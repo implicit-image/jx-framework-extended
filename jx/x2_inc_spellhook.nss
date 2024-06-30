@@ -271,25 +271,25 @@ int X2PreSpellCastCode()
        }
    }*/
 
-	// JX ADDED : Items also use the Spellcasting Framework
-	object oItem = GetSpellCastItem();
-	if (GetIsObjectValid(oItem))
-	{
-		int iSpellId =     JXGetSpellId();
-		int iMetamagic =   JXGetItemSpellMetaMagicFeat(iSpellId, oItem);
-		int iCasterLevel = JXGetItemSpellCasterLevel(iSpellId, oItem);
-		int iSaveDC =      JXGetItemSpellSpellSaveDC(iSpellId, oItem);
+    // JX ADDED : Items also use the Spellcasting Framework
+    object oItem = GetSpellCastItem();
+    if (GetIsObjectValid(oItem))
+    {
+        int iSpellId =     JXGetSpellId();
+        int iMetamagic =   JXGetItemSpellMetaMagicFeat(iSpellId, oItem);
+        int iCasterLevel = JXGetItemSpellCasterLevel(iSpellId, oItem);
+        int iSaveDC =      JXGetItemSpellSpellSaveDC(iSpellId, oItem);
 
-		if (iMetamagic > 0) JXSetMetaMagicFeat(iMetamagic);
-		if (iCasterLevel > 0) JXSetCasterLevel(iCasterLevel);
-		if (iSaveDC > 0) JXSetSpellSaveDC(iSaveDC);
+        if (iMetamagic > 0) JXSetMetaMagicFeat(iMetamagic);
+        if (iCasterLevel > 0) JXSetCasterLevel(iCasterLevel);
+        if (iSaveDC > 0) JXSetSpellSaveDC(iSaveDC);
 
-		// Call the magic staff system
-		struct script_param_list paramList;
-		paramList = JXScriptAddParameterObject(paramList, oItem);
-		paramList = JXScriptAddParameterInt(paramList, iSpellId);
-		JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_MAGIC_STAFF, paramList);
-	}
+        // Call the magic staff system
+        struct script_param_list paramList;
+        paramList = JXScriptAddParameterObject(paramList, oItem);
+        paramList = JXScriptAddParameterInt(paramList, iSpellId);
+        JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_MAGIC_STAFF, paramList);
+    }
 
 
    //---------------------------------------------------------------------------
@@ -303,93 +303,93 @@ int X2PreSpellCastCode()
    //---------------------------------------------------------------------------
    nContinue = X2UseMagicDeviceCheck();
 
-	// JX ADDED : Use the spellcasting action queue
-	struct jx_action_castspell actionCastSpell = JXGetActionCastSpellFromQueue(1);
-	if (actionCastSpell.iActionId > 0)
-	{
-		int bRemoveAction = FALSE;
-		int bRemoveActionImmediate = FALSE;
-		// Special case : Quicken spells
-		struct jx_action_castspell actionCastSpell2 = JXGetActionCastSpellFromQueue(2);
-		if (actionCastSpell.iMetaMagicFeat & METAMAGIC_QUICKEN)
-		{
-			bRemoveAction = TRUE;
-			// Immediately remove the spell from the action queue if the next one is also quickened,
-			// or if the spell is cast before a full round action that happens immediately after
-			if ((actionCastSpell2.iMetaMagicFeat & METAMAGIC_QUICKEN) || (actionCastSpell.bPreRoundAction))
-				bRemoveActionImmediate = TRUE;
+    // JX ADDED : Use the spellcasting action queue
+    struct jx_action_castspell actionCastSpell = JXGetActionCastSpellFromQueue(1);
+    if (actionCastSpell.iActionId > 0)
+    {
+        int bRemoveAction = FALSE;
+        int bRemoveActionImmediate = FALSE;
+        // Special case : Quicken spells
+        struct jx_action_castspell actionCastSpell2 = JXGetActionCastSpellFromQueue(2);
+        if (actionCastSpell.iMetaMagicFeat & METAMAGIC_QUICKEN)
+        {
+            bRemoveAction = TRUE;
+            // Immediately remove the spell from the action queue if the next one is also quickened,
+            // or if the spell is cast before a full round action that happens immediately after
+            if ((actionCastSpell2.iMetaMagicFeat & METAMAGIC_QUICKEN) || (actionCastSpell.bPreRoundAction))
+                bRemoveActionImmediate = TRUE;
 
-			// Fire the spellcasting action started event
-			nContinue = JXEventActionCastSpellStarted(OBJECT_SELF,
-													actionCastSpell.iSpellId,
-													actionCastSpell.oTarget,
-													GetIsObjectValid(actionCastSpell.oTarget) ?
-													 GetLocation(actionCastSpell.oTarget) :
-													 actionCastSpell.lTarget,
-													actionCastSpell.iCasterLevel,
-													actionCastSpell.iMetaMagicFeat,
-													actionCastSpell.iSpellSaveDC,
-													actionCastSpell.iClass);
-			if (nContinue)
-			{
-				JXSetCasterLevel(actionCastSpell.iCasterLevel);
-				JXSetMetaMagicFeat(actionCastSpell.iMetaMagicFeat);
-				JXSetSpellSaveDC(actionCastSpell.iSpellSaveDC);
-				// The following informations must be set in case multiple quicken spells are cast simultaneously
-				JXSetSpellId(actionCastSpell.iSpellId);
-				JXSetSpellTargetLocation(actionCastSpell.lTarget);
-				JXSetSpellTargetObject(actionCastSpell.oTarget);
-			}
-		}
-		else
-		{
-			// Get the power of the spell if cast as part of an action
-			int iCurrentAction = GetCurrentAction();
-			if (iCurrentAction == ACTION_CASTSPELL)
-			{
-				JXSetCasterLevel(actionCastSpell.iCasterLevel);
-				JXSetMetaMagicFeat(actionCastSpell.iMetaMagicFeat);
-				JXSetSpellSaveDC(actionCastSpell.iSpellSaveDC);
-	
-				// Immediately remove the spell from the action queue if the next one is quickened
-				if (actionCastSpell2.iMetaMagicFeat & METAMAGIC_QUICKEN)
-				{
-					bRemoveAction = TRUE;
-					bRemoveActionImmediate = TRUE;
-				}
-			}
-		}
+            // Fire the spellcasting action started event
+            nContinue = JXEventActionCastSpellStarted(OBJECT_SELF,
+                                                    actionCastSpell.iSpellId,
+                                                    actionCastSpell.oTarget,
+                                                    GetIsObjectValid(actionCastSpell.oTarget) ?
+                                                     GetLocation(actionCastSpell.oTarget) :
+                                                     actionCastSpell.lTarget,
+                                                    actionCastSpell.iCasterLevel,
+                                                    actionCastSpell.iMetaMagicFeat,
+                                                    actionCastSpell.iSpellSaveDC,
+                                                    actionCastSpell.iClass);
+            if (nContinue)
+            {
+                JXSetCasterLevel(actionCastSpell.iCasterLevel);
+                JXSetMetaMagicFeat(actionCastSpell.iMetaMagicFeat);
+                JXSetSpellSaveDC(actionCastSpell.iSpellSaveDC);
+                // The following informations must be set in case multiple quicken spells are cast simultaneously
+                JXSetSpellId(actionCastSpell.iSpellId);
+                JXSetSpellTargetLocation(actionCastSpell.lTarget);
+                JXSetSpellTargetObject(actionCastSpell.oTarget);
+            }
+        }
+        else
+        {
+            // Get the power of the spell if cast as part of an action
+            int iCurrentAction = GetCurrentAction();
+            if (iCurrentAction == ACTION_CASTSPELL)
+            {
+                JXSetCasterLevel(actionCastSpell.iCasterLevel);
+                JXSetMetaMagicFeat(actionCastSpell.iMetaMagicFeat);
+                JXSetSpellSaveDC(actionCastSpell.iSpellSaveDC);
 
-		// Fire the cast spell event
-		if (nContinue)
-			nContinue = JXEventActionCastSpellCast(OBJECT_SELF,
-												   actionCastSpell.iSpellId,
-												   actionCastSpell.oTarget,
-												   GetIsObjectValid(actionCastSpell.oTarget) ?
-												    GetLocation(actionCastSpell.oTarget) :
-													actionCastSpell.lTarget,
-												   actionCastSpell.iCasterLevel,
-												   actionCastSpell.iMetaMagicFeat,
-												   actionCastSpell.iSpellSaveDC,
-												   actionCastSpell.iClass);
+                // Immediately remove the spell from the action queue if the next one is quickened
+                if (actionCastSpell2.iMetaMagicFeat & METAMAGIC_QUICKEN)
+                {
+                    bRemoveAction = TRUE;
+                    bRemoveActionImmediate = TRUE;
+                }
+            }
+        }
 
-		// Remove the spellcasting action from the queue if necessary
-		if (bRemoveAction)
-		{
-			if (bRemoveActionImmediate)
-				JXRemoveFirstActionCastSpellFromQueue(nContinue);
-			else
-				// Quicken spells : Wait 3 seconds before removing the action
-				DelayCommand(3.0, JXRemoveFirstActionCastSpellFromQueue(nContinue));
-		}
-	}
+        // Fire the cast spell event
+        if (nContinue)
+            nContinue = JXEventActionCastSpellCast(OBJECT_SELF,
+                                                   actionCastSpell.iSpellId,
+                                                   actionCastSpell.oTarget,
+                                                   GetIsObjectValid(actionCastSpell.oTarget) ?
+                                                    GetLocation(actionCastSpell.oTarget) :
+                                                    actionCastSpell.lTarget,
+                                                   actionCastSpell.iCasterLevel,
+                                                   actionCastSpell.iMetaMagicFeat,
+                                                   actionCastSpell.iSpellSaveDC,
+                                                   actionCastSpell.iClass);
 
-	// JX MODIFED
-	if (nContinue)
-		nContinue = X2RunUserDefinedSpellScript();
-	else
-		// Execute the custom script, but the spell script will always stops
-		X2RunUserDefinedSpellScript();
+        // Remove the spellcasting action from the queue if necessary
+        if (bRemoveAction)
+        {
+            if (bRemoveActionImmediate)
+                JXRemoveFirstActionCastSpellFromQueue(nContinue);
+            else
+                // Quicken spells : Wait 3 seconds before removing the action
+                DelayCommand(3.0, JXRemoveFirstActionCastSpellFromQueue(nContinue));
+        }
+    }
+
+    // JX MODIFED
+    if (nContinue)
+        nContinue = X2RunUserDefinedSpellScript();
+    else
+        // Execute the custom script, but the spell script will always stops
+        X2RunUserDefinedSpellScript();
 
    //---------------------------------------------------------------------------
    // The following code is only of interest if an item was targeted
@@ -425,8 +425,8 @@ int X2PreSpellCastCode()
              }
        }
 
-	   /* Brock H. - OEI 07/05/06 - Removed for NWN2
-	   
+       /* Brock H. - OEI 07/05/06 - Removed for NWN2
+
        //-----------------------------------------------------------------------
        // Prevent any spell that has no special coding to handle targetting of items
        // from being cast on items. We do this because we can not predict how
@@ -435,31 +435,31 @@ int X2PreSpellCastCode()
        if (nContinue) {
            nContinue = X2CastOnItemWasAllowed(oTarget);
        }
-	   */
+       */
    }
 
-	//---------------------------------------------------------------------------
-	// The following code is only of interest if a placeable was targeted
-	//---------------------------------------------------------------------------
-	if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_PLACEABLE)
-	{	// spells going off on crafting workbenches causes to much carnage.  
-		// Maybe we should have the spells actually fire in hard core mode... 
-		// Although death by labratory experiment might be too much even for the hard core... ;)
-		// We turn off effects for all workbenches just to avoid any confusion.
-		// since the spell won't fire or signal the cast event, we do so here.
-		// Shaz: now that items use the spellhook, we can't just stop them all when used on a workbench,
-		//  or the smith hammer and the mortar/pestle won't work anymore. So, if its a unique item script, don't stop the script
-		if (IsWorkbench(oTarget))
-		{
-			// shaz: couldn't find the #define or const for 795 (ACTIVATE_ITEM_T)
-			if(JXGetSpellId() != 795) {
-				nContinue = FALSE;
-			}
-		    //Fire "cast spell at" event on a workbench. (only needed for magical workbenches currently)
-		    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, JXGetSpellId(), FALSE));
-			
-		}
-	}
-			
+    //---------------------------------------------------------------------------
+    // The following code is only of interest if a placeable was targeted
+    //---------------------------------------------------------------------------
+    if (GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_PLACEABLE)
+    {   // spells going off on crafting workbenches causes to much carnage.
+        // Maybe we should have the spells actually fire in hard core mode...
+        // Although death by labratory experiment might be too much even for the hard core... ;)
+        // We turn off effects for all workbenches just to avoid any confusion.
+        // since the spell won't fire or signal the cast event, we do so here.
+        // Shaz: now that items use the spellhook, we can't just stop them all when used on a workbench,
+        //  or the smith hammer and the mortar/pestle won't work anymore. So, if its a unique item script, don't stop the script
+        if (IsWorkbench(oTarget))
+        {
+            // shaz: couldn't find the #define or const for 795 (ACTIVATE_ITEM_T)
+            if(JXGetSpellId() != 795) {
+                nContinue = FALSE;
+            }
+            //Fire "cast spell at" event on a workbench. (only needed for magical workbenches currently)
+            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, JXGetSpellId(), FALSE));
+
+        }
+    }
+
    return nContinue;
 }

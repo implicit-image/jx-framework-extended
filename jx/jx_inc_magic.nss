@@ -76,15 +76,10 @@
 // implicit-image  05-30-24:
 //                           * Added check for selective magic to JXApplyEffectToObject()
 //                           * Added hook for overriding and adding on hit effects
-
-
 //#include "jx_inc_magic_info"
 #include "jx_inc_magic_item"
-#include "2d2f_inc_magic_class"
-//#include "jx_inc_magic_class"
+#include "jx_inc_magic_class"
 #include "jx_inc_action"
-
-
 //**************************************//
 //                                      //
 //              Interface               //
@@ -550,6 +545,7 @@ void JXCastSpellFromLocationAtLocation(location lFrom,
     }
     else
         SetFirstName(oCaster, GetStringByStrRef(50963));
+
 
     // Cast the spell
     JXCastSpellFromObjectAtLocation(oCaster, lTo, iSpellId, iMetamagic, iCasterLevel, iDC, bIgnoreDeadZone);
@@ -1558,22 +1554,20 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - eEffect Effect to apply to the object
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
-// - iRunOnHitEffects TRUE if the function should apply special onhit effects
-void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, iRunOnHitEffects=TRUE)
+void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, bCheckSelectiveMagic=FALSE)
 {
+
+    object oCaster = OBJECT_SELF;
     int iSpellId = JXGetSpellId();
 
-    // Running on apply spell effect hook
-    // if it returns false, dont apply any other effects
-    if (!JXOnApplySpellEffectCode(oTarget, oCaster)
+    if (bCheckSelectiveMagic)
     {
-        return;
+
     }
 
     // Information about instant effect spells aren't saved
     if (iDuration != DURATION_TYPE_INSTANT)
     {
-        object oCaster = OBJECT_SELF;
 
         // Applying an effect from within an area of effect
         if (GetObjectType(oCaster) == OBJECT_TYPE_AREA_OF_EFFECT)
@@ -2198,7 +2192,7 @@ int JXPrivateRunUserDefinedPostSpellScript()
         int nRet = GetLocalInt(OBJECT_SELF, "JX_BLOCK_LAST_SPELL_POST");
         DeleteLocalInt(OBJECT_SELF, "JX_BLOCK_LAST_SPELL_POST");
         if (nRet == TRUE)
-            return FALSE;
+        return FALSE;
     }
     return TRUE;
 }
@@ -2289,7 +2283,6 @@ int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget, eff
     }
     return -2;
 }
-
 
 // use this function to set the result of on_apply_spell_effect script
 void JXSetOnApplySpellEffectResult(int iValue, object oTarget=OBJECT_SELF)

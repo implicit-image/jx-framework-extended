@@ -155,19 +155,19 @@ void JXEventActionCastSpellFinished(object oCaster, int iSpellId, object oTarget
 // * Returns TRUE to enqueue the spellcasting action, or FALSE to prevent it to be enqueued
 int JXEventActionCastSpellEnqueued(object oCaster, int iSpellId, object oTarget, location lTarget, int iCasterLevel, int iMetaMagicFeat, int iSpellSaveDC, int iClass)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterObject(paramList, oCaster);
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
-	paramList = JXScriptAddParameterObject(paramList, oTarget);
-	paramList = JXScriptAddParameterLocation(paramList, lTarget);
-	paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
-	paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
-	paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
-	paramList = JXScriptAddParameterInt(paramList, iClass);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCaster);
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    paramList = JXScriptAddParameterObject(paramList, oTarget);
+    paramList = JXScriptAddParameterLocation(paramList, lTarget);
+    paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
+    paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
+    paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
+    paramList = JXScriptAddParameterInt(paramList, iClass);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLENQUEUED, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLENQUEUED, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // This event is fired when a spellcasting action becomes the current action of the caster
@@ -182,19 +182,19 @@ int JXEventActionCastSpellEnqueued(object oCaster, int iSpellId, object oTarget,
 // * Returns TRUE to let the spellcasting action continue, or FALSE to stop it
 int JXEventActionCastSpellStarted(object oCaster, int iSpellId, object oTarget, location lTarget, int iCasterLevel, int iMetaMagicFeat, int iSpellSaveDC, int iClass)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterObject(paramList, oCaster);
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
-	paramList = JXScriptAddParameterObject(paramList, oTarget);
-	paramList = JXScriptAddParameterLocation(paramList, lTarget);
-	paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
-	paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
-	paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
-	paramList = JXScriptAddParameterInt(paramList, iClass);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCaster);
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    paramList = JXScriptAddParameterObject(paramList, oTarget);
+    paramList = JXScriptAddParameterLocation(paramList, lTarget);
+    paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
+    paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
+    paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
+    paramList = JXScriptAddParameterInt(paramList, iClass);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLSTARTED, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLSTARTED, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // This event is fired when the conjuration animation of a spellcasting action starts
@@ -209,19 +209,19 @@ int JXEventActionCastSpellStarted(object oCaster, int iSpellId, object oTarget, 
 // * Returns TRUE to let the spellcasting action continue, or FALSE to stop it
 int JXEventActionCastSpellConjuring(object oCaster, int iSpellId, object oTarget, location lTarget, int iCasterLevel, int iMetaMagicFeat, int iSpellSaveDC, int iClass)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterObject(paramList, oCaster);
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
-	paramList = JXScriptAddParameterObject(paramList, oTarget);
-	paramList = JXScriptAddParameterLocation(paramList, lTarget);
-	paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
-	paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
-	paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
-	paramList = JXScriptAddParameterInt(paramList, iClass);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCaster);
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    paramList = JXScriptAddParameterObject(paramList, oTarget);
+    paramList = JXScriptAddParameterLocation(paramList, lTarget);
+    paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
+    paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
+    paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
+    paramList = JXScriptAddParameterInt(paramList, iClass);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLCONJURING, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLCONJURING, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // This event is fired when the conjuration animation of a spellcasting action stops
@@ -236,19 +236,19 @@ int JXEventActionCastSpellConjuring(object oCaster, int iSpellId, object oTarget
 // * Returns TRUE to let the spellcasting action continue, or FALSE to stop it
 int JXEventActionCastSpellConjured(object oCaster, int iSpellId, object oTarget, location lTarget, int iCasterLevel, int iMetaMagicFeat, int iSpellSaveDC, int iClass)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterObject(paramList, oCaster);
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
-	paramList = JXScriptAddParameterObject(paramList, oTarget);
-	paramList = JXScriptAddParameterLocation(paramList, lTarget);
-	paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
-	paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
-	paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
-	paramList = JXScriptAddParameterInt(paramList, iClass);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCaster);
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    paramList = JXScriptAddParameterObject(paramList, oTarget);
+    paramList = JXScriptAddParameterLocation(paramList, lTarget);
+    paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
+    paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
+    paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
+    paramList = JXScriptAddParameterInt(paramList, iClass);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLCONJURED, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLCONJURED, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // This event is fired when the spell is cast
@@ -263,19 +263,19 @@ int JXEventActionCastSpellConjured(object oCaster, int iSpellId, object oTarget,
 // * Returns TRUE to let the spell effects apply, or FALSE to prevent them
 int JXEventActionCastSpellCast(object oCaster, int iSpellId, object oTarget, location lTarget, int iCasterLevel, int iMetaMagicFeat, int iSpellSaveDC, int iClass)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterObject(paramList, oCaster);
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
-	paramList = JXScriptAddParameterObject(paramList, oTarget);
-	paramList = JXScriptAddParameterLocation(paramList, lTarget);
-	paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
-	paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
-	paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
-	paramList = JXScriptAddParameterInt(paramList, iClass);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCaster);
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    paramList = JXScriptAddParameterObject(paramList, oTarget);
+    paramList = JXScriptAddParameterLocation(paramList, lTarget);
+    paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
+    paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
+    paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
+    paramList = JXScriptAddParameterInt(paramList, iClass);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLCAST, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLCAST, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // This event is fired when a spellcasting action is finished
@@ -290,16 +290,16 @@ int JXEventActionCastSpellCast(object oCaster, int iSpellId, object oTarget, loc
 // - bResult FALSE if the spellcasting action hasn't been performed successfully
 void JXEventActionCastSpellFinished(object oCaster, int iSpellId, object oTarget, location lTarget, int iCasterLevel, int iMetaMagicFeat, int iSpellSaveDC, int iClass, int bResult)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterObject(paramList, oCaster);
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
-	paramList = JXScriptAddParameterObject(paramList, oTarget);
-	paramList = JXScriptAddParameterLocation(paramList, lTarget);
-	paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
-	paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
-	paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
-	paramList = JXScriptAddParameterInt(paramList, iClass);
-	paramList = JXScriptAddParameterInt(paramList, bResult);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCaster);
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    paramList = JXScriptAddParameterObject(paramList, oTarget);
+    paramList = JXScriptAddParameterLocation(paramList, lTarget);
+    paramList = JXScriptAddParameterInt(paramList, iCasterLevel);
+    paramList = JXScriptAddParameterInt(paramList, iMetaMagicFeat);
+    paramList = JXScriptAddParameterInt(paramList, iSpellSaveDC);
+    paramList = JXScriptAddParameterInt(paramList, iClass);
+    paramList = JXScriptAddParameterInt(paramList, bResult);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLFINISHED, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EVENTSPELLFINISHED, paramList);
 }

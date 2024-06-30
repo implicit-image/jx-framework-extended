@@ -1,7 +1,7 @@
 #include "jx_inc_spell_helpers"
 
-//###############################################3
-// Access functions for override data
+//###############################################
+// Setters and Getters  for override effect data
 //###############################################
 
 // ability type

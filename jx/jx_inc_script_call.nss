@@ -30,7 +30,7 @@
 // Structure that holds a list of parameters for a script
 struct script_param_list
 {
-	string sParamList;
+    string sParamList;
 };
 
 //========================================== Script Parameter Setting ==========================================//
@@ -224,11 +224,11 @@ itemproperty JXScriptGetResponseItemProp(object oTarget = OBJECT_SELF);
 
 
 // Constant used to set script parameters on an object
-const string JX_SCRIPT_PARAMETERS			= "JX_SCRIPT_PARAMETERS";
-const string JX_SCRIPT_RETURNED				= "JX_SCRIPT_RETURNED";
-const string JX_SCRIPT_FORKOPERATION		= "JX_SCRIPT_FORKOPERATION";
-const string JX_SCRIPT_PARAMSEPARATOR		= "{|}";
-const string JX_SCRIPT_PARAMLISTSEPARATOR	= "{||}";
+const string JX_SCRIPT_PARAMETERS           = "JX_SCRIPT_PARAMETERS";
+const string JX_SCRIPT_RETURNED                 = "JX_SCRIPT_RETURNED";
+const string JX_SCRIPT_FORKOPERATION        = "JX_SCRIPT_FORKOPERATION";
+const string JX_SCRIPT_PARAMSEPARATOR       = "{|}";
+const string JX_SCRIPT_PARAMLISTSEPARATOR   = "{||}";
 
 
 // Add a new integer parameter to a list of script parameters.
@@ -237,11 +237,11 @@ const string JX_SCRIPT_PARAMLISTSEPARATOR	= "{||}";
 // * Returns the list with the new parameter
 struct script_param_list JXScriptAddParameterInt(struct script_param_list paramList, int iValue)
 {
-	if (paramList.sParamList != "")
-		paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
-	paramList.sParamList += IntToString(JX_DATATYPE_INTEGER) + JX_SCRIPT_PARAMSEPARATOR + IntToString(iValue);
+    if (paramList.sParamList != "")
+        paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
+    paramList.sParamList += IntToString(JX_DATATYPE_INTEGER) + JX_SCRIPT_PARAMSEPARATOR + IntToString(iValue);
 
-	return paramList;
+    return paramList;
 }
 
 // Add a new float parameter to a list of script parameters.
@@ -250,11 +250,11 @@ struct script_param_list JXScriptAddParameterInt(struct script_param_list paramL
 // * Returns the list with the new parameter
 struct script_param_list JXScriptAddParameterFloat(struct script_param_list paramList, float fValue)
 {
-	if (paramList.sParamList != "")
-		paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
-	paramList.sParamList += IntToString(JX_DATATYPE_FLOAT) + JX_SCRIPT_PARAMSEPARATOR + FloatToString(fValue);
+    if (paramList.sParamList != "")
+        paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
+    paramList.sParamList += IntToString(JX_DATATYPE_FLOAT) + JX_SCRIPT_PARAMSEPARATOR + FloatToString(fValue);
 
-	return paramList;
+    return paramList;
 }
 
 // Add a new string parameter to a list of script parameters.
@@ -263,11 +263,11 @@ struct script_param_list JXScriptAddParameterFloat(struct script_param_list para
 // * Returns the list with the new parameter
 struct script_param_list JXScriptAddParameterString(struct script_param_list paramList, string sValue)
 {
-	if (paramList.sParamList != "")
-		paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
-	paramList.sParamList += IntToString(JX_DATATYPE_STRING) + JX_SCRIPT_PARAMSEPARATOR + sValue;
+    if (paramList.sParamList != "")
+        paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
+    paramList.sParamList += IntToString(JX_DATATYPE_STRING) + JX_SCRIPT_PARAMSEPARATOR + sValue;
 
-	return paramList;
+    return paramList;
 }
 
 // Add a new integer parameter to a list of script parameters.
@@ -276,11 +276,11 @@ struct script_param_list JXScriptAddParameterString(struct script_param_list par
 // * Returns the list with the new parameter
 struct script_param_list JXScriptAddParameterObject(struct script_param_list paramList, object oValue)
 {
-	if (paramList.sParamList != "")
-		paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
-	paramList.sParamList += IntToString(JX_DATATYPE_OBJECT) + JX_SCRIPT_PARAMSEPARATOR + IntToString(ObjectToInt(oValue));
+    if (paramList.sParamList != "")
+        paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
+    paramList.sParamList += IntToString(JX_DATATYPE_OBJECT) + JX_SCRIPT_PARAMSEPARATOR + IntToString(ObjectToInt(oValue));
 
-	return paramList;
+    return paramList;
 }
 
 // Add a new location parameter to a list of script parameters.
@@ -289,11 +289,11 @@ struct script_param_list JXScriptAddParameterObject(struct script_param_list par
 // * Returns the list with the new parameter
 struct script_param_list JXScriptAddParameterLocation(struct script_param_list paramList, location lValue)
 {
-	if (paramList.sParamList != "")
-		paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
-	paramList.sParamList += IntToString(JX_DATATYPE_LOCATION) + JX_SCRIPT_PARAMSEPARATOR + JXLocationToString(lValue);
+    if (paramList.sParamList != "")
+        paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
+    paramList.sParamList += IntToString(JX_DATATYPE_LOCATION) + JX_SCRIPT_PARAMSEPARATOR + JXLocationToString(lValue);
 
-	return paramList;
+    return paramList;
 }
 
 // Add a new item property parameter to a list of script parameters.
@@ -302,11 +302,11 @@ struct script_param_list JXScriptAddParameterLocation(struct script_param_list p
 // * Returns the list with the new parameter
 struct script_param_list JXScriptAddParameterItemProp(struct script_param_list paramList, itemproperty ipValue)
 {
-	if (paramList.sParamList != "")
-		paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
-	paramList.sParamList += IntToString(JX_DATATYPE_ITEMPROPERTY) + JX_SCRIPT_PARAMSEPARATOR + JXItemPropertyToString(ipValue);
+    if (paramList.sParamList != "")
+        paramList.sParamList += JX_SCRIPT_PARAMLISTSEPARATOR;
+    paramList.sParamList += IntToString(JX_DATATYPE_ITEMPROPERTY) + JX_SCRIPT_PARAMSEPARATOR + JXItemPropertyToString(ipValue);
 
-	return paramList;
+    return paramList;
 }
 
 // Execute a script for the specified target, using a list of parameters.
@@ -315,10 +315,11 @@ struct script_param_list JXScriptAddParameterItemProp(struct script_param_list p
 // - oTarget Object that executes the script
 void JXScriptCall(string sScript, struct script_param_list paramList, object oTarget = OBJECT_SELF)
 {
-	if (!GetIsObjectValid(oTarget)) return;
+    if (!GetIsObjectValid(oTarget)) return;
 
-	SetLocalString(oTarget, JX_SCRIPT_PARAMETERS, paramList.sParamList);
-	ExecuteScript(sScript, oTarget);
+    /* SetLocalString(oTarget, JX_SCRIPT_PARAMETERS, paramList.sParamList); */
+    AddScriptParameterString(paramList.sParamList);
+    ExecuteScriptEnhanced(sScript, oTarget, FALSE);
 }
 
 // Execute a script fork (a script that contains a list of operations), using a list of parameters.
@@ -328,10 +329,10 @@ void JXScriptCall(string sScript, struct script_param_list paramList, object oTa
 // - oTarget Object that executes the script
 void JXScriptCallFork(string sForkScript, int iOperation, struct script_param_list paramList, object oTarget = OBJECT_SELF)
 {
-	if (!GetIsObjectValid(oTarget)) return;
+    if (!GetIsObjectValid(oTarget)) return;
 
-	SetLocalInt(oTarget, JX_SCRIPT_FORKOPERATION, iOperation);
-	JXScriptCall(sForkScript, paramList, oTarget);
+    SetLocalInt(oTarget, JX_SCRIPT_FORKOPERATION, iOperation);
+    JXScriptCall(sForkScript, paramList, oTarget);
 }
 
 // Get the operation defined in JXScriptCallFork().
@@ -339,10 +340,10 @@ void JXScriptCallFork(string sForkScript, int iOperation, struct script_param_li
 // * Returns the operation previously set
 int JXScriptGetForkOperation()
 {
-	int iOperation = GetLocalInt(OBJECT_SELF, JX_SCRIPT_FORKOPERATION);
-	DeleteLocalInt(OBJECT_SELF, JX_SCRIPT_FORKOPERATION);
+    int iOperation = GetLocalInt(OBJECT_SELF, JX_SCRIPT_FORKOPERATION);
+    DeleteLocalInt(OBJECT_SELF, JX_SCRIPT_FORKOPERATION);
 
-	return iOperation;
+    return iOperation;
 }
 
 // Get the list of parameters available for the current script.
@@ -351,11 +352,11 @@ int JXScriptGetForkOperation()
 // * Returns the list of available parameters for the current script
 struct script_param_list JXScriptGetParameters()
 {
-	struct script_param_list paramList;
-	paramList.sParamList = GetLocalString(OBJECT_SELF, JX_SCRIPT_PARAMETERS);
-	DeleteLocalString(OBJECT_SELF, JX_SCRIPT_PARAMETERS);
+    struct script_param_list paramList;
+    paramList.sParamList = GetLocalString(OBJECT_SELF, JX_SCRIPT_PARAMETERS);
+    DeleteLocalString(OBJECT_SELF, JX_SCRIPT_PARAMETERS);
 
-	return paramList;
+    return paramList;
 }
 
 // Get the integer parameter at the specified position in the list of script parameters
@@ -364,16 +365,16 @@ struct script_param_list JXScriptGetParameters()
 // * Returns an integer parameter
 int JXScriptGetParameterInt(struct script_param_list paramList, int iParamPos)
 {
-	string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
-	string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
-	if (StringToInt(sParamType) != JX_DATATYPE_INTEGER)
-	{
-		SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterInt() invalid : Parameter number " +
-		                              IntToString(iParamPos) + " in  " + paramList.sParamList + " is not an integer");
-		return 0;
-	}
+    string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
+    string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
+    if (StringToInt(sParamType) != JX_DATATYPE_INTEGER)
+    {
+        SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterInt() invalid : Parameter number " +
+                                      IntToString(iParamPos) + " in  " + paramList.sParamList + " is not an integer");
+        return 0;
+    }
 
-	return StringToInt(JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1));
+    return StringToInt(JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1));
 }
 
 // Get the float parameter at the specified position in the list of script parameters
@@ -382,16 +383,16 @@ int JXScriptGetParameterInt(struct script_param_list paramList, int iParamPos)
 // * Returns a float parameter
 float JXScriptGetParameterFloat(struct script_param_list paramList, int iParamPos)
 {
-	string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
-	string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
-	if (StringToInt(sParamType) != JX_DATATYPE_FLOAT)
-	{
-		SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterFloat() invalid : Parameter number " +
-		                              IntToString(iParamPos) + " in  " + paramList.sParamList + " is not a float");
-		return 0.0;
-	}
+    string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
+    string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
+    if (StringToInt(sParamType) != JX_DATATYPE_FLOAT)
+    {
+        SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterFloat() invalid : Parameter number " +
+                                      IntToString(iParamPos) + " in  " + paramList.sParamList + " is not a float");
+        return 0.0;
+    }
 
-	return StringToFloat(JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1));
+    return StringToFloat(JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1));
 }
 
 // Get the string parameter at the specified position in the list of script parameters
@@ -400,16 +401,16 @@ float JXScriptGetParameterFloat(struct script_param_list paramList, int iParamPo
 // * Returns a string parameter
 string JXScriptGetParameterString(struct script_param_list paramList, int iParamPos)
 {
-	string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
-	string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
-	if (StringToInt(sParamType) != JX_DATATYPE_STRING)
-	{
-		SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterString() invalid : Parameter number " +
-		                              IntToString(iParamPos) + " in  " + paramList.sParamList + " is not a string");
-		return "";
-	}
+    string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
+    string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
+    if (StringToInt(sParamType) != JX_DATATYPE_STRING)
+    {
+        SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterString() invalid : Parameter number " +
+                                      IntToString(iParamPos) + " in  " + paramList.sParamList + " is not a string");
+        return "";
+    }
 
-	return JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1);
+    return JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1);
 }
 
 // Get the object parameter at the specified position in the list of script parameters
@@ -418,16 +419,16 @@ string JXScriptGetParameterString(struct script_param_list paramList, int iParam
 // * Returns an object parameter
 object JXScriptGetParameterObject(struct script_param_list paramList, int iParamPos)
 {
-	string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
-	string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
-	if (StringToInt(sParamType) != JX_DATATYPE_OBJECT)
-	{
-		SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterObject() invalid : Parameter number " +
-		                              IntToString(iParamPos) + " in  " + paramList.sParamList + " is not an object");
-		return OBJECT_INVALID;
-	}
+    string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
+    string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
+    if (StringToInt(sParamType) != JX_DATATYPE_OBJECT)
+    {
+        SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterObject() invalid : Parameter number " +
+                                      IntToString(iParamPos) + " in  " + paramList.sParamList + " is not an object");
+        return OBJECT_INVALID;
+    }
 
-	return IntToObject(StringToInt(JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1)));
+    return IntToObject(StringToInt(JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1)));
 }
 
 // Get the location parameter at the specified position in the list of script parameters
@@ -436,17 +437,17 @@ object JXScriptGetParameterObject(struct script_param_list paramList, int iParam
 // * Returns a location parameter
 location JXScriptGetParameterLocation(struct script_param_list paramList, int iParamPos)
 {
-	string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
-	string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
-	if (StringToInt(sParamType) != JX_DATATYPE_LOCATION)
-	{
-		SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterLocation() invalid : Parameter number " +
-		                              IntToString(iParamPos) + " in  " + paramList.sParamList + " is not a location");
-		location lInvalid;
-		return lInvalid;
-	}
+    string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
+    string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
+    if (StringToInt(sParamType) != JX_DATATYPE_LOCATION)
+    {
+        SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterLocation() invalid : Parameter number " +
+                                      IntToString(iParamPos) + " in  " + paramList.sParamList + " is not a location");
+        location lInvalid;
+        return lInvalid;
+    }
 
-	return JXStringToLocation(JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1));
+    return JXStringToLocation(JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1));
 }
 
 // Get the item property parameter at the specified position in the list of script parameters
@@ -455,65 +456,65 @@ location JXScriptGetParameterLocation(struct script_param_list paramList, int iP
 // * Returns an item property parameter
 itemproperty JXScriptGetParameterItemProp(struct script_param_list paramList, int iParamPos)
 {
-	string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
-	string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
-	if (StringToInt(sParamType) != JX_DATATYPE_ITEMPROPERTY)
-	{
-		SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterItemProp() invalid : Parameter number " +
-		                              IntToString(iParamPos) + " in  " + paramList.sParamList + " is not an item property");
-		itemproperty ipInvalid;
-		return ipInvalid;
-	}
+    string sParameter = JXStringSplit(paramList.sParamList, JX_SCRIPT_PARAMLISTSEPARATOR, iParamPos - 1);
+    string sParamType = JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 0);
+    if (StringToInt(sParamType) != JX_DATATYPE_ITEMPROPERTY)
+    {
+        SendMessageToPC(GetFirstPC(), "Call to JXScriptGetParameterItemProp() invalid : Parameter number " +
+                                      IntToString(iParamPos) + " in  " + paramList.sParamList + " is not an item property");
+        itemproperty ipInvalid;
+        return ipInvalid;
+    }
 
-	return JXStringToItemProperty(JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1));
+    return JXStringToItemProperty(JXStringSplit(sParameter, JX_SCRIPT_PARAMSEPARATOR, 1));
 }
 
 // Set the integer value that a script returns
 // - iValue Integer value to return
 void JXScriptSetResponseInt(int iValue)
 {
-	string sReturnedValue = IntToString(iValue);
-	SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
+    string sReturnedValue = IntToString(iValue);
+    SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
 }
 
 // Set the float value that a script returns
 // - fValue Float value to return
 void JXScriptSetResponseFloat(float fValue)
 {
-	string sReturnedValue = FloatToString(fValue);
-	SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
+    string sReturnedValue = FloatToString(fValue);
+    SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
 }
 
 // Set the string value that a script returns
 // - sValue Integer value to return
 void JXScriptSetResponseString(string sValue)
 {
-	string sReturnedValue = sValue;
-	SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
+    string sReturnedValue = sValue;
+    SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
 }
 
 // Set the object value that a script returns
 // - oValue Object value to return
 void JXScriptSetResponseObject(object oValue)
 {
-	string sReturnedValue = IntToString(ObjectToInt(oValue));
-	SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
+    string sReturnedValue = IntToString(ObjectToInt(oValue));
+    SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
 }
 
 // Set the location value that a script returns
 // - lValue Location value to return
 void JXScriptSetResponseLocation(location lValue)
 {
-	string sReturnedValue = JXLocationToString(lValue);
-	SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
+    string sReturnedValue = JXLocationToString(lValue);
+    SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
 }
 
 // Set the item property value that a script returns
 // - ipValue Integer value to return
 void JXScriptSetResponseItemProp(itemproperty ipValue)
 {
-	string sReturnedValue = JXItemPropertyToString(ipValue);
-	SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
+    string sReturnedValue = JXItemPropertyToString(ipValue);
+    SetLocalString(OBJECT_SELF, JX_SCRIPT_RETURNED, sReturnedValue);
 }
 
 // Get an integer value that a script returns
@@ -521,10 +522,10 @@ void JXScriptSetResponseItemProp(itemproperty ipValue)
 // * Returns an integer value
 int JXScriptGetResponseInt(object oTarget = OBJECT_SELF)
 {
-	string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
-	DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
+    string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
+    DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
 
-	return StringToInt(sReturnedValue);
+    return StringToInt(sReturnedValue);
 }
 
 // Get a float value that a script returns
@@ -532,10 +533,10 @@ int JXScriptGetResponseInt(object oTarget = OBJECT_SELF)
 // * Returns a float value
 float JXScriptGetResponseFloat(object oTarget = OBJECT_SELF)
 {
-	string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
-	DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
+    string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
+    DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
 
-	return StringToFloat(sReturnedValue);
+    return StringToFloat(sReturnedValue);
 }
 
 // Get a string value that a script returns
@@ -543,10 +544,10 @@ float JXScriptGetResponseFloat(object oTarget = OBJECT_SELF)
 // * Returns a string value
 string JXScriptGetResponseString(object oTarget = OBJECT_SELF)
 {
-	string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
-	DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
+    string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
+    DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
 
-	return sReturnedValue;
+    return sReturnedValue;
 }
 
 // Get an object value that a script returns
@@ -554,10 +555,10 @@ string JXScriptGetResponseString(object oTarget = OBJECT_SELF)
 // * Returns an object value
 object JXScriptGetResponseObject(object oTarget = OBJECT_SELF)
 {
-	string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
-	DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
+    string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
+    DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
 
-	return IntToObject(StringToInt(sReturnedValue));
+    return IntToObject(StringToInt(sReturnedValue));
 }
 
 // Get a location value that a script returns
@@ -565,10 +566,10 @@ object JXScriptGetResponseObject(object oTarget = OBJECT_SELF)
 // * Returns a location value
 location JXScriptGetResponseLocation(object oTarget = OBJECT_SELF)
 {
-	string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
-	DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
+    string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
+    DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
 
-	return JXStringToLocation(sReturnedValue);
+    return JXStringToLocation(sReturnedValue);
 }
 
 // Get an item property value that a script returns
@@ -576,8 +577,8 @@ location JXScriptGetResponseLocation(object oTarget = OBJECT_SELF)
 // * Returns an item property value
 itemproperty JXScriptGetResponseItemProp(object oTarget = OBJECT_SELF)
 {
-	string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
-	DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
+    string sReturnedValue = GetLocalString(oTarget, JX_SCRIPT_RETURNED);
+    DeleteLocalString(oTarget, JX_SCRIPT_RETURNED);
 
-	return JXStringToItemProperty(sReturnedValue);
+    return JXStringToItemProperty(sReturnedValue);
 }

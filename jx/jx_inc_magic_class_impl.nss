@@ -1,4 +1,5 @@
 #include "jx_inc_magic_class"
+#include "jx_class_info_interface"
 
 
 // Get the main caster class, depending on the spell type
@@ -7,44 +8,44 @@
 // * Returns a CLASS_TYPE_* constant, or -1 if not found
 int JXImplGetMainCasterClass(object oCreature = OBJECT_SELF, int iSpellType = JX_SPELLTYPE_BOTH)
 {
-	int iBestClass = CLASS_TYPE_INVALID;
-	int iBestCasterLevel = -1;
+    int iBestClass = CLASS_TYPE_INVALID;
+    int iBestCasterLevel = -1;
 
-	int iClass, iClassLevel;
-	int iCasterLevel;
-	int iLoop;
-	for (iLoop = 1; iLoop <= 4; iLoop++)
-	{
-		// Get the current class and its level
-		iClass = GetClassByPosition(iLoop, oCreature);
-		iClassLevel = GetLevelByPosition(iLoop, oCreature);
+    int iClass, iClassLevel;
+    int iCasterLevel;
+    int iLoop;
+    for (iLoop = 1; iLoop <= 4; iLoop++)
+    {
+        // Get the current class and its level
+        iClass = GetClassByPosition(iLoop, oCreature);
+        iClassLevel = GetLevelByPosition(iLoop, oCreature);
 
-		// Case Arcane class
-		if (((iSpellType == JX_SPELLTYPE_ARCANE) || (iSpellType == JX_SPELLTYPE_BOTH))
-		 && (JXPrivateGetIsMainArcaneClass(iClass)))
-		{
-			iCasterLevel = JXPrivateGetComputedCLFromClass(iClass, iClassLevel);
-			if ((iCasterLevel > iBestCasterLevel) || (iBestCasterLevel == CLASS_TYPE_INVALID))
-			{
-				iBestClass = iClass;
-				iBestCasterLevel = iCasterLevel;
-			}
-		}
+        // Case Arcane class
+        if (((iSpellType == JX_SPELLTYPE_ARCANE) || (iSpellType == JX_SPELLTYPE_BOTH))
+         && (JXImplGetIsMainArcaneClass(iClass)))
+        {
+            iCasterLevel = JXImplGetComputedCLFromClass(iClass, iClassLevel);
+            if ((iCasterLevel > iBestCasterLevel) || (iBestCasterLevel == CLASS_TYPE_INVALID))
+            {
+                iBestClass = iClass;
+                iBestCasterLevel = iCasterLevel;
+            }
+        }
 
-		// Case Divine class
-		if (((iSpellType == JX_SPELLTYPE_DIVINE) || (iSpellType == JX_SPELLTYPE_BOTH))
-		 && (JXPrivateGetIsMainDivineClass(iClass)))
-		{
-			iCasterLevel = JXPrivateGetComputedCLFromClass(iClass, iClassLevel);
-			if ((iCasterLevel > iBestCasterLevel) || (iBestCasterLevel == CLASS_TYPE_INVALID))
-			{
-				iBestClass = iClass;
-				iBestCasterLevel = iCasterLevel;
-			}
-		}
-	}
+        // Case Divine class
+        if (((iSpellType == JX_SPELLTYPE_DIVINE) || (iSpellType == JX_SPELLTYPE_BOTH))
+         && (JXImplGetIsMainDivineClass(iClass)))
+        {
+            iCasterLevel = JXImplGetComputedCLFromClass(iClass, iClassLevel);
+            if ((iCasterLevel > iBestCasterLevel) || (iBestCasterLevel == CLASS_TYPE_INVALID))
+            {
+                iBestClass = iClass;
+                iBestCasterLevel = iCasterLevel;
+            }
+        }
+    }
 
-	return iBestClass;
+    return iBestClass;
 }
 
 // Get the arcane caster level for a creature based on one of her class
@@ -53,25 +54,25 @@ int JXImplGetMainCasterClass(object oCreature = OBJECT_SELF, int iSpellType = JX
 // * Returns the creature's arcane caster level
 int JXImplGetCreatureArcaneCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID)
 {
-	// Get the main arcane caster class
-	int iMainClass = JXGetMainCasterClass(oCreature, JX_SPELLTYPE_ARCANE);
-	if (iMainClass == CLASS_TYPE_INVALID) return 0;
-	if (iClass == CLASS_TYPE_INVALID)
-		iClass = iMainClass;
+    // Get the main arcane caster class
+    int iMainClass = JXGetMainCasterClass(oCreature, JX_SPELLTYPE_ARCANE);
+    if (iMainClass == CLASS_TYPE_INVALID) return 0;
+    if (iClass == CLASS_TYPE_INVALID)
+        iClass = iMainClass;
 
-	// Test if the specified class is an arcane class
-	if (!JXPrivateGetIsMainArcaneClass(iClass))
-		return 0;
+    // Test if the specified class is an arcane class
+    if (!JXImplGetIsMainArcaneClass(iClass))
+        return 0;
 
-	// Compute the arcane caster level for the main caster class
-	int iCasterLevel = JXPrivateGetComputedCLFromClass(iClass, GetLevelByClass(iClass, oCreature));
-	// Add the arcane caster level from other classes
-	if (iClass == iMainClass)
-		iCasterLevel += JXPrivateGetImprovedArcaneCLFromClasses(oCreature, iClass);
-	// Add the caster level due to the Practised Spellcaster feature
-	iCasterLevel += JXPrivateGetCLBonusFromPractisedSpellcaster(oCreature, iClass, iCasterLevel);
+    // Compute the arcane caster level for the main caster class
+    int iCasterLevel = JXImplGetComputedCLFromClass(iClass, GetLevelByClass(iClass, oCreature));
+    // Add the arcane caster level from other classes
+    if (iClass == iMainClass)
+        iCasterLevel += JXImplGetImprovedArcaneCLFromClasses(oCreature, iClass);
+    // Add the caster level due to the Practised Spellcaster feature
+    iCasterLevel += JXImplGetCLBonusFromPractisedSpellcaster(oCreature, iClass, iCasterLevel);
 
-	return iCasterLevel;
+    return iCasterLevel;
 }
 
 // Get the divine caster level for a creature based on one of her class
@@ -80,25 +81,25 @@ int JXImplGetCreatureArcaneCasterLevel(object oCreature = OBJECT_SELF, int iClas
 // * Returns the creature's divine caster level
 int JXImplGetCreatureDivineCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID)
 {
-	// Get the main divine caster class
-	int iMainClass = JXGetMainCasterClass(oCreature, JX_SPELLTYPE_DIVINE);
-	if (iMainClass == CLASS_TYPE_INVALID) return 0;
-	if (iClass == CLASS_TYPE_INVALID)
-		iClass = iMainClass;
+    // Get the main divine caster class
+    int iMainClass = JXGetMainCasterClass(oCreature, JX_SPELLTYPE_DIVINE);
+    if (iMainClass == CLASS_TYPE_INVALID) return 0;
+    if (iClass == CLASS_TYPE_INVALID)
+        iClass = iMainClass;
 
-	// Test if the specified class is a divine class
-	if (!JXPrivateGetIsMainDivineClass(iClass))
-		return 0;
+    // Test if the specified class is a divine class
+    if (!JXImplGetIsMainDivineClass(iClass))
+        return 0;
 
-	// Compute the divine caster level for the main caster class
-	int iCasterLevel = JXPrivateGetComputedCLFromClass(iClass, GetLevelByClass(iClass, oCreature));
-	// Add the divine caster level from other classes
-	if (iClass == iMainClass)
-		iCasterLevel += JXPrivateGetImprovedDivineCLFromClasses(oCreature, iClass);
-	// Add the caster level due to the Practised Spellcaster feature
-	iCasterLevel += JXPrivateGetCLBonusFromPractisedSpellcaster(oCreature, iClass, iCasterLevel);
+    // Compute the divine caster level for the main caster class
+    int iCasterLevel = JXImplGetComputedCLFromClass(iClass, GetLevelByClass(iClass, oCreature));
+    // Add the divine caster level from other classes
+    if (iClass == iMainClass)
+        iCasterLevel += JXImplGetImprovedDivineCLFromClasses(oCreature, iClass);
+    // Add the caster level due to the Practised Spellcaster feature
+    iCasterLevel += JXImplGetCLBonusFromPractisedSpellcaster(oCreature, iClass, iCasterLevel);
 
-	return iCasterLevel;
+    return iCasterLevel;
 }
 
 // Get the caster level for a creature based on one of her class
@@ -107,29 +108,29 @@ int JXImplGetCreatureDivineCasterLevel(object oCreature = OBJECT_SELF, int iClas
 // * Returns the creature's caster level
 int JXImplGetCreatureCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID)
 {
-	// Get the main caster class (arcane or divine) if no class is specified
-	if (iClass == CLASS_TYPE_INVALID)
-	{
-		iClass = JXGetMainCasterClass(oCreature, JX_SPELLTYPE_BOTH);
-		if (iClass == CLASS_TYPE_INVALID) return 0;
-	}
-	// Test if the specified class is an arcane or a divine class
-	else
-	{
-		if (!JXPrivateGetIsMainArcaneClass(iClass)
-		 && !JXPrivateGetIsMainDivineClass(iClass))
-			return 0;
-	}
+    // Get the main caster class (arcane or divine) if no class is specified
+    if (iClass == CLASS_TYPE_INVALID)
+    {
+        iClass = JXGetMainCasterClass(oCreature, JX_SPELLTYPE_BOTH);
+        if (iClass == CLASS_TYPE_INVALID) return 0;
+    }
+    // Test if the specified class is an arcane or a divine class
+    else
+    {
+        if (!JXImplGetIsMainArcaneClass(iClass)
+         && !JXImplGetIsMainDivineClass(iClass))
+            return 0;
+    }
 
-	// Compute the arcane caster level for an arcane class
-	if (JXPrivateGetIsMainArcaneClass(iClass))
-		return JXGetCreatureArcaneCasterLevel(oCreature, iClass);
+    // Compute the arcane caster level for an arcane class
+    if (JXImplGetIsMainArcaneClass(iClass))
+        return JXGetCreatureArcaneCasterLevel(oCreature, iClass);
 
-	// Compute the divine caster level for a divine class
-	if (JXPrivateGetIsMainDivineClass(iClass))
-		return JXGetCreatureDivineCasterLevel(oCreature, iClass);
+    // Compute the divine caster level for a divine class
+    if (JXImplGetIsMainDivineClass(iClass))
+        return JXGetCreatureDivineCasterLevel(oCreature, iClass);
 
-	return 0;
+    return 0;
 }
 
 // Get the caster level for a creature depending on a spell
@@ -138,67 +139,22 @@ int JXImplGetCreatureCasterLevel(object oCreature = OBJECT_SELF, int iClass = CL
 // * Returns the creature's caster level
 int JXImplGetCreatureCasterLevelForSpell(int iSpellId, object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID)
 {
-	if (iSpellId < 0) return 0;
+    if (iSpellId < 0) return 0;
 
-	// Get the class used to cast the current spell
-	if (iClass == CLASS_TYPE_INVALID)
-		iClass = GetLastSpellCastClass();
+    // Get the class used to cast the current spell
+    if (iClass == CLASS_TYPE_INVALID)
+        iClass = GetLastSpellCastClass();
 
-	// Get the best creature's class able to cast the spell
-	if (iClass == CLASS_TYPE_INVALID)
-		iClass = JXGetClassForSpell(iSpellId, oCreature);
+    // Get the best creature's class able to cast the spell
+    if (iClass == CLASS_TYPE_INVALID)
+        iClass = JXImplGetClassForSpell(iSpellId, oCreature);
 
-	// Still no caster class found ? Then no caster level...
-	if (iClass == CLASS_TYPE_INVALID) return 0;
+    // Still no caster class found ? Then no caster level...
+    if (iClass == CLASS_TYPE_INVALID) return 0;
 
-	// Find the creature's caster level for the class
-	int iCasterLevel = JXGetCreatureCasterLevel(oCreature, iClass);
+    // Find the creature's caster level for the class
+    int iCasterLevel = JXGetCreatureCasterLevel(oCreature, iClass);
 
-	return iCasterLevel;
+    return iCasterLevel;
 }
 
-// Get the save DC for the specified spell cast by a creature
-// - iSpellId SPELL_* constant
-// - oCreature Creature from which to get the spell save DC
-// - iClass CLASS_TYPE_* constant (CLASS_TYPE_INVALID to use the best caster class able to cast the spell)
-// * Returns the creature's spell save DC
-int JXImplGetCreatureSpellSaveDC(int iSpellId, object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID)
-{
-	if (iSpellId < 0) return 0;
-
-	// Get the class used to cast the current spell
-	if (iClass == CLASS_TYPE_INVALID)
-		iClass = GetLastSpellCastClass();
-
-	// Get the best creature's class able to cast the spell
-	if (iClass == CLASS_TYPE_INVALID)
-		iClass = JXGetClassForSpell(iSpellId, oCreature);
-
-	// Still no caster class found ? Then no caster level...
-	if (iClass == CLASS_TYPE_INVALID) return 0;
-
-	// Set the base spell save DC 
-	int iSpellSaveDC = 10;
-	// Add the spell save DC bonus based on the spell level
-	if (iClass == CLASS_TYPE_ASSASSIN)
-		iSpellSaveDC += JXPrivateGetAssassinSpellLevel(iSpellId);
-	else if (iClass == CLASS_TYPE_BLACKGUARD)
-		iSpellSaveDC += JXPrivateGetBlackguardSpellLevel(iSpellId);
-	else
-		iSpellSaveDC += JXGetBaseSpellLevel(iSpellId, iClass);
-	// Add the spell save DC bonus that depends on the spell
-	iSpellSaveDC += JXPrivateGetSpellDCBonusFromSpell(iSpellId, oCreature);
-	// Add the caster ability modifier
-	int iAbility = -1;
-	if (iClass == CLASS_TYPE_ASSASSIN)
-		iAbility = ABILITY_INTELLIGENCE;
-	else if (iClass == CLASS_TYPE_BLACKGUARD)
-		iAbility = ABILITY_WISDOM;
-	else
-	{
-		iAbility = JXClassGetCasterAbility(iClass);
-	}
-	iSpellSaveDC += GetAbilityModifier(iAbility, oCreature);
-
-	return iSpellSaveDC;
-}

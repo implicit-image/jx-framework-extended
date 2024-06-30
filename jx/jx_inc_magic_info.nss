@@ -196,10 +196,44 @@ int JXClassGetHasDomains(int iClass);
 // * Returns the name of the specified spell
 string JXGetSpellName(int iSpellId)
 {
-	string sSpellNameStrRef = Get2DAString("spells", "Name", iSpellId);
-	if (sSpellNameStrRef == "") return "";
+    string sSpellNameStrRef = Get2DAString("spells", "Name", iSpellId);
+    if (sSpellNameStrRef == "") return "";
 
-	return GetStringByStrRef(StringToInt(sSpellNameStrRef));
+    return GetStringByStrRef(StringToInt(sSpellNameStrRef));
+}
+
+// Get the level of a spell, innate or depending on a caster class
+// - iClass Class that is able to cast the spell (CLASS_TYPE_INVALID for innate)
+// * Returns the spell level, or -1 if the spell is not accessible to the class
+int JXGetBaseSpellLevel(int iSpellId, int iClass = CLASS_TYPE_INVALID)
+{
+        string sSpellLevel = "";
+        int ismagic = JXClassGetCasterAbility("no it isnt");
+        switch (iClass)
+        {
+          case CLASS_TYPE_BARD:
+                sSpellLevel = Get2DAString("spells", "Bard", iSpellId); break;
+          case CLASS_TYPE_CLERIC:
+          case CLASS_TYPE_FAVORED_SOUL:
+                sSpellLevel = Get2DAString("spells", "Cleric", iSpellId); break;
+          case CLASS_TYPE_DRUID:
+          case CLASS_TYPE_SPIRIT_SHAMAN:
+                sSpellLevel = Get2DAString("spells", "Druid", iSpellId); break;
+          case CLASS_TYPE_RANGER:
+                sSpellLevel = Get2DAString("spells", "Ranger", iSpellId); break;
+          case CLASS_TYPE_PALADIN:
+                sSpellLevel = Get2DAString("spells", "Paladin", iSpellId); break;
+          case CLASS_TYPE_WIZARD:
+          case CLASS_TYPE_SORCERER:
+                sSpellLevel = Get2DAString("spells", "Wiz_Sorc", iSpellId); break;
+          default:
+                sSpellLevel = Get2DAString("spells", "Innate", iSpellId); break;
+        }
+
+        if (sSpellLevel == "")
+                return -1;
+        else
+                return StringToInt(sSpellLevel);
 }
 
 // Get the range type of a spell
@@ -207,13 +241,13 @@ string JXGetSpellName(int iSpellId)
 // * Return a SPELLRANGE_* constant
 int JXGetSpellRangeType(int iSpellId)
 {
-	string sRange = Get2DAString("spells", "Range", iSpellId);
-	if (sRange == "S") return JX_SPELLRANGE_SHORT;
-	if (sRange == "M") return JX_SPELLRANGE_MEDIUM;
-	if (sRange == "L") return JX_SPELLRANGE_LONG;
-	if (sRange == "P") return JX_SPELLRANGE_PERSONAL;
-	if (sRange == "T") return JX_SPELLRANGE_TOUCH;
-	return JX_SPELLRANGE_INVALID;
+    string sRange = Get2DAString("spells", "Range", iSpellId);
+    if (sRange == "S") return JX_SPELLRANGE_SHORT;
+    if (sRange == "M") return JX_SPELLRANGE_MEDIUM;
+    if (sRange == "L") return JX_SPELLRANGE_LONG;
+    if (sRange == "P") return JX_SPELLRANGE_PERSONAL;
+    if (sRange == "T") return JX_SPELLRANGE_TOUCH;
+    return JX_SPELLRANGE_INVALID;
 }
 
 // Get the range of a spell
@@ -221,54 +255,54 @@ int JXGetSpellRangeType(int iSpellId)
 // * Return the spell range
 float JXGetSpellRange(int iSpellId)
 {
-	int iRangeType = JXGetSpellRangeType(iSpellId);
-	switch (iRangeType)
-	{
-		case JX_SPELLRANGE_SHORT : return 8.0;
-		case JX_SPELLRANGE_MEDIUM : return 20.0;
-		case JX_SPELLRANGE_LONG : return 40.0;
-	}
-	return 0.0;
+    int iRangeType = JXGetSpellRangeType(iSpellId);
+    switch (iRangeType)
+    {
+        case JX_SPELLRANGE_SHORT : return 8.0;
+        case JX_SPELLRANGE_MEDIUM : return 20.0;
+        case JX_SPELLRANGE_LONG : return 40.0;
+    }
+    return 0.0;
 }
 
 // Private function - used in JXGetIsTargetTypeArea()
 int JXPrivateHexStringToInt(string hex)
 {
-	int dec = 0;
+    int dec = 0;
 
-	// We don't care about the "0x" prefix
-	hex = GetSubString(hex, 2, GetStringLength(hex) - 2);
-	int len = GetStringLength(hex);
+    // We don't care about the "0x" prefix
+    hex = GetSubString(hex, 2, GetStringLength(hex) - 2);
+    int len = GetStringLength(hex);
 
-	int i;
-	string digit;
-	int multiplier;
-	for (i = 0; i < len; i++)
-	{
-		digit = GetSubString(hex, i, 1);
-		if (GetStringUpperCase(digit) == "A")
-			multiplier = 10;
-		else if (GetStringUpperCase(digit) == "B")
-			multiplier = 11;
-		else if (GetStringUpperCase(digit) == "C")
-			multiplier = 12;
-		else if (GetStringUpperCase(digit) == "D")
-			multiplier = 13;
-		else if (GetStringUpperCase(digit) == "E")
-			multiplier = 14;
-		else if (GetStringUpperCase(digit) == "F")
-			multiplier = 15;
-		else
-			multiplier = StringToInt(digit);
+    int i;
+    string digit;
+    int multiplier;
+    for (i = 0; i < len; i++)
+    {
+        digit = GetSubString(hex, i, 1);
+        if (GetStringUpperCase(digit) == "A")
+            multiplier = 10;
+        else if (GetStringUpperCase(digit) == "B")
+            multiplier = 11;
+        else if (GetStringUpperCase(digit) == "C")
+            multiplier = 12;
+        else if (GetStringUpperCase(digit) == "D")
+            multiplier = 13;
+        else if (GetStringUpperCase(digit) == "E")
+            multiplier = 14;
+        else if (GetStringUpperCase(digit) == "F")
+            multiplier = 15;
+        else
+            multiplier = StringToInt(digit);
 
-		int j;
-		int digitLoc = 1;
-		for (j = 1; j < len -i; j++)
-			digitLoc *= 16;
-		dec += multiplier * digitLoc;
-	}
+        int j;
+        int digitLoc = 1;
+        for (j = 1; j < len -i; j++)
+            digitLoc *= 16;
+        dec += multiplier * digitLoc;
+    }
 
-	return dec;
+    return dec;
 }
 
 // Indicate if the spell can target an area
@@ -276,14 +310,14 @@ int JXPrivateHexStringToInt(string hex)
 // * Return TRUE if the spell can target an area
 int JXGetHasSpellTargetTypeArea(int iSpellId)
 {
-	string sTargetType = Get2DAString("spells", "TargetType", iSpellId);
-	int iTargetType = JXPrivateHexStringToInt(sTargetType);
-	int iTargetTypeArea = 4;
+    string sTargetType = Get2DAString("spells", "TargetType", iSpellId);
+    int iTargetType = JXPrivateHexStringToInt(sTargetType);
+    int iTargetTypeArea = 4;
 
-	if ((iTargetType & iTargetTypeArea) == iTargetTypeArea)
-		return TRUE;
-	else
-		return FALSE;
+    if ((iTargetType & iTargetTypeArea) == iTargetTypeArea)
+        return TRUE;
+    else
+        return FALSE;
 }
 
 // Indicate if a spell is using a ranged touch attack
@@ -291,12 +325,12 @@ int JXGetHasSpellTargetTypeArea(int iSpellId)
 // * Returns TRUE if the spell uses a ranged touch attack
 int JXGetIsSpellUsingRangedTouchAttack(int iSpellId)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLRANGEDTOUCHATTACK, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLRANGEDTOUCHATTACK, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // Indicate if a spell is a spell or a spell-like ability
@@ -304,12 +338,12 @@ int JXGetIsSpellUsingRangedTouchAttack(int iSpellId)
 // * Returns TRUE if the spell is a spell or a spell-like ability
 int JXGetIsSpellMagical(int iSpellId)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLMAGICAL, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLMAGICAL, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // Indicate if a spell is a supernatural ability
@@ -317,12 +351,12 @@ int JXGetIsSpellMagical(int iSpellId)
 // * Returns TRUE if the spell is a supernatural ability
 int JXGetIsSpellSupernatural(int iSpellId)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLSUPERNATURAL, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLSUPERNATURAL, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // Indicate if a spell is an extraordinary ability
@@ -330,12 +364,12 @@ int JXGetIsSpellSupernatural(int iSpellId)
 // * Returns TRUE if the spell is an extraordinary ability
 int JXGetIsSpellExtraordinary(int iSpellId)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLEXTRAORDINARY, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLEXTRAORDINARY, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // Indicate if a spell isn't a spell, spell-like, supernatural or extraordinary ability
@@ -343,12 +377,12 @@ int JXGetIsSpellExtraordinary(int iSpellId)
 // * Returns TRUE if the spell isn't a spell, spell-like, supernatural or extraordinary ability
 int JXGetIsSpellMiscellaneous(int iSpellId)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLMISCELLANEOUS, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLMISCELLANEOUS, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // Indicate if a spell has the specified descriptor
@@ -357,13 +391,13 @@ int JXGetIsSpellMiscellaneous(int iSpellId)
 // * Returns TRUE if the spell has the specified spell descriptor
 int JXGetHasSpellDescriptor(int iSpellId, int iDescriptor = JX_SPELLDESCRIPTOR_ANY)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
-	paramList = JXScriptAddParameterInt(paramList, iDescriptor);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    paramList = JXScriptAddParameterInt(paramList, iDescriptor);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLDESCRIPTOR, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLDESCRIPTOR, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // Get the spell school of a spell
@@ -389,12 +423,12 @@ int JXGetSpellSchool(int iSpellId)
 // * Returns a JX_SPELLSUBSCHOOL_* constant
 int JXGetSpellSubSchool(int iSpellId)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLSUBSCHOOL, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLSUBSCHOOL, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // Get the spell school name from a spell school identifier
@@ -426,121 +460,121 @@ string JXGetSpellSchoolName(int iSpellSchool)
 // * Returns the specified saving throw
 int JXGetSavingThrow(object oTarget, int iSave, int iSaveVsType = SAVING_THROW_ALL)
 {
-	// Test if the target is a valid creature
-	if (!GetIsObjectValid(oTarget))
-		return 0;
+    // Test if the target is a valid creature
+    if (!GetIsObjectValid(oTarget))
+        return 0;
 
-	// Get the base saving throw
-	int iBaseSave;
-	switch (iSave)
-	{
-		case SAVING_THROW_FORT :
-			iBaseSave = GetFortitudeSavingThrow(oTarget);
-			break;
-		case SAVING_THROW_REFLEX :
-			iBaseSave = GetReflexSavingThrow(oTarget);
-			break;
-		case SAVING_THROW_WILL :
-			iBaseSave = GetWillSavingThrow(oTarget);
-			break;
-	}
+    // Get the base saving throw
+    int iBaseSave;
+    switch (iSave)
+    {
+        case SAVING_THROW_FORT :
+            iBaseSave = GetFortitudeSavingThrow(oTarget);
+            break;
+        case SAVING_THROW_REFLEX :
+            iBaseSave = GetReflexSavingThrow(oTarget);
+            break;
+        case SAVING_THROW_WILL :
+            iBaseSave = GetWillSavingThrow(oTarget);
+            break;
+    }
 
-	if ((GetObjectType(oTarget) == OBJECT_TYPE_DOOR)
-	 || (GetObjectType(oTarget) == OBJECT_TYPE_PLACEABLE))
-	 	return iBaseSave;
+    if ((GetObjectType(oTarget) == OBJECT_TYPE_DOOR)
+     || (GetObjectType(oTarget) == OBJECT_TYPE_PLACEABLE))
+        return iBaseSave;
 
-	// Get the effect modifier
-	int iEffectModifier = 0;
-	int iSaveTemp;
-	int iSaveVsTypeTemp;
-	effect eLoop = GetFirstEffect(oTarget);
-	while (GetIsEffectValid(eLoop))
-	{
-		if (GetEffectType(eLoop) == EFFECT_TYPE_SAVING_THROW_INCREASE)
-		{
-			// Get the saving throw type (SAVING_THROW_* constant)
-			iSaveTemp = GetEffectInteger(eLoop, 1);
-			// Get the type of decreased saving throw (SAVING_THROW_TYPE_* constant)
-			iSaveVsTypeTemp = GetEffectInteger(eLoop, 2);
-			
-			if (((iSaveTemp == iSave) || (iSaveTemp == SAVING_THROW_ALL))
-			 && (iSaveVsTypeTemp == iSaveVsType))
-			{
-				iEffectModifier += GetEffectInteger(eLoop, 0);
-			}
-		}
-		else if (GetEffectType(eLoop) == EFFECT_TYPE_SAVING_THROW_DECREASE)
-		{
-			// Get the saving throw type (SAVING_THROW_* constant)
-			iSaveTemp = GetEffectInteger(eLoop, 1);
-			// Get the type of decreased saving throw (SAVING_THROW_TYPE_* constant)
-			iSaveVsTypeTemp = GetEffectInteger(eLoop, 2);
-			
-			if (((iSaveTemp == iSave) || (iSaveTemp == SAVING_THROW_ALL))
-			 && (iSaveVsTypeTemp == iSaveVsType))
-			{
-				// Get the saving throw decreased value
-				iEffectModifier -= GetEffectInteger(eLoop, 0);
-			}
-		}
-		eLoop = GetNextEffect(oTarget);
-	}
+    // Get the effect modifier
+    int iEffectModifier = 0;
+    int iSaveTemp;
+    int iSaveVsTypeTemp;
+    effect eLoop = GetFirstEffect(oTarget);
+    while (GetIsEffectValid(eLoop))
+    {
+        if (GetEffectType(eLoop) == EFFECT_TYPE_SAVING_THROW_INCREASE)
+        {
+            // Get the saving throw type (SAVING_THROW_* constant)
+            iSaveTemp = GetEffectInteger(eLoop, 1);
+            // Get the type of decreased saving throw (SAVING_THROW_TYPE_* constant)
+            iSaveVsTypeTemp = GetEffectInteger(eLoop, 2);
 
-	// Get the item properties' saving throws vs type
-	int iIPSaveVsType = -1;
-	switch (iSaveVsType)
-	{
-		case SAVING_THROW_TYPE_ALL :			iIPSaveVsType = IP_CONST_SAVEVS_UNIVERSAL; break;
-		case SAVING_THROW_TYPE_ACID :			iIPSaveVsType = IP_CONST_SAVEVS_ACID; break;
-		case SAVING_THROW_TYPE_COLD :			iIPSaveVsType = IP_CONST_SAVEVS_COLD; break;
-		case SAVING_THROW_TYPE_DEATH :			iIPSaveVsType = IP_CONST_SAVEVS_DEATH; break;
-		case SAVING_THROW_TYPE_DISEASE :		iIPSaveVsType = IP_CONST_SAVEVS_DISEASE; break;
-		case SAVING_THROW_TYPE_DIVINE :			iIPSaveVsType = IP_CONST_SAVEVS_DIVINE; break;
-		case SAVING_THROW_TYPE_ELECTRICITY :	iIPSaveVsType = IP_CONST_SAVEVS_ELECTRICAL; break;
-		case SAVING_THROW_TYPE_FEAR	:			iIPSaveVsType = IP_CONST_SAVEVS_FEAR; break;
-		case SAVING_THROW_TYPE_FIRE :			iIPSaveVsType = IP_CONST_SAVEVS_FIRE; break;
-		case SAVING_THROW_TYPE_MIND_SPELLS :	iIPSaveVsType = IP_CONST_SAVEVS_MINDAFFECTING; break;
-		case SAVING_THROW_TYPE_NEGATIVE :		iIPSaveVsType = IP_CONST_SAVEVS_NEGATIVE; break;
-		case SAVING_THROW_TYPE_POISON :			iIPSaveVsType = IP_CONST_SAVEVS_POISON; break;
-		case SAVING_THROW_TYPE_POSITIVE :		iIPSaveVsType = IP_CONST_SAVEVS_POSITIVE; break;
-		case SAVING_THROW_TYPE_SONIC :			iIPSaveVsType = IP_CONST_SAVEVS_SONIC; break;
-	}
+            if (((iSaveTemp == iSave) || (iSaveTemp == SAVING_THROW_ALL))
+             && (iSaveVsTypeTemp == iSaveVsType))
+            {
+                iEffectModifier += GetEffectInteger(eLoop, 0);
+            }
+        }
+        else if (GetEffectType(eLoop) == EFFECT_TYPE_SAVING_THROW_DECREASE)
+        {
+            // Get the saving throw type (SAVING_THROW_* constant)
+            iSaveTemp = GetEffectInteger(eLoop, 1);
+            // Get the type of decreased saving throw (SAVING_THROW_TYPE_* constant)
+            iSaveVsTypeTemp = GetEffectInteger(eLoop, 2);
 
-	// Get the item property modifier
-	int iItemPropModifier = 0;
-	if (iIPSaveVsType != -1)
-	{
-		// Loop all all items held by the creature
-		itemproperty ipLoop;
-		object oItemHeld; int iLoop;
-		for (iLoop = 0; iLoop < 17; iLoop++)
-		{
-			oItemHeld = GetItemInSlot(iLoop, oTarget);
-			if (GetIsObjectValid(oItemHeld)
-			 && (GetItemHasItemProperty(oItemHeld, ITEM_PROPERTY_SAVING_THROW_BONUS)
-			  || GetItemHasItemProperty(oItemHeld, ITEM_PROPERTY_DECREASED_SAVING_THROWS)))
-			{
-				// Loop all item propeties of an item
-				ipLoop = GetFirstItemProperty(oItemHeld);
-				while (GetIsItemPropertyValid(ipLoop))
-				{
-					// Item property that increases saving throws vs type found
-					if ((GetItemPropertyType(ipLoop) == ITEM_PROPERTY_SAVING_THROW_BONUS)
-					 && ((GetItemPropertySubType(ipLoop) == iIPSaveVsType)
-					  || (GetItemPropertySubType(ipLoop) == IP_CONST_SAVEVS_UNIVERSAL)))
-						iItemPropModifier += GetItemPropertyCostTableValue(ipLoop);
-					// Item property that decreases saving throws vs type found
-					else if ((GetItemPropertyType(ipLoop) == ITEM_PROPERTY_DECREASED_SAVING_THROWS)
-					 && ((GetItemPropertySubType(ipLoop) == iIPSaveVsType)
-					  || (GetItemPropertySubType(ipLoop) == IP_CONST_SAVEVS_UNIVERSAL)))
-						iItemPropModifier -= GetItemPropertyCostTableValue(ipLoop);
-					ipLoop = GetNextItemProperty(oItemHeld);
-				}
-			}
-		}
-	}
+            if (((iSaveTemp == iSave) || (iSaveTemp == SAVING_THROW_ALL))
+             && (iSaveVsTypeTemp == iSaveVsType))
+            {
+                // Get the saving throw decreased value
+                iEffectModifier -= GetEffectInteger(eLoop, 0);
+            }
+        }
+        eLoop = GetNextEffect(oTarget);
+    }
 
-	return iBaseSave + iEffectModifier + iItemPropModifier;
+    // Get the item properties' saving throws vs type
+    int iIPSaveVsType = -1;
+    switch (iSaveVsType)
+    {
+        case SAVING_THROW_TYPE_ALL :            iIPSaveVsType = IP_CONST_SAVEVS_UNIVERSAL; break;
+        case SAVING_THROW_TYPE_ACID :           iIPSaveVsType = IP_CONST_SAVEVS_ACID; break;
+        case SAVING_THROW_TYPE_COLD :           iIPSaveVsType = IP_CONST_SAVEVS_COLD; break;
+        case SAVING_THROW_TYPE_DEATH :          iIPSaveVsType = IP_CONST_SAVEVS_DEATH; break;
+        case SAVING_THROW_TYPE_DISEASE :        iIPSaveVsType = IP_CONST_SAVEVS_DISEASE; break;
+        case SAVING_THROW_TYPE_DIVINE :             iIPSaveVsType = IP_CONST_SAVEVS_DIVINE; break;
+        case SAVING_THROW_TYPE_ELECTRICITY :    iIPSaveVsType = IP_CONST_SAVEVS_ELECTRICAL; break;
+        case SAVING_THROW_TYPE_FEAR     :           iIPSaveVsType = IP_CONST_SAVEVS_FEAR; break;
+        case SAVING_THROW_TYPE_FIRE :           iIPSaveVsType = IP_CONST_SAVEVS_FIRE; break;
+        case SAVING_THROW_TYPE_MIND_SPELLS :    iIPSaveVsType = IP_CONST_SAVEVS_MINDAFFECTING; break;
+        case SAVING_THROW_TYPE_NEGATIVE :       iIPSaveVsType = IP_CONST_SAVEVS_NEGATIVE; break;
+        case SAVING_THROW_TYPE_POISON :             iIPSaveVsType = IP_CONST_SAVEVS_POISON; break;
+        case SAVING_THROW_TYPE_POSITIVE :       iIPSaveVsType = IP_CONST_SAVEVS_POSITIVE; break;
+        case SAVING_THROW_TYPE_SONIC :          iIPSaveVsType = IP_CONST_SAVEVS_SONIC; break;
+    }
+
+    // Get the item property modifier
+    int iItemPropModifier = 0;
+    if (iIPSaveVsType != -1)
+    {
+        // Loop all all items held by the creature
+        itemproperty ipLoop;
+        object oItemHeld; int iLoop;
+        for (iLoop = 0; iLoop < 17; iLoop++)
+        {
+            oItemHeld = GetItemInSlot(iLoop, oTarget);
+            if (GetIsObjectValid(oItemHeld)
+             && (GetItemHasItemProperty(oItemHeld, ITEM_PROPERTY_SAVING_THROW_BONUS)
+              || GetItemHasItemProperty(oItemHeld, ITEM_PROPERTY_DECREASED_SAVING_THROWS)))
+            {
+                // Loop all item propeties of an item
+                ipLoop = GetFirstItemProperty(oItemHeld);
+                while (GetIsItemPropertyValid(ipLoop))
+                {
+                    // Item property that increases saving throws vs type found
+                    if ((GetItemPropertyType(ipLoop) == ITEM_PROPERTY_SAVING_THROW_BONUS)
+                     && ((GetItemPropertySubType(ipLoop) == iIPSaveVsType)
+                      || (GetItemPropertySubType(ipLoop) == IP_CONST_SAVEVS_UNIVERSAL)))
+                        iItemPropModifier += GetItemPropertyCostTableValue(ipLoop);
+                    // Item property that decreases saving throws vs type found
+                    else if ((GetItemPropertyType(ipLoop) == ITEM_PROPERTY_DECREASED_SAVING_THROWS)
+                     && ((GetItemPropertySubType(ipLoop) == iIPSaveVsType)
+                      || (GetItemPropertySubType(ipLoop) == IP_CONST_SAVEVS_UNIVERSAL)))
+                        iItemPropModifier -= GetItemPropertyCostTableValue(ipLoop);
+                    ipLoop = GetNextItemProperty(oItemHeld);
+                }
+            }
+        }
+    }
+
+    return iBaseSave + iEffectModifier + iItemPropModifier;
 }
 
 // Get the spell type : none, arcane, divine, or both
@@ -548,21 +582,21 @@ int JXGetSavingThrow(object oTarget, int iSave, int iSaveVsType = SAVING_THROW_A
 // * Returns a JX_SPELLTYPE_* constant
 int JXGetSpellType(int iSpellId)
 {
-	int iArcane = 0;
-	int iDivine = 0;
+    int iArcane = 0;
+    int iDivine = 0;
 
-	// Check if the spell type is arcane
-	if (Get2DAString("spells", "Wiz_Sorc", iSpellId) != "") iArcane = 1;
-	if ((iArcane == 0) && (Get2DAString("spells", "Warlock", iSpellId) != "")) iArcane = 1;
-	if ((iArcane == 0) && (Get2DAString("spells", "Bard", iSpellId) != "")) iArcane = 1;
+    // Check if the spell type is arcane
+    if (Get2DAString("spells", "Wiz_Sorc", iSpellId) != "") iArcane = 1;
+    if ((iArcane == 0) && (Get2DAString("spells", "Warlock", iSpellId) != "")) iArcane = 1;
+    if ((iArcane == 0) && (Get2DAString("spells", "Bard", iSpellId) != "")) iArcane = 1;
 
-	// Check if the spell type is divine
-	if (Get2DAString("spells", "Cleric", iSpellId) != "") iDivine = 1;
-	if ((iDivine == 0) && (Get2DAString("spells", "Druid", iSpellId) != "")) iDivine = 1;
-	if ((iDivine == 0) && (Get2DAString("spells", "Ranger", iSpellId) != "")) iDivine = 1;
-	if ((iDivine == 0) && (Get2DAString("spells", "Paladin", iSpellId) != "")) iDivine = 1;
+    // Check if the spell type is divine
+    if (Get2DAString("spells", "Cleric", iSpellId) != "") iDivine = 1;
+    if ((iDivine == 0) && (Get2DAString("spells", "Druid", iSpellId) != "")) iDivine = 1;
+    if ((iDivine == 0) && (Get2DAString("spells", "Ranger", iSpellId) != "")) iDivine = 1;
+    if ((iDivine == 0) && (Get2DAString("spells", "Paladin", iSpellId) != "")) iDivine = 1;
 
-	return iArcane + iDivine;
+    return iArcane + iDivine;
 }
 
 // Get the level of a spell, innate or depending on a caster class
@@ -570,13 +604,13 @@ int JXGetSpellType(int iSpellId)
 // * Returns the spell level, or -1 if the spell is not accessible to the class
 int JXGetBaseSpellLevel(int iSpellId, int iClass = CLASS_TYPE_INVALID)
 {
-	struct script_param_list paramList;
-	paramList = JXScriptAddParameterInt(paramList, iSpellId);
-	paramList = JXScriptAddParameterInt(paramList, iClass);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    paramList = JXScriptAddParameterInt(paramList, iClass);
 
-	JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLLEVEL, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLLEVEL, paramList);
 
-	return JXScriptGetResponseInt();
+    return JXScriptGetResponseInt();
 }
 
 // Get the main ability for a spellcasting class
@@ -584,22 +618,22 @@ int JXGetBaseSpellLevel(int iSpellId, int iClass = CLASS_TYPE_INVALID)
 // * Returns an ABILITY_* constant, or -1 if the class doesn't have any spellcasting ability
 int JXClassGetCasterAbility(int iClass)
 {
-	string sAbility = Get2DAString("classes", "SpellAbil", iClass);
+    string sAbility = Get2DAString("classes", "SpellAbil", iClass);
 
-	if (sAbility == "STR")
-		return ABILITY_STRENGTH;
-	if (sAbility == "DEX")
-		return ABILITY_DEXTERITY;
-	if (sAbility == "CON")
-		return ABILITY_CONSTITUTION;
-	if (sAbility == "INT")
-		return ABILITY_INTELLIGENCE;
-	if (sAbility == "WIS")
-		return ABILITY_WISDOM;
-	if (sAbility == "CHA")
-		return ABILITY_CHARISMA;
+    if (sAbility == "STR")
+        return ABILITY_STRENGTH;
+    if (sAbility == "DEX")
+        return ABILITY_DEXTERITY;
+    if (sAbility == "CON")
+        return ABILITY_CONSTITUTION;
+    if (sAbility == "INT")
+        return ABILITY_INTELLIGENCE;
+    if (sAbility == "WIS")
+        return ABILITY_WISDOM;
+    if (sAbility == "CHA")
+        return ABILITY_CHARISMA;
 
-	return -1;
+    return -1;
 }
 
 // Determine if a class must memorize spells
@@ -607,7 +641,7 @@ int JXClassGetCasterAbility(int iClass)
 // * Returns TRUE if the class must memorize spells
 int JXClassGetMemorizesSpells(int iClass)
 {
-	return StringToInt(Get2DAString("classes", "MemorizesSpells", iClass));
+    return StringToInt(Get2DAString("classes", "MemorizesSpells", iClass));
 }
 
 // Determine if a class can cast its spells infinitely
@@ -615,7 +649,7 @@ int JXClassGetMemorizesSpells(int iClass)
 // * Returns TRUE if the class has infinite spells
 int JXClassGetHasInfiniteSpells(int iClass)
 {
-	return StringToInt(Get2DAString("classes", "HasInfiniteSpells", iClass));
+    return StringToInt(Get2DAString("classes", "HasInfiniteSpells", iClass));
 }
 
 // Determine if a class knows all the spells associated with it
@@ -623,7 +657,7 @@ int JXClassGetHasInfiniteSpells(int iClass)
 // * Returns TRUE if all spells are known for the the class
 int JXClassGetKnowsAllSpells(int iClass)
 {
-	return StringToInt(Get2DAString("classes", "AllSpellsKnown", iClass));
+    return StringToInt(Get2DAString("classes", "AllSpellsKnown", iClass));
 }
 
 // Determine if a class has domain spells
@@ -631,5 +665,5 @@ int JXClassGetKnowsAllSpells(int iClass)
 // * Returns TRUE if all spells are known for the the class
 int JXClassGetHasDomains(int iClass)
 {
-	return StringToInt(Get2DAString("classes", "HasDomains", iClass));
+    return StringToInt(Get2DAString("classes", "HasDomains", iClass));
 }

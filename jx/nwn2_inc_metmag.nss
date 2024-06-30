@@ -25,11 +25,11 @@ int ApplyMetamagicVariableMods(int nVal, int nValMax)
 {
     int nOrigVal = nVal;
     int nMetaMagic = JXGetMetaMagicFeat();
-	
-	// if no metamagic feats then don't go any further (or do any bitwise comparisons!)
-	if(nMetaMagic==-1) 
-		return nVal;
-	
+
+    // if no metamagic feats then don't go any further (or do any bitwise comparisons!)
+    if(nMetaMagic==-1)
+        return nVal;
+
     // Need to handle Multiple Metamagics properly here, in case that gets supported in the GUI...
     if (nMetaMagic & METAMAGIC_MAXIMIZE)
     {
@@ -46,11 +46,11 @@ int ApplyMetamagicVariableMods(int nVal, int nValMax)
 float ApplyMetamagicDurationMods(float fDuration)
 {
     int nMetaMagic = JXGetMetaMagicFeat();
-	
-	// if no metamagic feats then don't go any further (or do any bitwise comparisons!)
-	if(nMetaMagic==-1) 
-		return fDuration;
-	
+
+    // if no metamagic feats then don't go any further (or do any bitwise comparisons!)
+    if(nMetaMagic==-1)
+        return fDuration;
+
     if (nMetaMagic & METAMAGIC_PERMANENT)
     {
         fDuration = 0.0;
@@ -70,12 +70,12 @@ float ApplyMetamagicDurationMods(float fDuration)
 int ApplyMetamagicDurationTypeMods(int nDurType)
 {
     int nMetaMagic = JXGetMetaMagicFeat();
-	
-	// if no metamagic feats then don't go any further (or do any bitwise comparisons!)
-	if(nMetaMagic==-1) 
-		return nDurType;
 
-	
+    // if no metamagic feats then don't go any further (or do any bitwise comparisons!)
+    if(nMetaMagic==-1)
+        return nDurType;
+
+
     if (nMetaMagic & METAMAGIC_PERMANENT)
     {
         nDurType = DURATION_TYPE_PERMANENT;

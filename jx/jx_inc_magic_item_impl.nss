@@ -10,61 +10,61 @@
 // - iItemPropId ITEM_PROPERTY_* or JX_ITEM_PROPERTY_* constant
 void JXImplDisableItemProperty(object oItem, string sStoreVariable, int iItemPropId = JX_ITEM_PROPERTY_ALL)
 {
-	// Item property type
-	int iIPType;
+    // Item property type
+    int iIPType;
 
-	// Get the item properties curretly saved
-	string sItemProperties = GetLocalString(oItem, sStoreVariable);
-	string sItemProperty;
+    // Get the item properties curretly saved
+    string sItemProperties = GetLocalString(oItem, sStoreVariable);
+    string sItemProperty;
 
-	// Loop to remove the item properties
-	itemproperty ipLoop = GetFirstItemProperty(oItem);
-	while (GetIsItemPropertyValid(ipLoop))
-	{
-		// Get the identifier of the current item property
-		iIPType = GetItemPropertyType(ipLoop);
+    // Loop to remove the item properties
+    itemproperty ipLoop = GetFirstItemProperty(oItem);
+    while (GetIsItemPropertyValid(ipLoop))
+    {
+        // Get the identifier of the current item property
+        iIPType = GetItemPropertyType(ipLoop);
 
-		// Temporary properties aren't removed
-		if (GetItemPropertyDurationType(ipLoop) == DURATION_TYPE_TEMPORARY)
-		{
-			ipLoop = GetNextItemProperty(oItem);
-			continue;
-		}
-		// Determine if the item property has to be removed
-		if (iItemPropId != JX_ITEM_PROPERTY_ALL)
-			if ((iItemPropId != JX_ITEM_PROPERTY_MAGIC)
-			 || (iItemPropId == JX_ITEM_PROPERTY_MAGIC) && (!JXGetIsItemPropertyMagical(oItem, ipLoop)))
-				if ((iItemPropId != JX_ITEM_PROPERTY_NOMAGIC)
-				 || (iItemPropId == JX_ITEM_PROPERTY_NOMAGIC) && (JXGetIsItemPropertyMagical(oItem, ipLoop)))
-				 	if (iItemPropId != iIPType)
-					{
-						ipLoop = GetNextItemProperty(oItem);
-						continue;
-					}
+        // Temporary properties aren't removed
+        if (GetItemPropertyDurationType(ipLoop) == DURATION_TYPE_TEMPORARY)
+        {
+            ipLoop = GetNextItemProperty(oItem);
+            continue;
+        }
+        // Determine if the item property has to be removed
+        if (iItemPropId != JX_ITEM_PROPERTY_ALL)
+            if ((iItemPropId != JX_ITEM_PROPERTY_MAGIC)
+             || (iItemPropId == JX_ITEM_PROPERTY_MAGIC) && (!JXGetIsItemPropertyMagical(oItem, ipLoop)))
+                if ((iItemPropId != JX_ITEM_PROPERTY_NOMAGIC)
+                 || (iItemPropId == JX_ITEM_PROPERTY_NOMAGIC) && (JXGetIsItemPropertyMagical(oItem, ipLoop)))
+                    if (iItemPropId != iIPType)
+                    {
+                        ipLoop = GetNextItemProperty(oItem);
+                        continue;
+                    }
 
-		// Get the item property in a string form
-		sItemProperty = JXItemPropertyToString(ipLoop);
+        // Get the item property in a string form
+        sItemProperty = JXItemPropertyToString(ipLoop);
 
-		// Special case : As a weapon looses its enhancement bonus, it becomes masterwork
-		if ((iItemPropId == JX_ITEM_PROPERTY_MAGIC) && (GetWeaponType(oItem) != WEAPON_TYPE_NONE) && (iIPType == ITEM_PROPERTY_ENHANCEMENT_BONUS))
-			AddItemProperty(DURATION_TYPE_PERMANENT, ItemPropertyAttackBonus(1), oItem);
+        // Special case : As a weapon looses its enhancement bonus, it becomes masterwork
+        if ((iItemPropId == JX_ITEM_PROPERTY_MAGIC) && (GetWeaponType(oItem) != WEAPON_TYPE_NONE) && (iIPType == ITEM_PROPERTY_ENHANCEMENT_BONUS))
+            AddItemProperty(DURATION_TYPE_PERMANENT, ItemPropertyAttackBonus(1), oItem);
 
-		// Item properties that can't be re-created
-		if ((iIPType != ITEM_PROPERTY_MIND_BLANK)		// No ItemPropertyXXX() to create this property
-		 && (iIPType != ITEM_PROPERTY_ON_MONSTER_HIT))	// ItemPropertyOnMonsterHitProperties() is bugged
-		{
-			if (sItemProperties == "")
-				sItemProperties = sItemProperty;
-			else
-				sItemProperties += ";" + sItemProperty;
-			RemoveItemProperty(oItem, ipLoop);
-		}
+        // Item properties that can't be re-created
+        if ((iIPType != ITEM_PROPERTY_MIND_BLANK)       // No ItemPropertyXXX() to create this property
+         && (iIPType != ITEM_PROPERTY_ON_MONSTER_HIT))  // ItemPropertyOnMonsterHitProperties() is bugged
+        {
+            if (sItemProperties == "")
+                sItemProperties = sItemProperty;
+            else
+                sItemProperties += ";" + sItemProperty;
+            RemoveItemProperty(oItem, ipLoop);
+        }
 
-		ipLoop = GetNextItemProperty(oItem);
-	}
+        ipLoop = GetNextItemProperty(oItem);
+    }
 
-	// Save the item properties that have been removed
-	SetLocalString(oItem, sStoreVariable, sItemProperties);
+    // Save the item properties that have been removed
+    SetLocalString(oItem, sStoreVariable, sItemProperties);
 }
 
 // Restore a permanent item property or a group of item properties from an item.
@@ -77,58 +77,58 @@ void JXImplDisableItemProperty(object oItem, string sStoreVariable, int iItemPro
 // - iItemPropId ITEM_PROPERTY_* or JX_ITEM_PROPERTY_* constant
 void JXImplEnableItemProperty(object oItem, string sStoreVariable, int iItemPropId = JX_ITEM_PROPERTY_ALL)
 {
-	string sItemProperties = GetLocalString(oItem, sStoreVariable);
-	string sItemProperty;
-	string sItemPropertiesResult;
+    string sItemProperties = GetLocalString(oItem, sStoreVariable);
+    string sItemProperty;
+    string sItemPropertiesResult;
 
-	// Loop on all item properties
-	int iPosSemicolon = FindSubString(sItemProperties, ";");
-	if (sItemProperties != "")
-		while (1)
-		{
-			// Get the current item property
-			if (iPosSemicolon == -1)
-				sItemProperty = sItemProperties;
-			else
-			{
-				sItemProperty = GetStringLeft(sItemProperties, iPosSemicolon);
-				sItemProperties = GetSubString(sItemProperties, iPosSemicolon + 1, GetStringLength(sItemProperties) - iPosSemicolon + 1);
-			}
+    // Loop on all item properties
+    int iPosSemicolon = FindSubString(sItemProperties, ";");
+    if (sItemProperties != "")
+        while (1)
+        {
+            // Get the current item property
+            if (iPosSemicolon == -1)
+                sItemProperty = sItemProperties;
+            else
+            {
+                sItemProperty = GetStringLeft(sItemProperties, iPosSemicolon);
+                sItemProperties = GetSubString(sItemProperties, iPosSemicolon + 1, GetStringLength(sItemProperties) - iPosSemicolon + 1);
+            }
 
-			// Get the item property previously saved
-			itemproperty ipRestored = JXStringToItemProperty(sItemProperty);
+            // Get the item property previously saved
+            itemproperty ipRestored = JXStringToItemProperty(sItemProperty);
 
-			// Determine if the item property has to be restored
-			if (iItemPropId != JX_ITEM_PROPERTY_ALL)
-				if ((iItemPropId != JX_ITEM_PROPERTY_MAGIC)
-				 || (iItemPropId == JX_ITEM_PROPERTY_MAGIC) && (!JXGetIsItemPropertyMagical(oItem, ipRestored)))
-					if ((iItemPropId != JX_ITEM_PROPERTY_NOMAGIC)
-					 || (iItemPropId == JX_ITEM_PROPERTY_NOMAGIC) && (JXGetIsItemPropertyMagical(oItem, ipRestored)))
-					 	if (iItemPropId != GetItemPropertyType(ipRestored))
-						{
-							if (sItemPropertiesResult == "")
-								sItemPropertiesResult = sItemProperty;
-							else
-								sItemPropertiesResult += ";" + sItemProperty;
-							if (iPosSemicolon == -1) break;
-							iPosSemicolon = FindSubString(sItemProperties, ";");
-							continue;
-						}
+            // Determine if the item property has to be restored
+            if (iItemPropId != JX_ITEM_PROPERTY_ALL)
+                if ((iItemPropId != JX_ITEM_PROPERTY_MAGIC)
+                 || (iItemPropId == JX_ITEM_PROPERTY_MAGIC) && (!JXGetIsItemPropertyMagical(oItem, ipRestored)))
+                    if ((iItemPropId != JX_ITEM_PROPERTY_NOMAGIC)
+                     || (iItemPropId == JX_ITEM_PROPERTY_NOMAGIC) && (JXGetIsItemPropertyMagical(oItem, ipRestored)))
+                        if (iItemPropId != GetItemPropertyType(ipRestored))
+                        {
+                            if (sItemPropertiesResult == "")
+                                sItemPropertiesResult = sItemProperty;
+                            else
+                                sItemPropertiesResult += ";" + sItemProperty;
+                            if (iPosSemicolon == -1) break;
+                            iPosSemicolon = FindSubString(sItemProperties, ";");
+                            continue;
+                        }
 
-			// Special case : As a weapon restores its enhancement bonus, it looses its masterwork property
-			if ((GetWeaponType(oItem) != WEAPON_TYPE_NONE) && (GetItemPropertyType(ipRestored) == ITEM_PROPERTY_ENHANCEMENT_BONUS))
-				IPRemoveMatchingItemProperties(oItem, ITEM_PROPERTY_ATTACK_BONUS, DURATION_TYPE_PERMANENT);
+            // Special case : As a weapon restores its enhancement bonus, it looses its masterwork property
+            if ((GetWeaponType(oItem) != WEAPON_TYPE_NONE) && (GetItemPropertyType(ipRestored) == ITEM_PROPERTY_ENHANCEMENT_BONUS))
+                IPRemoveMatchingItemProperties(oItem, ITEM_PROPERTY_ATTACK_BONUS, DURATION_TYPE_PERMANENT);
 
-			// Create the item property found on the item
-			AddItemProperty(DURATION_TYPE_PERMANENT, ipRestored, oItem);
+            // Create the item property found on the item
+            AddItemProperty(DURATION_TYPE_PERMANENT, ipRestored, oItem);
 
-			// End loop if there are no other item properties
-			if (iPosSemicolon == -1) break;
-			iPosSemicolon = FindSubString(sItemProperties, ";");
-		}
+            // End loop if there are no other item properties
+            if (iPosSemicolon == -1) break;
+            iPosSemicolon = FindSubString(sItemProperties, ";");
+        }
 
-	// Save the item properties that haven't been restored
-	SetLocalString(oItem, sStoreVariable, sItemPropertiesResult);
+    // Save the item properties that haven't been restored
+    SetLocalString(oItem, sStoreVariable, sItemPropertiesResult);
 }
 
 // Get the caster level of a magical item. By default, it gets the best caster level from
@@ -158,42 +158,42 @@ int JXImplGetItemCasterLevel(object oItem, string sAdditionalProperties = "")
         ipLoop = GetNextItemProperty(oItem);
     }
 
-	// Also look for additional properties under string form (ex: 35;51,2;7,3,3)
-	if (sAdditionalProperties != "")
-	{
-		string sItemProperties = sAdditionalProperties;
-		string sItemProperty;
+    // Also look for additional properties under string form (ex: 35;51,2;7,3,3)
+    if (sAdditionalProperties != "")
+    {
+        string sItemProperties = sAdditionalProperties;
+        string sItemProperty;
 
-		// Loop all additional item properties
-		int iPosSemicolon = FindSubString(sItemProperties, ";");
-		if (sItemProperties != "")
-			while (1)
-			{
-				// Get the current item property
-				if (iPosSemicolon == -1)
-					sItemProperty = sItemProperties;
-				else
-				{
-					sItemProperty = GetStringLeft(sItemProperties, iPosSemicolon);
-					sItemProperties = GetSubString(sItemProperties, iPosSemicolon + 1, GetStringLength(sItemProperties) - iPosSemicolon + 1);
-				}
-	
-				// Translate the string into the corresponding item property
-				ipLoop = JXStringToItemProperty(sItemProperty);
+        // Loop all additional item properties
+        int iPosSemicolon = FindSubString(sItemProperties, ";");
+        if (sItemProperties != "")
+            while (1)
+            {
+                // Get the current item property
+                if (iPosSemicolon == -1)
+                    sItemProperty = sItemProperties;
+                else
+                {
+                    sItemProperty = GetStringLeft(sItemProperties, iPosSemicolon);
+                    sItemProperties = GetSubString(sItemProperties, iPosSemicolon + 1, GetStringLength(sItemProperties) - iPosSemicolon + 1);
+                }
 
-				// Get the item property's caster level
-		        if (JXGetIsItemPropertyMagical(oItem, ipLoop))
-		        {
-		            iIPCasterLevel = JXGetItemPropertyCasterLevel(oItem, ipLoop);
-		            if (iIPCasterLevel > iItemCasterLevel)
-		                iItemCasterLevel = iIPCasterLevel;
-		        }
+                // Translate the string into the corresponding item property
+                ipLoop = JXStringToItemProperty(sItemProperty);
 
-				// Find the next item property
-				if (iPosSemicolon == -1) break;
-				iPosSemicolon = FindSubString(sItemProperties, ";");
-			}
-	}
+                // Get the item property's caster level
+                if (JXGetIsItemPropertyMagical(oItem, ipLoop))
+                {
+                    iIPCasterLevel = JXGetItemPropertyCasterLevel(oItem, ipLoop);
+                    if (iIPCasterLevel > iItemCasterLevel)
+                        iItemCasterLevel = iIPCasterLevel;
+                }
+
+                // Find the next item property
+                if (iPosSemicolon == -1) break;
+                iPosSemicolon = FindSubString(sItemProperties, ";");
+            }
+    }
 
     return iItemCasterLevel;
 }
@@ -229,45 +229,45 @@ int JXImplGetItemSpellSchool(object oItem, string sAdditionalProperties = "")
         ipLoop = GetNextItemProperty(oItem);
     }
 
-	// Also look for additional properties under string form (ex: 35;51,2;7,3,3)
-	if (sAdditionalProperties != "")
-	{
-		string sItemProperties = sAdditionalProperties;
-		string sItemProperty;
+    // Also look for additional properties under string form (ex: 35;51,2;7,3,3)
+    if (sAdditionalProperties != "")
+    {
+        string sItemProperties = sAdditionalProperties;
+        string sItemProperty;
 
-		// Loop all additional item properties
-		int iPosSemicolon = FindSubString(sItemProperties, ";");
-		if (sItemProperties != "")
-			while (1)
-			{
-				// Get the current item property
-				if (iPosSemicolon == -1)
-					sItemProperty = sItemProperties;
-				else
-				{
-					sItemProperty = GetStringLeft(sItemProperties, iPosSemicolon);
-					sItemProperties = GetSubString(sItemProperties, iPosSemicolon + 1, GetStringLength(sItemProperties) - iPosSemicolon + 1);
-				}
-	
-				// Translate the string into the corresponding item property
-				ipLoop = JXStringToItemProperty(sItemProperty);
+        // Loop all additional item properties
+        int iPosSemicolon = FindSubString(sItemProperties, ";");
+        if (sItemProperties != "")
+            while (1)
+            {
+                // Get the current item property
+                if (iPosSemicolon == -1)
+                    sItemProperty = sItemProperties;
+                else
+                {
+                    sItemProperty = GetStringLeft(sItemProperties, iPosSemicolon);
+                    sItemProperties = GetSubString(sItemProperties, iPosSemicolon + 1, GetStringLength(sItemProperties) - iPosSemicolon + 1);
+                }
 
-				// Get the item property's spell school
-		        if (JXGetIsItemPropertyMagical(oItem, ipLoop))
-		        {
-		            iIPCasterLevel = JXGetItemPropertyCasterLevel(oItem, ipLoop);
-		            if (iIPCasterLevel > iItemCasterLevel)
-					{
-		                iItemCasterLevel = iIPCasterLevel;
-                		ipBest = ipLoop;
-					}
-		        }
+                // Translate the string into the corresponding item property
+                ipLoop = JXStringToItemProperty(sItemProperty);
 
-				// Find the next item property
-				if (iPosSemicolon == -1) break;
-				iPosSemicolon = FindSubString(sItemProperties, ";");
-			}
-	}
+                // Get the item property's spell school
+                if (JXGetIsItemPropertyMagical(oItem, ipLoop))
+                {
+                    iIPCasterLevel = JXGetItemPropertyCasterLevel(oItem, ipLoop);
+                    if (iIPCasterLevel > iItemCasterLevel)
+                    {
+                        iItemCasterLevel = iIPCasterLevel;
+                        ipBest = ipLoop;
+                    }
+                }
+
+                // Find the next item property
+                if (iPosSemicolon == -1) break;
+                iPosSemicolon = FindSubString(sItemProperties, ";");
+            }
+    }
 
     return JXGetItemPropertySpellSchool(oItem, ipBest);
 }
@@ -284,42 +284,42 @@ int JXImplGetIsItemMagical(object oItem, string sAdditionalProperties = "")
     while (GetIsItemPropertyValid(ipLoop))
     {
         if (JXGetIsItemPropertyMagical(oItem, ipLoop))
-			return TRUE;
+            return TRUE;
         ipLoop = GetNextItemProperty(oItem);
     }
 
-	// Also look for additional properties under string form (ex: 35;51,2;7,3,3)
-	if (sAdditionalProperties != "")
-	{
-		string sItemProperties = sAdditionalProperties;
-		string sItemProperty;
+    // Also look for additional properties under string form (ex: 35;51,2;7,3,3)
+    if (sAdditionalProperties != "")
+    {
+        string sItemProperties = sAdditionalProperties;
+        string sItemProperty;
 
-		// Loop all additional item properties
-		int iPosSemicolon = FindSubString(sItemProperties, ";");
-		if (sItemProperties != "")
-			while (1)
-			{
-				// Get the current item property
-				if (iPosSemicolon == -1)
-					sItemProperty = sItemProperties;
-				else
-				{
-					sItemProperty = GetStringLeft(sItemProperties, iPosSemicolon);
-					sItemProperties = GetSubString(sItemProperties, iPosSemicolon + 1, GetStringLength(sItemProperties) - iPosSemicolon + 1);
-				}
-	
-				// Translate the string into the corresponding item property
-				ipLoop = JXStringToItemProperty(sItemProperty);
+        // Loop all additional item properties
+        int iPosSemicolon = FindSubString(sItemProperties, ";");
+        if (sItemProperties != "")
+            while (1)
+            {
+                // Get the current item property
+                if (iPosSemicolon == -1)
+                    sItemProperty = sItemProperties;
+                else
+                {
+                    sItemProperty = GetStringLeft(sItemProperties, iPosSemicolon);
+                    sItemProperties = GetSubString(sItemProperties, iPosSemicolon + 1, GetStringLength(sItemProperties) - iPosSemicolon + 1);
+                }
 
-				// Get the item property's caster level
-		        if (JXGetIsItemPropertyMagical(oItem, ipLoop))
-					return TRUE;
+                // Translate the string into the corresponding item property
+                ipLoop = JXStringToItemProperty(sItemProperty);
 
-				// Find the next item property
-				if (iPosSemicolon == -1) break;
-				iPosSemicolon = FindSubString(sItemProperties, ";");
-			}
-	}
+                // Get the item property's caster level
+                if (JXGetIsItemPropertyMagical(oItem, ipLoop))
+                    return TRUE;
 
-	return FALSE;
+                // Find the next item property
+                if (iPosSemicolon == -1) break;
+                iPosSemicolon = FindSubString(sItemProperties, ";");
+            }
+    }
+
+    return FALSE;
 }

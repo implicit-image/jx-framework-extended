@@ -339,7 +339,7 @@ int ITEM_PROPERTY_DAMAGE_BONUS                             = 16 ;
 int ITEM_PROPERTY_DAMAGE_BONUS_VS_ALIGNMENT_GROUP          = 17 ;
 int ITEM_PROPERTY_DAMAGE_BONUS_VS_RACIAL_GROUP             = 18 ;
 int ITEM_PROPERTY_DAMAGE_BONUS_VS_SPECIFIC_ALIGNMENT       = 19 ;
-int ITEM_PROPERTY_DAMAGE_REDUCTION              		   = 90 ; 
+int ITEM_PROPERTY_DAMAGE_REDUCTION                         = 90 ;
 int ITEM_PROPERTY_DAMAGE_REDUCTION_DEPRECATED              = 22 ; // not called
 int ITEM_PROPERTY_DAMAGE_RESISTANCE                        = 23 ;
 int ITEM_PROPERTY_DAMAGE_VULNERABILITY                     = 24 ;
@@ -397,9 +397,9 @@ int ITEM_PROPERTY_USE_LIMITATION_CLASS                     = 63 ;
 int ITEM_PROPERTY_USE_LIMITATION_RACIAL_TYPE               = 64 ;
 int ITEM_PROPERTY_USE_LIMITATION_SPECIFIC_ALIGNMENT        = 65 ;
 //int ITEM_PROPERTY_USE_LIMITATION_TILESET                   = 66 ; <- replaced by ITEM_PROPERTY_BONUS_HITPOINTS
-int ITEM_PROPERTY_VISUALEFFECT	                           = 83;
+int ITEM_PROPERTY_VISUALEFFECT                             = 83;
 int ITEM_PROPERTY_WEIGHT_INCREASE                          = 81;
-*/	
+*/
 
 
 // ----------------------------------------------------------------------------
@@ -525,13 +525,13 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    }
    else if (nPropID == ITEM_PROPERTY_DECREASED_SAVING_THROWS) // 49
    {
-   		// JX bug corrected
+            // JX bug corrected
         //ipRet = ItemPropertyReducedSavingThrow(nParam1, nParam2);
         ipRet = ItemPropertyReducedSavingThrowVsX(nParam1, nParam2);
    }
    else if (nPropID == ITEM_PROPERTY_DECREASED_SAVING_THROWS_SPECIFIC) // 50
    {
-   		// JX bug corrected
+            // JX bug corrected
         //ipRet = ItemPropertyReducedSavingThrowVsX(nParam1, nParam2);
         ipRet = ItemPropertyReducedSavingThrow(nParam1, nParam2);
    }
@@ -601,7 +601,7 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    }
    else if (nPropID == ITEM_PROPERTY_IMMUNITY_SPELLS_BY_LEVEL) // 78 
    {
-   		// JX modified
+            // JX modified
         ipRet = ItemPropertyImmunityToSpellLevel(nParam1 + 1);
    }
    else if (nPropID == ITEM_PROPERTY_IMPROVED_EVASION) // 38
@@ -623,7 +623,7 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    // JX uncommented
    else if (nPropID == ITEM_PROPERTY_MIGHTY) // 45
    {
-   		// JX added
+            // JX added
         ipRet = ItemPropertyMaxRangeStrengthMod(nParam1);
    }
 /*
@@ -631,7 +631,7 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    {
         ipRet = ?(nParam1);
    }
-*/	
+*/
    else if (nPropID == ITEM_PROPERTY_MONSTER_DAMAGE) // 77
    {
         ipRet = ItemPropertyMonsterDamage(nParam1);
@@ -652,100 +652,100 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    {
         ipRet = ItemPropertyOnHitCastSpell(nParam1, nParam2);
    }
-/*	
+/*
    else if (nPropID == ITEM_PROPERTY_POISON) // 76
-   {	
-		//NWSCRIPT.nss: no longer working, poison is now a on_hit subtype
+   {
+        //NWSCRIPT.nss: no longer working, poison is now a on_hit subtype
         ipRet = ();
    }
 */
-	else if (nPropID == ITEM_PROPERTY_REGENERATION) // 51
-	{
-	     ipRet = ItemPropertyRegeneration(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_REGENERATION_VAMPIRIC) // 67
-	{
-	     ipRet = ItemPropertyVampiricRegeneration(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_SAVING_THROW_BONUS) // 40
-	{
-		 // JX bug corrected
-	     //ipRet = ItemPropertyBonusSavingThrow(nParam1, nParam2);
-	     ipRet = ItemPropertyBonusSavingThrowVsX(nParam1, nParam2);
-	}
-	else if (nPropID == ITEM_PROPERTY_SAVING_THROW_BONUS_SPECIFIC) // 41
-	{
-		 // JX bug corrected
-	     //ipRet = ItemPropertyBonusSavingThrowVsX(nParam1, nParam2);
-	     ipRet = ItemPropertyBonusSavingThrow(nParam1, nParam2);
-	}
-	else if (nPropID == ITEM_PROPERTY_SKILL_BONUS) // 52
-	{
-	     ipRet = ItemPropertySkillBonus(nParam1, nParam2);
-	}
-	else if (nPropID == ITEM_PROPERTY_SPECIAL_WALK) // 79
-	{
-	     ipRet = ItemPropertySpecialWalk(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_SPELL_RESISTANCE)
-	{
-	     ipRet = ItemPropertyBonusSpellResistance(nParam1); // 39
-	}
-	else if (nPropID == ITEM_PROPERTY_THIEVES_TOOLS)
-	{
-	     ipRet = ItemPropertyThievesTools(nParam1); // 55
-	}
-	else if (nPropID == ITEM_PROPERTY_TRAP) // 70
-	{
-	     ipRet = ItemPropertyTrap(nParam1, nParam2);
-	}
-	else if (nPropID == ITEM_PROPERTY_TRUE_SEEING) // 71
-	{
-	     ipRet = ItemPropertyTrueSeeing();
-	}
-	else if (nPropID == ITEM_PROPERTY_TURN_RESISTANCE) // 73
-	{
-	     ipRet = ItemPropertyTurnResistance(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_UNLIMITED_AMMUNITION) // 61
-	{
-	     ipRet = ItemPropertyUnlimitedAmmo(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_ALIGNMENT_GROUP) // 62
-	{
-	     ipRet = ItemPropertyLimitUseByAlign(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_CLASS) // 63
-	{
-	     ipRet = ItemPropertyLimitUseByClass(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_RACIAL_TYPE) // 64
-	{
-	     ipRet = ItemPropertyLimitUseByRace(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_SPECIFIC_ALIGNMENT) // 65
-	{
-	     ipRet = ItemPropertyLimitUseBySAlign(nParam1);
-	}
+    else if (nPropID == ITEM_PROPERTY_REGENERATION) // 51
+    {
+         ipRet = ItemPropertyRegeneration(nParam1);
+    }
+    else if (nPropID == ITEM_PROPERTY_REGENERATION_VAMPIRIC) // 67
+    {
+         ipRet = ItemPropertyVampiricRegeneration(nParam1);
+    }
+    else if (nPropID == ITEM_PROPERTY_SAVING_THROW_BONUS) // 40
+    {
+         // JX bug corrected
+         //ipRet = ItemPropertyBonusSavingThrow(nParam1, nParam2);
+         ipRet = ItemPropertyBonusSavingThrowVsX(nParam1, nParam2);
+    }
+    else if (nPropID == ITEM_PROPERTY_SAVING_THROW_BONUS_SPECIFIC) // 41
+    {
+         // JX bug corrected
+         //ipRet = ItemPropertyBonusSavingThrowVsX(nParam1, nParam2);
+         ipRet = ItemPropertyBonusSavingThrow(nParam1, nParam2);
+    }
+    else if (nPropID == ITEM_PROPERTY_SKILL_BONUS) // 52
+    {
+         ipRet = ItemPropertySkillBonus(nParam1, nParam2);
+    }
+    else if (nPropID == ITEM_PROPERTY_SPECIAL_WALK) // 79
+    {
+         ipRet = ItemPropertySpecialWalk(nParam1);
+    }
+    else if (nPropID == ITEM_PROPERTY_SPELL_RESISTANCE)
+    {
+         ipRet = ItemPropertyBonusSpellResistance(nParam1); // 39
+    }
+    else if (nPropID == ITEM_PROPERTY_THIEVES_TOOLS)
+    {
+         ipRet = ItemPropertyThievesTools(nParam1); // 55
+    }
+    else if (nPropID == ITEM_PROPERTY_TRAP) // 70
+    {
+         ipRet = ItemPropertyTrap(nParam1, nParam2);
+    }
+    else if (nPropID == ITEM_PROPERTY_TRUE_SEEING) // 71
+    {
+         ipRet = ItemPropertyTrueSeeing();
+    }
+    else if (nPropID == ITEM_PROPERTY_TURN_RESISTANCE) // 73
+    {
+         ipRet = ItemPropertyTurnResistance(nParam1);
+    }
+    else if (nPropID == ITEM_PROPERTY_UNLIMITED_AMMUNITION) // 61
+    {
+         ipRet = ItemPropertyUnlimitedAmmo(nParam1);
+    }
+    else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_ALIGNMENT_GROUP) // 62
+    {
+         ipRet = ItemPropertyLimitUseByAlign(nParam1);
+    }
+    else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_CLASS) // 63
+    {
+         ipRet = ItemPropertyLimitUseByClass(nParam1);
+    }
+    else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_RACIAL_TYPE) // 64
+    {
+         ipRet = ItemPropertyLimitUseByRace(nParam1);
+    }
+    else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_SPECIFIC_ALIGNMENT) // 65
+    {
+         ipRet = ItemPropertyLimitUseBySAlign(nParam1);
+    }
 /*
-	else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_TILESET) // 66
-	{
-	     ipRet = ();
-	}
+    else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_TILESET) // 66
+    {
+         ipRet = ();
+    }
 */
 
-	else if (nPropID == ITEM_PROPERTY_VISUALEFFECT) // 83
-	{
-	     ipRet = ItemPropertyVisualEffect(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_WEIGHT_INCREASE) // 81 
-	{
-	     ipRet = ItemPropertyWeightIncrease(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_BONUS_HITPOINTS) // 86 (JX comment : it's 66)
-	{
-	     ipRet = ItemPropertyBonusHitpoints(nParam1);
-	}
+    else if (nPropID == ITEM_PROPERTY_VISUALEFFECT) // 83
+    {
+         ipRet = ItemPropertyVisualEffect(nParam1);
+    }
+    else if (nPropID == ITEM_PROPERTY_WEIGHT_INCREASE) // 81
+    {
+         ipRet = ItemPropertyWeightIncrease(nParam1);
+    }
+    else if (nPropID == ITEM_PROPERTY_BONUS_HITPOINTS) // 86 (JX comment : it's 66)
+    {
+         ipRet = ItemPropertyBonusHitpoints(nParam1);
+    }
 
    return ipRet;
 }
@@ -805,14 +805,14 @@ int IPGetIsMeleeWeapon(object oItem)
       (nItem == BASE_ITEM_SHORTSPEAR) ||
       (nItem == BASE_ITEM_SHORTSWORD) ||
       (nItem == BASE_ITEM_WARHAMMER)  ||
-	  (nItem == BASE_ITEM_MACE)	||
-	  (nItem == BASE_ITEM_FALCHION)	||
-	  (nItem == BASE_ITEM_FLAIL)	||
-	  (nItem == BASE_ITEM_SPEAR)	||
-	  (nItem == BASE_ITEM_WARMACE)	||
-	  (nItem == BASE_ITEM_CGIANT_SWORD)	||
-	  (nItem == BASE_ITEM_CGIANT_AXE)	||
-	  (nItem == BASE_ITEM_ALLUSE_SWORD)	||
+      (nItem == BASE_ITEM_MACE)     ||
+      (nItem == BASE_ITEM_FALCHION)     ||
+      (nItem == BASE_ITEM_FLAIL)    ||
+      (nItem == BASE_ITEM_SPEAR)    ||
+      (nItem == BASE_ITEM_WARMACE)  ||
+      (nItem == BASE_ITEM_CGIANT_SWORD)     ||
+      (nItem == BASE_ITEM_CGIANT_AXE)   ||
+      (nItem == BASE_ITEM_ALLUSE_SWORD)     ||
       (nItem == BASE_ITEM_DWARVENWARAXE))
    {
         return TRUE;
@@ -1545,7 +1545,7 @@ int IPGetDamageBonusConstantFromNumber(int nNumber)
         case 18:  return DAMAGE_BONUS_18;
         case 19:  return DAMAGE_BONUS_19;
         case 20: return DAMAGE_BONUS_20;
-	    case 21: return DAMAGE_BONUS_21;
+        case 21: return DAMAGE_BONUS_21;
         case 22: return DAMAGE_BONUS_22;
         case 23: return DAMAGE_BONUS_23;
         case 24: return DAMAGE_BONUS_24;
