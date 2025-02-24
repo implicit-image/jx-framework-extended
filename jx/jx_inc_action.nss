@@ -54,7 +54,7 @@ struct jx_action_castspell
 // * Returns the spellcasting action in string form
 string JXActionCastSpellToString(struct jx_action_castspell actionCastSpell);
 
-// Transform a spellcasting action string into a structure 
+// Transform a spellcasting action string into a structure
 // - actionCastSpell Spellcasting action in string form
 // * Returns the spellcasting action in strucure form
 struct jx_action_castspell JXStringToActionCastSpell(string sActionCastSpell);
@@ -136,7 +136,7 @@ string JXActionCastSpellToString(struct jx_action_castspell actionCastSpell)
     return sAction;
 }
 
-// Transform a spellcasting action string into a structure 
+// Transform a spellcasting action string into a structure
 // - actionCastSpell Spellcasting action in string form
 // * Returns the spellcasting action in strucure form
 struct jx_action_castspell JXStringToActionCastSpell(string sActionCastSpell)
@@ -162,7 +162,7 @@ int JXFindNewActionCastSpellIdentifier(object oCreature)
 {
     int iActionId = GetLocalInt(oCreature, "JX_LAST_ACTION_CASTSPELL_ID") + 1;
     if (iActionId == 101)
-        iActionId = 1;
+	iActionId = 1;
     SetLocalInt(oCreature, "JX_LAST_ACTION_CASTSPELL_ID", iActionId);
     return iActionId;
 }
@@ -184,36 +184,36 @@ int JXAddActionCastSpellToQueue(struct jx_action_castspell actionCastSpell, obje
 {
     // Fire the spellcasting action enqueued event
     if (JXEventActionCastSpellEnqueued(oCreature,
-                                       actionCastSpell.iSpellId,
-                                       actionCastSpell.oTarget,
-                                       GetIsObjectValid(actionCastSpell.oTarget) ?
-                                        GetLocation(actionCastSpell.oTarget) :
-                                        actionCastSpell.lTarget,
-                                       actionCastSpell.iCasterLevel,
-                                       actionCastSpell.iMetaMagicFeat,
-                                       actionCastSpell.iSpellSaveDC,
-                                       actionCastSpell.iClass))
+				       actionCastSpell.iSpellId,
+				       actionCastSpell.oTarget,
+				       GetIsObjectValid(actionCastSpell.oTarget) ?
+					GetLocation(actionCastSpell.oTarget) :
+					actionCastSpell.lTarget,
+				       actionCastSpell.iCasterLevel,
+				       actionCastSpell.iMetaMagicFeat,
+				       actionCastSpell.iSpellSaveDC,
+				       actionCastSpell.iClass))
     {
-        int iCountActions = GetLocalInt(oCreature, "JX_ACTION_CASTSPELL_COUNT") + 1;
-        SetLocalInt(oCreature, "JX_ACTION_CASTSPELL_COUNT", iCountActions);
+	int iCountActions = GetLocalInt(oCreature, "JX_ACTION_CASTSPELL_COUNT") + 1;
+	SetLocalInt(oCreature, "JX_ACTION_CASTSPELL_COUNT", iCountActions);
 
-        // Save the overriden action if it exists
-        string sAction = GetLocalString(oCreature, "JX_ACTION_CASTSPELL_OVERRIDE");
-        if (sAction != "")
-        {
-            SetLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iCountActions), sAction);
-            DeleteLocalString(oCreature, "JX_ACTION_CASTSPELL_OVERRIDE");
-        }
-        else
-        {
-            sAction = JXActionCastSpellToString(actionCastSpell);
-            SetLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iCountActions), sAction);
-        }
+	// Save the overriden action if it exists
+	string sAction = GetLocalString(oCreature, "JX_ACTION_CASTSPELL_OVERRIDE");
+	if (sAction != "")
+	{
+	    SetLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iCountActions), sAction);
+	    DeleteLocalString(oCreature, "JX_ACTION_CASTSPELL_OVERRIDE");
+	}
+	else
+	{
+	    sAction = JXActionCastSpellToString(actionCastSpell);
+	    SetLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iCountActions), sAction);
+	}
 
-        return TRUE;
+	return TRUE;
     }
     else
-        return FALSE;
+	return FALSE;
 }
 
 // Remove the first (current) spellcasting action from the queue
@@ -226,31 +226,31 @@ void JXRemoveFirstActionCastSpellFromQueue(int bResult, int iActionId, object oC
     struct jx_action_castspell actionCastSpell = JXStringToActionCastSpell(sAction);
     if ((iActionId == 0) || (actionCastSpell.iActionId == iActionId))
     {
-        // Fire the spellcasting action finished event
-        JXEventActionCastSpellFinished(oCreature,
-                                       actionCastSpell.iSpellId,
-                                       actionCastSpell.oTarget,
-                                       GetIsObjectValid(actionCastSpell.oTarget) ?
-                                        GetLocation(actionCastSpell.oTarget) :
-                                        actionCastSpell.lTarget,
-                                       actionCastSpell.iCasterLevel,
-                                       actionCastSpell.iMetaMagicFeat,
-                                       actionCastSpell.iSpellSaveDC,
-                                       actionCastSpell.iClass,
-                                       bResult);
+	// Fire the spellcasting action finished event
+	JXEventActionCastSpellFinished(oCreature,
+				       actionCastSpell.iSpellId,
+				       actionCastSpell.oTarget,
+				       GetIsObjectValid(actionCastSpell.oTarget) ?
+					GetLocation(actionCastSpell.oTarget) :
+					actionCastSpell.lTarget,
+				       actionCastSpell.iCasterLevel,
+				       actionCastSpell.iMetaMagicFeat,
+				       actionCastSpell.iSpellSaveDC,
+				       actionCastSpell.iClass,
+				       bResult);
 
-        // Move the actions that are after the removed spell
-        int iCountActions = GetLocalInt(oCreature, "JX_ACTION_CASTSPELL_COUNT");
-        int iLoopPos;
-        for (iLoopPos = 1; iLoopPos < iCountActions; iLoopPos++)
-        {
-            SetLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iLoopPos),
-             GetLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iLoopPos + 1)));
-        }
-        DeleteLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iCountActions));
+	// Move the actions that are after the removed spell
+	int iCountActions = GetLocalInt(oCreature, "JX_ACTION_CASTSPELL_COUNT");
+	int iLoopPos;
+	for (iLoopPos = 1; iLoopPos < iCountActions; iLoopPos++)
+	{
+	    SetLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iLoopPos),
+	     GetLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iLoopPos + 1)));
+	}
+	DeleteLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iCountActions));
 
-        // Update the action counter
-        SetLocalInt(oCreature, "JX_ACTION_CASTSPELL_COUNT", iCountActions - 1);
+	// Update the action counter
+	SetLocalInt(oCreature, "JX_ACTION_CASTSPELL_COUNT", iCountActions - 1);
     }
 }
 
@@ -274,22 +274,22 @@ void JXClearActionQueue(object oCreature)
     int iLoopPos;
     for (iLoopPos = 1; iLoopPos <= iCountActions; iLoopPos++)
     {
-        // Fire the spellcasting action finished event
-        string sAction = GetLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iLoopPos));
-        struct jx_action_castspell actionCastSpell = JXStringToActionCastSpell(sAction);
-        JXEventActionCastSpellFinished(oCreature,
-                                       actionCastSpell.iSpellId,
-                                       actionCastSpell.oTarget,
-                                       GetIsObjectValid(actionCastSpell.oTarget) ?
-                                        GetLocation(actionCastSpell.oTarget) :
-                                        actionCastSpell.lTarget,
-                                       actionCastSpell.iCasterLevel,
-                                       actionCastSpell.iMetaMagicFeat,
-                                       actionCastSpell.iSpellSaveDC,
-                                       actionCastSpell.iClass,
-                                       FALSE);
+	// Fire the spellcasting action finished event
+	string sAction = GetLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iLoopPos));
+	struct jx_action_castspell actionCastSpell = JXStringToActionCastSpell(sAction);
+	JXEventActionCastSpellFinished(oCreature,
+				       actionCastSpell.iSpellId,
+				       actionCastSpell.oTarget,
+				       GetIsObjectValid(actionCastSpell.oTarget) ?
+					GetLocation(actionCastSpell.oTarget) :
+					actionCastSpell.lTarget,
+				       actionCastSpell.iCasterLevel,
+				       actionCastSpell.iMetaMagicFeat,
+				       actionCastSpell.iSpellSaveDC,
+				       actionCastSpell.iClass,
+				       FALSE);
 
-        DeleteLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iLoopPos));
+	DeleteLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iLoopPos));
     }
     DeleteLocalInt(oCreature, "JX_ACTION_CASTSPELL_COUNT");
 }
