@@ -287,7 +287,6 @@ void JXClearActionQueue(object oCreature)
                                        actionCastSpell.iSpellSaveDC,
                                        actionCastSpell.iClass,
                                        FALSE);
-
         DeleteLocalString(oCreature, "JX_ACTION_CASTSPELL_" + IntToString(iLoopPos));
     }
     DeleteLocalInt(oCreature, "JX_ACTION_CASTSPELL_COUNT");
