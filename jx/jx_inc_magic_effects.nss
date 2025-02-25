@@ -1,4 +1,5 @@
 #include "jx_inc_magic"
+#include "utils"
 // #include "jx_inc_magic_effects_impl"
 // #include "jx_inc_magic_effects_overrides"
 
@@ -480,6 +481,7 @@ effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDmgPower=
             // }
 
             // return eMain;
+    FloatingMessage("Running DAMAGE EFFECT", "red");
     return EffectDamage(iDmg, iDmgType, iDmgPower, bIgnoreRes);
 }
 
