@@ -165,49 +165,61 @@ const string JX_EFFECT_SEP = "|";
 const string JX_ARG_SEP = ":";
 const string JX_FIELD_SEP = "&";
 const string JX_INFO_SEP = "_";
-const strin JX_MAP_SEP = ";";
-// EFFECT OVERRIDES
+const string JX_MAP_SEP = ";";
 
+//=============================== EFFECT OVERRIDES ======================================
+
+// JXSetEffectModifierInt(EFFECT_TYPE,
+//                        PROPERTY_TO_MODIFY,
+//                        TYPE_OF_MODIFICATION,
+//                        VALUE,
+//                        REQUIRED_PREVIOUS_VALUE)
+//
 // idk how to implement these atm; they require functions as args
-const int JX_EFFECT_DISPEL_ALL = 200;
-const int JX_EFFECT_DISPEL_BEST = 201;
-const int JX_EFFECT_ON_DISPEL = 202;
+// - const int JX_EFFECT_DISPEL_ALL = 200;
+// - const int JX_EFFECT_DISPEL_BEST = 201;
+// - const int JX_EFFECT_ON_DISPEL = 202;
+
+// const string JX_OVERRIDE_EFFECT_BONUS_LINK = "JX_OVR_BONUS_LINK_ARR";
+const string JX_EFFECT_BONUS_LINK_ARRAY = "JX_OVR_BONUS_LINK_ARR";
+const string JX_EFFECT_MOD_INFO_ARRAY = "JX_EFFECT_MOD_INFO";
+
+// helper local vars
+const string JX_EFFECT_NUM_OF_LINKS = "JX_EFFECT_LINK_NUMBER";
+const int JX_EFFECT_MAX_LINK_COUNT = 10;
+const int JX_EFFECT_MAX_LINK_SIZE = 10;
 
 
-// bonus effect link to apply at effect creation
-// !!! Warning if JX_OVERRIDE_*_IGNORE_DEFAULT is TRUE
-// and  JX_OVERRIDE_VAR_*_BONUS_LINK is not defined
-// the constructor function returns an invalid effect
-const string JX_OVERRIDE_STR_ARR_BONUS_LINK = "JX_OVERRIDE_ARR_BONUS_LINK";
 
-// whether to ignore creating default effect (only bonus link is created)
-const string JX_OVERRIDE_INT_ARR_IGNORE_DEFAULT = "JX_OVR_ARR_IGNORE_DEFAULT";
+// effect info arrays
+const string JX_EFFECT_ARRAY = "JX_EFFECT_ARRAY";
+// const string JX_EFFECT_PROP_ARRAY
+// const string JX_EFFECT_MOD_ARRAY
 
-const string JX_OVERRIDE_INT_ARR_FLAT_BONUS = "JX_OVR_ARR_FLAT_BONUS";
 
-const string JX_OVERRIDE_STR_ARR_RAND_BONUS = "JX_OVR_ARR_RAND_BONUS";
 
-const string JX_OVERRIDE_STR_ARR_DAMAGE_TYPE_MAP = "JX_OVR_ARR_DAMAGE_TYPE_MAP";
+// effect parameter modifiers
+const int JX_EFFECT_MOD_PARAM_INCREASE_BY = 1;
+const int JX_EFFECT_MOD_PARAM_DECREASE_BY = 2;
+const int JX_EFFECT_MOD_PARAM_MULTIPLY_BY = 4;
+const int JX_EFFECT_MOD_PARAM_DIVIDE_BY = 8;
+const int JX_EFFECT_MOD_PARAM_LOGIC_OR = 16;
+const int JX_EFFECT_MOD_PARAM_LOGIC_AND = 32;
+const int JX_EFFECT_MOD_PARAM_INCREASE_BY_RAND = 64;
+const int JX_EFFECT_MOD_PARAM_DECREASE_BY_RAND = 128;
+const int JX_EFFECT_MOD_PARAM_MULTIPLY_BY_RAND = 256;
+const int JX_EFFECT_MOD_PARAM_DIVIDE_BY_RAND = 512;
+const int JX_EFFECT_MOD_PARAM_MAX_CAP = 8192;
+const int JX_EFFECT_MOD_PARAM_MIN_CAP = 16384;
+const int JX_EFFECT_MOD_PARAM_OVERRIDE = 32768;
+const int JX_EFFECT_MOD_PARAM_PREFIX = 65536;
+const int JX_EFFECT_MOD_PARAM_POSTFIX = 131072;
 
-const string JX_OVERRIDE_INT_ARR_INTERVAL = "JX_OVR_ARR_INTERVAL";
-
-const string JX_OVERRIDE_INT_ARR_IGNORE_DMG_RES = "JX_OVR_IGNORE_RES";
-
-const string JX_OVERRIDE_INT_ARR_DMG_POWER = "JX_OVR_DAMAGE_POWER";
-
-const string JX_OVERRIDE_INT_ARR_ABILITY_TYPE_MAP = "JX_OVR_AB_TYPE_MAP";
-
-const string JX_OVERRIDE_INT_ARR_INC_ABILITY = "JX_OVR_INC_ABILITY";
-
-// effect constructor arg arrays
-const string JX_OVERRIDE_EFFECT_ARGS_1 = "JX_OVR_EFFECT_ARGS_1";
-const string JX_OVERRIDE_EFFECT_ARGS_2 = "JX_OVR_EFFECT_ARGS_2";
-const string JX_OVERRIDE_EFFECT_ARGS_3 = "JX_OVR_EFFECT_ARGS_3";
-const string JX_OVERRIDE_EFFECT_ARGS_4 = "JX_OVR_EFFECT_ARGS_4";
-const string JX_OVERRIDE_EFFECT_ARGS_5 = "JX_OVR_EFFECT_ARGS_5";
-const string JX_OVERRIDE_EFFECT_ARGS_6 = "JX_OVR_EFFECT_ARGS_6";
-
-const
+// other effect modifiers
+const int JX_EFFECT_MOD_SUBTYPE = 262144;
+const int JX_EFFECT_MOD_VS_RACIAL = 524288;
+const int JX_EFFECT_MOD_VS_ALIGN = 1048576;
+const int JX_EFFECT_MOD_ENABLED = 2097152;
 
 // EffectHeal
 const int JX_EFFECT_HEAL = 1;
@@ -217,7 +229,5 @@ const int JX_EFFECT_DAMAGE = 2;
 const int JX_EFFECT_DAMAGE_OVER_TIME = 3;
 // Effect Ability Increase
 const int JX_EFFECT_ABILITY_INCREASE = 4;
-
-
 
 const int JX_EFFECT_MAX_ID = 40;

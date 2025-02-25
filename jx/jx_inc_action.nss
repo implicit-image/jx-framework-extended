@@ -54,7 +54,7 @@ struct jx_action_castspell
 // * Returns the spellcasting action in string form
 string JXActionCastSpellToString(struct jx_action_castspell actionCastSpell);
 
-// Transform a spellcasting action string into a structure 
+// Transform a spellcasting action string into a structure
 // - actionCastSpell Spellcasting action in string form
 // * Returns the spellcasting action in strucure form
 struct jx_action_castspell JXStringToActionCastSpell(string sActionCastSpell);
@@ -110,7 +110,6 @@ int JXCountActionsInQueue(object oCreature = OBJECT_SELF);
 
 
 
-
 //**************************************//
 //                                      //
 //            Implementation            //
@@ -136,7 +135,7 @@ string JXActionCastSpellToString(struct jx_action_castspell actionCastSpell)
     return sAction;
 }
 
-// Transform a spellcasting action string into a structure 
+// Transform a spellcasting action string into a structure
 // - actionCastSpell Spellcasting action in string form
 // * Returns the spellcasting action in strucure form
 struct jx_action_castspell JXStringToActionCastSpell(string sActionCastSpell)
@@ -187,8 +186,8 @@ int JXAddActionCastSpellToQueue(struct jx_action_castspell actionCastSpell, obje
                                        actionCastSpell.iSpellId,
                                        actionCastSpell.oTarget,
                                        GetIsObjectValid(actionCastSpell.oTarget) ?
-                                        GetLocation(actionCastSpell.oTarget) :
-                                        actionCastSpell.lTarget,
+                                       GetLocation(actionCastSpell.oTarget) :
+                                       actionCastSpell.lTarget,
                                        actionCastSpell.iCasterLevel,
                                        actionCastSpell.iMetaMagicFeat,
                                        actionCastSpell.iSpellSaveDC,
@@ -231,8 +230,8 @@ void JXRemoveFirstActionCastSpellFromQueue(int bResult, int iActionId, object oC
                                        actionCastSpell.iSpellId,
                                        actionCastSpell.oTarget,
                                        GetIsObjectValid(actionCastSpell.oTarget) ?
-                                        GetLocation(actionCastSpell.oTarget) :
-                                        actionCastSpell.lTarget,
+                                       GetLocation(actionCastSpell.oTarget) :
+                                       actionCastSpell.lTarget,
                                        actionCastSpell.iCasterLevel,
                                        actionCastSpell.iMetaMagicFeat,
                                        actionCastSpell.iSpellSaveDC,
@@ -281,8 +280,8 @@ void JXClearActionQueue(object oCreature)
                                        actionCastSpell.iSpellId,
                                        actionCastSpell.oTarget,
                                        GetIsObjectValid(actionCastSpell.oTarget) ?
-                                        GetLocation(actionCastSpell.oTarget) :
-                                        actionCastSpell.lTarget,
+                                       GetLocation(actionCastSpell.oTarget) :
+                                       actionCastSpell.lTarget,
                                        actionCastSpell.iCasterLevel,
                                        actionCastSpell.iMetaMagicFeat,
                                        actionCastSpell.iSpellSaveDC,

@@ -49,7 +49,7 @@
 #include "nwn2_inc_spells"
 #include "ginc_debug"
 #include "cmi_ginc_spells"
-#include "jx_invocations_interface_impl"
+#include "jx_invocations_interface"
 
 const int STRREF_HELLFIRE_BONUS             = 220796;  // Bonus Damage (Hellfire): ( in use )
 const int STRREF_HELLFIRE_SHIELD_NAME   = 220779;  // Hellfire Shield ( in use )

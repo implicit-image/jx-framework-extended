@@ -9,11 +9,11 @@ Since nwscript doesnt have lists or similar features, spell and feat categories 
 The impl directory contains the implementation for my Progression Overhaul Mod (in pr_ov directory) and for zMerger (in zMerger directory). I will probably move it to a seperate repo later. If you are using different content pack you have to modify impl/ files to make your spells, classes and feats work with the framework features.
 
 
-#### file: jx_spell_info_interface_impl.nss
+#### file: jx_spell_info_interface.nss
 
 
 
-``` c++
+``` nwscript
 
 // Indicate if a spell is using a ranged touch attack
 // - iSpellId Identifier of the spell
@@ -73,11 +73,11 @@ int JXImplGetBaseSpellLevel(int iSpellId, int iClass = CLASS_TYPE_INVALID)
 
 
 
-#### file: jx_epic_spell_interface_impl.nss
+#### file: jx_epic_spell_interface.nss
 
 These functions should correctly add caster levels gained from prestige classes for calculating epic spell save DC.
 
-``` c++
+``` nwscript
 int isEpicWizard();
 int isEpicSorcerer();
 int isEpicBard();
@@ -90,9 +90,9 @@ int isEpicWarlock();
 
 
 
-#### file: jx_invocations_interface_impl.nss
+#### file: jx_invocations_interface.nss
 
-``` c++
+``` nwscript
 
 // Returns the highest level of Eldritch Blast available
 int JXImplGetEldritchBlastLevelBonus(object oCaster)
@@ -100,9 +100,9 @@ int JXImplGetEldritchBlastLevelBonus(object oCaster)
 
 
 
-#### file: jx_class_info_interface_impl.nss
+#### file: jx_class_info_interface.nss
 
-``` c++
+``` nwscript
 
 // Get the caster level associated with one of the main classes
 int JXImplGetComputedCLFromClass(int iClass, int iClassLevel)

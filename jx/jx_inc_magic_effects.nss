@@ -1,16 +1,60 @@
 #include "jx_inc_magic"
-#include "jx_inc_magic_effects_impl"
-#include "jx_inc_magic_effects_ovr"
+// #include "jx_inc_magic_effects_impl"
+// #include "jx_inc_magic_effects_overrides"
 
 
-//#####################################################
+/*
+In order to use effect overrides you need to set them in the precast script.
+All effect overrides are local and are reset after the spell finishes casting.
+Since effect type cannot be identified before the effect is applied, this code
+works by creating wrapper functions for effect creation.
+
+More about the precast script in x2_inc_spellhook.nss.
+
+You can:
+- override effect parameters
+- modify passed parameters
+- add bonus effect to be linked with og effect
+- nullify effect (changes the effect to an invalid one)
+
+
+Examples:
+
+
+- increase slow effects by 20
+JXSetEffectModiffierInt(JX_EFFECT_SLOW, JX_EFFECT_PARAM_1, JX_EFFECT_MOD_PARAM_INCREASE_BY, 20);
+
+- override the damage type of damage effects
+JXSetEffectModifierInt(JX_EFFECT_DAMAGE, JX_EFFECT_PARAM_2, JX_EFFECT_PARAM_OVERRIDE, DAMAGE_TYPE_MAGICAL);
+
+- add bonus damage effect to all slow effects (may cause unexpected behaviour with dispelling)
+JXOverrideEffectLinkEffectDamage(JX_EFFECT_SLOW, 20);
+
+- make damage effects count as magical effects
+JXSetEffectModifierInt(JX_EFFECT_DAMAGE, JX_EFFECT_SUBTYPE, JX_EFFECT_SUBTYPE_MAGICAL);
+
+- override the damage type if it is DAMAGE_TYPE_FIRE
+JXSetEffectModifierInt(JX_EFFECT_DAMAGE, JX_EFFECT_PARAM_1, JX_EFFECT_PARAM_OVERRIDE, DAMAGE_TYPE_MAGICAL, DAMAGE_TYPE_FIRE);
+
+- nullify the effect (it is declared but not initialized, and therefore invalid)
+JXSetEffectModifierInt(JX_EFFECT_DAMAGE, JX_EFFECT_NULLIFY);
+
+*/
+
+
+//=====================================================
 // EFFECT WRAPPERS
 //
 // Each effect uses only some of existing overrides. See jx_inc_effect_ovr.nss
 // for more more information.
-// #####################################################
+//======================================================
 
-//=======================================================
+
+
+//============================================Declarations===================================
+
+
+//=====================================================
 // EFFECT HEAL
 //=====================================================
 // used overrides:
@@ -21,14 +65,12 @@
 
 
 // creates resulting effect after taking under account existing override
-// variables
-effect JXEffectHeal(int iDmgToHeal);
 
-struct override_effect JXOverrideEffectHeal(int iDmgToHeal);
+effect JXEffectHeal(int iDmgToHeal);
 
 //=========================================================
 // EFFECT DAMAGE
-//==========================================================
+//=========================================================
 
 // Possible overrides:
 // + damage type (as a mapping from old to new)
@@ -40,13 +82,12 @@ struct override_effect JXOverrideEffectHeal(int iDmgToHeal);
 //
 // EffectDamage wrapper
 // Allows for overriding spell damage type in precast script
-effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDamagePower=DAMAGE_POWER_NORMAL, int bIgnoreRes=FALSE);
 
-struct override_effect JXOverrideEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, iDamagePower=DAMAGE_POWER_NORMAL, iIgnoreResistances=FALSE);
+effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDamagePower=DAMAGE_POWER_NORMAL, int bIgnoreRes=FALSE);
 
 //=====================================================
 // EffectDamageOverTime
-//=======================================================
+//=====================================================
 
 
 // EffectDamageOverTime wrapper
@@ -60,8 +101,6 @@ struct override_effect JXOverrideEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE
 // + override ignore resist
 
 effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYPE_MAGICAL, int iIgnoreResistances=FALSE);
-
-struct override_effect JXOverrideEffectDamageOverTime(int iAmount, float fIntervalSeconds, int iDamageType=DAMAGE_TYPE_MAGICAL, int bIgnoreRes=FALSE);
 
 //=============================================================
 // EffectAbilityIncrease
@@ -275,9 +314,9 @@ effect JXEffectInsane();
 
 effect JXEffectSummonCopy(object oSource, int iVisualEffectId=VFX_NONE, float fDelaySeconds=0.0f, string sNewTag="", int iNewHP=0, string sScript="");
 
-//#############################################################
+//==============================================================
 // Cutscene Effects
-//##############################################################
+//==============================================================
 
 effect JXEffectCutsceneParalyze();
 
@@ -287,19 +326,20 @@ effect JXEffectCutsceneImmobilize();
 
 effect JXEffectCutsceneGhost();
 
-//################################################################
+//====================================================================
 // Effects using action parameters
-//####################################################################
+//====================================================================
 
 // impossible to implement as user defined functions
 // cant use action type arguments
+
 /* effect JXEffectDispelMagicAll(int iCasterLevel, action aOnDispelEffect ) */
 /* effect JXEffectDispelMagicBest(int iCasterLevel, action aOnDispelEffect ); */
 /* effect JXEffectOnDispel( float fDelay, action aOnDispelEffect ); */
 
-//##############################################################
+//==============================================================
 // SPECIAL EFFECT FUNCTIONS
-//###########################################################
+//==============================================================
 
 
 effect JXEffectAreaOfEffect(int iAreaEffectId, string sOnEnterScript="", string sHeartbeatScript="", string sOnExitScript="", string sEffectTag="");
@@ -308,29 +348,15 @@ effect JXEffectVisualEffect(int iVisualEffectId, int bMissEffect=FALSE);
 
 effect JXEffectBeam(int iBeamVisualEffect, object oEffector, int iBodyPart, int bMissEffect=FALSE);
 
-
-// creates a override_effect which stores the information about a link of
-// ParentEffect and ChildEffect.
-// You can only link override_effects with the same iDefaultDurationType
-// Otherwise ParentOverrideEffect is returned
-struct override_effect JXOverrideEffectLinkEffects(struct override_effect ParentOverrideEffect, struct override_effect ChildOverrideEffect);
-
-//#####################################################
+//======================================================
 // SIMULATED EFFECTS
-// ###################################################
+//======================================================
 
 //simulates shaken effect
 effect JXEffectShaken();
 
 
-
-
-
-
-
-//################################################################################################################
-// IMPLEMENTATION
-//#################################################################################################################
+//================================================IMPLEMENTATION====================================
 
 
 
@@ -350,31 +376,57 @@ effect JXEffectShaken();
 // variables
 effect JXEffectHeal(int iDmgToHeal)
 {
-    effect eMain;
-    effect eDefault = EffectHeal(iDmgToHeal);
-    if (!JXOverrideGetIgnoreDefaultEffect(JX_EFFECT_HEAL))
-    {
-        int iFlatBonus = JXOverrideGetFlatBonus(JX_EFFECT_HEAL);
-        int iRandBonus = JXOverrideGetRandBonus(JX_EFFECT_HEAL)
-        iDamageToHeal = iDmgToHeal + FlatBonus + iRandBonus;
-        eMain = EffectHeal(iDmgToHeal);
-    }
-    effect eBonusLink = JXOverrideGetBonusEffectLink(JX_EFFECT_HEAL);
-    if (GetISEffectValid(eBonusLink))
-    {
-        eMain = EffectLinkEffect(eMain, eBonusLink);
-    }
-    return JXVerifyEffect(eMain, eDefault);
+    // int iBonusLinkCount = GetLocalArrayInt(OBJECT_SELF, JX_EFFECT_NUM_OF_LINKS, JX_EFFECT_HEAL);
+    // if (iBonusLinkCount > 0)
+    // {
+        //     effect eBonusLink = JXLoadBonusEffectLink(JX_EFFECT_HEAL, iBonusLinkCount);
+        // }
+
+        // string sModInfoArray = JXArrayForEffect(JX_EFFECT_HEAL, JX_EFFECT_MOD_INFO_ARRAY);
+
+        // iDmgToHeal = JXApplyEffectModifiersInt(JX_EFFECT_PARAM_1, iDmgToHeal);
+
+
+        // effect eMain;
+        // effect eDefault = EffectHeal(iDmgToHeal);
+        // if (!JXOverrideGetIgnoreDefaultEffect(JX_EFFECT_HEAL))
+        // {
+            //     int iFlatBonus = JXOverrideGetFlatBonus(JX_EFFECT_HEAL);
+            //     int iRandBonus = JXOverrideGetRandBonus(JX_EFFECT_HEAL)
+            //     iDamageToHeal = iDmgToHeal + FlatBonus + iRandBonus;
+            //     eMain = EffectHeal(iDmgToHeal);
+            // }
+            // effect eBonusLink = JXOverrideGetBonusEffectLink(JX_EFFECT_HEAL);
+            // if (GetIsEffectValid(eBonusLink))
+            // {
+                //     eMain = EffectLinkEffect(eMain, eBonusLink);
+                // }
+                // return eDefault;
+
+    return EffectHeal(iDmgToHeal);
 }
 
-struct override_effect JXOverrideEffectHeal(int iDmgToHeal)
-{
-    // save effect args (needed for invocation later)
-    string sEffectArgs = JXOverrideEffectArgsPushInteger("", iDmgToHeal);
-    effect eHeal = EffectHeal(iDmgToHeal);
-    struct override_effect HealEffect = JXMakeOverrideEffect(JX_EFFECT_HEAL, eHeal, sEffectArgs);
-    return HealEffect;
-}
+// void JXBonusLinkEffectHeal(int iJXEffectId, int iDmgToHeal)
+// {
+//     // get array name for the target effect
+//     string sBonusLinkArray = JXArrayForEffect(iJXEffectId, JX_EFFECT_BONUS_LINK);
+
+//     // check the bonus link limit
+//     int iBonusLinkCount = GetLocalArrayInt(OBJECT_SELF, JX_EFFECT_NUM_OF_LINKS, iJXEffectType);
+//     if (iBonusLinkCount >= JX_EFFECT_MAX_LINK_COUNT)
+//     {
+//         // cant add more effects to the link
+//         return;
+//     }
+//     // calculate correct index for heal effect info
+//     int iStartIndex = (iJXEffectId + (iBonusLinkCount * JX_EFFECT_MAX_LINK_SIZE) + 1);
+//     // save effect information
+//     SetLocalArrayInt(OBJECT_SELF, sBonusLinkArray, iStartIndex, JX_EFFECT_HEAL);
+//     SetLocalArrayInt(OBJECT_SELF, sBonusLinkArray, iStartIndex + 1, iDmgToHeal);
+
+//     // increment link count for the effect
+//     SetLocalArrayInt(OBJECT_SELF, JX_EFFECT_NUM_OF_LINKS, iJXEffectId, iBonusLinkCount + 1);
+// }
 
 
 //=========================================================
@@ -393,57 +445,58 @@ struct override_effect JXOverrideEffectHeal(int iDmgToHeal)
 
 // EffectDamage wrapper
 // Allows for overriding spell damage type in precast script
-effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDamagePower=DAMAGE_POWER_NORMAL, int bIgnoreRes=FALSE)
+effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDmgPower=DAMAGE_POWER_NORMAL, int bIgnoreRes=FALSE)
 {
-    effect eMain;
+    // effect eMain;
 
-    // dmg type override
-    iDmgType = JXGetOverrideDamageType(JX_EFFECT_DAMAGE, iDmgType);
-    // add dmg bonus handling
+    // // dmg type override
+    // iDmgType = JXGetOverrideDamageType(JX_EFFECT_DAMAGE, iDmgType);
+    // // add dmg bonus handling
 
-    int bIgnoreDefault= JXGetOverrideIgnoreDefaultEffect(JX_EFFECT_DAMAGE);
-    if (!bIgnoreDefault)
-    {
-        // flat bonus
-        int iFlatBonus = JXGetOverrideFlatBonus(JX_EFFECT_DAMAGE);
-        // roll random bonus
-        int iRandBonus = JXGetOverrideRandBonus(JX_EFFECT_DAMAGE);
-        // damage power override
-        int iOvrDmgPower = JXGetOverrideDamagePower(JX_EFFECT_DAMAGE);
-        if (iOvrDmgPower != -1) iDmgPower = iOvrDmgPower;
-        // ignore resists override
-        int bOvrIgnoreRes = JXGetOverrideIgnoreResistance(JX_EFFECT_DAMAGE);
-        if (bOvrIgnoreRes != -1) bIgnoreRes = bOvrIgnoreRes
+    // int bIgnoreDefault= JXGetOverrideIgnoreDefaultEffect(JX_EFFECT_DAMAGE);
+    // if (!bIgnoreDefault)
+    // {
+        //     // flat bonus
+        //     int iFlatBonus = JXGetOverrideFlatBonus(JX_EFFECT_DAMAGE);
+        //     // roll random bonus
+        //     int iRandBonus = JXGetOverrideRandBonus(JX_EFFECT_DAMAGE);
+        //     // damage power override
+        //     int iOvrDmgPower = JXGetOverrideDamagePower(JX_EFFECT_DAMAGE);
+        //     if (iOvrDmgPower != -1) iDmgPower = iOvrDmgPower;
+        //     // ignore resists override
+        //     int bOvrIgnoreRes = JXGetOverrideIgnoreResistance(JX_EFFECT_DAMAGE);
+        //     if (bOvrIgnoreRes != -1) bIgnoreRes = bOvrIgnoreRes
 
-        // sum up the bonuses
-        iDmg = iDmg + iFlatBonus + iRandBonus;
-        // create altered effect
-        eMain = EffectLinkEffects(eMain, EffectDamage(iDmg, iDmgType, iDmgPower, bIgnoreRes));
-    }
+        //     // sum up the bonuses
+        //     iDmg = iDmg + iFlatBonus + iRandBonus;
+        //     // create altered effect
+        //     eMain = EffectLinkEffects(eMain, EffectDamage(iDmg, iDmgType, iDmgPower, bIgnoreRes));
+        // }
 
-    effect eBonusLink = JXGetOverrideBonusEffectLink(JX_EFFECT_DAMAGE);
-    if (GetIsEffectValid(eBonusLink))
-    {
-        eMain = EffectLinkEffects(eMain, eBonusLink);
-    }
+        // effect eBonusLink = JXGetOverrideBonusEffectLink(JX_EFFECT_DAMAGE);
+        // if (GetIsEffectValid(eBonusLink))
+        // {
+            //     eMain = EffectLinkEffects(eMain, eBonusLink);
+            // }
 
-    return eMain;
+            // return eMain;
+    return EffectDamage(iDmg, iDmgType, iDmgPower, bIgnoreRes);
 }
 
 
-struct override_effect JXOverrideEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, iDamagePower=DAMAGE_POWER_NORMAL, iIgnoreResistances=FALSE)
-{
-    string sEffectArgs;
-    effect eDmg = EffectDamage(iDmg, iDmgType, iDamagePower, iIgnoreResistances);
+// struct jx_effect JXOverrideEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDamagePower=DAMAGE_POWER_NORMAL, int iIgnoreResistances=FALSE)
+// {
+//     string sEffectArgs;
+//     effect eDmg = EffectDamage(iDmg, iDmgType, iDamagePower, iIgnoreResistances);
 
-    sEffectArgs = JXOverrideEffectArgsPushInteger("", iDmg);
-    sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iDmgType);
-    sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iDamagePower);
-    sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iIgnoreResistances);
+//     sEffectArgs = JXOverrideEffectArgsPushInteger("", iDmg);
+//     sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iDmgType);
+//     sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iDamagePower);
+//     sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iIgnoreResistances);
 
-    struct override_effect DamageEffect = JXMakeOverrideEffect(JX_EFFECT_DAMAGE, eDmg, sEffectArgs);
-    return DamageEffect;
-}
+//     struct jx_effect DamageEffect = JXMakeOverrideEffect(JX_EFFECT_DAMAGE, eDmg, sEffectArgs);
+//     return DamageEffect;
+// }
 
 
 
@@ -462,54 +515,55 @@ struct override_effect JXOverrideEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE
 // + set interval
 // + override ignore resist
 
-effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYPE_MAGICAL, int iIgnoreResistances=FALSE)
+effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYPE_MAGICAL, int bIgnoreResistances=FALSE)
 {
-    effect eMain;
+    // effect eMain;
 
-    // dmg type override
-    iDmgType = JXGetOverrideDamageType(JX_EFFECT_DAMAGE_OVER_TIME, iDmgType);
+    // // dmg type override
+    // iDmgType = JXGetOverrideDamageType(JX_EFFECT_DAMAGE_OVER_TIME, iDmgType);
 
-    int bIgnoreDefault= JXGetOverrideIgnoreDefaultEffect(JX_EFFECT_DAMAGE);
-    if (!bIgnoreDefault)
-    {
-        // check flat bonus
-        int iFlatBonus = JXGetOverrideFlatBonus(JX_EFFECT_DAMAGE_OVER_TIME);
-        // check random bonus
-        int iRandBonus = JXGetOverrideRandBonus(JX_EFFECT_DAMAGE_OVER_TIME);
-        // check ignore resist overrid
-        int iOvrIgnoreRes = JXGetOverrideIgnoreResistance(JX_EFFECT_DAMAGE_OVER_TIME);
-        if (iOvrIgnoreRes != -1) iIgnoreRes = iOvrIgnoreRes;
-        float fOvrInterval = JXGetOverrideInterval(JX_EFFECT_OVER_TIME);
-        if (fOvrInterval != 0) fInterval = fOvrInterval;
-        iDmg = iDmg + iFlatBonus + iRandBonus;
-        eMain = EffectLinkEffects(eMain, EffectDamageOverTime(iDmg, fInterval, iDmgType, bIgnoreResistances));
-    }
+    // int bIgnoreDefault= JXGetOverrideIgnoreDefaultEffect(JX_EFFECT_DAMAGE);
+    // if (!bIgnoreDefault)
+    // {
+        //     // check flat bonus
+        //     int iFlatBonus = JXGetOverrideFlatBonus(JX_EFFECT_DAMAGE_OVER_TIME);
+        //     // check random bonus
+        //     int iRandBonus = JXGetOverrideRandBonus(JX_EFFECT_DAMAGE_OVER_TIME);
+        //     // check ignore resist overrid
+        //     int iOvrIgnoreRes = JXGetOverrideIgnoreResistance(JX_EFFECT_DAMAGE_OVER_TIME);
+        //     if (iOvrIgnoreRes != -1) iIgnoreRes = iOvrIgnoreRes;
+        //     float fOvrInterval = JXGetOverrideInterval(JX_EFFECT_OVER_TIME);
+        //     if (fOvrInterval != 0) fInterval = fOvrInterval;
+        //     iDmg = iDmg + iFlatBonus + iRandBonus;
+        //     eMain = EffectLinkEffects(eMain, EffectDamageOverTime(iDmg, fInterval, iDmgType, bIgnoreResistances));
+        // }
 
-    effect eBonusLink = JXGetOverrideBonusEffectLink(JX_EFFECT_DAMAGE_OVER_TIME);
-    if (GetIsEffectValid(eBonusLink))
-    {
-        // link the bonus effect link
-        eMain = EffectLinkEffects(eMain, eBonusLink);
-    }
+        // effect eBonusLink = JXGetOverrideBonusEffectLink(JX_EFFECT_DAMAGE_OVER_TIME);
+        // if (GetIsEffectValid(eBonusLink))
+        // {
+            //     // link the bonus effect link
+            //     eMain = EffectLinkEffects(eMain, eBonusLink);
+            // }
 
-    return eMain;
+            // return eMain;
+    return EffectDamageOverTime(iDmg, fInterval, iDmgType, bIgnoreResistances);
 }
 
 
-struct override_effect JXOverrideEffectDamageOverTime(int iAmount, float fIntervalSeconds, int iDamageType=DAMAGE_TYPE_MAGICAL, int bIgnoreRes=FALSE)
-{
-    string sEffectArgs;
-    effect eDmg = EffectDamageOverTime(iDmg, fInterval, iDmgType, iIgnoreRes);
+// struct jx_effect JXOverrideEffectDamageOverTime(int iAmount, float fIntervalSeconds, int iDamageType=DAMAGE_TYPE_MAGICAL, int bIgnoreRes=FALSE)
+// {
+//     string sEffectArgs;
+//     effect eDmg = EffectDamageOverTime(iDmg, fInterval, iDmgType, iIgnoreRes);
 
-    sEffectArgs = JXOverrideEffectArgsPushInteger("", iDmg);
-    sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iDmgType);
-    sEffectArgs = JXOverrideEffectArgsPushFloat(sEffectArgs, fInterval);
-    sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iIgnoreResistances);
+//     sEffectArgs = JXOverrideEffectArgsPushInteger("", iDmg);
+//     sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iDmgType);
+//     sEffectArgs = JXOverrideEffectArgsPushFloat(sEffectArgs, fInterval);
+//     sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iIgnoreResistances);
 
-    struct override_effect DamageEffect = JXMakeOverrideEffect(JX_EFFECT_DAMAGE_OVER_TIME, eDmg,  sEffectArgs);
-    return DamageEffect;
+//     struct jx_effect DamageEffect = JXMakeOverrideEffect(JX_EFFECT_DAMAGE_OVER_TIME, eDmg,  sEffectArgs);
+//     return DamageEffect;
 
-}
+// }
 
 
 //=============================================================
@@ -524,36 +578,36 @@ struct override_effect JXOverrideEffectDamageOverTime(int iAmount, float fInterv
 
 effect JXEffectAbilityIncrease(int iAbility, int iModifyBy)
 {
-    effect eMain;
+    // effect eMain;
 
-    // ability to increase
-    iAbility = JXGetOverrideAbilityIncrease(JX_EFFECT_ABILITY_INCREASE, iAbility);
+    // // ability to increase
+    // iAbility = JXGetOverrideAbilityIncrease(JX_EFFECT_ABILITY_INCREASE, iAbility);
 
-    int bIgnoreDefault= JXGetOverrideIgnoreDefaultEffect(JX_EFFECT_DAMAGE);
-    if (!bIgnoreDefault)
-    {
-        // check flat bonus
-        int iFlatBonus = JXGetOverrideFlatBonus(JX_EFFECT_DAMAGE_OVER_TIME);
-        // check random bonus
-        int iRandBonus = JXGetOverrideRandBonus(JX_EFFECT_DAMAGE_OVER_TIME);
-        // check ignore resist overrid
-        int iOvrIgnoreRes = JXGetOverrideIgnoreResistance(JX_EFFECT_DAMAGE_OVER_TIME);
-        if (iOvrIgnoreRes != -1) iIgnoreRes = iOvrIgnoreRes;
-        float fOvrInterval = JXGetOverrideInterval(JX_EFFECT_OVER_TIME);
-        if (fOvrInterval != 0) fInterval = fOvrInterval;
-        iDmg = iDmg + iFlatBonus + iRandBonus;
-        eMain = EffectLinkEffects(eMain, EffectDamageOverTime(iDmg, fInterval, iDmgType, bIgnoreResistances));
-    }
+    // int bIgnoreDefault= JXGetOverrideIgnoreDefaultEffect(JX_EFFECT_DAMAGE);
+    // if (!bIgnoreDefault)
+    // {
+        //     // check flat bonus
+        //     int iFlatBonus = JXGetOverrideFlatBonus(JX_EFFECT_DAMAGE_OVER_TIME);
+        //     // check random bonus
+        //     int iRandBonus = JXGetOverrideRandBonus(JX_EFFECT_DAMAGE_OVER_TIME);
+        //     // check ignore resist overrid
+        //     int iOvrIgnoreRes = JXGetOverrideIgnoreResistance(JX_EFFECT_DAMAGE_OVER_TIME);
+        //     if (iOvrIgnoreRes != -1) iIgnoreRes = iOvrIgnoreRes;
+        //     float fOvrInterval = JXGetOverrideInterval(JX_EFFECT_OVER_TIME);
+        //     if (fOvrInterval != 0) fInterval = fOvrInterval;
+        //     iDmg = iDmg + iFlatBonus + iRandBonus;
+        //     eMain = EffectLinkEffects(eMain, EffectDamageOverTime(iDmg, fInterval, iDmgType, bIgnoreResistances));
+        // }
 
-    effect eBonusLink = JXGetOverrideBonusEffectLink(JX_EFFECT_DAMAGE_OVER_TIME);
-    if (GetIsEffectValid(eBonusLink))
-    {
-        // link the bonus effect link
-        eMain = EffectLinkEffects(eMain, eBonusLink);
-    }
+        // effect eBonusLink = JXGetOverrideBonusEffectLink(JX_EFFECT_DAMAGE_OVER_TIME);
+        // if (GetIsEffectValid(eBonusLink))
+        // {
+            //     // link the bonus effect link
+            //     eMain = EffectLinkEffects(eMain, eBonusLink);
+            // }
 
-    return eMain;
-
+            // return eMain;
+    return EffectAbilityIncrease(iAbility, iModifyBy);
 }
 
 effect JXEffectDamageResistance(int iDamageType, int iAmount, int iLimit=0)
@@ -574,7 +628,6 @@ effect JXEffectSummonCreature(string sCreatureResref, int iVisualEffectId=VFX_NO
 effect JXMagicalEffect(effect eEffect)
 {
     return MagicalEffect(eEffect);
-
 }
 
 effect JXSupernaturalEffect(effect eEffect)
@@ -592,12 +645,10 @@ effect JXEffectACIncrease(int iValue, int iModifyType=AC_DODGE_BONUS, int iDamag
     return EffectACIncrease(iValue, iModifyType, iDamageType, iVsSpiritsOnly);
 }
 
-
 effect JXEffectSavingThrowIncrease(int iSave, int iValue, int iSaveType=SAVING_THROW_TYPE_ALL, int iVsSpiritsOnly=FALSE)
 {
     return EffectSavingThrowIncrease(iSave, iValue, iSaveType, iVsSpiritsOnly);
 }
-
 
 effect JXEffectAttackIncrease(int iBonus, int iModifierType=ATTACK_BONUS_MISC)
 {
@@ -609,31 +660,25 @@ effect JXEffectDamageReduction(int iAmount, int iDRSubType=DAMAGE_POWER_NORMAL, 
     return EffectDamageReduction(iAmount, iDRSubType, iLimit, iDRType);
 }
 
-
 effect JXEffectDamageIncrease(int iBonus, int iDamageType=DAMAGE_TYPE_MAGICAL, int iVersusRace=-1)
 {
-    return EffectDamageIncrease(ibonus, iDamageType, iVersusRace);
+    return EffectDamageIncrease(iBonus, iDamageType, iVersusRace);
 }
-
 
 effect JXEffectEntangle()
 {
     return EffectEntangle();
 }
 
-
 effect JXEffectDeath(int iSpectacularDeath=FALSE, int iDisplayFeedback=TRUE, int iIgnoreDeathImmunity=FALSE, int iPurgeEffects=TRUE)
 {
     return EffectDeath(iSpectacularDeath, iDisplayFeedback, iIgnoreDeathImmunity, iPurgeEffects);
 }
 
-
-
 effect JXEffectKnockdown()
 {
     return EffectKnockdown();
 }
-
 
 effect JXEffectCurse(int iStrMod=1, int iDexMod=1, int iConMod=1, int iIntMod=1, int iWisMod=1, int iChaMod=1)
 {
@@ -645,18 +690,15 @@ effect JXEffectParalyze(int iSaveDC=-1, int iSave=SAVING_THROW_WILL, int iSaveEv
     return EffectParalyze(iSaveDC, iSave, iSaveEveryRound);
 }
 
-
 effect JXEffectSpellImmunity(int iImmunityToSpell=SPELL_ALL_SPELLS)
 {
     return EffectSpellImmunity(iImmunityToSpell);
 }
 
-
 effect JXEffectDeaf()
 {
     return EffectDeaf();
 }
-
 
 effect JXEffectSleep()
 {
@@ -668,12 +710,10 @@ effect JXEffectCharmed()
     return EffectCharmed();
 }
 
-
 effect JXEffectConfused()
 {
     return EffectConfused();
 }
-
 
 effect JXEffectFrightened()
 {
@@ -690,7 +730,6 @@ effect JXEffectDazed()
     return EffectDazed();
 }
 
-
 effect JXEffectStunned()
 {
     return EffectStunned();
@@ -698,7 +737,7 @@ effect JXEffectStunned()
 
 effect JXEffectRegenerate(int iAmount, float fIntervalSeconds)
 {
-    return EffectRegenerate(iAmount, fIntervalInSeconds);
+    return EffectRegenerate(iAmount, fIntervalSeconds);
 }
 
 effect JXEffectMovementSpeedIncrease(int iPercentChange)
@@ -706,11 +745,10 @@ effect JXEffectMovementSpeedIncrease(int iPercentChange)
     return EffectMovementSpeedIncrease(iPercentChange);
 }
 
-effect JXEffectSpellResistanceIncrease(int iValue, int iUses = -1)
+effect JXEffectSpellResistanceIncrease(int iValue, int iUses=-1)
 {
-    return EffectSpellResistance(iValue, iUses);
+    return EffectSpellResistanceIncrease(iValue, iUses);
 }
-
 
 effect JXEffectPoison(int iPoisonType)
 {
@@ -732,12 +770,10 @@ effect JXEffectHaste()
     return EffectHaste();
 }
 
-
 effect JXEffectSlow()
 {
     return EffectSlow();
 }
-
 
 effect JXEffectImmunity(int iImmunityType)
 {
@@ -748,7 +784,6 @@ effect JXEffectDamageImmunityIncrease(int iDamageType, int iPercentImmunity)
 {
     return EffectDamageImmunityIncrease(iDamageType, iPercentImmunity);
 }
-
 
 effect JXEffectTemporaryHitpoints(int iHitPoints)
 {
@@ -765,42 +800,35 @@ effect JXVersusAlignmentEffect(effect eEffect, int iLawChaos=ALIGNMENT_ALL, int 
     return VersusAlignmentEffect(eEffect, iLawChaos, iGoodEvil);
 }
 
-
 effect JXVersusRacialTypeEffect(effect eEffect, int iRacialType)
 {
-    return VersusRacialType(eEffect, iRacialType);
+    return VersusRacialTypeEffect(eEffect, iRacialType);
 }
-
 
 effect JXVersusTrapEffect(effect eEffect)
 {
     return VersusTrapEffect(eEffect);
 }
 
-
 effect JXEffectTurned()
 {
     return EffectTurned();
 }
-
 
 effect JXEffectHitPointChangeWhenDying(float fHitPointChangePerRound)
 {
     return EffectHitPointChangeWhenDying(fHitPointChangePerRound);
 }
 
-
 effect JXEffectAbilityDecrease(int iAbility, int iModifyBy)
 {
     return EffectAbilityDecrease(iAbility, iModifyBy);
 }
 
-
 effect JXEffectAttackDecrease(int iPenalty, int iModifierType=ATTACK_BONUS_MISC)
 {
     return EffectAttackDecrease(iPenalty, iModifierType);
 }
-
 
 effect JXEffectDamageDecrease(int iPenalty, int iDamageType=DAMAGE_TYPE_MAGICAL)
 {
@@ -809,9 +837,8 @@ effect JXEffectDamageDecrease(int iPenalty, int iDamageType=DAMAGE_TYPE_MAGICAL)
 
 effect JXEffectDamageImmunityDecrease(int iDamageType, int iPercentImmunity)
 {
-    return EffectDagaeImmunityBonus(iDamageType, iPercentImmunity);
+    return EffectDamageImmunityDecrease(iDamageType, iPercentImmunity);
 }
-
 
 effect JXEffectACDecrease(int iValue, int iModifyType=AC_DODGE_BONUS, int iDamageType=AC_VS_DAMAGE_TYPE_ALL)
 {
@@ -823,16 +850,14 @@ effect JXEffectMovementSpeedDecrease(int iPercentChange)
     return EffectMovementSpeedDecrease(iPercentChange);
 }
 
-
 effect JXEffectSavingThrowDecrease(int iSave, int iValue, int iSaveType=SAVING_THROW_TYPE_ALL)
 {
     return EffectSavingThrowDecrease(iSave, iValue, iSaveType);
 }
 
-
 effect JXEffectSkillDecrease(int iSkill, int iValue)
 {
-    return EffectSkillDecrease(iSKillm iValue);
+    return EffectSkillDecrease(iSkill, iValue);
 }
 
 effect JXEffectSpellResistanceDecrease(int iValue)
@@ -840,12 +865,10 @@ effect JXEffectSpellResistanceDecrease(int iValue)
     return EffectSpellResistanceDecrease(iValue);
 }
 
-
 effect JXEffectInvisibility(int iInvisibilityType)
 {
     return EffectInvisibility(iInvisibilityType);
 }
-
 
 effect JXEffectConcealment(int iPercentage, int iMissType=MISS_CHANCE_TYPE_NORMAL)
 {
@@ -856,8 +879,6 @@ effect JXEffectDarkness()
 {
     return EffectDarkness();
 }
-
-
 
 effect JXEffectUltravision()
 {
@@ -871,7 +892,7 @@ effect JXEffectNegativeLevel(int iNumLevels, int bHPBonus=FALSE)
 
 effect JXEffectPolymorph(int iPolymorphSelection, int bLocked=FALSE, int bWildshape=FALSE)
 {
-    return EffectPolymorph(iPolymorphSelection, bBlocked, bWildshape);
+    return EffectPolymorph(iPolymorphSelection, bLocked, bWildshape);
 }
 
 effect JXEffectSanctuary(int iDifficultyClass)
@@ -921,7 +942,7 @@ effect JXEffectDamageShield(int iDamageAmount, int iRandomAmount, int iDamageTyp
 
 effect JXEffectSwarm(int bLooping, string sCreatureTemplate1, string sCreatureTemplate2="", string sCreatureTemplate3="", string sCreatureTemplate4="")
 {
-    return EffectSwarm(bLooping, sCreatureTemplate1, sCreatureTemplate2, sCreatureTemplate3. sCreatureTemplate4);
+    return EffectSwarm(bLooping, sCreatureTemplate1, sCreatureTemplate2, sCreatureTemplate3, sCreatureTemplate4);
 }
 
 effect JXEffectTurnResistanceDecrease(int iHitDice)
@@ -956,7 +977,7 @@ effect JXEffectDetectUndead()
 
 effect JXEffectLowLightVision()
 {
-    return EffectLowLoghtVision();
+    return EffectLowLightVision();
 }
 
 effect JXEffectSetScale(float fScaleX, float fScaleY=-1.0, float fScaleZ=-1.0)
@@ -966,7 +987,7 @@ effect JXEffectSetScale(float fScaleX, float fScaleY=-1.0, float fScaleZ=-1.0)
 
 effect JXEffectShareDamage(object oHelper, int iAmountShared=50, int iAmountCasterShared=50)
 {
-    return EffectSharedDamage(oHelper, iAmountShared, iAmountCasterShared);
+    return EffectShareDamage(oHelper, iAmountShared, iAmountCasterShared);
 }
 
 effect JXEffectAssayResistance(object oTarget)
@@ -996,10 +1017,10 @@ effect JXEffectMesmerize(int iBreakFlags, float fBreakDist = 0.0f)
 
 effect JXEffectDarkVision()
 {
-    return EffectDarkvision();
+    return EffectDarkVision();
 }
 
-effect JXEffectArmorCheckPenaltyIncrease(object oTarget, int nPenalty)
+effect JXEffectArmorCheckPenaltyIncrease(object oTarget, int iPenalty)
 {
     return EffectArmorCheckPenaltyIncrease(oTarget, iPenalty);
 }
@@ -1014,7 +1035,7 @@ effect JXEffectHealOnZeroHP(object oTarget, int iDmgToHeal)
     return EffectHealOnZeroHP(oTarget, iDmgToHeal);
 }
 
-effect JXEffectBreakEnchantment(int nLevel)
+effect JXEffectBreakEnchantment(int iLevel)
 {
     return EffectBreakEnchantment(iLevel);
 }
@@ -1034,9 +1055,9 @@ effect JXEffectJarring()
     return EffectJarring();
 }
 
-effect JXEffectBABMinimum(int nBABMin)
+effect JXEffectBABMinimum(int iBABMin)
 {
-    return EffectBABMinimum(int iBABMin);
+    return EffectBABMinimum(iBABMin);
 }
 
 effect JXEffectMaxDamage()
@@ -1081,7 +1102,7 @@ effect JXEffectConcealmentNegated()
 
 effect JXEffectInsane()
 {
-    return EffectInsane;
+    return EffectInsane();
 }
 
 effect JXEffectSummonCopy(object oSource, int iVisualEffectId=VFX_NONE, float fDelaySeconds=0.0f, string sNewTag="", int iNewHP=0, string sScript="")
@@ -1089,9 +1110,9 @@ effect JXEffectSummonCopy(object oSource, int iVisualEffectId=VFX_NONE, float fD
     return EffectSummonCopy(oSource, iVisualEffectId, fDelaySeconds, sNewTag, iNewHP, sScript);
 }
 
-//#############################################################
+//=============================================================
 // Cutscene Effects
-//##############################################################
+//=============================================================
 
 effect JXEffectCutsceneParalyze()
 {
@@ -1110,12 +1131,12 @@ effect JXEffectCutsceneImmobilize()
 
 effect JXEffectCutsceneGhost()
 {
-    return EffectCustsceneGhost();
+    return EffectCutsceneGhost();
 }
 
-//################################################################
+//===============================================================
 // Effects using action parameters
-//####################################################################
+//===============================================================
 
 // impossible to implement as user defined functions
 // cant use action type arguments
@@ -1123,9 +1144,9 @@ effect JXEffectCutsceneGhost()
 /* effect JXEffectDispelMagicBest(int iCasterLevel, action aOnDispelEffect ); */
 /* effect JXEffectOnDispel( float fDelay, action aOnDispelEffect ); */
 
-//##############################################################
+//===========================================================
 // SPECIAL EFFECT FUNCTIONS
-//###########################################################
+//===========================================================
 
 
 effect JXEffectAreaOfEffect(int iAreaEffectId, string sOnEnterScript="", string sHeartbeatScript="", string sOnExitScript="", string sEffectTag="" )
@@ -1149,26 +1170,24 @@ effect JXEffectBeam(int iBeamVisualEffect, object oEffector, int iBodyPart, int 
 
 
 
-// creates a override_effect which stores the information about a link of
+// creates a jx_effect which stores the information about a link of
 // ParentEffect and ChildEffect.
-// You can only link override_effects with the same iDefaultDurationType
+// You can only link jx_effects with the same iDefaultDurationType
 // Otherwise ParentOverrideEffect is returned
-struct override_effect JXOverrideEffectLinkEffects(struct override_effect ParentOverrideEffect, struct override_effect ChildOverrideEffect)
-{
-    if (ParentOverrideEffect.iDefaultDurationType == ChildOverrideEffect.iDefaultDurationType)
-    {
-        ParentOverrideEffect.iNumOfEffects += ChildOverrideEffect.iNumOfEffects;
-        ParentOverrideEffect.sEffectInfo += JX_EFFECT_SEP + ChildOverrideEffect.sEffectInfo;
-        ParentOverrideEffect.iEffectSubtype ^= ChildOverrideEffect.iEffectSubtype;
-    }
+// struct jx_effect JXOverrideEffectLinkEffects(struct jx_effect ParentOverrideEffect, struct jx_effect ChildOverrideEffect)
+// {
+//     if (ParentOverrideEffect.iDefaultDurationType == ChildOverrideEffect.iDefaultDurationType)
+//     {
+//         ParentOverrideEffect.iNumOfEffects += ChildOverrideEffect.iNumOfEffects;
+//         ParentOverrideEffect.sEffectInfo += JX_EFFECT_SEP + ChildOverrideEffect.sEffectInfo;
+//         ParentOverrideEffect.iEffectSubtype ^= ChildOverrideEffect.iEffectSubtype;
+//     }
+//     return ParentOverrideEffect;
+// }
 
-    return ParentOverrideEffect;
-}
-
-
-//#####################################################
+//=====================================================
 // SIMULATED EFFECTS
-// ###################################################
+//=====================================================
 
 //simulates shaken effect
 effect JXEffectShaken()
@@ -1180,5 +1199,3 @@ effect JXEffectShaken()
     eShakenLink = EffectLinkEffects(eShakenLink, eSkillPen);
     return eShakenLink;
 }
-
-

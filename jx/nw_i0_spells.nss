@@ -9,7 +9,7 @@
 //:: Updated By: 2003/20/10 Georg Zoeller
 //:: Updated By: 6/21/06 BDF-OEI: updated to use NWN2 VFX
 //:://////////////////////////////////////////////
-// 8/9/06 - BDF-OEI: in spellsCure, added the GetSpellCastItem() check to the GetHasFeat() check to make sure that 
+// 8/9/06 - BDF-OEI: in spellsCure, added the GetSpellCastItem() check to the GetHasFeat() check to make sure that
 //      clerics with the healing domain power don't get a bonus when using a healin potion
 // 8/28/06 - BDF-OEI: modified all the Remove*() functions to start back at the beginning of the effects list
 //      in the event that a desired effect is removed; this helps ensure that effects that are linked to other
@@ -34,7 +34,7 @@
 //  In the 3rd check, one-to-one object comparison was insufficient since GetCurrentMaster() would return OBJECT_INVALID
 //  for non-PC-party NPC targets and sources, causing the function to return TRUE even if they were non-hostile to one another.
 //      These changes may confound rules pundits, but the heart of the issue here is difficulty, not rules loyalty.
-/*  
+/*
 
     Modified by Reeron on 3-16-07
     Changed maximized healing to work correctly.
@@ -78,7 +78,7 @@
 #include "x0_i0_assoc"
 #include "bot9s_inc_constants"
 #include "x2_inc_spellhook"
-#include "jx_inc_magic_effects"
+// #include "jx_inc_magic_effects"
 //=========================================================================
 // * Constants
 //=========================================================================
@@ -208,13 +208,13 @@ void IgnoreTargetRulesEnqueueTarget(object oCaster, object oTarget);
 // Parameters the same as ActionCastSpellAtObject() in nwscript.nss
 void IgnoreTargetRulesActionCastSpellAtObject(int nSpell, object oTarget, int nMetaMagic=METAMAGIC_ANY, int bCheat=FALSE, int nDomainLevel=0, int nProjectilePathType=PROJECTILE_PATH_TYPE_DEFAULT, int bInstantSpell=FALSE);
 
-// Enqueues a spell that will ignore the spellsIsTarget logic. 
+// Enqueues a spell that will ignore the spellsIsTarget logic.
 // Variation: this will target all within the nShapeType and fShapeSize parameters. (ex SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL)
 //   try to match the nShapeType and fShapeSize parameters to prevent lingerings ITR variables.
 // Other parameters are the same as ActionCastSpellAtObject() in nwscript.nss
 void IgnoreTargetRulesActionCastSpellAtObjectArea(int nShapeType, float fShapeSize, int nSpell, object oTarget, int nMetaMagic=METAMAGIC_ANY, int bCheat=FALSE, int nDomainLevel=0, int nProjectilePathType=PROJECTILE_PATH_TYPE_DEFAULT, int bInstantSpell=FALSE);
 
-// Enqueues a spell that will ignore the spellsIsTarget logic. 
+// Enqueues a spell that will ignore the spellsIsTarget logic.
 // Variation: this will target all within the nShapeType and fShapeSize parameters. (ex SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL)
 //   try to match the nShapeType and fShapeSize parameters to prevent lingerings ITR variables.
 // Other parameters are the same as ActionCastSpellAtLocation() in nwscript.nss
@@ -245,7 +245,7 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
     }
 
     int bSelfTarget = FALSE;
-    
+
     // Noted by Reeron on 5-4-09
     // Was GetCurrentMaster instead of GetCurrentRealMaster before patch 1.22
 
@@ -272,8 +272,8 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
         }
         // 11/10/06 - BDF(OEI): GetCurrentMaster() will return OBJECT_INVALID when the queried object is not in a PC party.
         //  This causes non-PC-party NPCs to affect one another even if they are not hostile to one another.  Bad.
-        else if (oTargetMaster == oSourceMaster 
-                && GetIsObjectValid(oSourceMaster) 
+        else if (oTargetMaster == oSourceMaster
+                && GetIsObjectValid(oSourceMaster)
                 && GetIsObjectValid(oTargetMaster)  )   // This will also ensure that PC party members in multiplayer are affected
         {
             bSelfTarget = TRUE;
@@ -286,8 +286,8 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
     {
         // * I am an associate
         // * of someone
-        
-        
+
+
         // For associates, check target's master (instead of target)
         if ( GetIsReactionTypeHostile(oTargetMaster, oSource) == TRUE )
         {
@@ -493,12 +493,12 @@ int GetCureDamageTotal(object oTarget, int nDamage, int nMaxExtraDamage, int nMa
 {
     int nMetaMagic = JXGetMetaMagicFeat();
     int nExtraDamage = JXGetCasterLevel(OBJECT_SELF); // * figure out the bonus damage
-       
+
     if (nExtraDamage > nMaxExtraDamage)
     {
         nExtraDamage = nMaxExtraDamage;
     }
-    
+
     // * if low or normal difficulty is treated as MAXIMIZED
     if(     GetIsPC(oTarget)/* &&
        (GetGameDifficulty() < GAME_DIFFICULTY_CORE_RULES) */ )
@@ -570,7 +570,7 @@ int GetCureDamageTotal(object oTarget, int nDamage, int nMaxExtraDamage, int nMa
 //  spellsCure
 //    Used by the 'cure' series of spells.
 //    Will do max heal/damage if at normal or low difficulty.  Random rolls occur at higher difficulties.
-// 8/9/06 - BDF-OEI: added the GetSpellCastItem() check to the GetHasFeat() check to make sure that 
+// 8/9/06 - BDF-OEI: added the GetSpellCastItem() check to the GetHasFeat() check to make sure that
 //      clerics with the healing domain power don't get a bonus when using a healin potion
 //
 //  Heal spells typically do a random amount +1/level up to a max.
@@ -1404,7 +1404,7 @@ effect CreateDoomEffectsLink()
 
     return eLink;
 }
- 
+
 void RemoveSpellEffects(int nSpell_ID, object oCaster, object oTarget)
 {
     //Declare major variables
@@ -1784,7 +1784,7 @@ void IgnoreTargetRulesActionCastSpellAtObject(int nSpell, object oTarget, int nM
     ActionCastSpellAtObject(nSpell, oTarget, nMetaMagic,bCheat,nDomainLevel,nProjectilePathType, bInstantSpell);
 }
 
-// Enqueues a spell that will ignore the spellsIsTarget logic. 
+// Enqueues a spell that will ignore the spellsIsTarget logic.
 // Variation: this will target all within the nShapeType and fShapeSize parameters. (ex SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL)
 //   try to match the nShapeType and fShapeSize parameters to prevent lingerings ITR variables.
 // Other parameters are the same as ActionCastSpellAtObject() in nwscript.nss
@@ -1800,7 +1800,7 @@ void IgnoreTargetRulesActionCastSpellAtObjectArea(int nShapeType, float fShapeSi
     ActionCastSpellAtObject(nSpell,oTarget,nMetaMagic,bCheat, nDomainLevel,nProjectilePathType, bInstantSpell);
 }
 
-// Enqueues a spell that will ignore the spellsIsTarget logic. 
+// Enqueues a spell that will ignore the spellsIsTarget logic.
 // Variation: this will target all within the nShapeType and fShapeSize parameters. (ex SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL)
 //   try to match the nShapeType and fShapeSize parameters to prevent lingerings ITR variables.
 // Other parameters are the same as ActionCastSpellAtLocation() in nwscript.nss

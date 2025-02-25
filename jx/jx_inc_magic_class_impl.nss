@@ -1,4 +1,5 @@
 #include "jx_inc_magic_class"
+// include content-dependent implementation
 #include "jx_class_info_interface"
 
 

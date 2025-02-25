@@ -16,6 +16,8 @@
 
 #include "x2_inc_itemprop"
 #include "jx_inc_magic"
+#include "nw_i0_spells"
+#include "x0_i0_spells"
 
 //------------------------------------------------------------------------------
 // GZ: These constants are used with for the AOE behavior AI
@@ -314,7 +316,7 @@ void CheckAndApplyThunderingRage(int nRounds)
            /*
            IPSafeAddItemProperty(oWeapon, ItemPropertyOnHitProps(IP_CONST_ONHIT_DEAFNESS,IP_CONST_ONHIT_SAVEDC_14,IP_CONST_ONHIT_DURATION_100_PERCENT_3_ROUND),
                                  RoundsToSeconds(nRounds), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, TRUE);
-           */ 
+           */
         }
      }
 }

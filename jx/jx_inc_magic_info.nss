@@ -205,36 +205,37 @@ string JXGetSpellName(int iSpellId)
 // Get the level of a spell, innate or depending on a caster class
 // - iClass Class that is able to cast the spell (CLASS_TYPE_INVALID for innate)
 // * Returns the spell level, or -1 if the spell is not accessible to the class
-int JXGetBaseSpellLevel(int iSpellId, int iClass = CLASS_TYPE_INVALID)
-{
-        string sSpellLevel = "";
-        int ismagic = JXClassGetCasterAbility("no it isnt");
-        switch (iClass)
-        {
-          case CLASS_TYPE_BARD:
-                sSpellLevel = Get2DAString("spells", "Bard", iSpellId); break;
-          case CLASS_TYPE_CLERIC:
-          case CLASS_TYPE_FAVORED_SOUL:
-                sSpellLevel = Get2DAString("spells", "Cleric", iSpellId); break;
-          case CLASS_TYPE_DRUID:
-          case CLASS_TYPE_SPIRIT_SHAMAN:
-                sSpellLevel = Get2DAString("spells", "Druid", iSpellId); break;
-          case CLASS_TYPE_RANGER:
-                sSpellLevel = Get2DAString("spells", "Ranger", iSpellId); break;
-          case CLASS_TYPE_PALADIN:
-                sSpellLevel = Get2DAString("spells", "Paladin", iSpellId); break;
-          case CLASS_TYPE_WIZARD:
-          case CLASS_TYPE_SORCERER:
-                sSpellLevel = Get2DAString("spells", "Wiz_Sorc", iSpellId); break;
-          default:
-                sSpellLevel = Get2DAString("spells", "Innate", iSpellId); break;
-        }
+// FIXME: is already defined in interface
+// int JXGetBaseSpellLevel(int iSpellId, int iClass = CLASS_TYPE_INVALID)
+// {
+//         string sSpellLevel = "";
+//         int ismagic = JXClassGetCasterAbility(iClass);
+//         switch (iClass)
+//         {
+//           case CLASS_TYPE_BARD:
+//                 sSpellLevel = Get2DAString("spells", "Bard", iSpellId); break;
+//           case CLASS_TYPE_CLERIC:
+//           case CLASS_TYPE_FAVORED_SOUL:
+//                 sSpellLevel = Get2DAString("spells", "Cleric", iSpellId); break;
+//           case CLASS_TYPE_DRUID:
+//           case CLASS_TYPE_SPIRIT_SHAMAN:
+//                 sSpellLevel = Get2DAString("spells", "Druid", iSpellId); break;
+//           case CLASS_TYPE_RANGER:
+//                 sSpellLevel = Get2DAString("spells", "Ranger", iSpellId); break;
+//           case CLASS_TYPE_PALADIN:
+//                 sSpellLevel = Get2DAString("spells", "Paladin", iSpellId); break;
+//           case CLASS_TYPE_WIZARD:
+//           case CLASS_TYPE_SORCERER:
+//                 sSpellLevel = Get2DAString("spells", "Wiz_Sorc", iSpellId); break;
+//           default:
+//                 sSpellLevel = Get2DAString("spells", "Innate", iSpellId); break;
+//         }
 
-        if (sSpellLevel == "")
-                return -1;
-        else
-                return StringToInt(sSpellLevel);
-}
+//         if (sSpellLevel == "")
+//                 return -1;
+//         else
+//                 return StringToInt(sSpellLevel);
+// }
 
 // Get the range type of a spell
 // - iSpellId Identifier of the spell

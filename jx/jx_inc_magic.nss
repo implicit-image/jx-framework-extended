@@ -314,7 +314,7 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - eEffect Effect to apply to the object
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
-void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, iRunOnHitEffects=TRUE);
+void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iRunOnHitEffects=TRUE);
 
 // Create an area of effect for the current spell and apply it at the specified location.
 // Areas of effect created by this way have the following properties :
@@ -364,7 +364,7 @@ void JXApplyAreaEffectToObject(int nAreaEffectId,
 // N.B. : A call to GetAreaOfEffectCreator() on an area of effect that has been
 // created with JXApplyAreaEffectToXXX() would return an "Attach Spell Node" creature.
 // - oAOE Area of effect
-// * Returns the real creator of the spell, or 
+// * Returns the real creator of the spell, or
 object JXGetAOERealCreator(object oAOE = OBJECT_SELF);
 
 // * Get Scaled Effect
@@ -1155,13 +1155,12 @@ int JXResistSpell(object oCaster, object oTarget)
     // Turn back the spell to the caster if the target is
     // protected by a Spell Turning effect
     if ((GetHasSpellEffect(SPELL_SPELL_TURNING, oTarget))
-     && (JXGetHasSpellTargetTypeArea(GetSpellId()) == FALSE)
-     && (JXGetSpellRange(GetSpellId()) > 0.0)
-     && (JXGetIsSpellUsingRangedTouchAttack(GetSpellId()) == FALSE))
+        && (JXGetHasSpellTargetTypeArea(GetSpellId()) == FALSE)
+        && (JXGetSpellRange(GetSpellId()) > 0.0)
+        && (JXGetIsSpellUsingRangedTouchAttack(GetSpellId()) == FALSE))
     {
         // Cast the same spell from the target to the caster
         int iSpellLevelsLeft = GetLocalInt(oTarget, JX_SP_SPELLTURN_LVLS);
-
         // Decrease the number of spell absorption levels
         int iSpellLevel = GetSpellLevel(GetSpellId());
         if (iSpellLevelsLeft - iSpellLevel > 0)
@@ -1554,7 +1553,7 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - eEffect Effect to apply to the object
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
-void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, bCheckSelectiveMagic=FALSE)
+void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int bCheckSelectiveMagic=FALSE)
 {
 
     object oCaster = OBJECT_SELF;
@@ -2224,69 +2223,69 @@ void JXPostSpellCastCode()
     DeleteLocalObject(oCaster, JX_SPELL_TARGET_OBJECT);
     DeleteLocalLocation(oCaster, JX_SPELL_TARGET_LOCATION);
 
-	// Delete effect override info
-	// see jx_inc_effects.nss for effect override interface
+    // Delete effect override info
+    // see jx_inc_effects.nss for effect override interface
 
-    JXClearOverrideIntArray(JX_OVERRIDE_INT_ARR_IGNORE_DEFAULT);
-    JXClearOverrideIntArray(JX_OVERRIDE_INT_ARR_FLAT_BONUS);
+    // JXClearOverrideIntArray(JX_OVERRIDE_INT_ARR_IGNORE_DEFAULT);
+    // JXClearOverrideIntArray(JX_OVERRIDE_INT_ARR_FLAT_BONUS);
 
-	JXClearOverrideStringArray(JX_OVERRIDE_STR_ARR_BONUS_LINK);
-	JXClearOverrideStringArray(JX_OVERRIDE_STR_ARR_RAND_BONUS);
-	JXClearOverrideStringArray(JX_OVERRIDE_STR_ARR_DAMAGE_TYPE_MAP);
+    // JXClearOverrideStringArray(JX_OVERRIDE_STR_ARR_BONUS_LINK);
+    // JXClearOverrideStringArray(JX_OVERRIDE_STR_ARR_RAND_BONUS);
+    // JXClearOverrideStringArray(JX_OVERRIDE_STR_ARR_DAMAGE_TYPE_MAP);
 }
 
 
 //========================================== On Apply Spell Effect Hook ==========================================//
-
-int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect)
-{
-    int iContinue = JXRunUserDefinedOnApplySpellEffectCode(oCaster, oTarget, eEffect);
-    // if user script reports false, do no apply any effects
-    //
-    switch (iContinue)
-    {
-        case -2: // script not found
-        case -1: // script found, execution failed
-        case 0:  // script found, exec success, proceed as normal
-            return TRUE;
-        case 1:  // script found, execution success, dont apply other effects
-        default:
-            return FALSE;
-    }
-    return TRUE;
-}
+// TODO: actually make this work
+// int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect)
+// {
+//     int iContinue = JXRunUserDefinedOnApplySpellEffectCode(oCaster, oTarget, eEffect);
+//     // if user script reports false, do no apply any effects
+//     //
+//     switch (iContinue)
+//     {
+//         case -2: // script not found
+//         case -1: // script found, execution failed
+//         case 0:  // script found, exec success, proceed as normal
+//             return TRUE;
+//         case 1:  // script found, execution success, dont apply other effects
+//         default:
+//             return FALSE;
+//     }
+//     return TRUE;
+// }
 
 //#######################################################
 // JXRunUserDefinedOnApplySpellEffectScript
 // oCaster - object that cast the spell applying the effect
 // oTarget - object to which the effect is applied
 // eEffect - the effect being applied
-int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget, effect eEffect)
-{
-    string sScript =  GetLocalString(GetModule(), MODULE_VAR_JX_USER_ON_APPLY_SPELL_EFFECT);
-    if (sScript != "")
-    {
-        string sEffectInfo = JXGetEffectInfo(eEffect);
-        // on hit script is run on the target we are applying the effect to
-        // it has to have an object as first param
-        // and string containing effetc info as the second
-        AddScriptParameterObject(oCaster);
-        int res = ExecuteScriptEnhanced(sScript, oTarget, FALSE);
-        if (res == -1) // execution failed
-        {
-            SendMessageToPC(oCaster, "Executing user on apply spell effect script failed");
-            return 0;
-        }
-        // the variable must be set by on apply spell effect script
-        res = GetLocalInt(oTarget, VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT);
-        return res;
-    }
-    return -2;
-}
+// TODO: actually fix this
+// int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget, effect eEffect)
+// {
+//     string sScript =  GetLocalString(GetModule(), MODULE_VAR_JX_USER_ON_APPLY_SPELL_EFFECT);
+//     if (sScript != "")
+//     {
+//         string sEffectInfo = JXGetEffectInfo(eEffect);
+//         // on hit script is run on the target we are applying the effect to
+//         // it has to have an object as first param
+//         // and string containing effetc info as the second
+//         AddScriptParameterObject(oCaster);
+//         int res = ExecuteScriptEnhanced(sScript, oTarget, FALSE);
+//         if (res == -1) // execution failed
+//         {
+//             SendMessageToPC(oCaster, "Executing user on apply spell effect script failed");
+//             return 0;
+//         }
+//         // the variable must be set by on apply spell effect script
+//         res = GetLocalInt(oTarget, VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT);
+//         return res;
+//     }
+//     return -2;
+// }
 
 // use this function to set the result of on_apply_spell_effect script
 void JXSetOnApplySpellEffectResult(int iValue, object oTarget=OBJECT_SELF)
 {
     SetLocalInt(oTarget, VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT, iValue);
 }
-

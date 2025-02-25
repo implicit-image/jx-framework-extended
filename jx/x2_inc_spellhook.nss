@@ -321,15 +321,15 @@ int X2PreSpellCastCode()
 
             // Fire the spellcasting action started event
             nContinue = JXEventActionCastSpellStarted(OBJECT_SELF,
-                                                    actionCastSpell.iSpellId,
-                                                    actionCastSpell.oTarget,
-                                                    GetIsObjectValid(actionCastSpell.oTarget) ?
-                                                     GetLocation(actionCastSpell.oTarget) :
-                                                     actionCastSpell.lTarget,
-                                                    actionCastSpell.iCasterLevel,
-                                                    actionCastSpell.iMetaMagicFeat,
-                                                    actionCastSpell.iSpellSaveDC,
-                                                    actionCastSpell.iClass);
+                                                      actionCastSpell.iSpellId,
+                                                      actionCastSpell.oTarget,
+                                                      GetIsObjectValid(actionCastSpell.oTarget) ?
+                                                       GetLocation(actionCastSpell.oTarget) :
+                                                       actionCastSpell.lTarget,
+                                                      actionCastSpell.iCasterLevel,
+                                                      actionCastSpell.iMetaMagicFeat,
+                                                      actionCastSpell.iSpellSaveDC,
+                                                      actionCastSpell.iClass);
             if (nContinue)
             {
                 JXSetCasterLevel(actionCastSpell.iCasterLevel);
