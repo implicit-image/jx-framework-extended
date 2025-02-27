@@ -4,10 +4,10 @@
 //:: Copyright (c) 2003 Bioware Corp.
 //:://////////////////////////////////////////////
 /*	Drammel's Note 2/4/2010: This is a copy of the original for use in the Tome of Battle.
-	Using modified versions of the original files caues far too many compatibility issues,
-	therefore a copy is made which is hooked into the relavent overriden files rather than
-	the original.  Thus, I can use all the functionality of the original without worrying about
-	recompiling errors into the original versions.
+        Using modified versions of the original files caues far too many compatibility issues,
+        therefore a copy is made which is hooked into the relavent overriden files rather than
+        the original.  Thus, I can use all the functionality of the original without worrying about
+        recompiling errors into the original versions.
 */
 /*
 
@@ -33,36 +33,36 @@
 //void main(){}
 // *  The tag of the ip work container, a placeable which has to be set into each
 // *  module that is using any of the crafting functions.
-const string  X2_IP_WORK_CONTAINER_TAG = "x2_plc_ipbox";
+// const string  X2_IP_WORK_CONTAINER_TAG = "x2_plc_ipbox";
 // *  2da for the AddProperty ItemProperty
-const string X2_IP_ADDRPOP_2DA = "des_crft_props" ;
+// const string X2_IP_ADDRPOP_2DA = "des_crft_props" ;
 // *  2da for the Poison Weapon Itemproperty
-const string X2_IP_POISONWEAPON_2DA = "des_crft_poison" ;
+// const string X2_IP_POISONWEAPON_2DA = "des_crft_poison" ;
 // *  2da for armor appearance
-const string X2_IP_ARMORPARTS_2DA = "des_crft_aparts" ;
+// const string X2_IP_ARMORPARTS_2DA = "des_crft_aparts" ;
 // *  2da for armor appearance
-const string X2_IP_ARMORAPPEARANCE_2DA = "des_crft_appear" ;
+// const string X2_IP_ARMORAPPEARANCE_2DA = "des_crft_appear" ;
 
 // * Base custom token for item modification conversations (do not change unless you want to change the conversation too)
-const int    XP_IP_ITEMMODCONVERSATION_CTOKENBASE = 12220;
-const int    X2_IP_ITEMMODCONVERSATION_MODE_TAILOR = 0;
-const int    X2_IP_ITEMMODCONVERSATION_MODE_CRAFT = 1;
+// const int    XP_IP_ITEMMODCONVERSATION_CTOKENBASE = 12220;
+// const int    X2_IP_ITEMMODCONVERSATION_MODE_TAILOR = 0;
+// const int    X2_IP_ITEMMODCONVERSATION_MODE_CRAFT = 1;
 
 // * Number of maximum item properties allowed on most items
-const int    X2_IP_MAX_ITEM_PROPERTIES = 8;
+// const int    X2_IP_MAX_ITEM_PROPERTIES = 8;
 
 // *  Constants used with the armor modification system
-const int    X2_IP_ARMORTYPE_NEXT = 0;
-const int    X2_IP_ARMORTYPE_PREV = 1;
-const int    X2_IP_ARMORTYPE_RANDOM = 2;
-const int    X2_IP_WEAPONTYPE_NEXT = 0;
-const int    X2_IP_WEAPONTYPE_PREV = 1;
-const int    X2_IP_WEAPONTYPE_RANDOM = 2;
+// const int    X2_IP_ARMORTYPE_NEXT = 0;
+// const int    X2_IP_ARMORTYPE_PREV = 1;
+// const int    X2_IP_ARMORTYPE_RANDOM = 2;
+// const int    X2_IP_WEAPONTYPE_NEXT = 0;
+// const int    X2_IP_WEAPONTYPE_PREV = 1;
+// const int    X2_IP_WEAPONTYPE_RANDOM = 2;
 
 // *  Policy constants for IPSafeAddItemProperty()
-const int    X2_IP_ADDPROP_POLICY_REPLACE_EXISTING = 0;
-const int    X2_IP_ADDPROP_POLICY_KEEP_EXISTING = 1;
-const int    X2_IP_ADDPROP_POLICY_IGNORE_EXISTING =2;
+// const int    X2_IP_ADDPROP_POLICY_REPLACE_EXISTING = 0;
+// const int    X2_IP_ADDPROP_POLICY_KEEP_EXISTING = 1;
+// const int    X2_IP_ADDPROP_POLICY_IGNORE_EXISTING =2;
 
 
 // *  removes all itemproperties with matching nItemPropertyType and nItemPropertyDuration
@@ -343,7 +343,7 @@ int ITEM_PROPERTY_DAMAGE_BONUS                             = 16 ;
 int ITEM_PROPERTY_DAMAGE_BONUS_VS_ALIGNMENT_GROUP          = 17 ;
 int ITEM_PROPERTY_DAMAGE_BONUS_VS_RACIAL_GROUP             = 18 ;
 int ITEM_PROPERTY_DAMAGE_BONUS_VS_SPECIFIC_ALIGNMENT       = 19 ;
-int ITEM_PROPERTY_DAMAGE_REDUCTION              		   = 90 ; 
+int ITEM_PROPERTY_DAMAGE_REDUCTION              		   = 90 ;
 int ITEM_PROPERTY_DAMAGE_REDUCTION_DEPRECATED              = 22 ; // not called
 int ITEM_PROPERTY_DAMAGE_RESISTANCE                        = 23 ;
 int ITEM_PROPERTY_DAMAGE_VULNERABILITY                     = 24 ;
@@ -404,9 +404,9 @@ int ITEM_PROPERTY_USE_LIMITATION_SPECIFIC_ALIGNMENT        = 65 ;
 int ITEM_PROPERTY_VISUALEFFECT	                           = 83;
 int ITEM_PROPERTY_WEIGHT_INCREASE                          = 81;
 
-*/	
+*/
 
-	
+
 // ----------------------------------------------------------------------------
 // This function needs to be rather extensive and needs to be updated if there are new
 // ip types we want to use, but it goes into the item property include anyway
@@ -416,11 +416,11 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
 {
    itemproperty ipRet;
 
-   if (nPropID == ITEM_PROPERTY_ABILITY_BONUS) // 0 
+   if (nPropID == ITEM_PROPERTY_ABILITY_BONUS) // 0
    {
         ipRet = ItemPropertyAbilityBonus(nParam1, nParam2);
    }
-   else if (nPropID == ITEM_PROPERTY_AC_BONUS) // 1 
+   else if (nPropID == ITEM_PROPERTY_AC_BONUS) // 1
    {
         ipRet = ItemPropertyACBonus(nParam1);
    }
@@ -600,7 +600,7 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    {
         ipRet = ItemPropertySpellImmunitySchool(nParam1);
    }
-   else if (nPropID == ITEM_PROPERTY_IMMUNITY_SPELLS_BY_LEVEL) // 78 
+   else if (nPropID == ITEM_PROPERTY_IMMUNITY_SPELLS_BY_LEVEL) // 78
    {
         ipRet = ItemPropertyImmunityToSpellLevel(nParam1);
    }
@@ -620,7 +620,7 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    {
         ipRet = ItemPropertyMassiveCritical(nParam1);
    }
-/*	
+/*
    else if (nPropID == ITEM_PROPERTY_MIGHTY) // 45
    {
         ipRet = ?(nParam1);
@@ -629,7 +629,7 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    {
         ipRet = ?(nParam1);
    }
-*/	
+*/
    else if (nPropID == ITEM_PROPERTY_MONSTER_DAMAGE) // 77
    {
         ipRet = ItemPropertyMonsterDamage(nParam1);
@@ -650,97 +650,97 @@ itemproperty IPGetItemPropertyByID(int nPropID, int nParam1 = 0, int nParam2 = 0
    {
         ipRet = ItemPropertyOnHitCastSpell(nParam1, nParam2);
    }
-/*	
+/*
    else if (nPropID == ITEM_PROPERTY_POISON) // 76
-   {	
-		//NWSCRIPT.nss: no longer working, poison is now a on_hit subtype
+   {
+                //NWSCRIPT.nss: no longer working, poison is now a on_hit subtype
         ipRet = ();
    }
 */
-	else if (nPropID == ITEM_PROPERTY_REGENERATION) // 51
-	{
-	     ipRet = ItemPropertyRegeneration(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_REGENERATION_VAMPIRIC) // 67
-	{
-	     ipRet = ItemPropertyVampiricRegeneration(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_SAVING_THROW_BONUS) // 40
-	{
-	     ipRet = ItemPropertyBonusSavingThrow(nParam1, nParam2);
-	}
-	else if (nPropID == ITEM_PROPERTY_SAVING_THROW_BONUS_SPECIFIC) // 41
-	{
-	     ipRet = ItemPropertyBonusSavingThrowVsX(nParam1, nParam2);
-	}
-	
-	else if (nPropID == ITEM_PROPERTY_SKILL_BONUS) // 52
-	{
-	     ipRet = ItemPropertySkillBonus(nParam1, nParam2);
-	}
-	else if (nPropID == ITEM_PROPERTY_SPECIAL_WALK) // 79
-	{
-	     ipRet = ItemPropertySpecialWalk(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_SPELL_RESISTANCE)
-	{
-	     ipRet = ItemPropertyBonusSpellResistance(nParam1); // 39
-	}
-	else if (nPropID == ITEM_PROPERTY_THIEVES_TOOLS)
-	{
-	     ipRet = ItemPropertyThievesTools(nParam1); // 55
-	}
-	else if (nPropID == ITEM_PROPERTY_TRAP) // 70
-	{
-	     ipRet = ItemPropertyTrap(nParam1, nParam2);
-	}
-	else if (nPropID == ITEM_PROPERTY_TRUE_SEEING) // 71
-	{
-	     ipRet = ItemPropertyTrueSeeing();
-	}
-	else if (nPropID == ITEM_PROPERTY_TURN_RESISTANCE) // 73
-	{
-	     ipRet = ItemPropertyTurnResistance(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_UNLIMITED_AMMUNITION) // 61
-	{
-	     ipRet = ItemPropertyUnlimitedAmmo(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_ALIGNMENT_GROUP) // 62
-	{
-	     ipRet = ItemPropertyLimitUseByAlign(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_CLASS) // 63
-	{
-	     ipRet = ItemPropertyLimitUseByClass(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_RACIAL_TYPE) // 64
-	{
-	     ipRet = ItemPropertyLimitUseByRace(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_SPECIFIC_ALIGNMENT) // 65
-	{
-	     ipRet = ItemPropertyLimitUseBySAlign(nParam1);
-	}
+        else if (nPropID == ITEM_PROPERTY_REGENERATION) // 51
+        {
+             ipRet = ItemPropertyRegeneration(nParam1);
+        }
+        else if (nPropID == ITEM_PROPERTY_REGENERATION_VAMPIRIC) // 67
+        {
+             ipRet = ItemPropertyVampiricRegeneration(nParam1);
+        }
+        else if (nPropID == ITEM_PROPERTY_SAVING_THROW_BONUS) // 40
+        {
+             ipRet = ItemPropertyBonusSavingThrow(nParam1, nParam2);
+        }
+        else if (nPropID == ITEM_PROPERTY_SAVING_THROW_BONUS_SPECIFIC) // 41
+        {
+             ipRet = ItemPropertyBonusSavingThrowVsX(nParam1, nParam2);
+        }
+
+        else if (nPropID == ITEM_PROPERTY_SKILL_BONUS) // 52
+        {
+             ipRet = ItemPropertySkillBonus(nParam1, nParam2);
+        }
+        else if (nPropID == ITEM_PROPERTY_SPECIAL_WALK) // 79
+        {
+             ipRet = ItemPropertySpecialWalk(nParam1);
+        }
+        else if (nPropID == ITEM_PROPERTY_SPELL_RESISTANCE)
+        {
+             ipRet = ItemPropertyBonusSpellResistance(nParam1); // 39
+        }
+        else if (nPropID == ITEM_PROPERTY_THIEVES_TOOLS)
+        {
+             ipRet = ItemPropertyThievesTools(nParam1); // 55
+        }
+        else if (nPropID == ITEM_PROPERTY_TRAP) // 70
+        {
+             ipRet = ItemPropertyTrap(nParam1, nParam2);
+        }
+        else if (nPropID == ITEM_PROPERTY_TRUE_SEEING) // 71
+        {
+             ipRet = ItemPropertyTrueSeeing();
+        }
+        else if (nPropID == ITEM_PROPERTY_TURN_RESISTANCE) // 73
+        {
+             ipRet = ItemPropertyTurnResistance(nParam1);
+        }
+        else if (nPropID == ITEM_PROPERTY_UNLIMITED_AMMUNITION) // 61
+        {
+             ipRet = ItemPropertyUnlimitedAmmo(nParam1);
+        }
+        else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_ALIGNMENT_GROUP) // 62
+        {
+             ipRet = ItemPropertyLimitUseByAlign(nParam1);
+        }
+        else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_CLASS) // 63
+        {
+             ipRet = ItemPropertyLimitUseByClass(nParam1);
+        }
+        else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_RACIAL_TYPE) // 64
+        {
+             ipRet = ItemPropertyLimitUseByRace(nParam1);
+        }
+        else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_SPECIFIC_ALIGNMENT) // 65
+        {
+             ipRet = ItemPropertyLimitUseBySAlign(nParam1);
+        }
 /*
-	else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_TILESET) // 66
-	{
-	     ipRet = ();
-	}
+        else if (nPropID == ITEM_PROPERTY_USE_LIMITATION_TILESET) // 66
+        {
+             ipRet = ();
+        }
 */
 
-	else if (nPropID == ITEM_PROPERTY_VISUALEFFECT) // 83
-	{
-	     ipRet = ItemPropertyVisualEffect(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_WEIGHT_INCREASE) // 81 
-	{
-	     ipRet = ItemPropertyWeightIncrease(nParam1);
-	}
-	else if (nPropID == ITEM_PROPERTY_BONUS_HITPOINTS) // 86
-	{
-	     ipRet = ItemPropertyBonusHitpoints(nParam1);
-	}
+        else if (nPropID == ITEM_PROPERTY_VISUALEFFECT) // 83
+        {
+             ipRet = ItemPropertyVisualEffect(nParam1);
+        }
+        else if (nPropID == ITEM_PROPERTY_WEIGHT_INCREASE) // 81
+        {
+             ipRet = ItemPropertyWeightIncrease(nParam1);
+        }
+        else if (nPropID == ITEM_PROPERTY_BONUS_HITPOINTS) // 86
+        {
+             ipRet = ItemPropertyBonusHitpoints(nParam1);
+        }
 
    return ipRet;
 }
@@ -800,14 +800,14 @@ int IPGetIsMeleeWeapon(object oItem)
       (nItem == BASE_ITEM_SHORTSPEAR) ||
       (nItem == BASE_ITEM_SHORTSWORD) ||
       (nItem == BASE_ITEM_WARHAMMER)  ||
-	  (nItem == BASE_ITEM_MACE)	||
-	  (nItem == BASE_ITEM_FALCHION)	||
-	  (nItem == BASE_ITEM_FLAIL)	||
-	  (nItem == BASE_ITEM_SPEAR)	||
-	  (nItem == BASE_ITEM_WARMACE)	||
-	  (nItem == BASE_ITEM_CGIANT_SWORD)	||
-	  (nItem == BASE_ITEM_CGIANT_AXE)	||
-	  (nItem == BASE_ITEM_ALLUSE_SWORD)	||
+          (nItem == BASE_ITEM_MACE)	||
+          (nItem == BASE_ITEM_FALCHION)	||
+          (nItem == BASE_ITEM_FLAIL)	||
+          (nItem == BASE_ITEM_SPEAR)	||
+          (nItem == BASE_ITEM_WARMACE)	||
+          (nItem == BASE_ITEM_CGIANT_SWORD)	||
+          (nItem == BASE_ITEM_CGIANT_AXE)	||
+          (nItem == BASE_ITEM_ALLUSE_SWORD)	||
       (nItem == BASE_ITEM_DWARVENWARAXE))
    {
         return TRUE;
@@ -1529,7 +1529,7 @@ int IPGetDamageBonusConstantFromNumber(int nNumber)
         case 18:  return DAMAGE_BONUS_18;
         case 19:  return DAMAGE_BONUS_19;
         case 20: return DAMAGE_BONUS_20;
-	case 21: return DAMAGE_BONUS_21;
+        case 21: return DAMAGE_BONUS_21;
         case 22: return DAMAGE_BONUS_22;
         case 23: return DAMAGE_BONUS_23;
         case 24: return DAMAGE_BONUS_24;
