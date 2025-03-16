@@ -1,12 +1,12 @@
 // tob_ginc_param_const based on ginc_param_const
 /*	Drammel's Note 2/4/2010: This is a copy of the original for use in the Tome of Battle.
-	Using modified versions of the original files caues far too many compatibility issues,
-	therefore a copy is made which is hooked into the relavent overriden files rather than
-	the original.  Thus, I can use all the functionality of the original without worrying about
-	recompiling errors into the original versions.
+        Using modified versions of the original files caues far too many compatibility issues,
+        therefore a copy is made which is hooked into the relavent overriden files rather than
+        the original.  Thus, I can use all the functionality of the original without worrying about
+        recompiling errors into the original versions.
 */
 /*
-	Include file for interesting params and converting ints to constants.
+        Include file for interesting params and converting ints to constants.
 */
 // 3/10/05 ChazM
 // 4/22/05 ChazM - added param functions
@@ -58,9 +58,9 @@ const string PARAM_MERCHANT	=  "$MERCHANT";
 // Similar to rNameValuePair in x0_i0_stringlib, but with a string value instead of an int.
 struct rNameValueStringPair
 {
-	string sName;
-	string sValue;
-};	
+        string sName;
+        string sValue;
+};
 
 
 ///////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ int		GetSkillConstant(int nSkill);
 
 object GetSoundObjectByTag(string sTarget);
 
-struct rNameValueStringPair GetNameValuePairStruct (string sNameValuePair, string sDelimiter = "=");
+struct rNameValueStringPair GetNameValuePairStruct(string sNameValuePair, string sDelimiter = "=");
 string GetNVPValue(string sNVPList, string sName);
 string RemoveNVP(string sNVPList, string sName);
 string AppendUniqueToNVP(string sNVPList, string sName, string sValue, string sDelim="=");
@@ -98,10 +98,10 @@ string AppendUniqueToNVP(string sNVPList, string sName, string sValue, string sD
 // Used in gc_skill_dc, gc_skill_rank
 int GetSkillConstant(int nSkill)
 {
-	int nSkillVal;
+        int nSkillVal;
 
-	switch (nSkill)	
-	{
+        switch (nSkill)
+        {
         case 0:     // APPRAISE
             nSkillVal = SKILL_APPRAISE;
             break;
@@ -186,37 +186,37 @@ int GetSkillConstant(int nSkill)
         case 27:     // USE MAGIC DEVICE
             nSkillVal = SKILL_USE_MAGIC_DEVICE;
             break;
-	}
+        }
 
-	return (nSkillVal);
+        return (nSkillVal);
 }
 
 
 string StringTrim(string sString)
 {
-	int iLen = GetStringLength(sString);
-	string sLeft = GetStringLeft(sString, 1);
-	while (sLeft == " ")
-	{
-		sString = GetSubString(sString, 1, GetStringLength(sString)-1);
-		sLeft = GetStringLeft(sString, 1);
-	}
+        int iLen = GetStringLength(sString);
+        string sLeft = GetStringLeft(sString, 1);
+        while (sLeft == " ")
+        {
+                sString = GetSubString(sString, 1, GetStringLength(sString)-1);
+                sLeft = GetStringLeft(sString, 1);
+        }
 
-	string sRight = GetStringRight(sString, 1);
-	while (sRight == " ")
-	{
-		sString = GetSubString(sString, 0, GetStringLength(sString)-1);
-		sRight = GetStringRight(sString, 1);
-	}
-	return (sString);
+        string sRight = GetStringRight(sString, 1);
+        while (sRight == " ")
+        {
+                sString = GetSubString(sString, 0, GetStringLength(sString)-1);
+                sRight = GetStringRight(sString, 1);
+        }
+        return (sString);
 }
 
 // get specified param from comma delimited string.
 // return as string
 string GetTrimmedStringParam(string sString, int nPos)
 {
-	string sParam = GetTokenByPosition(sString, ",", nPos);
-	return (StringTrim(sParam));
+        string sParam = GetTokenByPosition(sString, ",", nPos);
+        return (StringTrim(sParam));
 }
 
 
@@ -224,7 +224,7 @@ string GetTrimmedStringParam(string sString, int nPos)
 // return as string
 string GetStringParam(string sString, int nPos, string sDelim=",")
 {
-	return (GetTokenByPosition(sString, sDelim, nPos));
+        return (GetTokenByPosition(sString, sDelim, nPos));
 }
 
 
@@ -232,7 +232,7 @@ string GetStringParam(string sString, int nPos, string sDelim=",")
 // return as int
 int GetIntParam(string sString, int nPos, string sDelim=",")
 {
-	return (StringToInt(GetTokenByPosition(sString, sDelim, nPos)));
+        return (StringToInt(GetTokenByPosition(sString, sDelim, nPos)));
 }
 
 
@@ -240,7 +240,7 @@ int GetIntParam(string sString, int nPos, string sDelim=",")
 // return as float
 float GetFloatParam(string sString, int nPos, string sDelim=",")
 {
-	return (StringToFloat(GetTokenByPosition(sString, sDelim, nPos)));
+        return (StringToFloat(GetTokenByPosition(sString, sDelim, nPos)));
 }
 
 
@@ -248,62 +248,62 @@ float GetFloatParam(string sString, int nPos, string sDelim=",")
 // Leave sTarget blank to use sDefault override
 object GetTarget(string sTarget, string sDefault=TARGET_OWNER)
 {
-	object oTarget = OBJECT_INVALID;
-	
-	// If sTarget is blank, use sDefault
-	if ("" == sTarget || "0" == sTarget) sTarget = sDefault;
-	
-	// Check if sTarget is a special identifier
-	if (IsParameterConstant(sTarget))
-	{
-		string sIdentifier = sTarget;
-		sIdentifier = GetStringUpperCase(sIdentifier);
-		
-		if (TARGET_OWNER == sIdentifier) 			oTarget = OBJECT_SELF;
-		else if (TARGET_OBJECT_SELF == sIdentifier)	oTarget = OBJECT_SELF;
-		else if (TARGET_OWNED_CHAR == sIdentifier)	oTarget = GetOwnedCharacter(OBJECT_SELF);
-		else if (TARGET_PC == sIdentifier)			oTarget = GetPCSpeaker();
-		else if (TARGET_PC_LEADER == sIdentifier)	oTarget = GetFactionLeader(GetFirstPC());
-		else if (TARGET_PC_NEAREST == sIdentifier)	oTarget = GetNearestPC();
-		else if (TARGET_PC_SPEAKER == sIdentifier)	oTarget = GetPCSpeaker();
-		else if (TARGET_MODULE == sIdentifier)		oTarget = GetModule();
-		else if (TARGET_LAST_SPEAKER == sIdentifier) oTarget = GetLastSpeaker();
-		else
-		{
-			PrettyError("GetTarget() -- " + sIdentifier + " not recognized as special identifier!");
-		}
-	}
-	else
-	{
-		oTarget = GetNearestObjectByTag(sTarget);	// Search area
-		
+        object oTarget = OBJECT_INVALID;
 
-		//EPF 4/13/06 -- get nearest misses if the owner is the object we're looking for
-		//	so check and see if the target is OBJECT_SELF.  I'm putting this after the GetNearest()
-		// call since string compares are expensive, but before the GetObjectByTag() call, since
-		// that's liable to return the wrong instance.  We can move this to before the GetNearest() call
-		// if this becomes a problem.
-		if(!GetIsObjectValid(oTarget))	
-		{								
-			if(sTarget == GetTag(OBJECT_SELF))
-			{
-				oTarget = OBJECT_SELF;
-			}	
-		}
-		// If not found
-		if (GetIsObjectValid(oTarget) == FALSE) 
-		{	
-			oTarget = GetObjectByTag(sTarget);		// Search module
-		}
-	}
+        // If sTarget is blank, use sDefault
+        if ("" == sTarget || "0" == sTarget) sTarget = sDefault;
 
-	// If not found
-	if (GetIsObjectValid(oTarget) == FALSE)
-	{
-		PrettyDebug("GetTarget() -- Could not find target with tag: " + sTarget);
-	}
-	
-	return (oTarget);
+        // Check if sTarget is a special identifier
+        if (IsParameterConstant(sTarget))
+        {
+                string sIdentifier = sTarget;
+                sIdentifier = GetStringUpperCase(sIdentifier);
+
+                if (TARGET_OWNER == sIdentifier) 			oTarget = OBJECT_SELF;
+                else if (TARGET_OBJECT_SELF == sIdentifier)	oTarget = OBJECT_SELF;
+                else if (TARGET_OWNED_CHAR == sIdentifier)	oTarget = GetOwnedCharacter(OBJECT_SELF);
+                else if (TARGET_PC == sIdentifier)			oTarget = GetPCSpeaker();
+                else if (TARGET_PC_LEADER == sIdentifier)	oTarget = GetFactionLeader(GetFirstPC());
+                else if (TARGET_PC_NEAREST == sIdentifier)	oTarget = GetNearestPC();
+                else if (TARGET_PC_SPEAKER == sIdentifier)	oTarget = GetPCSpeaker();
+                else if (TARGET_MODULE == sIdentifier)		oTarget = GetModule();
+                else if (TARGET_LAST_SPEAKER == sIdentifier) oTarget = GetLastSpeaker();
+                else
+                {
+                        PrettyError("GetTarget() -- " + sIdentifier + " not recognized as special identifier!");
+                }
+        }
+        else
+        {
+                oTarget = GetNearestObjectByTag(sTarget);	// Search area
+
+
+                //EPF 4/13/06 -- get nearest misses if the owner is the object we're looking for
+                //	so check and see if the target is OBJECT_SELF.  I'm putting this after the GetNearest()
+                // call since string compares are expensive, but before the GetObjectByTag() call, since
+                // that's liable to return the wrong instance.  We can move this to before the GetNearest() call
+                // if this becomes a problem.
+                if(!GetIsObjectValid(oTarget))
+                {
+                        if(sTarget == GetTag(OBJECT_SELF))
+                        {
+                                oTarget = OBJECT_SELF;
+                        }
+                }
+                // If not found
+                if (GetIsObjectValid(oTarget) == FALSE)
+                {
+                        oTarget = GetObjectByTag(sTarget);		// Search module
+                }
+        }
+
+        // If not found
+        if (GetIsObjectValid(oTarget) == FALSE)
+        {
+                PrettyDebug("GetTarget() -- Could not find target with tag: " + sTarget);
+        }
+
+        return (oTarget);
 }
 
 
@@ -313,13 +313,13 @@ object GetTarget(string sTarget, string sDefault=TARGET_OWNER)
 //{
 //	string sVarName;
 //    object oTarg = GetTarget(sTarget, TARGET_OBJECT_SELF);
-//	
+//
 //	if (GetIsObjectValid(oTarg))
 //		sVarName = GetTag(oTarg);
 //	else
 //		sVarName = sTarget;
-//		
-//	sVarName = sVarName + "_Influence";		
+//
+//	sVarName = sVarName + "_Influence";
 //	return (sVarName);
 //}
 
@@ -357,8 +357,8 @@ int GetObjectTypes(string sType)
         iObjectType |= (FindSubString(sType, "P")==-1)?0:OBJECT_TYPE_PLACEABLE;
         iObjectType |= (FindSubString(sType, "S")==-1)?0:OBJECT_TYPE_STORE;
         iObjectType |= (FindSubString(sType, "E")==-1)?0:OBJECT_TYPE_ENCOUNTER;
-		iObjectType |= (FindSubString(sType, "V")==-1)?0:OBJECT_TYPE_PLACED_EFFECT;
-		iObjectType |= (FindSubString(sType, "L")==-1)?0:OBJECT_TYPE_LIGHT;
+                iObjectType |= (FindSubString(sType, "V")==-1)?0:OBJECT_TYPE_PLACED_EFFECT;
+                iObjectType |= (FindSubString(sType, "L")==-1)?0:OBJECT_TYPE_LIGHT;
     }
 
     return iObjectType;
@@ -380,54 +380,54 @@ int GetDurationType(string sType)
     if (FindSubString(sType, "T"))
         iType = DURATION_TYPE_TEMPORARY;
 
-	return (iType);
+        return (iType);
 }
 
 
 // returns the standard faction or -1 if not found
 int GetStandardFaction(string sFactionName)
 {
-	int iFaction = -1;
-	if (IsParameterConstant(sFactionName))
-	{	
-		string sTargetFaction = GetStringUpperCase(sFactionName);
-	
-		if (sTargetFaction == PARAM_COMMONER)
-			iFaction = STANDARD_FACTION_COMMONER;
-		else if (sTargetFaction == PARAM_DEFENDER)
-			iFaction = STANDARD_FACTION_DEFENDER;
-		else if (sTargetFaction == PARAM_HOSTILE)
-			iFaction = STANDARD_FACTION_HOSTILE;
-		else if (sTargetFaction == PARAM_MERCHANT)
-			iFaction = STANDARD_FACTION_MERCHANT;
-		
-	}
-	return (iFaction);
+        int iFaction = -1;
+        if (IsParameterConstant(sFactionName))
+        {
+                string sTargetFaction = GetStringUpperCase(sFactionName);
+
+                if (sTargetFaction == PARAM_COMMONER)
+                        iFaction = STANDARD_FACTION_COMMONER;
+                else if (sTargetFaction == PARAM_DEFENDER)
+                        iFaction = STANDARD_FACTION_DEFENDER;
+                else if (sTargetFaction == PARAM_HOSTILE)
+                        iFaction = STANDARD_FACTION_HOSTILE;
+                else if (sTargetFaction == PARAM_MERCHANT)
+                        iFaction = STANDARD_FACTION_MERCHANT;
+
+        }
+        return (iFaction);
 }
 
 
 // check if this is a parameter constant - starts with TARGET_KEY
 int IsParameterConstant(string sParameter)
 {
-	string sKey = GetStringLeft(sParameter, 1);
-	return (TARGET_KEY == sKey);
+        string sKey = GetStringLeft(sParameter, 1);
+        return (TARGET_KEY == sKey);
 
 }
 
 // returns a sound object
 object GetSoundObjectByTag(string sTarget)
 {
-	object oTarget = GetTarget(sTarget);
+        object oTarget = GetTarget(sTarget);
 
-	if (GetIsObjectValid(oTarget) == FALSE)
-		ErrorMessage("GetSoundObjetByTag: " + sTarget + " not found!");
-	else 
-	{	
-		int iType = GetObjectType(oTarget);
-		if (iType != OBJECT_TYPE_ALL) // sound object don't have their own special type...
-			ErrorMessage("GetSoundObjetByTag: " + sTarget + " is wrong type: " + IntToString(iType) + " - attempting to use anyway.");
-	}
-	return oTarget;
+        if (GetIsObjectValid(oTarget) == FALSE)
+                ErrorMessage("GetSoundObjetByTag: " + sTarget + " not found!");
+        else
+        {
+                int iType = GetObjectType(oTarget);
+                if (iType != OBJECT_TYPE_ALL) // sound object don't have their own special type...
+                        ErrorMessage("GetSoundObjetByTag: " + sTarget + " is wrong type: " + IntToString(iType) + " - attempting to use anyway.");
+        }
+        return oTarget;
 }
 
 
@@ -438,59 +438,59 @@ object GetSoundObjectByTag(string sTarget)
 // splits apart a Name-Value Pair string into it's component parts.
 struct rNameValueStringPair GetNameValuePairStruct (string sNameValuePair, string sDelimiter = "=")
 {
-	struct rNameValueStringPair oNameValuePair;
-	int iDelimPostion = FindSubString(sNameValuePair, sDelimiter);
-	int iStringLength = GetStringLength(sNameValuePair);
-	oNameValuePair.sName = GetStringLeft(sNameValuePair, iDelimPostion);
-	oNameValuePair.sValue = GetStringRight(sNameValuePair, iStringLength - iDelimPostion - GetStringLength(sDelimiter));
-	
-	return (oNameValuePair);
+        struct rNameValueStringPair oNameValuePair;
+        int iDelimPostion = FindSubString(sNameValuePair, sDelimiter);
+        int iStringLength = GetStringLength(sNameValuePair);
+        oNameValuePair.sName = GetStringLeft(sNameValuePair, iDelimPostion);
+        oNameValuePair.sValue = GetStringRight(sNameValuePair, iStringLength - iDelimPostion - GetStringLength(sDelimiter));
+
+        return (oNameValuePair);
 }
 
 
 // return Value string for name/value pair, empty string if not found.
 string GetNVPValue(string sNVPList, string sName)
 {
-	struct rNameValueStringPair oNameValuePair;
-	int bFound = FALSE;
-	int i = 0;
-	string sRet = "";
-	
-	string sNameValuePair = GetStringParam(sNVPList, i);
-	while (sNameValuePair != "" && !bFound)
-	{
-		oNameValuePair = GetNameValuePairStruct(sNameValuePair);
-		if (oNameValuePair.sName == sName)
-		{
-			bFound = TRUE;
-			sRet = oNameValuePair.sValue;
-			break;
-		}			
-		i++;
-		sNameValuePair = GetStringParam(sNVPList, i);
-	}
-	
-	return sRet;
+        struct rNameValueStringPair oNameValuePair;
+        int bFound = FALSE;
+        int i = 0;
+        string sRet = "";
+
+        string sNameValuePair = GetStringParam(sNVPList, i);
+        while (sNameValuePair != "" && !bFound)
+        {
+                oNameValuePair = GetNameValuePairStruct(sNameValuePair);
+                if (oNameValuePair.sName == sName)
+                {
+                        bFound = TRUE;
+                        sRet = oNameValuePair.sValue;
+                        break;
+                }
+                i++;
+                sNameValuePair = GetStringParam(sNVPList, i);
+        }
+
+        return sRet;
 }
 
 // Remove Name-Value pair from Name-Value pair list
 string RemoveNVP(string sNVPList, string sName)
 {
-	string sValue = GetNVPValue(sNVPList, sName);
-	string sNameValuePair = sName + "=" + sValue;
-	sNVPList = RemoveListElement(sNVPList, sNameValuePair);
-	return(sNVPList);
+        string sValue = GetNVPValue(sNVPList, sName);
+        string sNameValuePair = sName + "=" + sValue;
+        sNVPList = RemoveListElement(sNVPList, sNameValuePair);
+        return(sNVPList);
 }
 
 // Set a Name-Value pair in a list of Name-Value Pairs
 string AppendUniqueToNVP(string sNVPList, string sName, string sValue, string sDelim="=")
 {
-	string sNameValuePair = sName + sDelim + sValue;
-	
-	// Remove old value if it exists.
-	sName = RemoveNVP(sNVPList, sName);
-	// append new value
-	sNVPList = AppendToList(sNVPList, sNameValuePair);
+        string sNameValuePair = sName + sDelim + sValue;
 
-	return (sNVPList);
+        // Remove old value if it exists.
+        sName = RemoveNVP(sNVPList, sName);
+        // append new value
+        sNVPList = AppendToList(sNVPList, sNameValuePair);
+
+        return (sNVPList);
 }

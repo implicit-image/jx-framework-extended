@@ -3,7 +3,7 @@
 //  nwn2_inc_metmag.nss
 //
 //  Metamagic related utility functions for NWN2
-//  These are not included in nwn_inc_spells, so that they can be added 
+//  These are not included in nwn_inc_spells, so that they can be added
 //  to older scripts
 //
 //  (c) Obsidian Entertainment Inc., 2005

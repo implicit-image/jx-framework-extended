@@ -31,7 +31,7 @@
 //::             Reeron modified on 7-22-07
 //::             Greater Dispel: Now doesn't give curse removal message if target isn't cursed.
 //:://////////////////////////////////////////////
-//:: 8/15/06 - BDF-OEI: modified spellsIsTarget (case SPELL_TARGET_STANDARDHOSTILE) to disregard targets that are associates of 
+//:: 8/15/06 - BDF-OEI: modified spellsIsTarget (case SPELL_TARGET_STANDARDHOSTILE) to disregard targets that are associates of
 //::    non-hostile PC's that are in the party, based on personal reputation global flag
 // ChazM 8/29/06 moved spellsIsTarget() (and includes and constants) to NW_I0_SPELLS
 //:: 10/16/06 - BDF-OEI: modified doAura() to substitute EffectDamageIncrease for EffectDamageShield(), which cannot be set for VersusAlignmentEffect()
@@ -47,6 +47,7 @@
 //  spellApplyMindBlank(), spellsGenericAreaOfEffect(), spellsInflictTouchAttack(), RollMissileDamage()
 // 2drunk2frag - 05-08-08 - voilated spellsInflictTouchAttack for my own selfish purposes
 
+#include "jx_inc_magic"
 #include "nw_i0_spells"
 #include "x0_i0_henchman"
 // JLR - OEI 08/24/05 -- Metamagic changes
@@ -174,7 +175,7 @@ int GetIntInRange(int iVal, int iMin, int iMax)
 {
     if ( iVal > iMax )
         iVal = iMax;
-    if ( iVal < iMin) 
+    if ( iVal < iMin)
         iVal = iMin;
     return (iVal);
 }
@@ -728,7 +729,7 @@ void spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximized, 
 // Missile Storm functions
 //********************************
 int RollMissileDamage(object oTarget, int nD6Dice, int nMetaMagic, int iReflexSaveType);
-void ShootMissilesAtTarget(object oTarget, location lSourceLoc, location lTargetLoc, int nSpell, int nPathType, 
+void ShootMissilesAtTarget(object oTarget, location lSourceLoc, location lTargetLoc, int nSpell, int nPathType,
                             int nMissilesForThisTarget, effect eVis, float fDelay, int nCnt,
                             int nD6Dice, int nDamageType, int nMetaMagic, int iReflexSaveType);
 
@@ -766,7 +767,7 @@ int RollMissileDamage(object oTarget, int nD6Dice, int nMetaMagic, int iReflexSa
 // int nDamageType - The Type of Damage being applied
 // int nMetaMagic - MetaMagic used
 // int iReflexSaveType - A SAVING_THROW_TYPE_* constant, or -1 if no reflex save allowed.
-void ShootMissilesAtTarget(object oTarget, location lSourceLoc, location lTargetLoc, int nSpell, int nPathType, 
+void ShootMissilesAtTarget(object oTarget, location lSourceLoc, location lTargetLoc, int nSpell, int nPathType,
                             int nMissilesForThisTarget, effect eVis, float fDelay, int nCnt,
                             int nD6Dice, int nDamageType, int nMetaMagic, int iReflexSaveType)
 {
@@ -855,9 +856,9 @@ void DoFireBrand(int nD6Dice)
 //:://////////////////////////////////////////////
 //:: Modified March 14 2003: Removed the option to hurt chests/doors
 //::  was potentially causing bugs when no creature targets available.
-//:: 
+//::
 //:: Brock Heinz - OEI - 08/15/05 - Limit hits per target
-//::    This function now limits the number of hits done to any 
+//::    This function now limits the number of hits done to any
 //::    creature to no more than nMaxHits each
 //::
 //:: AFW-OEI 06/06/2006:
@@ -887,8 +888,8 @@ void DoMissileStorm(int nD6Dice, int nCap, int nSpell, int nVIS = VFX_IMP_MAGBLU
     int nEnemies        = CountEnemies(lTargetLoc, RADIUS_SIZE_GARGANTUAN, nMissiles); // how many enemies (up to max number of missiles)
 
      // * Exit if no enemies to hit
-     if (nEnemies == 0) 
-        return; 
+     if (nEnemies == 0)
+        return;
 
      // divide the missles evenly amongst the enemies;
     int nMissilesPerTarget  = nMissiles / nEnemies;
@@ -1004,10 +1005,10 @@ break;
 }*/
 
 //effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);   // NWN1 VFX
-    
+
                 effect eLink = EffectLinkEffects(eAttack, eVis);
                 eLink = EffectLinkEffects(eLink, eDamage);
-    
+
 //eLink = EffectLinkEffects(eLink, eReduction);
 
                 float fDuration = TurnsToSeconds(JXGetCasterLevel(OBJECT_SELF)); // * Duration 1 turn/level

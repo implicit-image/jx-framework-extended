@@ -14,6 +14,7 @@
 // jallaix 03/13/07 - modified CheckAndApplyTerrifyingRage() to use JXApplyAreaEffectToObject()
 // jallaix 04/22/07 - compatibility with patch 1.05
 
+#include "jx_inc_magic"
 #include "x2_inc_itemprop"
 #include "jx_inc_magic"
 #include "nw_i0_spells"

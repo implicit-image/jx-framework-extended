@@ -142,7 +142,7 @@ effect CreateProtectionFromAlignmentLink(int nAlignment, int nPower = 1);
 effect CreateDoomEffectsLink();
 
 // * Searchs through a persons effects and removes those from a particular spell by a particular caster.
-void RemoveSpellEffects(int nSpell_ID, object oCaster, object oTarget);
+void RemoveSpellEffects(int nSpellId, object oCaster, object oTarget);
 
 // * Searchs through a persons effects and removes all those of a specific type.
 void RemoveSpecificEffect(int nEffectTypeID, object oTarget);
@@ -1405,11 +1405,11 @@ effect CreateDoomEffectsLink()
     return eLink;
 }
 
-void RemoveSpellEffects(int nSpell_ID, object oCaster, object oTarget)
+void RemoveSpellEffects(int nSpellId, object oCaster, object oTarget)
 {
     //Declare major variables
     effect eAOE;
-    if(GetHasSpellEffect(nSpell_ID, oTarget))
+    if(GetHasSpellEffect(nSpellId, oTarget))
     {
         //Search through the valid effects on the target.
         eAOE = GetFirstEffect(oTarget);
@@ -1418,7 +1418,7 @@ void RemoveSpellEffects(int nSpell_ID, object oCaster, object oTarget)
             if (GetEffectCreator(eAOE) == oCaster)
             {
                 //If the effect was created by the spell then remove it
-                if(GetEffectSpellId(eAOE) == nSpell_ID)
+                if(GetEffectSpellId(eAOE) == nSpellId)
                 {
                     RemoveEffect(oTarget, eAOE);
                     eAOE = GetFirstEffect(oTarget);     // 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
