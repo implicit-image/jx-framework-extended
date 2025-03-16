@@ -265,14 +265,13 @@ const int JX_EFFECT_MOD_OP_PROP_VS_ALIGN = 17;
 
 const int JX_EFFECT_MOD_OP_MAX_ID = 18;
 
-const string JX_EFFECT_MOD_IGNORE = "JX_EM_IGNORE";
 //###########################################
 // params at effect creation
 //############################################
 const string JX_EFFECT_MOD_OP_PARAMS = "JX_EM_PARAM";
 const string JX_EFFECT_MOD_OP_PARAM_STATES = "JX_EF_MPS";
 const string JX_EFFECT_MOD_OP_PARAM_TYPES = "JX_EMP_T";
-
+const string JX_EFFECT_MOD_ENABLED = "JX_EM_E";
 //###################################
 // currently processed mod params
 //######################################

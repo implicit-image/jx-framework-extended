@@ -392,7 +392,7 @@ effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYP
     iDmgType = JXApplyEffectParamModifiers_Int(iDmgType, 3);
     bIgnoreResistances = JXApplyEffectParamModifiers_Int(bIgnoreResistances, 4);
 
-    eMain = EffectDamageOvertime(iDmg, fInterval, iDmgType, bIgnoreResistances);
+    eMain = EffectDamageOverTime(iDmg, fInterval, iDmgType, bIgnoreResistances);
 
     eMain = JXApplyEffectPropertyModifiers(eMain);
 
