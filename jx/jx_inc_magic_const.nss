@@ -169,6 +169,34 @@ const string JX_MAP_SEP = ";";
 
 //=============================== EFFECT OVERRIDES ======================================
 
+// TYPE IDENTITIES
+
+const int JX_INT_ADD_ID = 0;
+const int JX_INT_MULTIPLY_ID = 1;
+const int JX_INT_OR_ID = 0;
+
+const float JX_FLOAT_ADD_ID = 0.0f;
+const float JX_FLOAT_MULTIPLY_ID = 1.0f;
+
+const string JX_STRING_CONCAT_ID = "";
+
+// TYPES
+const int JX_TYPE_NONE = -1;
+const int JX_TYPE_INT = 1;
+const int JX_TYPE_FLOAT = 2;
+const int JX_TYPE_STRING = 3;
+const int JX_TYPE_OBJECT = 4;
+const int JX_TYPE_LOCATION = 5;
+const int JX_TYPE_VECTOR = 6;
+
+const string JX_TYPE_NAME_INT = "INT";
+const string JX_TYPE_NAME_FLOAT = "FLOAT";
+const string JX_TYPE_NAME_STRING ="STRING";
+const string JX_TYPE_NAME_OBJECT = "OBJECT";
+const string JX_TYPE_NAME_LOCATION = "LOCATION";
+const string JX_TYPE_NAME_VECTOR = "VECTOR";
+
+
 // JXSetEffectModifierInt(EFFECT_TYPE,
 //                        PROPERTY_TO_MODIFY,
 //                        TYPE_OF_MODIFICATION,
@@ -191,43 +219,176 @@ const int JX_EFFECT_MAX_LINK_SIZE = 10;
 
 
 
-// effect info arrays
-const string JX_EFFECT_ARRAY = "JX_EFFECT_ARRAY";
-// const string JX_EFFECT_PROP_ARRAY
-// const string JX_EFFECT_MOD_ARRAY
+
+// effect override types
+// param override types take as their parameters values of types corresponding to effect
+// constructor arguments
+// eg. for EffectDamage()
+//  int, int int int
+const int JX_EFFECT_MOD_TYPE_PARAM_1 = 1;
+const int JX_EFFECT_MOD_TYPE_PARAM_2 = 2;
+const int JX_EFFECT_MOD_TYPE_PARAM_3 = 3;
+const int JX_EFFECT_MOD_TYPE_PARAM_4 = 4;
+const int JX_EFFECT_MOD_TYPE_PARAM_5 = 5;
+const int JX_EFFECT_MOD_TYPE_PARAM_6 = 6;
+const int JX_EFFECT_MOD_TYPE_PARAM_7 = 7;
+const int JX_EFFECT_MOD_TYPE_PARAM_8 = 8;
+const int JX_EFFECT_MOD_TYPE_PARAM_9 = 9;
 
 
+const int JX_EFFECT_MOD_TYPE_EFFECT_PROP = 10;
 
-// effect parameter modifiers
-const int JX_EFFECT_MOD_PARAM_INCREASE_BY = 1;
-const int JX_EFFECT_MOD_PARAM_DECREASE_BY = 2;
-const int JX_EFFECT_MOD_PARAM_MULTIPLY_BY = 4;
-const int JX_EFFECT_MOD_PARAM_DIVIDE_BY = 8;
-const int JX_EFFECT_MOD_PARAM_LOGIC_OR = 16;
-const int JX_EFFECT_MOD_PARAM_LOGIC_AND = 32;
-const int JX_EFFECT_MOD_PARAM_INCREASE_BY_RAND = 64;
-const int JX_EFFECT_MOD_PARAM_DECREASE_BY_RAND = 128;
-const int JX_EFFECT_MOD_PARAM_MULTIPLY_BY_RAND = 256;
-const int JX_EFFECT_MOD_PARAM_DIVIDE_BY_RAND = 512;
-const int JX_EFFECT_MOD_PARAM_MAX_CAP = 8192;
-const int JX_EFFECT_MOD_PARAM_MIN_CAP = 16384;
-const int JX_EFFECT_MOD_PARAM_OVERRIDE = 32768;
-const int JX_EFFECT_MOD_PARAM_PREFIX = 65536;
-const int JX_EFFECT_MOD_PARAM_POSTFIX = 131072;
+const int JX_EFFECT_MOD_TYPE_DISABLE_EFFECT = 11;
+const int JX_EFFECT_MOD_TYPE_SUBSTITUTE_EFFECT = 12;
+const int JX_EFFECT_MOD_TYPE_LINK_EFFECT = 13;
 
-// other effect modifiers
-const int JX_EFFECT_MOD_SUBTYPE = 262144;
-const int JX_EFFECT_MOD_VS_RACIAL = 524288;
-const int JX_EFFECT_MOD_VS_ALIGN = 1048576;
-const int JX_EFFECT_MOD_ENABLED = 2097152;
+const int JX_EFFECT_MOD_TYPE_MAX_ID = 14;
+// effect override modifier types
+const int JX_EFFECT_MOD_OP_PARAM_INCREASE_BY = 1;
+const int JX_EFFECT_MOD_OP_PARAM_DECREASE_BY = 2;
+const int JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY = 3;
+const int JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY = 4;
+const int JX_EFFECT_MOD_OP_PARAM_LOGIC_OR = 5;
+const int JX_EFFECT_MOD_OP_PARAM_LOGIC_AND = 6;
+const int JX_EFFECT_MOD_OP_PARAM_INCREASE_BY_RAND = 7;
+const int JX_EFFECT_MOD_OP_PARAM_DECREASE_BY_RAND = 8;
+const int JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY_RAND = 9;
+const int JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY_RAND = 10;
+const int JX_EFFECT_MOD_OP_PARAM_MAX = 11;
+const int JX_EFFECT_MOD_OP_PARAM_MIN = 12;
+const int JX_EFFECT_MOD_OP_PARAM_OVERRIDE = 13;
+const int JX_EFFECT_MOD_OP_PARAM_MAP = 14;
 
-// EffectHeal
+const int JX_EFFECT_MOD_OP_PROP_SUBTYPE = 15;
+const int JX_EFFECT_MOD_OP_PROP_VS_RACIAL = 16;
+const int JX_EFFECT_MOD_OP_PROP_VS_ALIGN = 17;
+
+const int JX_EFFECT_MOD_OP_MAX_ID = 18;
+
+const string JX_EFFECT_MOD_IGNORE = "JX_EM_IGNORE";
+//###########################################
+// params at effect creation
+//############################################
+const string JX_EFFECT_MOD_OP_PARAMS = "JX_EM_PARAM";
+const string JX_EFFECT_MOD_OP_PARAM_STATES = "JX_EF_MPS";
+const string JX_EFFECT_MOD_OP_PARAM_TYPES = "JX_EMP_T";
+
+//###################################
+// currently processed mod params
+//######################################
+const string JX_EFFECT_CURR_MOD_OP_PARAMS = "JX_EF_CMP";
+const string JX_EFFECT_CURR_MOD_OP_PARAM_STATES = "JX_EF_CMPS";
+const string JX_EFFECT_CURR_MOD_OP_PARAM_TYPES = "JX_CEMP_T";
+// stores the id of currently processed effect in JXEffect* wrappers
+const string JX_EFFECT_CURRENT = "JX_EF_CURR";
+
+// JX_P_MODS_1_1 = 33242452, JX_P_MODS_1_1_32;
+// JX_P_MODS_1_2 = 33242452, JX_P_MODS_1_2_32
+// JX_P_MODS_1_3 = 33242452, JX_P_MODS_1_3_32
+// JX_P_MODS_1_4 = 33242452, JX_P_MODS_1_4_32
+// JX_P_MODS_1_5 = 33242452, JX_P_MODS_1_5_32
+// JX_P_MODS_1_6 = 33242452, JX_P_MODS_1_6_32
+const int JX_EFFECT_MAX_MOD_PARAMS = 8;
+
 const int JX_EFFECT_HEAL = 1;
-// Effect Damage
 const int JX_EFFECT_DAMAGE = 2;
-// Effect Damage Over Time
 const int JX_EFFECT_DAMAGE_OVER_TIME = 3;
-// Effect Ability Increase
 const int JX_EFFECT_ABILITY_INCREASE = 4;
+const int JX_EFFECT_DAMAGE_RESISTANCE = 5;
+const int JX_EFFECT_RESURRECTION = 6;
+const int JX_EFFECT_SUMMON_CREATURE = 7;
+const int JX_EFFECT_AC_INCREASE = 8;
+const int JX_EFFECT_SAVING_THROW_INCREASE = 9;
+const int JX_EFFECT_ATTACK_INCREASE = 10;
+const int JX_EFFECT_DMAAGE_REDUCTION = 11;
+const int JX_EFFECT_DAMAGE_INCREASE = 12;
+const int JX_EFFECT_ENTANGLE = 13;
+const int JX_EFFECT_DEATH = 14;
+const int JX_EFFECT_KNOCKDOWN = 15;
+const int JX_EFFECT_CURSE = 16;
+const int JX_EFFECT_PARALYZE = 17;
+const int JX_EFFECT_SPELL_IMMUNITY = 18;
+const int JX_EFFECT_DEAF = 19;
+const int JX_EFFECT_SLEEP = 20;
+const int JX_EFFECT_CHARMED = 21;
+const int JX_EFFECT_CONFUSED = 22;
+const int JX_EFFECT_FRIGHTENED = 23;
+const int JX_EFFECT_DOMINATED = 24;
+const int JX_EFFECT_DAZED = 25;
+const int JX_EFFECT_STUNNED = 26;
+const int JX_EFFECT_REGENERATE = 27;
+const int JX_EFFECT_MOVEMENT_SPEED_INCREASE = 28;
+const int JX_EFFECT_SPELL_RESISTANCE_INCREASE = 29;
+const int JX_EFFECT_POISON = 30;
+const int JX_EFFECT_DISEASE = 31;
+const int JX_EFFECT_SILENCE = 32;
+const int JX_EFFECT_HASTE = 33;
+const int JX_EFFECT_SLOW = 34;
+const int JX_EFFECT_IMMUNITY = 35;
+const int JX_EFFECT_DAMAGE_IMMUNITY_INCREASE = 36;
+const int JX_EFFECT_TEMPORARY_HITPOINTS = 37;
+const int JX_EFFECT_SKILL_INCREASE = 38;
+const int JX_EFFECT_TURNED = 39;
+const int JX_EFFECT_HITPOINT_CHANGE_WHEN_DYING = 40;
+const int JX_EFFECT_ABILITY_DECREASE = 41;
+const int JX_EFFECT_ATTACK_DECREASE = 42;
+const int JX_EFFECT_DAMAGE_DECREASE = 43;
+const int JX_EFFECT_DAMAGE_IMMUNITY_DECREASE = 44;
+const int JX_EFFECT_AC_DECREASE = 45;
+const int JX_EFFECT_MOVEMENT_SPEED_DECREASE = 46;
+const int JX_EFFECT_SAVING_THROW_DECREASE = 47;
+const int JX_EFFECT_SKILL_DECREASE = 48;
+const int JX_EFFECT_SPELL_RESISTANCE_DECCREASE = 49;
+const int JX_EFFECT_INVISIBILITY = 50;
+const int JX_EFFECT_CONCEALMENT = 51;
+const int JX_EFFECT_DARKNESS = 52;
+const int JX_EFFECT_ULTRAVISION = 53;
+const int JX_EFFECT_NEGATIVE_LEVEL = 54;
+const int JX_EFFECT_POLYMORPH = 55;
+const int JX_EFFECT_SANCTUARY = 56;
+const int JX_EFFECT_TRUE_SEEING = 57;
+const int JX_EFFECT_SEE_INVISIBLE = 58;
+const int JX_EFFECT_TIME_STOP = 59;
+const int JX_EFFECT_BLINDESS = 60;
+const int JX_EFFECT_SPELL_LEVEL_ABSORPTION = 61;
+const int JX_EFFECT_MISS_CHANCE = 62;
+const int JX_EFFECT_MODIFY_ATTACKS = 63;
+const int JX_EFFECT_DAMAGE_SHIELD = 64;
+const int JX_EFFECT_SWARM = 65;
+const int JX_EFFECT_TURN_RESISTANCE_DECREASE = 66;
+const int JX_EFFECT_TURN_RESISTANCE_INCREASE = 67;
+const int JX_EFFECT_PETRIFY = 68;
+const int JX_EFFECT_SPELL_FAILURE = 69;
+const int JX_EFFECT_ETHEREAL = 70;
+const int JX_EFFECT_DETECT_UNDEAD = 71;
+const int JX_EFFECT_LOW_LIGHT_VISION = 72;
+const int JX_EFFECT_SET_SCALE = 73;
+const int JX_EFFECT_SHARE_DAMAGE = 74;
+const int JX_EFFECT_ASSAY_RESISTANCE = 75;
+const int JX_EFFECT_SEE_TRUE_HPS = 76;
+const int JX_EFFECT_ABSORB_DAMAGE = 77;
+const int JX_EFFECT_HIDEOUS_BLOW = 78;
+const int JX_EFFECT_MESMERIZE = 79;
+const int JX_EFFECT_DARK_VISION = 80;
+const int JX_EFFECT_ARMOR_CHECK_PENALTY_INCREASE = 81;
+const int JX_EFFECT_DESINTEGRATE = 82;
+const int JX_EFFECT_HEAL_ON_ZERO_HP = 83;
+const int JX_EFFECT_BREAK_ENCHANTMENT = 84;
+const int JX_EFFECT_BONUS_HITPOINTS = 85;
+const int JX_EFFECT_BARD_SONG_SINGING = 86;
+const int JX_EFFECT_JARRING = 87;
+const int JX_EFFECT_BAB_MINIMUM = 88;
+const int JX_EFFECT_MAX_DAMAGE = 89;
+const int JX_EFFECT_ARCANE_SPELL_FAILURE = 90;
+const int JX_EFFECT_WILD_SHAPE = 91;
+const int JX_EFFECT_RESCUE = 92;
+const int JX_EFFECT_DETECT_SPIRITS = 93;
+const int JX_EFFECT_DAMAGE_REDUCTION_NEGATED = 94;
+const int JX_EFFECT_CONCEALMENT_NEGATED = 95;
+const int JX_EFFECT_INSANE = 96;
+const int JX_EFFECT_SUMMON_COPY = 97;
+// simulated effects
+const int JX_EFFECT_SHAKEN = 98;
 
-const int JX_EFFECT_MAX_ID = 40;
+
+const int JX_EFFECT_MAX_ID = 99;

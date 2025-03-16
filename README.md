@@ -1,12 +1,27 @@
 # JX Spellcasting Framework - extended
 
-This is my extension of jallaix's spellcasting framework.
+This is my extension of jallaix's spellcasting framework + some other spell code from zMerger.
 
 ### Compatibility
 
 Since nwscript doesnt have lists or similar features, spell and feat categories are determined using functions in *_interface_impl.nss files. This requires implementing following functions for your particular spell/class/feat setup
 
 The impl directory contains the implementation for my Progression Overhaul Mod (in pr_ov directory) and for zMerger (in zMerger directory). I will probably move it to a seperate repo later. If you are using different content pack you have to modify impl/ files to make your spells, classes and feats work with the framework features.
+
+
+
+### Effect modifier API
+
+
+
+``` nwscript
+
+JXAddEffectModifier(int iJXEffectId, int iModifierType, int iModifierOperationType, args....)
+
+
+
+```
+
 
 
 #### file: jx_spell_info_interface.nss
@@ -140,4 +155,33 @@ int JXImplGetClassForSpell(int iSpellId, object oCreature = OBJECT_SELF)
 
 
 
-#### file: jx_inc_magic
+### effect modifier system
+
+files jx_inc_magic_effects.nss and and jx_inc_magic_effects_impl.nss implement a system for modifying effects created during spell scripts. The modifiers should be set before the spell script is run, for example in precast script. The file jx_magic_effects_impl.nss provides a function to clear all set modifiers to run in postcast script.
+
+
+for example in the precast script
+
+``` nwscript
+if (JXGetHasSpellDescriptor(iSpellId, JX_SPELL_DESCRIPTOR_FIRE)
+    && GetHasFeat(oCaster, FEAT_SCORCHING_FLAMES))
+{
+    // if the damage type (second argument of EffectDamage) passed is DAMAGE_TYPE_FIRE
+    // replace it with DAMAGE_TYPE_MAGICAL
+    JXAddEffectModifier(JX_EFFECT_DAMAGE,
+                        JX_EFFECT_MOD_TYPE_PARAM_2,
+                        JX_EFFECT_MOD_PARAM_MAP,
+                        JXEffectModArgInt(DAMAGE_TYPE_FIRE),
+                        JXEffectModArgInt(DAMAGE_TYPE_MAGICAL));
+}
+```
+
+
+
+### OnEffectApply script
+
+jx_inc_magic.nss now implements a system for running scripts before each effect is applied in JXApplyEffect* family of functions. Use JXAddOnApplyScript(<script name>) to add your script
+
+``` nwscript
+JXAddOnApplyScript(string sScriptName, iIndex=0, iOverride=FALSE);
+```

@@ -7,7 +7,7 @@
 //:: Created On: aug 18, 2007
 //:://////////////////////////////////////////////
 //
-// This file contains functions that perform miscellaneous 
+// This file contains functions that perform miscellaneous
 // operations on basic data.
 //
 //:://////////////////////////////////////////////
@@ -16,7 +16,7 @@
 //:://////////////////////////////////////////////
 
 #include "x2_inc_itemprop"
-
+#include "utils"
 
 
 
@@ -76,9 +76,9 @@ int JXStringSplitCount(string sSource, string sSeparator);
 // * Returns the desired sub-string
 string JXStringSplit(string sSource, string sSeparator, int iRank);
 
-// Get a string from a corresponding item property 
+// Get a string from a corresponding item property
 // - ipProperty Item property from which the string is get
-// * Returns a string corresponding to the item property 
+// * Returns a string corresponding to the item property
 string JXItemPropertyToString(itemproperty ipProperty);
 
 // Get a an item property from a corresponding string
@@ -96,9 +96,15 @@ string JXLocationToString(location lLocation);
 // * Returns a loation corresponding to the string
 location JXStringToLocation(string sLocation);
 
+string JXTypeName(int iType);
 
+string JXEffectName(int iEffect);
 
+string JXModName(int iMod);
 
+string JXModOpName(int iModOp);
+
+void JXPrintFunctionCall(string sFunctionName, string sMsg="", string sArg1="", string sArg2="", string sArg3="", string sArg4="", string sArg5="", string sArg6="", string sArg7="");
 
 
 
@@ -204,9 +210,9 @@ string JXStringSplit(string sSource, string sSeparator, int iRank)
     return sTemp;
 }
 
-// Get a string from a corresponding item property 
+// Get a string from a corresponding item property
 // - ipProperty Item property from which the string is get
-// * Returns a string corresponding to the item property 
+// * Returns a string corresponding to the item property
 string JXItemPropertyToString(itemproperty ipProperty)
 {
     // Get the identifier of the current item property
@@ -428,4 +434,198 @@ location JXStringToLocation(string sLocation)
     float fOrientation = StringToFloat(JXStringSplit(sLocation, "!", 4));
 
     return Location(oArea, vPosition, fOrientation);
+}
+
+
+string JXTypeName(int iType)
+{
+    switch(iType)
+    {
+        case JX_TYPE_INT:      return JX_TYPE_NAME_INT;
+        case JX_TYPE_FLOAT:    return JX_TYPE_NAME_FLOAT;
+        case JX_TYPE_STRING:   return JX_TYPE_NAME_STRING;
+        case JX_TYPE_OBJECT:   return JX_TYPE_NAME_OBJECT;
+        case JX_TYPE_LOCATION: return JX_TYPE_NAME_OBJECT;
+        case JX_TYPE_VECTOR:   return JX_TYPE_NAME_VECTOR;
+        default:               return "";
+    }
+    return "";
+}
+
+
+string JXEffectName(int iEffect)
+{
+    switch (iEffect)
+    {
+        case JX_EFFECT_HEAL:                       return "JX_EFFECT_HEAL";
+        case JX_EFFECT_DAMAGE:                     return "JX_EFFECT_DAMAGE";
+        case JX_EFFECT_DAMAGE_OVER_TIME:           return "JX_EFFECT_DAMAGE_OVER_TIME";
+        case JX_EFFECT_ABILITY_INCREASE:           return "JX_EFFECT_ABILITY_INCREASE";
+        case JX_EFFECT_DAMAGE_RESISTANCE:          return "JX_EFFECT_DAMAGE_RESISTANCE";
+        case JX_EFFECT_RESURRECTION:               return "JX_EFFECT_RESURRECTION";
+        case JX_EFFECT_SUMMON_CREATURE:            return "JX_EFFECT_SUMMON_CREATURE";
+        case JX_EFFECT_AC_INCREASE:                return "JX_EFFECT_AC_INCREASE";
+        case JX_EFFECT_SAVING_THROW_INCREASE:      return "JX_EFFECT_SAVING_THROW_INCREASE";
+        case JX_EFFECT_ATTACK_INCREASE:            return "JX_EFFECT_ATTACK_INCREASE";
+        case JX_EFFECT_DMAAGE_REDUCTION:           return "JX_EFFECT_DMAAGE_REDUCTION";
+        case JX_EFFECT_DAMAGE_INCREASE:            return "JX_EFFECT_DAMAGE_INCREASE";
+        case JX_EFFECT_ENTANGLE:                   return "JX_EFFECT_ENTANGLE";
+        case JX_EFFECT_DEATH:                      return "JX_EFFECT_DEATH";
+        case JX_EFFECT_KNOCKDOWN:                  return "JX_EFFECT_KNOCKDOWN";
+        case JX_EFFECT_CURSE:                      return "JX_EFFECT_CURSE";
+        case JX_EFFECT_PARALYZE:                   return "JX_EFFECT_PARALYZE";
+        case JX_EFFECT_SPELL_IMMUNITY:             return "JX_EFFECT_SPELL_IMMUNITY";
+        case JX_EFFECT_DEAF:                       return "JX_EFFECT_DEAF";
+        case JX_EFFECT_SLEEP:                      return "JX_EFFECT_SLEEP";
+        case JX_EFFECT_CHARMED:                    return "JX_EFFECT_CHARMED";
+        case JX_EFFECT_CONFUSED:                   return "JX_EFFECT_CONFUSED";
+        case JX_EFFECT_FRIGHTENED:                 return "JX_EFFECT_FRIGHTENED";
+        case JX_EFFECT_DOMINATED:                  return "JX_EFFECT_DOMINATED";
+        case JX_EFFECT_DAZED:                      return "JX_EFFECT_DAZED";
+        case JX_EFFECT_STUNNED:                    return "JX_EFFECT_STUNNED";
+        case JX_EFFECT_REGENERATE:                 return "JX_EFFECT_REGENERATE";
+        case JX_EFFECT_MOVEMENT_SPEED_INCREASE:    return "JX_EFFECT_MOVEMENT_SPEED_INCREASE";
+        case JX_EFFECT_SPELL_RESISTANCE_INCREASE:  return "JX_EFFECT_SPELL_RESISTANCE_INCREASE";
+        case JX_EFFECT_POISON:                     return "JX_EFFECT_POISON";
+        case JX_EFFECT_DISEASE:                    return "JX_EFFECT_DISEASE";
+        case JX_EFFECT_SILENCE:                    return "JX_EFFECT_SILENCE";
+        case JX_EFFECT_HASTE:                      return "JX_EFFECT_HASTE";
+        case JX_EFFECT_SLOW:                       return "JX_EFFECT_SLOW";
+        case JX_EFFECT_IMMUNITY:                   return "JX_EFFECT_IMMUNITY";
+        case JX_EFFECT_DAMAGE_IMMUNITY_INCREASE:   return "JX_EFFECT_DAMAGE_IMMUNITY_INCREASE";
+        case JX_EFFECT_TEMPORARY_HITPOINTS:        return "JX_EFFECT_TEMPORARY_HITPOINTS";
+        case JX_EFFECT_SKILL_INCREASE:             return "JX_EFFECT_SKILL_INCREASE";
+        case JX_EFFECT_TURNED:                     return "JX_EFFECT_TURNED";
+        case JX_EFFECT_HITPOINT_CHANGE_WHEN_DYING: return "JX_EFFECT_HITPOINT_CHANGE_WHEN_DYING";
+        case JX_EFFECT_ABILITY_DECREASE:           return "JX_EFFECT_ABILITY_DECREASE";
+        case JX_EFFECT_ATTACK_DECREASE:            return "JX_EFFECT_ATTACK_DECREASE";
+        case JX_EFFECT_DAMAGE_DECREASE:            return "JX_EFFECT_DAMAGE_DECREASE";
+        case JX_EFFECT_DAMAGE_IMMUNITY_DECREASE:   return "JX_EFFECT_DAMAGE_IMMUNITY_DECREASE";
+        case JX_EFFECT_AC_DECREASE:                return "JX_EFFECT_AC_DECREASE";
+        case JX_EFFECT_MOVEMENT_SPEED_DECREASE:    return "JX_EFFECT_MOVEMENT_SPEED_DECREASE";
+        case JX_EFFECT_SAVING_THROW_DECREASE:      return "JX_EFFECT_SAVING_THROW_DECREASE";
+        case JX_EFFECT_SKILL_DECREASE:             return "JX_EFFECT_SKILL_DECREASE";
+        case JX_EFFECT_SPELL_RESISTANCE_DECCREASE: return "JX_EFFECT_SPELL_RESISTANCE_DECCREASE";
+        case JX_EFFECT_INVISIBILITY:               return "JX_EFFECT_INVISIBILITY";
+        case JX_EFFECT_CONCEALMENT:                return "JX_EFFECT_CONCEALMENT";
+        case JX_EFFECT_DARKNESS:                   return "JX_EFFECT_DARKNESS";
+        case JX_EFFECT_ULTRAVISION:                return "JX_EFFECT_ULTRAVISION";
+        case JX_EFFECT_NEGATIVE_LEVEL:             return "JX_EFFECT_NEGATIVE_LEVEL";
+        case JX_EFFECT_POLYMORPH:                  return "JX_EFFECT_POLYMORPH";
+        case JX_EFFECT_SANCTUARY:                  return "JX_EFFECT_SANCTUARY";
+        case JX_EFFECT_TRUE_SEEING:                return "JX_EFFECT_TRUE_SEEING";
+        case JX_EFFECT_SEE_INVISIBLE:              return "JX_EFFECT_SEE_INVISIBLE";
+        case JX_EFFECT_TIME_STOP:                  return "JX_EFFECT_TIME_STOP";
+        case JX_EFFECT_BLINDESS:                   return "JX_EFFECT_BLINDESS";
+        case JX_EFFECT_SPELL_LEVEL_ABSORPTION:     return "JX_EFFECT_SPELL_LEVEL_ABSORPTION";
+        case JX_EFFECT_MISS_CHANCE:                return "JX_EFFECT_MISS_CHANCE";
+        case JX_EFFECT_MODIFY_ATTACKS:             return "JX_EFFECT_MODIFY_ATTACKS";
+        case JX_EFFECT_DAMAGE_SHIELD:              return "JX_EFFECT_DAMAGE_SHIELD";
+        case JX_EFFECT_SWARM:                      return "JX_EFFECT_SWARM";
+        case JX_EFFECT_TURN_RESISTANCE_DECREASE:   return "JX_EFFECT_TURN_RESISTANCE_DECREASE";
+        case JX_EFFECT_TURN_RESISTANCE_INCREASE:   return "JX_EFFECT_TURN_RESISTANCE_INCREASE";
+        case JX_EFFECT_PETRIFY:                    return "JX_EFFECT_PETRIFY";
+        case JX_EFFECT_SPELL_FAILURE:              return "JX_EFFECT_SPELL_FAILURE";
+        case JX_EFFECT_ETHEREAL:                   return "JX_EFFECT_ETHEREAL";
+        case JX_EFFECT_DETECT_UNDEAD:              return "JX_EFFECT_DETECT_UNDEAD";
+        case JX_EFFECT_LOW_LIGHT_VISION:           return "JX_EFFECT_LOW_LIGHT_VISION";
+        case JX_EFFECT_SET_SCALE:                  return "JX_EFFECT_SET_SCALE";
+        case JX_EFFECT_SHARE_DAMAGE:               return "JX_EFFECT_SHARE_DAMAGE";
+        case JX_EFFECT_ASSAY_RESISTANCE:           return "JX_EFFECT_ASSAY_RESISTANCE";
+        case JX_EFFECT_SEE_TRUE_HPS:               return "JX_EFFECT_SEE_TRUE_HPS";
+        case JX_EFFECT_ABSORB_DAMAGE:              return "JX_EFFECT_ABSORB_DAMAGE";
+        case JX_EFFECT_HIDEOUS_BLOW:               return "JX_EFFECT_HIDEOUS_BLOW";
+        case JX_EFFECT_MESMERIZE:                  return "JX_EFFECT_MESMERIZE";
+        case JX_EFFECT_DARK_VISION:                return "JX_EFFECT_DARK_VISION";
+        case JX_EFFECT_ARMOR_CHECK_PENALTY_INCREASE: return "JX_EFFECT_ARMOR_CHECK_PENALTY_INCREASE";
+        case JX_EFFECT_DESINTEGRATE:               return "JX_EFFECT_DESINTEGRATE";
+        case JX_EFFECT_HEAL_ON_ZERO_HP:            return "JX_EFFECT_HEAL_ON_ZERO_HP";
+        case JX_EFFECT_BREAK_ENCHANTMENT:          return "JX_EFFECT_BREAK_ENCHANTMENT";
+        case JX_EFFECT_BONUS_HITPOINTS:            return "JX_EFFECT_BONUS_HITPOINTS";
+        case JX_EFFECT_BARD_SONG_SINGING:          return "JX_EFFECT_BARD_SONG_SINGING";
+        case JX_EFFECT_JARRING:                    return "JX_EFFECT_JARRING";
+        case JX_EFFECT_BAB_MINIMUM:                return "JX_EFFECT_BAB_MINIMUM";
+        case JX_EFFECT_MAX_DAMAGE:                 return "JX_EFFECT_MAX_DAMAGE";
+        case JX_EFFECT_ARCANE_SPELL_FAILURE:       return "JX_EFFECT_ARCANE_SPELL_FAILURE";
+        case JX_EFFECT_WILD_SHAPE:                 return "JX_EFFECT_WILD_SHAPE";
+        case JX_EFFECT_RESCUE:                     return "JX_EFFECT_RESCUE";
+        case JX_EFFECT_DETECT_SPIRITS:             return "JX_EFFECT_DETECT_SPIRITS";
+        case JX_EFFECT_DAMAGE_REDUCTION_NEGATED:   return "JX_EFFECT_DAMAGE_REDUCTION_NEGATED";
+        case JX_EFFECT_CONCEALMENT_NEGATED:        return "JX_EFFECT_CONCEALMENT_NEGATED";
+        case JX_EFFECT_INSANE:                     return "JX_EFFECT_INSANE";
+        case JX_EFFECT_SUMMON_COPY:                return "JX_EFFECT_SUMMON_COPY";
+        case JX_EFFECT_SHAKEN:                     return "JX_EFFECT_SHAKEN";
+    }
+
+    return "<INVALID EFFECT ID (" + IntToString(iEffect) + ")>";
+}
+
+string JXModName(int iMod)
+{
+    switch(iMod)
+    {
+        case JX_EFFECT_MOD_TYPE_PARAM_1:           return "JX_EFFECT_MOD_TYPE_PARAM_1";
+        case JX_EFFECT_MOD_TYPE_PARAM_2:           return "JX_EFFECT_MOD_TYPE_PARAM_2";
+        case JX_EFFECT_MOD_TYPE_PARAM_3:           return "JX_EFFECT_MOD_TYPE_PARAM_3";
+        case JX_EFFECT_MOD_TYPE_PARAM_4:           return "JX_EFFECT_MOD_TYPE_PARAM_4";
+        case JX_EFFECT_MOD_TYPE_PARAM_5:           return "JX_EFFECT_MOD_TYPE_PARAM_5";
+        case JX_EFFECT_MOD_TYPE_PARAM_6:           return "JX_EFFECT_MOD_TYPE_PARAM_6";
+        case JX_EFFECT_MOD_TYPE_PARAM_7:           return "JX_EFFECT_MOD_TYPE_PARAM_7";
+        case JX_EFFECT_MOD_TYPE_PARAM_8:           return "JX_EFFECT_MOD_TYPE_PARAM_8";
+        case JX_EFFECT_MOD_TYPE_PARAM_9:           return "JX_EFFECT_MOD_TYPE_PARAM_9";
+        case JX_EFFECT_MOD_TYPE_EFFECT_PROP:       return "JX_EFFECT_MOD_TYPE_EFFECT_PROP";
+        case JX_EFFECT_MOD_TYPE_DISABLE_EFFECT:    return "JX_EFFECT_MOD_TYPE_DISABLE_EFFECT";
+        case JX_EFFECT_MOD_TYPE_SUBSTITUTE_EFFECT: return "JX_EFFECT_MOD_TYPE_SUBSTITUTE_EFFECT";
+        case JX_EFFECT_MOD_TYPE_LINK_EFFECT:       return "JX_EFFECT_MOD_TYPE_LINK_EFFECT";
+    }
+    return "<INVALID EFFECT MOD ID (" + IntToString(iMod) + ")>";
+}
+
+string JXModOpName(int iModOp)
+{
+    switch(iModOp)
+    {
+        case JX_EFFECT_MOD_OP_PARAM_INCREASE_BY : return "JX_EFFECT_MOD_OP_PARAM_INCREASE_BY";
+        case JX_EFFECT_MOD_OP_PARAM_DECREASE_BY : return "JX_EFFECT_MOD_OP_PARAM_DECREASE_BY";
+        case JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY : return "JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY";
+        case JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY : return "JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY";
+        case JX_EFFECT_MOD_OP_PARAM_LOGIC_OR : return "JX_EFFECT_MOD_OP_PARAM_LOGIC_OR";
+        case JX_EFFECT_MOD_OP_PARAM_LOGIC_AND : return "JX_EFFECT_MOD_OP_PARAM_LOGIC_AND";
+        case JX_EFFECT_MOD_OP_PARAM_INCREASE_BY_RAND : return "JX_EFFECT_MOD_OP_PARAM_INCREASE_BY_RAND";
+        case JX_EFFECT_MOD_OP_PARAM_DECREASE_BY_RAND : return "JX_EFFECT_MOD_OP_PARAM_DECREASE_BY_RAND";
+        case JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY_RAND : return "JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY_RAND";
+        case JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY_RAND : return "JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY_RAND";
+        case JX_EFFECT_MOD_OP_PARAM_MAX : return "JX_EFFECT_MOD_OP_PARAM_MAX";
+        case JX_EFFECT_MOD_OP_PARAM_MIN : return "JX_EFFECT_MOD_OP_PARAM_MIN";
+        case JX_EFFECT_MOD_OP_PARAM_OVERRIDE : return "JX_EFFECT_MOD_OP_PARAM_OVERRIDE";
+        case JX_EFFECT_MOD_OP_PARAM_MAP : return "JX_EFFECT_MOD_OP_PARAM_MAP";
+        default: return "<INVALID EFFECT MOD OP ID(" + IntToString(iModOp) + ")>";
+    }
+    return "<INVALID EFFECT MOD OP ID(" + IntToString(iModOp) + ")>";
+}
+
+
+void JXPrintFunctionCall(string sFunctionName, string sMsg="",  string sArg1="", string sArg2="", string sArg3="", string sArg4="", string sArg5="", string sArg6="", string sArg7="")
+{
+    int i = 1;
+    string sArg = sArg1;
+    Log("Calling " + sFunctionName);
+    while (i < 8 && sArg != "")
+    {
+        if (sArg1 != "" && i == 1) sArg = sArg1;
+        if (sArg2 != "" && i == 2) sArg = sArg2;
+        if (sArg3 != "" && i == 3) sArg = sArg3;
+        if (sArg4 != "" && i == 4) sArg = sArg4;
+        if (sArg5 != "" && i == 5) sArg = sArg5;
+        if (sArg6 != "" && i == 6) sArg = sArg6;
+        if (sArg7 != "" && i == 7) sArg = sArg7;
+        Log(IntToString(i) + ": " + sArg);
+        i++;
+    }
+    if (sMsg != "")
+    {
+        Log(">>------------------");
+        Log(sMsg);
+        Log(">>------------------");
+    }
 }

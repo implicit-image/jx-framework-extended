@@ -80,6 +80,7 @@
 #include "jx_inc_magic_item"
 #include "jx_inc_magic_class"
 #include "jx_inc_action"
+#include "jx_inc_magic_effects"
 //**************************************//
 //                                      //
 //              Interface               //
@@ -2223,15 +2224,9 @@ void JXPostSpellCastCode()
     DeleteLocalObject(oCaster, JX_SPELL_TARGET_OBJECT);
     DeleteLocalLocation(oCaster, JX_SPELL_TARGET_LOCATION);
 
-    // Delete effect override info
-    // see jx_inc_effects.nss for effect override interface
-
-    // JXClearOverrideIntArray(JX_OVERRIDE_INT_ARR_IGNORE_DEFAULT);
-    // JXClearOverrideIntArray(JX_OVERRIDE_INT_ARR_FLAT_BONUS);
-
-    // JXClearOverrideStringArray(JX_OVERRIDE_STR_ARR_BONUS_LINK);
-    // JXClearOverrideStringArray(JX_OVERRIDE_STR_ARR_RAND_BONUS);
-    // JXClearOverrideStringArray(JX_OVERRIDE_STR_ARR_DAMAGE_TYPE_MAP);
+    // clear effects
+    // from jx_inc_magic_effects_impl.nss
+    JXClearEffectModifiers();
 }
 
 

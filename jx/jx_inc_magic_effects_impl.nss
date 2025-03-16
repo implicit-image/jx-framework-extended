@@ -3,417 +3,1170 @@
 #include "ginc_wp"
 // i need string tokenizer
 #include "x0_i0_stringlib"
+#include "utils"
 
 /*
 This file contains implementation details and helper functions for
 override effects
 */
+// array helpers
+
+int JXEffectModOpParamInt(int iValue);
+
+int JXEffectModOpParamFloat(float fValue);
+
+int JXEffectModOpParamString(string sValue);
+
+int JXEffectModOpParamObject(object oValue);
+
+// curremt mod param getters;
+
+int JXGetCurrModOpParamInt(int iOpParamPos=1);
+
+float JXGetCurrModOpParamFloat(int iOpParamPos=1);
+
+string JXGetCurrModOpParamString(int iOpParamPos=1);
+
+object JXGetCurrModOpParamObject(int iOpParamPos=1);
+
+int JXGetCurrModOpParamType(int iParamPos);
+
+int JXIsCurrModOpParamSet(int iParamPos);
+
+void JXClearCurrModOpParams();
+
+void JXTypeError(int iPassedType, int iExpectedType1=0, int iExpectedType2=0, int iExpectedType3=0, int iExpectedType4=0, int iExpectedType5=0);
+
+// JXAddEffectModifier(JX_EFFECT_TYPE_HEAL, JX_EFFECT_MOD_TYPE_PARAM_1, JX_EFFECT_MOD_PARAM_INCREASE_BY, JXEffectModArgInt(40));;
+
+void JXAddEffectModifier(int iEffectType, int iModType, int iModOp=0, int iModParam1=0, int iModParam2=0, int iModParam3=0, int iModParam4=0, int iModParam5=0, int iModParam6=0, int iModParam7=0);
+
+void JXSetModOpParamValueInt(int iEffectType, int iModType, int iModOp, int iParamPos, int iValue);
+
+void JXSetModOpParamValueFloat(int iEffectType, int iModType, int iModOp, int iParamPos, float fValue);
+
+void JXSetModOpParamValueString(int iEffectType, int iModType, int iModOp, int iParamPos, string sValue);
+
+void JXSetModOpParamValueObject(int iEffectType, int iModType, int iModOp, int iParamPos, object oValue);
+
+void JXDisableEffect(int iEffectType);
+
+int JXIsEffectDisabled();
 
 
-//##################################################
-// Effect String Representation Data
-//#################################################
+//==================================================================== effect creation functions =====================================================;
 
-struct jx_effect
+void JXStartEffectMod(int iEffectType);
+
+void JXEndEffectMod();
+
+int JXGetModifiedEffectType();
+
+int JXIsEffectModOpParamSet(int iModType, int iModOp, int iOpParamPosition=1);
+
+int JXGetEffectModParamInt(int iModType, int iModOp, int iOpParamPosition=1);
+
+float JXGetEffectModParamFloat(int iModType, int iModOp, int iOpParamPosition=1);
+
+string JXGetEffectModParamString(int iOvrtype, int iModOp, int iOpParamPosition=1);
+
+object JXGetEffectModParamObject(int iModType, int iModOp, int iOpParamPosition=1);
+
+// applying modifiers;
+
+effect JXApplyEffectPropertyModifiers(effect eEffect);
+
+int JXApplyEffectParamModifiers_Int(int iValue, int iEffectParamPosition=1);
+
+float JXApplyEffectParamModifiers_Float(float fValue, int iEffectParamPosition=1);
+
+string JXApplyEffectParamModifiers_String(string sValue, int iEffectParamPosition=1);
+
+object JXApplyEffectParamModifiers_Object(object oValue, int iEffectParamPosition=1);
+
+effect JXApplyEffectBonusEffectLinks(effect eEffect);
+
+effect JXSetEffectSubtype(effect eEffect, int iSubtype);
+
+// call it in postcast script;
+void JXClearEffectModifiers();
+
+
+
+//========================================= Implementation ================================
+
+
+//=============================================== effect modifier setup =============================================================
+
+
+// passing modifier parameters
+
+int JXEffectModOpParamInt(int iValue)
 {
-    int iNumOfEffects;
-    int iDefaultDurationType;
-    string sEffectInfo;
-};
-
-
-//###################################################
-// General Effect Info
-//#################################################
-
-// Get All effect integers of the effect
-string JXGetAllEffectInts(effect eEffect)
-{
-    int iIndex = 0;
-    string sEffectInts;
-    int iEffectInt = GetEffectInteger(eEffect, iIndex);
-    while(iEffectInt != 0)
+    // find first unset param index
+    int i = 1;
+    while (GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, i)))
     {
-        sEffectInfo += IntToString(iEffectInt) + JX_GEN_SEP;
-        SendMessageToPC(OBJECT_SELF, "effect info is " + sEffectInfo);
-        iIndex++;
-        iEffectInt = GetEffectInteger(eEffect, iIndex);
+        i++;
     }
-    return sEffectInts;
+    // mark that ith param is set
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, i), TRUE);
+    // Set first param type
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_TYPES, i), JX_TYPE_INT);
+    // set the param value
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAMS, i), iValue);
+    return 1;
 }
 
-int JXGetOverrideEffectDefaultDurationType(int iOverrideEffectId)
+int JXEffectModOpParamFloat(float fValue)
 {
-    switch (iOverrideEffectId)
+    // find first unset param index
+    int i = 1;
+    while (GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, i)))
     {
-        case JX_SAVED_EFFECT_HEAL:
-        case JX_SAVED_EFFECT_DAMAGE:
-                return DURATION_TYPE_INSTANT;
-        default:
-                return DURATION_TYPE_TEMPORARY;
+        i++;
+    }
+    // mark that ith param is set
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, i), TRUE);
+    // set param type
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_TYPES, i), JX_TYPE_FLOAT);
+    // set the param value
+    SetLocalFloat(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAMS, i), fValue);
+    return 1;
+}
+
+int JXEffectModOpParamString(string sValue)
+{
+    int i = 1;
+    while (GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, i)))
+    {
+        i++;
+    }
+    // mark that ith param is set
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, i), TRUE);
+    // set param type
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_TYPES, i), JX_TYPE_STRING);
+    // set the param value
+    SetLocalString(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAMS, i), sValue);
+    return 1;
+}
+
+int JXEffectModOpParamObject(object oValue)
+{
+    int i = 1;
+    while (GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, i)))
+    {
+        i++;
+    }
+    // mark that ith param is set
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, i), TRUE);
+    // set param type
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_TYPES, i), JX_TYPE_OBJECT);
+    // set the param value
+    SetLocalObject(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAMS, i), oValue);
+    return 1;
+}
+
+
+
+// curremt mod param getters
+
+int JXGetCurrModOpParamInt(int iOpParamPos=1)
+{
+    JXPrintFunctionCall("JXGetCurrModOpParamInt(int iOpParamPos=1)", "Getting currently processes modifier operator paramater.", IntToString(iOpParamPos));
+    // catch useless invocation
+    if (GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, iOpParamPos)) == FALSE)
+    {
+        Log("JXGetCurrModOpParamInt called with no params set.");
+        return 0;
+    }
+    // get the param value
+    int iRes = GetLocalInt(OBJECT_SELF, Arrayat(JX_EFFECT_CURR_MOD_OP_PARAMS, iOpParamPos));
+    // reset param state
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, iOpParamPos), FALSE);
+    return iRes;
+}
+
+float JXGetCurrModOpParamFloat(int iOpParamPos=1)
+{
+    JXPrintFunctionCall("JXGetCurrModOpParamFloat(int iOpParamPos=1)", "Getting currently processes modifier operator paramater.", IntToString(iOpParamPos));
+    // catch useless invocation
+    if (GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, iOpParamPos)) == FALSE)
+    {
+
+        Log("JXGetCurrModOpParamFloat called with no params set.");
+        return 0.0f;
+    }
+    // get the param value
+    float fRes = GetLocalFloat(OBJECT_SELF, Arrayat(JX_EFFECT_CURR_MOD_OP_PARAMS, iOpParamPos));
+    // reset param state
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, iOpParamPos), FALSE);
+    return fRes;
+}
+
+string JXGetCurrModOpParamString(int iOpParamPos=1)
+{
+
+    JXPrintFunctionCall("JXGetCurrModOpParamString(int iOpParamPos=1)", "Getting currently processes modifier operator paramater.", IntToString(iOpParamPos));
+    if (GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, iOpParamPos)) == FALSE)
+    {
+
+        Log("JXGetCurrModOpParamString called with no params set.");
+        return "";
+    }
+    // get the param value
+    string sRes = GetLocalString(OBJECT_SELF, Arrayat(JX_EFFECT_CURR_MOD_OP_PARAMS, iOpParamPos));
+    // reset param state
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, iOpParamPos), FALSE);
+    return sRes;
+}
+
+object JXGetCurrModOpParamObject(int iOpParamPos=1)
+{
+
+    JXPrintFunctionCall("JXGetCurrModOpParamObject(int iOpParamPos=1)", "Getting currently processes modifier operator paramater.", IntToString(iOpParamPos));
+    if (GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, iOpParamPos)) == FALSE)
+    {
+
+        Log("JXGetCurrModOpParamObject called with no params set.");
+        return OBJECT_INVALID;
+    }
+    // get the param value
+    object oRes = GetLocalObject(OBJECT_SELF, Arrayat(JX_EFFECT_CURR_MOD_OP_PARAMS, iOpParamPos));
+    // reset param state
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, iOpParamPos), FALSE);
+    return oRes;
+}
+
+
+int JXGetCurrModOpParamType(int iParamPos)
+{
+    int iRes = GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_TYPES, iParamPos));
+    JXPrintFunctionCall("JXGetCurrModOpParamType(int iParamPos)", "", IntToString(iParamPos));
+    return iRes;
+}
+
+int JXIsCurrModOpParamSet(int iParamPos)
+{
+    int iRes = GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_OP_PARAM_STATES, iParamPos));
+    JXPrintFunctionCall("JXIsCurrModOpParamSet(int iParamPos)", "", IntToString(iParamPos));
+    return iRes;
+}
+
+void JXClearCurrModOpParams()
+{
+    int i;
+    for (i = 0; i<=8 ;i++)
+    {
+        SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_CURR_MOD_PARAM_STATES, i), FALSE);
     }
 }
 
 
-//#################################################################
-// Load effect from local array
-//#################################################################
-
-// @param JXEffectId - JX_EFFECT_* of the effect to link with
-// @result effect    - effect link
-effect JXLoadBonusEffectLink(int iJXEffectId, int iLinkCount)
+void JXTypeError(int iPassedType, int iExpectedType1=0, int iExpectedType2=0, int iExpectedType3=0, int iExpectedType4=0, int iExpectedType5=0)
 {
-    string sBonusLinkArray = JXArrayForEffect(iJXEffectId, JX_EFFECT_BONUS_LINK_ARRAY);
+    string sErrMsg = "Type Error: passed argument of type " + JXTypeName(iPassedType);
+    string sExMsg = "Expected ";
+    if (iExpectedType1 != 0) sExMssg = sExMsg + "or " + JXTypeName(iExpectedType1) + " ";
+    if (iExpectedType2 != 0) sExMssg = sExMsg + "or " + JXTypeName(iExpectedType2) + " ";
+    if (iExpectedType3 != 0) sExMssg = sExMsg + "or " + JXTypeName(iExpectedType3) + " ";
+    if (iExpectedType4 != 0) sExMssg = sExMsg + "or " + JXTypeName(iExpectedType4) + " ";
+    if (iExpectedType5 != 0) sExMssg = sExMsg + "or " + JXTypeName(iExpectedType5) + " ";
 
-    int iIndex = 1;
+    Log(sErrMsg, "red");
+    Log(sExMsg, "red");
+}
 
-    effect eLink;
-    int iJXEffectId = GetLocalArrayInt(OBJECT_SELF, sBonusLinkArray, iIndex);
-    while (iJXEffectId != 0)
+
+// JXAddEffectModifier(JX_EFFECT_TYPE_HEAL, JX_EFFECT_MOD_TYPE_PARAM_1, JX_EFFECT_MOD_PARAM_INCREASE_BY, JXEffectModArgInt(40));
+
+void JXAddEffectModifier(int iEffectType, int iModType, int iModOp=0, int iModParam1=0, int iModParam2=0, int iModParam3=0, int iModParam4=0, int iModParam5=0, int iModParam6=0, int iModParam7=0)
+{
+    JXPrintFunctionCall("JXAddEffectModifier(int iEffectType, int iModtype, int iModOp, ...)", "Adding effect modifier to locally saved modifiers", JXEffectName(iEffect), JXModName(iMod), JXModOpName(iModOp));
+
+    Log("Modifying effect " + JXEffectName(iEffectType));
+    Log("Modifier type: " + JXModName(iModType));
+    Log("Modifier operator type: " + JXModOpName(iModOp));
+
+
+    //##################################################################
+    // disabling effects
+    //###################################################################
+    if (iModType == JX_EFFECT_MOD_TYPE_DISABLE_EFFECT)
     {
-        effect eEffect = JXLoadEffectFromArray(iIndex, iJXEffectId, sBonusLinkArray);
-        eLink = EffectLinkEffects(eEffect, eLink);
-
-        // move to the next effect index
-        iIndex += iIndex + JX_EFFECT_MAX_LINK_SIZE;
-        // read next effect id
-        iJXEffectId = GetLocalArrayInt(OBJECT_SELF, sBonusLinkArray, iIndex);
-    }
-    return eLink;
-}
-
-int JXEffectGetParamInt(string sArrayName, int iPos, object oOwner=OBJECT_SELF)
-{
-    string sEffectArr
-    int sPAram = GetLocalArrayInt(oOwner, )
-    return
-}
-
-
-effect JXLoadEffectFromArray(int iStartIndex, int iJXEffectId, string sArray, object oOwner=OBJECT_SELF)
-{
-    string sParam1 = GetVarNameFromArrayPos(sArray, iStartIndex + 1, oOwner);
-    string sParam2 = GetVarNameFromArrayPos(sArray, iStartIndex + 2, oOwner);
-    string sParam3 = GetVarNameFromArrayPos(sArray, iStartIndex + 3, oOwner);
-    string sParam4 = GetVarNameFromArrayPos(sArray, iStartIndex + 4, oOwner);
-    string sParam5 = GetVarNameFromArrayPos(sArray, iStartIndex + 5, oOwner);
-    string sParam6 = GetVarNameFromArrayPos(sArray, iStartIndex + 6, oOwner);
-    string sParam7 = GetVarNameFromArrayPos(sArray, iStartIndex + 7, oOwner);
-    string sParam8 = GetVarNameFromArrayPos(sArray, iStartIndex + 8, oOwner);
-    string sParam9 = GetVarNameFromArrayPos(sArray, iStartIndex + 9, oOwner);
-
-    switch(iJXEffectId)
-    {
-        case JX_EFFECT_HEAL:
-            {
-                int iDmgToHeal = GetLocalInt(oOwner, sParam1);
-                return EffectHeal(iDmgToHeal);
-            }
-        case JX_EFFECT_DAMAGE:
-            {
-                int iDmgAmount = GetLocalInt(oOwner, sParam1);
-                int iDmgType = GetLocalInt(oOwner, sParam2);
-                int iDmgPower = GetLocalInt(oOwner, sParam3);
-                return EffectDamage(iDmgAmount, iDmgType, iDmgPower);
-            }
-        case JX_EFFECT_DAMAGE_OVER_TIME:
-            {
-                int iDmg = GetLocalInt(oOwner, sParam1);
-                float fInterval = GetLocalInt(oOwner, sParam2);
-                int iDmgType = GetLocalFloat(oOwner, sParam3);
-                int iIgnoreResistances = GetLocalInt(oOwner, sParam4);
-                return EffectDamageOverTime(iDmg, fInterval, iDmgType, iIgnoreResistances);
-            }
-        case JX_EFFECT_ABILITY_INCREASE:
-            {
-                int iAbility = GetLocalInt(oOwner, sParam1);
-                int iModifyBy = GetLocalInt(oOwner, sParam2);
-                return EffectAbilityIncrease(iAbility, iModifyBy);
-            }
-        case JX_EFFECT_DAMAGE_RESISTANCE:
-            {
-                int iDmgType = GetLocalInt(oOwner, sParam1);
-                int iAmount = GetLocalInt(oOwner, sParam2);
-                int iLimit = GetLocalInt(oOwner, sParam3);
-                return EffectDamageResistance(iDmgType, iAmount, iLimit);
-            }
-        case JX_EFFECT_RESURRECTION:
-            {
-                return EffectResurrection();
-            }
-        case JX_EFFECT_SUMMON_CREATURE:
-            {
-                string sCreatureRef = GetLocalString(oOwner, sParam1);
-                int iVisEffect = GetLocalInt(oOwner, sParam2);
-                float fDelay = GetLocalFloat(oOwner, sParam3);
-                int iUseAppearAnimation = GetLocalInt(oOwner, sParam4);
-                return EffectSummonCreature(sCreatureRef, iVisEffects, fDelay, iUseAppearAnimation);
-            }
-        case JX_EFFECT_AC_INCREASE:
-            {
-                int iValue = GetLocalInt(oOwner, sParam1);
-                int iModifyType = GetLocalInt(oOwner, sParam2);
-                int iDamageType = GetLocalInt(oOwner, sParam3);
-                int iVsSpiritsOnly = GetLocalInt(oOwner, sParam4);
-                return EffectACIncrease(iValue, iModifyType, iDmaageType, iVsSpiritsOnly);
-            }
-        case JX_EFFECT_SAVING_THROW_INCREASE:
-            {
-                int iSave = GetLocalInt(oOwner, sParam1);
-                int iValue = GetLocalInt(oOwner, sParam2);
-                int iSaveType = GetLocalInt(oOwner, sParam3);
-                int iVsSpiritsOnly = GetLocalInt(oOwner, sPAram4);
-                return EffectSavingThrowDecrease(iSave, iValue, iSaveType, iVsSpiritsOnly);
-            }
-        case JX_EFFECT_ATTACK_INCREASE:
-            {
-                int iBonus = GetLocalInt(oOwner, sParam1);
-                int iModifierType = GetLocalInt(oOwner, sParam2);
-                return EffectAttackIncrease(iBonus, iModifierType);
-            }
-        case JX_EFFECT_DAMAGE_REDUCTION:
-            {
-                int iAmount = GetLocalInt(oOwner, sParam1);
-                int iDamagePower = GetLocalInt(oOwner, sParam2);
-                int iLimit = GetLocalInt(oOwner, sParam3);
-                int iDRType = GetLocalInt(oowner, sParam4);
-                return EffectDamageReduction(iAmount, iDamagePower, iLimit);
-            }
-        case JX_EFFECT_DAMAGE_INCREASE:
-            {
-                int iBonus = GetLocalInt(oOwner, sParam1);
-                int iDamageType = GetLocalInt(oOwner, sParam2);
-                int iVsRace = GetLocalInt(oOwner, sParam3);
-                return EffectDamageIncrease(iBonus, iDamageType, iVsRace);
-            }
-        case JX_EFFECT_ENTANGLE:
-            {
-                return EffectEntangle();
-            }
-        case JX_EFFECT_DEATH:
-            {
-                int iSpectacularDeath = GetLocalInt(oOwner, sParam1);
-                int iDisplayFeedback
-                return EffectDeath(int iSpectacularDeath, iDisplayFeedback, iIgnoreImmunity, iPurgeEffects);
-            }
-
-        default:
-            return;
-    }
-}
-
-string JXArrayForEffect(int iJXEffectId, string sArrayRoot)
-{
-    return sArrayRoot + "_" + IntToString(iJXEffectId) + ":";
-}
-
-string JXModifierArrayForEffectProperty(int iJXEffectId, int iEffectProp, )
-
-string JXVarForEffect(int iJXEffectId, string sVarRoot)
-{
-    return sVarRoot + "_" + IntToString(iJXEffectId) + ":";
-}
-
-
-
-
-
-//#########################################################
-// Create effect from string representation
-//#######################################################
-
-
-effect JXEffectFromString(string sEffectRepr)
-{
-
-    SendMessageToPC(OBJECT_SELF, "Converting effect string repr to efffect.")
-    effect e;
-    // early out
-    if (sEffectRepr == "")
-    {
-        SendMessageToPC(OBJECT_SELF, "Effect repr is empty string!!!");
-        return e;
+        SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_ENABLED, iEffectType), FALSE);
     }
 
-    int iNumOfEffects = StringToInt(GetTokenByPosition(sEffectRepr, JX_FIELD_EP, 0));
-    SendMessageToPC(OBJECT_SELF, "Number of linked effects is: " + IntoToString(iNumOfEffect));
-
-    int iEffectSubtype = StringToInt(GetTokenByPosition(sEffectRepr, JX_FIELD_SEP, 1));
-    SendMessageToPC(OBJECT_SELF, "Effect subtype id is: " + IntToString(iEffectSubtype));
-
-    string sEffectInfos = GetTokenByPosition(sEffectRepr, JX_FIELD_SEP, 2);
-    SendMessageToPC(OBJECT_SELF, "List of Effect Infos is: " + sEffectInfos);
-
-
-    struct sStringTokenizer strTok= GetStringTokenizer(sEffectInfos, JX_EFFECT_SEP);
-
-    while (HasMoreTokens(strTok))
+    //################################################################
+    // effect parameter modifications
+    //################################################################
+    if (iModType >= JX_EFFECT_MOD_TYPE_PARAM_1 && iModType <= JX_EFFECT_MOD_TYPE_PARAM_9)
     {
-        strTok = AdvanceToNextToken(strTok);
-        sEffectInfo = GetNextToken(strTok);
-
-        SendMessageToPC(OBJECT_SELF, "Current effect info is: " + sEffectInfo);
-        eNewEffect = JXSingleEffectFromString(sEffectInfo);
-        e = EffectLinkEffects(e, eNewEffect);
-        int isEffectOk = GetIsEffectValid(eNewEffect);
-        int isLinkOk = GetIsEffectValid(e);
-        if (isEffectOk && isLinkOk)
+        Log("Adding effect parameter modification");
+        switch (iModOp)
         {
-            SendMessageToPC(OBJECT_SELF, "Created effect of type: " + IntToString(GetEffectType(eNewEffect)));
-            SendMEssageToPC(OBJECT_SELF, "Creating effect out of effect info:")
+            // increases can be accumulate dby adding modifier values
+            case JX_EFFECT_MOD_OP_PARAM_INCREASE_BY:
+            case JX_EFFECT_MOD_OP_PARAM_DECREASE_BY:
+            {
+                int iModOpParam1Type = JXGetCurrModOpParamType(1);
+                switch (iModOpParam1Type)
+                {
+                    case JX_TYPE_INT:
+                    {
+                        int iModOpParam1Value = JXGetCurrModOpParamInt(1);
+
+                        int iOldModOpParam1Value;
+                        if (JXIsCurrModOpParamSet(1))
+                        {
+                            iOldModOpParam1Value = JXGetModOpParamValueInt(iEffectType, iModType, iModOp, 1);
+                        } else
+                        {
+                            iOldModOpParam1Value = JX_INT_ADD_ID;
+                        }
+                        JXSetModOpParamValueInt(iEffectType, iModType, iModOp, 1, iModOpParam1Value + iOldModOpParam1Value);
+                        break;
+                    }
+                    case JX_TYPE_FLOAT:
+                    {
+                        float fModOpParam1Value = JXGetCurrModOpParamFloat(1);
+                        float fOldModParam1Value;
+                        if (JXIsCurrModOpParamSet(1))
+                        {
+                            fOldModOpParam1Value = JXGetModOpParamValueFloat(iEffectType, iModType, iModOp, 1);
+                        } else
+                        {
+                            fOldModParam1Value = JX_FLOAT_ADD_ID;
+                        }
+                        JXSetModOpParamValueFloat(iEffectType, iModType, iModOp, 1, fModOpParam1Value + fOldModOpParam1Value);
+                        break;
+                    }
+                    default:
+                    {
+                        JXTypeError(iModOpParam1Type, JX_TYPE_INT, JX_TYPE_FLOAT);
+                    }
+                }
+                break;
+            }
+            // multipliers and dividers are accumulated by multiplying modifier values
+            case JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY:
+            case JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY:
+            {
+                int iModOpParam1Type = JXGetCurrModOpParamType(1);
+                switch (iModOpParam1Type)
+                {
+                    case JX_TYPE_INT:
+                    {
+                        int iModOpParam1Value = JXGetCurrModOpParamInt(1);
+
+                        int iOldModOpParam1Value;
+                        if (JXIsCurrModOpParamSet(1))
+                        {
+                            iOldModOpParam1Value = JXGetModOpParamValueInt(iEffectType, iModType, iModOp, 1);
+                        } else
+                        {
+                            fOldModOpParam1Value = JX_INT_MULTIPLY_ID;
+                        }
+                        JXSetModOpParamValueInt(iEffectType, iModType, iModOp, 1, iModOpParam1Value * iOldModOpParam1Value);
+                        break;
+                    }
+                    case JX_TYPE_FLOAT:
+                    {
+                        float fModOpParam1Value = JXGetCurrModOpParamFloat(1);
+
+                        float fOldModOpParam1Value;
+                        if (JXIsCurrModOpParamSet(1))
+                        {
+                            fOldModOpParam1Value = JXGetModOpParamValueInt(iEffectType, iModType, iModOp, 1);
+                        } else
+                        {
+                            fOldModOpParam1Value = JX_FLOAT_MULTIPLY_ID;
+                        }
+                        JXSetModOpParamValueFloat(iEffectType, iModType, iModOp, 1, fModOpParam1Value * fOldModOpParam1Value);
+                        break;
+                    }
+                    default:
+                    {
+                        JXTypeError(iModOpParam1Type, JX_TYPE_INT, JX_TYPE_FLOAT);
+                    }
+                }
+                break;
+            }
+            // random increases are accumulated by saving all dice roll info and rolling at effect creation
+            case JX_EFFECT_MOD_OP_PARAM_INCREASE_BY_RAND:
+            case JX_EFFECT_MOD_OP_PARAM_DECREASE_BY_RAND:
+            {
+                int iModOpParam1Type = JXGetCurrModOpParamType(1);
+                switch (iModOpParam1Type)
+                {
+                    case JX_TYPE_STRING:
+                    {
+                        // param stored as 4d6;2d8 etc
+                        string sModOpParam1Value = JXGetCurrModOpParamString(1);
+
+                        string sOldModOpParam1Value;
+                        if (JXIsCurrModOpParamSet(1))
+                        {
+                            sOldModOpParam1Value = JXGetModOpParamValueString(iEffectType, iModType, iModOp, 1);
+                            sOldModOpParam1Value = ";" + sOldModOpParam1Value;
+                        } else
+                        {
+                            sOldModOpParam1Value = JX_STRING_CONCAT_ID;
+                        }
+                        JXSetModOpParamValueInt(iEffectType, iModType, iModOp, 1, sOldModParam1Value + sModOpParam1Value);
+                        break;
+                    }
+                    default:
+                    {
+                        JXTypeError(iModOpParam1Type, JX_TYPE_STRING);
+                    }
+
+                }
+                break;
+            }
+            // random multipliers are accumulated by saving all dice roll info and rolling at effect creation
+            case JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY_RAND:
+            case JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY_RAND:
+            {
+                int iModOpParam1Type = JXGetCurrModOpParamType(1);
+                switch (iModOpParam1Type)
+                {
+                    case JX_TYPE_STRING:
+                    {
+                        string sModOpParam1Value = JXGetCurrModOpParamString(1);
+
+                        string sOldModParam1Value = JXGetModOpParamValueString(iEffectType, iModType, iModOp, 1);
+                        JXSetModOpParamValueInt(iEffectType, iModType, iModOp, 1, sOldModOpParam1Value + ";" + sModOpParam1Value);
+                        break;
+                    }
+                    default:
+                    {
+                        JXTypeError(iModOpParam1Type, JX_TYPE_STRING);
+                    }
+
+                }
+                break;
+            }
+            // param maximum is accumulated by overriding the old maximum if it is larger
+            case JX_EFFECT_MOD_OP_PARAM_MAX:
+            {
+                int iModOpParam1Type = JXGetCurrModOpParamType(1);
+                switch (iModOpParam1Type)
+                {
+                    case JX_TYPE_INT:
+                    {
+                        int iModOpParam1Value = JXGetCurrModOpParamInt(1);
+
+                        int iOldModParam1Value = JXGetModOpParamValueInt(iEffectType, iModType, iModOp, 1);
+                        if (iOldModParam1Value > iModOpParam1Value)
+                        {
+                            iModOpParam1Value = iOldModParam1Value;
+                        }
+                        JXSetModOpParamValueInt(iEffectType, iModType, iModOp, 1, iModOpParam1Valuue);
+                        break;
+                    }
+                    case JX_TYPE_FLOAT:
+                    {
+                        float fModOpParam1Value = JXGetCurrModOpParamFloat(1);
+
+                        float fOldModParam1Value = JXGetModOpParamValueFloat(iEffectType, iModType, iModOp, 1);
+                        if (fOldModParam1Value > fModOpParam1Value)
+                        {
+                            float fModOpParam1Value = fOldModParam1Value;
+                        }
+                        JXSetModOpParamValueFloat(iEffectType, iModType, iModOp, 1, fModOpParam1Value);
+                        break;
+                    }
+                    default:
+                    {
+                        JXTypeError(iModOpParam1Type, JX_TYPE_INT, JX_TYPE_FLOAT);
+                    }
+                }
+                break;
+            }
+            // param minimum is accumulated by overriding the old minimum if is is smaller
+            case JX_EFFECT_MOD_OP_PARAM_MIN:
+            {
+                int iModOpParam1Type = JXGetCurrModOpParamType(1);
+                switch (iModOpParam1Type)
+                {
+                    case JX_TYPE_INT:
+                    {
+                        int iModOpParam1Value = JXGetCurrModOpParamInt(1);
+
+                        int iOldModParam1Value = JXGetModOpParamValueInt(iEffectType, iModType, iModOp, 1);
+                        if (iOldModParam1Value < iModOpParam1Value)
+                        {
+                            iModOpParam1Value = iOldModParam1Value;
+                        }
+                        JXSetModOpParamValueInt(iEffectType, iModType, iModOp, 1, iModOpParam1Valuue);
+                        break;
+                    }
+                    case JX_TYPE_FLOAT:
+                    {
+                        float fModOpParam1Value = JXGetCurrModOpParamFloat(1);
+
+                        float fOldModParam1Value = JXGetModOpParamValueFloat(iEffectType, iModType, iModOp, 1);
+                        if (fOldModParam1Value < fModOpParam1Value)
+                        {
+                            float fModOpParam1Value = fOldModParam1Value;
+                        }
+                        JXSetModOpParamValueFloat(iEffectType, iModType, iModOp, 1, fModOpParam1Value);
+                        break;
+                    }
+                    default:
+                    {
+                        JXTypeError(iModOpParam1Type, JX_TYPE_INT, JX_TYPE_FLOAT);
+                    }
+                }
+                break;
+            }
+            // param override mod is not accumulated, it always replaces the last one
+            case JX_EFFECT_MOD_OP_PARAM_OVERRIDE:
+            {
+                int iModOpParam1Type = JXGetCurrModOpParamType(1);
+                switch (iModOpParam1Type)
+                {
+                    case JX_TYPE_INT:
+                    {
+                        JXSetModOpParamValueInt(iEffectType, iModType, iModOp, 1, JXGetCurrModOpParamInt(1));
+                        break;
+                    }
+                    case JX_TYPE_FLOAT:
+                    {
+                        JXSetModOpParamValueFloat(iEffectType, iModType, iModOp, 1, JXGetCurrModOpParamFloat(1));
+                        break;
+                    }
+                    case JX_TYPE_STRING:
+                    {
+
+                        JXSetModOpParamValueString(iEffectType, iModType, iModOp, 1, JXGetCurrModOpParamString(1));
+                        break;
+                    }
+                    case JX_TYPE_OBJECT:
+                    {
+                        JXSetModOpParamValueObject(iEffectType, iModType, iModOp, 1, JXGetCurrModOpParamObject(1));
+                        break;
+                    }
+                    default:
+                    {
+                        JXTypeError(iModOpParam1Type, JX_TYPE_INT, JX_TYPE_FLOAT, JX_TYPE_STRING, JX_TYPE_OBJECT);
+                    }
+                }
+
+            }
+            case JX_EFFECT_MOD_OP_PARAM_MAP:
+            {
+                int iModOpParam1Type = JXGetCurrModOpParamType(1);
+                // we assume that second map param has the same type
+                switch (iModOpParam1Type)
+                {
+                    case JX_TYPE_INT:
+                    {
+                        int iModOpParam1Value = JXGetCurrModOpParamInt(1);
+                        int iModOpParam2Value = JXGetCurrModOpParamInt(2);
+                        string sRepr = IntToString(sModOpParam1Value) + ":" + IntToString(fModOpParam2Value);
+                        string sOld = JXGetModOpParamValueString(iEffectType, iModtype, iModOp, 1);
+                        sRepr = sRepr + ";" + sOld;
+                        JXSetModOpParamValueString(iEffectType, iModType, iModOP, 1, sRepr);
+                        break;
+                    }
+                    case JX_TYPE_FLOAT:
+                    {
+                        float fModOpParam1Value = JXGetCurrModOpParamFloat(1);
+                        float fModOpParam2Value = JXGetCurrModOpParamFloat(2);
+                        string sRepr = FloatToString(fModOpParam1Value) + ":" + FloatToString(fModOpParam2Value);
+                        string sOld = JXGetModOpParamValueString(iEffectType, iModtype, iModOp, 1);
+                        sRepr = sRepr + ";" + sOld;
+                        JXSetModOpParamValueString(iEffectType, iModType, iModOP, 1, sRepr);
+                        break;
+                    }
+                    case JX_TYPE_STRING:
+                    {
+                        string sModOpParam1Value = JXGetCurrModOpParamString(1);
+                        string sModOpParam2Value = JXGetCurrModOpParamString(2);
+                        string sRepr = sModOpParam1Value + ":" + sModOpParam2Value;
+                        string sOld = JXGetModOpParamValueString(iEffectType, iModtype, iModOp, 1);
+                        sRepr = sRepr + ";" + sOld;
+                        JXSetModOpParamValueString(iEffectType, iModType, iModOP, 1, sRepr);
+                        break;
+                    }
+                    case JX_TYPE_OBJECT:
+                    {
+                        object oModOpParam1Value = JXGetCurrModOpParamObject(1);
+                        object oModOpParam2Value = JXGetCurrModOpParamObject(2);
+                        string sRepr = ObjectToString(oModOpParam1Value) + ":" + ObjectToString(oModOpParam2Value);
+                        string sOld = JXGetModOpParamValueString(iEffectType, iModtype, iModOp, 1);
+                        sRepr = sRepr + ";" + sOld;
+                        JXSetModOpParamValueString(iEffectType, iModType, iModOP, 1, sRepr);
+                        break;
+                    }
+                    default:
+                    {
+                        JXTypeError(iModOpParam1Type, JX_TYPE_INT, JX_TYPE_FLOAT, JX_TYPE_STRING, JX_TYPE_OBJECT);
+                    }
+                }
+            }
         }
-
+        return;
     }
-    e = JXSetEffectSubtype(e, iEffectSubtype);
-    return e;
 
-}
+    // TODO: effect link + substitution modification
 
-effect JXEffectFromOverrideEffect(struct jx_effect OverrideEffect)
-{
-    effect e;
-    struct sStringTokenizer strTok= GetStringTokenizer(OverrideEffect.sEffectInfos, JX_EFFECT_SEP);
-
-    while (HasMoreTokens(strTok))
+    if (iModType >= JX_EFFECT_MOD_TYPE_SUBSTITUTE_EFFECT && iModType <= JX_EFFECT_MOD_TYPE_LINK_EFFECT)
     {
-        strTok = AdvanceToNextToken(strTok);
-        sEffectInfo = GetNextToken(strTok);
-        e = EffectLinkEffects(e, JXSingleEffectFromString(sEffectInfo));
+        Log("Adding effect link + substitution modification not implemented yet...");
     }
-    return e;
+
+    JXClearCurrModOpParams();
+    return;
 }
 
 
-effect JXSingleEffectFromString(string sEffectInfo)
+
+
+void JXSetModOpParamValueInt(int iEffectType, int iModType, int iModOp, int iParamPos, int iValue)
 {
-    int iOverrideEffectType = StringToInt(GetTokenByPosition(OverrideEffect.sEffectInfo, JX_PROP_SEP, 0));
-    int iEffectType = StringToInt(GetTokenByPosition(OverrideEffect.sEffectInfo, JX_PROP_SEP, 1));
-    string sArgList = GetTokenByPosition(OverrideEffect.sEffectInfo, JX_PROP_SEP, 2);
+    JXPrintFunctionCall("JXSetModOpParamValueInt(int iEffectType, int iModType, int iModOp, int iParamPos, int iValue)", "Saving modifier parameters" , JXEffectName(iEffect), JXModName(iMod), JXModOpName(iModOp), IntToString(iParamPos), IntToString(iValue));
+    // check status
+    int iModStatus = GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_STATES, iEffectType, iModType, iModOp, iParamPos));
 
-    return JXCreateEffect(iOverrideEffectType, sArgsList, iEffectType);
-}
-
-effect JXCreateEffect(int iOverrideEffectType, string sArgList, int iEffectType)
-{
-    effect e;
-    // each arg is <str_repr> of an arg
-    string sArg0 = GetTokenByPosition(sArgList, JX_ARG_SEP, 0);
-    string sArg1 = GetTokenByPosition(sArgList, JX_ARG_SEP, 1);
-    string sArg2 = GetTokenByPosition(sArgList, JX_ARG_SEP, 2);
-    string sArg3 = GetTokenByPosition(sArgList, JX_ARG_SEP, 3);
-    string sArg4 = GetTokenByPosition(sArgList, JX_ARG_SEP, 4);
-    string sArg5 = GetTokenByPosition(sArgList, JX_ARG_SEP, 5);
-    string sArg6 = GetTokenByPosition(sArgList, JX_ARG_SEP, 6);
-    string sArg7 = GetTokenByPosition(sArgList, JX_ARG_SEP, 7);
-
-    switch (iOverrideEffectType)
+    if (!iModStatus)
     {
-        case JX_EFFECT_HEAL:
-                int iDmgToHeal = StringToInt(Arg0);
-                e = EffectHeal(iDmgToHeal);
-                break;
-        case JX_EFFECT_DAMAGE:
-                int iDmg = StringToInt(sArg0);
-                int iDmgType = StringToInt(sArg1);
-                int iDmgPower = StringToInt(sArg2);
-                int iIgnoreResistances = StringToInt(sArg3);
-                e = EffectDamage(iDmg, iDmgType, iDmgPower, iIgnoreResistaces);
-                break;
-        // case JX_EFFECT_:
-        //     break;
-        // case JX_EFFECT_:
-        //     break;
-        // case JX_EFFECT_:
-        //     break;
-        // case JX_EFFECT_:
-        //     break;
-        // case JX_EFFECT_:
-        //     break;
-        // case JX_EFFECT_:
-        //     break;
+        // if status is 0, set to 1 and initiialize value
+        SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_STATES, iEffectType, iModType, iModOp, iParamPos), 1);
+        // set type
+        SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_TYPES, iEffectType, iModType, iModOp, iParamPos), JX_TYPE_INT);
     }
-    return e;
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAMS, iEffectType, iModType, iModOp, iParamPos), iValue);
 }
 
-//#######################################################
-// Saving effect data
-//#######################################################
-
-string JXOverrideEffectToString(struct jx_effect OverrideEffect)
+void JXSetModOpParamValueFloat(int iEffectType, int iModType, int iModOp, int iParamPos, float fValue)
 {
-    string sOverrideEffectRepr;
-    sOverrideEffectRepr += IntToString(OverrideEffect.iNumOfEffects) + JX_FIELD_SEP;
-    sOverrideEffectRepr += IntToString(OverrideEffect.iEffectSubtype) + JX_FIELD_SEP;
-    sOverrideEffectRepr += OverrideEffect.sEffectInfo;
-    SendMessageToPC(OBJECT_SELF, "effect repr is: ");
-    SendMessageToPC(OBJECT_SELF, "**********************");
-    SendMessageToPC(OBJECT_SELF, sOverrideEffectRepr);
-    SendMessageToPC(OBJECT_SELF, "**********************");
-    return sOverrideEffectRepr;
+    JXPrintFunctionCall("JXSetModOpParamValueFloat(int iEffectType, int iModType, int iModOp, int iParamPos, float fValue)", "Saving modifier parameters" , JXEffectName(iEffect), JXModName(iMod), JXModOpName(iModOp), IntToString(iParamPos), FloatToString(fValue));
+    int iModStatus = GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_STATES, iEffectType, iModType, iModOp, iParamPos));
+    if (!iModStatus)
+    {
+        // if status is 0, set to 1 and initiialize value
+        SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_STATES, iEffectType, iModType, iModOp, iParamPos), 1);
+        SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_TYPES, iEffectType, iModType, iModOp, iParamPos), JX_TYPE_FLOAT);
+    }
+    SetLocalFloat(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAMS, iEffectType, iModType, iModOp, iParamPos), fValue);
 }
 
-
-struct jx_effect JXMakeOverrideEffect(int iOverrideEffectId, effect eEffect, string sEffectArgs)
+void JXSetModOpParamValueString(int iEffectType, int iModType, int iModOp, int iParamPos, string sValue)
 {
-    struct jx_effect OverrideEffect;
-    string sEffectInfo;
-
-    int iDefaultEffectDurationType = JXGetDefaultEffectDurationType(iOverrideEffectId);
-
-    OverrideEffect.iDefaultDurationType = iDefaultEffectDurationType;
-    OverrideEffect.iNumEffects = 1;
-
-    sEffectInfo = IntToString(iSaveEffectId) + JX_INFO_SEP;
-    sEffectInfo += IntToString(GetEffectType(eEffect)) + JX_INFO_SEP;
-    sEffectInfo += IntToString(GetEffectSubtype(eEffect)) + JX_INFO_SEP;
-    sEffectInfo += sEffectArgs + JX_EFFECT_SEP;
-
-    OverrideEffect.sEffectInfo = sEffectInfo ;
-
-    return OverrideEffect;
+    JXPrintFunctionCall("JXSetModOpParamValueString(int iEffectType, int iModType, int iModOp, int iParamPos, string sValue)", "Saving modifier parameters" , JXEffectName(iEffect), JXModName(iMod), JXModOpName(iModOp), IntToString(iParamPos), sValue);
+    int iModStatus = GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_STATES, iEffectType, iModType, iModOp, iParamPos));
+    if (!iModStatus)
+    {
+        // if status is 0, set to 1 and initiialize value
+        SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_STATES, iEffectType, iModType, iModOp, iParamPos), 1);
+        SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_TYPES, iEffectType, iModType, iModOp, iParamPos), JX_TYPE_STRING);
+    }
+    SetLocalString(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAMS, iEffectType, iModType, iModOp, iParamPos), sValue);
 }
 
-
-string JXOverrideEffectArgsPushInteger(string sArgList, int iArg)
+void JXSetModOpParamValueObject(int iEffectType, int iModType, int iModOp, int iParamPos, object oValue)
 {
-    sArgList += IntToString(iArgs) + JX_ARG_SEP;
-    return sArgList;
-}
-
-string JXOverrideEffectArgsPushFloat(string sArgList, float fArg)
-{
-    sArgList += FloatToString(fArg) + JX_ARG_SEP;
-    return sArgList;
-}
-
-string JXOverrideEffectArgsPushString(string sArgList, string sArg)
-{
-    sArgList += sArg + JX_ARG_SEP;
-    return sArgList;
+    JXPrintFunctionCall("JXSetModOpParamValueObject(int iEffectType, int iModType, int iModOp, int iParamPos, object oValue)", "Saving modifier parameters" , JXEffectName(iEffect), JXModName(iMod), JXModOpName(iModOp), IntToString(iParamPos), ObjectToString(oValue));
+    int iModStatus = GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_STATES, iEffectType, iModType, iModOp, iParamPos));
+    if (!iModStatus)
+    {
+        // if status is 0, set to 1 and initiialize value
+        SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_STATES, iEffectType, iModType, iModOp, iParamPos), 1);
+        SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_TYPES, iEffectType, iModType, iModOp, iParamPos), JX_TYPE_OBJECT);
+    }
+    SetLocalObject(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAMS, iEffectType, iModType, iModOp, iParamPos), oValue);
 }
 
 
-string JXOverrideEffectArgsPushObject(string sArgList, object oArg)
+void JXDisableEffect(int iEffectType)
 {
-    sArgList += ObjectToString(oArg) + JX_ARG_SEP;
-    return sArgList;
+    SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_IGNORE, iEffectType), TRUE);
+}
+
+int JXIsEffectDisabled()
+{
+    int iEffectType = JXGetModifiedEffectType();
+    return GetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_IGNORE, iEffectType)) == TRUE;
 }
 
 
-effect JXSetEffectSubtype(effect eEffect, int iEffectSubtype)
+//==================================================================== effect creation functions =====================================================
+
+
+void JXStartEffectMod(int iEffectType)
 {
-    switch (iEffectSubtype)
+    SetLocalInt(OBJECT_SELF, JX_EFFECT_CURRENT, iEffectType);
+}
+
+void JXEndEffectMod()
+{
+    SetLocalInt(OBJECT_SELF, JX_EFFECT_CURRENT, 0);
+}
+
+int JXGetModifiedEffectType()
+{
+    return GetLocalInt(OBJECT_SELF, JX_EFFECT_CURRENT);
+}
+
+
+//
+
+
+int JXIsEffectModOpParamSet(int iModType, int iModOp, int iOpParamPosition=1)
+{
+    int iEffectType = JXGetModifiedEffectType();
+    JXPrintFunctionCall("JXIsEffectModOpParamSet(int iModType, int iModOp, int iOpParamPosition=1)", "Checking if Modifier op param is set", JXModName(iMod), JXModOpName(iModOp), IntToString(iOpParamPosition));
+    return GetLocalInt(OBJECT_SELF, Arrayat(JX_EFFECT_MOD_OP_PARAM_STATES, iEffectType, iModType, iModOp, iOpParamPosition));
+}
+
+int JXGetEffectModParamInt(int iModType, int iModOp, int iOpParamPosition=1)
+{
+    int iEffectType = JXGetModifiedEffectType();
+    int iValue = GetLocalInt(OBJECT_SELF, ArrayAt(JX_MOD_OP_PARAMS, iEffectType, iModType, iModOp, iOpParamPosition));
+    JXPrintFunctionCall("JXGetEffectModParamInt(int iModType, int iModOp, int iOpParamPosition=1)", "Getting integer mod parameter", JXModName(iModType), JXModOpName(iModOp), IntToString(iOpParamPosition));
+    return iValue;
+}
+
+float JXGetEffectModParamFloat(int iModType, int iModOp, int iOpParamPosition=1)
+{
+    int iEffectType = JXGetModifiedEffectType();
+    float fValue = GetLocalFloat(OBJECT_SELF, ArrayAt(JX_MOD_OP_PARAMS, iEffectType, iModType, iModOp, iOpParamPosition));
+    JXPrintFunctionCall("JXGetEffectModParamFloat(int iModType, int iModOp, int iOpParamPosition=1)", "Getting float mod parameter", JXModName(iModType), JXModOpName(iModOp), IntToString(iOpParamPosition));
+    return fValue;
+}
+
+string JXGetEffectModParamString(int iModType, int iModOp, int iOpParamPosition=1)
+{
+    int iEffectType = JXGetModifiedEffectType();
+    string sValue = GetLocalString(OBJECT_SELF, ArrayAt(JX_MOD_OP_PARAMS, iEffectType, iModType, iModOp, iOpParamPosition));
+    JXPrintFunctionCall("JXGetEffectModParamString(int iModType, int iModOp, int iOpParamPosition=1)", "Getting string mod parameter", JXModName(iModType), JXModOpName(iModOp), IntToString(iOpParamPosition));
+    return sValue;
+}
+
+object JXGetEffectModParamObject(int iModType, int iModOp, int iOpParamPosition=1)
+{
+    int iEffectType = JXGetModifiedEffectType();
+    object oValue = GetLocalObject(OBJECT_SELF, ArrayAt(JX_MOD_OP_PARAMS, iEffectType, iModType, iModOp, iOpParamPosition));
+    JXPrintFunctionCall("JXGetEffectModParamObject(int iModType, int iModOp, int iOpParamPosition=1)", "Getting object mod parameter", JXModName(iModType), JXModOpName(iModOp), IntToString(iOpParamPosition));
+    return oValue;
+
+}
+
+
+// applying modifiers
+
+effect JXApplyEffectPropertyModifiers(effect eEffect)
+{
+    int iSubtype;
+    int iEffectType = JXGetModifiedEffectType();
+
+    int iRacialType = JXGetEffectModParamInt(JX_EFFECT_MOD_TYPE_EFFECT_PROP, JX_EFFECT_MOD_PROP_VS_RACIAL);
+    if (iRacialType != 0) eEffect = VersusRacialTypeEffect(eEffect, iRacialType);
+
+    int iLawChaos = JXGetEffectModParamInt(JX_EFFECT_MOD_TYPE_EFFECT_PROP, JX_EFFECT_MOD_PROP_VS_ALIGN);
+    int iGoodEvil = JXGetEffectModParamInt(JX_EFFECT_MOD_TYPE_EFFECT_PROP, JX_EFFECT_MOD_PROP_VS_ALIGN, 2);
+    if (iGoodEvil == 0 || iLawChaos == 0) eEffect = VersusAlignmentEffect(eEffect, iLawChaos, iGoodEvil);
+
+    int iSubtype = JXGetEffectModParamInt(JX_EFFECT_MOD_TYPE_EFFECT_PROP, JX_EFFECT_MOD_PROP_SUBTYPE);
+    if (iSubtype !=  0) eEffect = JXSetEffectSubtype(eEffect, iSubType);
+
+    return eEffect;
+}
+
+
+
+int JXApplyEffectParamModifiers_Int(int iValue, int iEffectParamPosition=1)
+{
+
+    JXPrintFunctionCall("JXApplyEffectParamModifiers_Int(int iValue, int iEffectParamPosition=1)", "applying int parameter modifiers", IntToString(iValue), IntToString(iEffectParamPosition));
+    int iEffectType = JXGetModifiedEffectType();
+
+    // FLAT INCREASE
+    int iFlatIncrease = JX_INT_ADD_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_INCREASE_BY))
+    {
+        iFlatIncrease = JXGetEffectModParamInt(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_INCREASE_BY);
+    }
+
+    // FLAT DECREASE
+    int iFlatDecrease = JX_INT_ADD_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DECREASE_BY))
+    {
+        iFlatDecrease = JXGetEffectModParamInt(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DECREASE_BY);
+    }
+
+    // MULTIPLIER
+    float fMultiplier = JX_FLOAT_MULTIPLY_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY))
+    {
+        fMultiplier = JXGetEffectModParamFloat(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY);
+    }
+
+    // DIVIDER
+    float fDivider = JX_FLOAT_MULTIPLY_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY))
+    {
+        fDivider = JXGetEffectModParamFloat(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY);
+    }
+
+    // FIXME: actually implement this
+    // int iOr = JXGetEffectModParamInt(JX_EFFECT_MOD_PARAM_LOGIC_OR);
+    // int iAnd = JXGetEffectModParamInt(JX_EFFECT_MOD_PARAM_LOGIC_AND);
+
+    int iOr = JX_INT_OR_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_LOGIC_OR))
+    {
+        iOr = JXGetEffectModParamInt(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_LOGIC_OR);
+    }
+
+    int iAnd = iValue;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_LOGIC_AND))
+    {
+        iAnd = JXGetEffectModParamInt(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_LOGIC_AND);
+    }
+
+    int iRandIncrease = JX_INT_ADD_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_INCREASE_BY_RAND))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_INCREASE_BY_RAND);
+
+        int iDice, iDiceNum;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sDiceInfo = GetNextToken(sTok);
+            iDiceNum = StringToInt(GetTokenByPosition(sDiceInfo, "d", 0));
+            iDice = StringToInt(GetTokenByPosition(sDiceInfo, "d", 1));
+            iRandIncrease = iRandIncrease + RollDice(iDiceNum, iDice);
+        }
+    }
+
+    int iRandDecrease = JX_INT_ADD_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DECREASE_BY_RAND))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DECREASE_BY_RAND);
+
+        int iDice, iDiceNum;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sDiceInfo = GetNextToken(sTok);
+            iDiceNum = StringToInt(GetTokenByPosition(sDiceInfo, "d", 0));
+            iDice = StringToInt(GetTokenByPosition(sDiceInfo, "d", 1));
+            iRandDecrease = iRandDecrease + RollDice(iDiceNum, iDice);
+        }
+    }
+
+
+    int iRandMultiply = JX_INT_MULTIPLY_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MULLTIPLY_BY_RAND))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY_RAND);
+
+        int iDice, iDiceNum;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sDiceInfo = GetNextToken(sTok);
+            iDiceNum = StringToInt(GetTokenByPosition(sDiceInfo, "d", 0));
+            iDice = StringToInt(GetTokenByPosition(sDiceInfo, "d", 1));
+            iRandMultiply = iRandMultiply * RollDice(iDiceNum, iDice);
+        }
+    }
+
+    int iRandDivide = JX_INT_MULTIPLY_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY_RAND))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY_RAND);
+
+        int iDice, iDiceNum;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sDiceInfo = GetNextToken(sTok);
+            iDiceNum = StringToInt(GetTokenByPosition(sDiceInfo, "d", 0));
+            iDice = StringToInt(GetTokenByPosition(sDiceInfo, "d", 1));
+            iRandDivide = iRandDivide * RollDice(iDiceNum, iDice);
+        }
+    }
+
+    // value map applied first
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MAP))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MAP);
+        int iFrom, iTo;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sCell = GetNextToken(sTok);
+            iFrom = StringToInt(GetTokenByPosition(sCell, ":", 0));
+            iTo = StringToInt(GetTokenByPosition(sCell, ":", 1));
+            if (iValue == iFrom) iValue = iTo;
+        }
+    }
+
+    // apply multiplication
+    iValue = FloatToInt(fMultiplier * (1 / fDivider) * IntToFloat(iRandMultiply) * (1 / IntToFloat(iRandDivide)) * IntToFloat(iValue));
+
+    // apply flat changes
+    iValue = iValue + iFlatIncrease - iFlatDecrease + iRandIncrease - iRandDecrease;
+
+
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MAX))
+    {
+        int iMax = JXGetEffectModParamInt(JX_EFFECT_MOD_OP_PARAM_MAX);
+        if (iMax != 0 && iValue > iMax) iValue = iMax;
+    }
+
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MIN))
+    {
+        int iMin = JXGetEffectModParamInt(JX_EFFECT_MOD_OP_PARAM_MIN);
+        if (iMin != 0 && iValue < iMin) iValue = iMin;
+    }
+
+    // apply logical modifiers
+    iValue = iValue | iOr;
+    iValue = iValue & iAnd;
+
+    return iValue;
+}
+
+float JXApplyEffectParamModifiers_Float(float fValue, int iEffectParamPosition=1)
+{
+    JXPrintFunctionCall("JXApplyEffectParamModifiers_Float(float fValue, int iEffectParamPosition=1)", "applying int parameter modifiers", FloatToString(fValue), IntToString(iEffectParamPosition));
+    int iEffectType = JXGetModifiedEffectType();
+
+    float fFlatIncrease = JX_FLOAT_ADD_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_INCREASE_BY))
+    {
+        fFlatIncrease = JXGetEffectModParamFloat(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_INCREASE_BY);
+    }
+
+    float fFlatDecrease = JX_FLOAT_ADD_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DECREASE_BY))
+    {
+        iFlatDecrease = JXGetEffectModParamFloat(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DECREASE_BY);
+    }
+
+    float fMultiplier = JX_FLOAT_MULTIPLY_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY))
+    {
+        fMultiplier = JXGetEffectModParamFloat(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY);
+    }
+
+    float fDivider = JX_FLOAT_MULTIPLY_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY))
+    {
+        fDivider = JXGetEffectModParamFloat(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY);
+    }
+
+
+    float fRandIncrease = JX_FLOAT_ADD_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_INCREASE_BY_RAND))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_INCREASE_BY_RAND);
+
+        int iDice, iDiceNum;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sDiceInfo = GetNextToken(sTok);
+            iDiceNum = StringToInt(GetTokenByPosition(sDiceInfo, "d", 0));
+            iDice = StringToInt(GetTokenByPosition(sDiceInfo, "d", 1));
+            fRandIncrease = fRandIncrease + IntToFloat(RollDice(iDiceNum, iDice));
+        }
+    }
+
+    float fRandDecrease = JX_FLOAT_ADD_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DECREASE_BY_RAND))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DECREASE_BY_RAND);
+
+        int iDice, iDiceNum;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sDiceInfo = GetNextToken(sTok);
+            iDiceNum = StringToInt(GetTokenByPosition(sDiceInfo, "d", 0));
+            iDice = StringToInt(GetTokenByPosition(sDiceInfo, "d", 1));
+            fRandDecrease = fRandDecrease + IntToFloat(RollDice(iDiceNum, iDice));
+        }
+    }
+
+
+    float fRandMultiply = JX_FLOAT_MULTIPLY_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MULLTIPLY_BY_RAND))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY_RAND);
+
+        int iDice, iDiceNum;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sDiceInfo = GetNextToken(sTok);
+            iDiceNum = StringToInt(GetTokenByPosition(sDiceInfo, "d", 0));
+            iDice = StringToInt(GetTokenByPosition(sDiceInfo, "d", 1));
+            fRandMultiply = fRandMultiply * IntToFloat(RollDice(iDiceNum, iDice));
+        }
+    }
+
+    float fRandDivide = JX_FLOAT_MULTIPLY_ID;
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY_RAND))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY_RAND);
+
+        int iDice, iDiceNum;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sDiceInfo = GetNextToken(sTok);
+            iDiceNum = StringToInt(GetTokenByPosition(sDiceInfo, "d", 0));
+            iDice = StringToInt(GetTokenByPosition(sDiceInfo, "d", 1));
+            fRandDivide = fRandDivide * IntToFloat(RollDice(iDiceNum, iDice));
+        }
+    }
+
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MAP))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MAP);
+        float fFrom, fTo;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sCell = GetNextToken(sTok);
+            sFrom = GetTokenByPosition(sCell, ":", 0);
+            fTo = StringToFloat(GetTokenByPosition(sCell, ":", 1));
+            // compare string representation as the conversion from string is lossy
+            if (FloatToString(fValue) == sFrom) fValue = fTo;
+        }
+    }
+
+    // apply multiplication
+    fValue = FloatToInt(fMultiplier * (1 / fDivider) * IntToFloat(iRandMultiply) * (1 / IntToFloat(iRandDivide)) * IntToFloat(fValue));
+
+    // apply flat changes
+    fValue = fValue + fFlatIncrease + fRandIncrease - fFlatDecrease - fRandDecrease;
+
+
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MAX))
+    {
+        float fMax = JXGetEffectModParamFloat(JX_EFFECT_MOD_OP_PARAM_MAX);
+        if (fMax != -1.0f && fValue > fMax) fValue = fMax;
+    }
+
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MIN))
+    {
+        float fMin = JXGetEffectModParamFloat(JX_EFFECT_MOD_OP_PARAM_MIN);
+        if (fMin != -1.0f && fValue < fMin) fValue = fMin;
+    }
+
+    return fValue;
+}
+
+string JXApplyEffectParamModifiers_String(string sValue, int iEffectParamPosition=1)
+{
+    JXPrintFunctionCall("JXApplyEffectParamModifiers_String(string sValue, int iEffectParamPosition=1)", "applying string parameter modifiers", sValue, IntToString(iEffectParamPosition));
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MAP))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MAP);
+        string sFrom, sTo;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sCell = GetNextToken(sTok);
+            sFrom = GetTokenByPosition(sCell, ":", 0);
+            sTo = GetTokenByPosition(sCell, ":", 1);
+            if (sValue == sFrom) sValue = sTo;
+        }
+    }
+
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_OVERRIDE))
+    {
+        // override takes precedence
+        string sOverrideValue = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_OVERRIDE);
+        if (sOverrideValue != "") sValue = sOverrideValue;
+    }
+
+    return sValue;
+}
+
+object JXApplyEffectParamModifiers_Object(object oValue, int iEffectParamPosition=1)
+{
+    JXPrintFunctionCall("JXApplyEffectParamModifiers_Object(object oValue, int iEffectParamPosition=1)", "applying string parameter modifiers", ObjectToString(oValue), IntToString(iEffectParamPosition));
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MAP))
+    {
+        string sRepr = JXGetEffectModParamString(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_MAP);
+        object oFrom, oTo;
+        struct sStringTokenizer sTok = GetStringTokenizer(sRepr, ";");
+        while(HasMoreTokens(sTok))
+        {
+            sTok = AdvanceToNextToken(sTok);
+            string sCell = GetNextToken(sTok);
+            oFrom = StringToObject(GetTokenByPosition(sCell, ":", 0));
+            oTo = StringToObject(GetTokenByPosition(sCell, ":", 1));
+            if (oValue == oFrom) oValue = oTo;
+        }
+    }
+
+    if (JXIsEffectModOpParamSet(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_OVERRIDE))
+    {
+        // override takes precedence
+        object oOverrideValue = JXGetEffectModParamObject(iEffectParamPosition, JX_EFFECT_MOD_OP_PARAM_OVERRIDE);
+        if (oOverrideValue != OBJECT_INVALID) oValue = oOverrideValue;
+    }
+
+    return oValue;
+}
+
+
+effect JXApplyEffectBonusEffectLinks(effect eEffect)
+{
+    int iEffectType = JXGetModifiedEffectType();
+    return eEffect;
+}
+
+effect JXSetEffectSubtype(effect eEffect, int iSubtype)
+{
+    switch(iSubtype)
     {
         case SUBTYPE_MAGICAL: return MagicalEffect(eEffect);
         case SUBTYPE_SUPERNATURAL: return SupernaturalEffect(eEffect);
         case SUBTYPE_EXTRAORDINARY: return ExtraordinaryEffect(eEffect);
-        default: return eEffect
     }
+    return eEffect;
 }
 
-int JXRollRandBonus(string sRollInfo)
+// called in postcast script
+void JXClearEffectModifiers()
 {
-    int iNumOfDice = GetTokenByPosition(sRollInfo, JX_GEN_SEP, 0);
-    int iNumOfSides = GetTokenByPosition(sRollInfo, JX_GEN_SEP, 1);
-    return Roll(iNumOfDice, iNumOfSides);
+    int iEffect = 1;
+    int iMod = 1;
+    int iModOp = 1;
+    while (iEffect < JX_EFFECT_MAX_ID)
+    {
+        while (iMod < JX_EFFECT_MOD_TYPE_MAX_ID)
+        {
+            while (iModOp < JX_EFFECT_MOD_OP_MAX_ID)
+            {
+                SetLocalInt(OBJECT_SELF, ArrayAt(JX_EFFECT_MOD_OP_PARAM_STATES, iEffect, iMod, iModOp), FALSE);
+                iModOp++;
+            }
+            iMod++;
+        }
+        iEffect++;
+    }
 }

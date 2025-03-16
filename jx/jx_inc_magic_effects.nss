@@ -1,4 +1,4 @@
-#include "jx_inc_magic"
+#include "jx_inc_magic_effects_impl"
 #include "utils"
 // #include "jx_inc_magic_effects_impl"
 // #include "jx_inc_magic_effects_overrides"
@@ -54,64 +54,11 @@ JXSetEffectModifierInt(JX_EFFECT_DAMAGE, JX_EFFECT_NULLIFY);
 
 //============================================Declarations===================================
 
-
-//=====================================================
-// EFFECT HEAL
-//=====================================================
-// used overrides:
-//    * flat heal amount bonus
-//    * random heal amount bonus
-//    * bonus effect link
-//    * ignore default effect
-
-
-// creates resulting effect after taking under account existing override
-
 effect JXEffectHeal(int iDmgToHeal);
-
-//=========================================================
-// EFFECT DAMAGE
-//=========================================================
-
-// Possible overrides:
-// + damage type (as a mapping from old to new)
-// + substitute
-// + bonus flat dmg
-// + bonus rand dmg
-// + override damage power
-// + override ignore resist
-//
-// EffectDamage wrapper
-// Allows for overriding spell damage type in precast script
 
 effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDamagePower=DAMAGE_POWER_NORMAL, int bIgnoreRes=FALSE);
 
-//=====================================================
-// EffectDamageOverTime
-//=====================================================
-
-
-// EffectDamageOverTime wrapper
-// Allows for overriding spell damage type in precast script
-// Possible overrides:
-// + damage type (as a mapping from old to new)
-// + substitute
-// + bonus flat dmg
-// + bonus rand dmg
-// + set interval
-// + override ignore resist
-
 effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYPE_MAGICAL, int iIgnoreResistances=FALSE);
-
-//=============================================================
-// EffectAbilityIncrease
-//=============================================================
-// Possible overrides
-// + flat bonus
-// + random bonus
-// + override ability
-// + bonus inked effects
-// + ignore def effects
 
 effect JXEffectAbilityIncrease(int iAbility, int iModifyBy);
 
@@ -366,140 +313,62 @@ effect JXEffectShaken();
 //=======================================================
 // EFFECT HEAL
 //=====================================================
-// used overrides:
-//    * flat heal amount bonus
-//    * random heal amount bonus
-//    * bonus effect link
-//    * ignore default effect
-
-
-// creates resulting effect after taking under account existing override
-// variables
 effect JXEffectHeal(int iDmgToHeal)
 {
-    // int iBonusLinkCount = GetLocalArrayInt(OBJECT_SELF, JX_EFFECT_NUM_OF_LINKS, JX_EFFECT_HEAL);
-    // if (iBonusLinkCount > 0)
-    // {
-        //     effect eBonusLink = JXLoadBonusEffectLink(JX_EFFECT_HEAL, iBonusLinkCount);
-        // }
+    JXStartEffectMod(JX_EFFECT_HEAL);
 
-        // string sModInfoArray = JXArrayForEffect(JX_EFFECT_HEAL, JX_EFFECT_MOD_INFO_ARRAY);
+    effect eMain;
+    // if effect is disabled return empty effect
+    if (JXIsEffectDisabled())
+    {
+        JXEndEffectMod();
+        return eMain;
+    }
 
-        // iDmgToHeal = JXApplyEffectModifiersInt(JX_EFFECT_PARAM_1, iDmgToHeal);
+    // apply param1 modifiers
 
+    iDmgToHeal = JXApplyEffectParamModifiers_Int(iDmgToHeal, 1);
 
-        // effect eMain;
-        // effect eDefault = EffectHeal(iDmgToHeal);
-        // if (!JXOverrideGetIgnoreDefaultEffect(JX_EFFECT_HEAL))
-        // {
-            //     int iFlatBonus = JXOverrideGetFlatBonus(JX_EFFECT_HEAL);
-            //     int iRandBonus = JXOverrideGetRandBonus(JX_EFFECT_HEAL)
-            //     iDamageToHeal = iDmgToHeal + FlatBonus + iRandBonus;
-            //     eMain = EffectHeal(iDmgToHeal);
-            // }
-            // effect eBonusLink = JXOverrideGetBonusEffectLink(JX_EFFECT_HEAL);
-            // if (GetIsEffectValid(eBonusLink))
-            // {
-                //     eMain = EffectLinkEffect(eMain, eBonusLink);
-                // }
-                // return eDefault;
+    eMain = EffectHeal(iDmgToHeal);
 
-    return EffectHeal(iDmgToHeal);
+    // apply effect property modifiers
+    eMain = JXApplyEffectPropertyModifiers(eMain);
+
+    JXEndEffectMod();
+    return eMain;
 }
-
-// void JXBonusLinkEffectHeal(int iJXEffectId, int iDmgToHeal)
-// {
-//     // get array name for the target effect
-//     string sBonusLinkArray = JXArrayForEffect(iJXEffectId, JX_EFFECT_BONUS_LINK);
-
-//     // check the bonus link limit
-//     int iBonusLinkCount = GetLocalArrayInt(OBJECT_SELF, JX_EFFECT_NUM_OF_LINKS, iJXEffectType);
-//     if (iBonusLinkCount >= JX_EFFECT_MAX_LINK_COUNT)
-//     {
-//         // cant add more effects to the link
-//         return;
-//     }
-//     // calculate correct index for heal effect info
-//     int iStartIndex = (iJXEffectId + (iBonusLinkCount * JX_EFFECT_MAX_LINK_SIZE) + 1);
-//     // save effect information
-//     SetLocalArrayInt(OBJECT_SELF, sBonusLinkArray, iStartIndex, JX_EFFECT_HEAL);
-//     SetLocalArrayInt(OBJECT_SELF, sBonusLinkArray, iStartIndex + 1, iDmgToHeal);
-
-//     // increment link count for the effect
-//     SetLocalArrayInt(OBJECT_SELF, JX_EFFECT_NUM_OF_LINKS, iJXEffectId, iBonusLinkCount + 1);
-// }
 
 
 //=========================================================
 // EFFECT DAMAGE
 //==========================================================
 
-// Possible overrides:
-// + damage type (as a mapping from old to new)
-// + substitute
-// + bonus flat dmg
-// + bonus rand dmg
-// + override damage power
-// + override ignore resist
-//
-
 
 // EffectDamage wrapper
 // Allows for overriding spell damage type in precast script
 effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDmgPower=DAMAGE_POWER_NORMAL, int bIgnoreRes=FALSE)
 {
-    // effect eMain;
+    JXStartEffectMod(JX_EFFECT_DAMAGE);
 
-    // // dmg type override
-    // iDmgType = JXGetOverrideDamageType(JX_EFFECT_DAMAGE, iDmgType);
-    // // add dmg bonus handling
+    effect eMain;
 
-    // int bIgnoreDefault= JXGetOverrideIgnoreDefaultEffect(JX_EFFECT_DAMAGE);
-    // if (!bIgnoreDefault)
-    // {
-        //     // flat bonus
-        //     int iFlatBonus = JXGetOverrideFlatBonus(JX_EFFECT_DAMAGE);
-        //     // roll random bonus
-        //     int iRandBonus = JXGetOverrideRandBonus(JX_EFFECT_DAMAGE);
-        //     // damage power override
-        //     int iOvrDmgPower = JXGetOverrideDamagePower(JX_EFFECT_DAMAGE);
-        //     if (iOvrDmgPower != -1) iDmgPower = iOvrDmgPower;
-        //     // ignore resists override
-        //     int bOvrIgnoreRes = JXGetOverrideIgnoreResistance(JX_EFFECT_DAMAGE);
-        //     if (bOvrIgnoreRes != -1) bIgnoreRes = bOvrIgnoreRes
+    if (JXIsEffectDisabled())
+    {
+        JXEndEffectMod();
+        return eMain;
+    }
+    iDmg = JXApplyEffectParamModifiers_Int(iDmg, 1);
+    iDmgType = JXApplyEffectParamModifiers_Int(iDmgType, 2);
+    iDmgPower = JXApplyEffectParamModifiers_Int(iDmgPower, 3);
+    bIgnoreRes = JXApplyEffectParamModifiers_Int(bIgnoreRes, 4);
 
-        //     // sum up the bonuses
-        //     iDmg = iDmg + iFlatBonus + iRandBonus;
-        //     // create altered effect
-        //     eMain = EffectLinkEffects(eMain, EffectDamage(iDmg, iDmgType, iDmgPower, bIgnoreRes));
-        // }
+    eMain = EffectDamage(iDmg, iDmgType, iDmgPower, bIgnoreRes);
 
-        // effect eBonusLink = JXGetOverrideBonusEffectLink(JX_EFFECT_DAMAGE);
-        // if (GetIsEffectValid(eBonusLink))
-        // {
-            //     eMain = EffectLinkEffects(eMain, eBonusLink);
-            // }
+    eMain = JXApplyEffectPropertyModifiers(eMain);
 
-            // return eMain;
-    FloatingMessage("Running DAMAGE EFFECT", "red");
-    return EffectDamage(iDmg, iDmgType, iDmgPower, bIgnoreRes);
+    JXEndEffectMod();
+    return eMain;
 }
-
-
-// struct jx_effect JXOverrideEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDamagePower=DAMAGE_POWER_NORMAL, int iIgnoreResistances=FALSE)
-// {
-//     string sEffectArgs;
-//     effect eDmg = EffectDamage(iDmg, iDmgType, iDamagePower, iIgnoreResistances);
-
-//     sEffectArgs = JXOverrideEffectArgsPushInteger("", iDmg);
-//     sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iDmgType);
-//     sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iDamagePower);
-//     sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iIgnoreResistances);
-
-//     struct jx_effect DamageEffect = JXMakeOverrideEffect(JX_EFFECT_DAMAGE, eDmg, sEffectArgs);
-//     return DamageEffect;
-// }
-
 
 
 //=====================================================
@@ -507,119 +376,100 @@ effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDmgPower=
 //=======================================================
 
 
-// EffectDamageOverTime wrapper
-// Allows for overriding spell damage type in precast script
-// Possible overrides:
-// + damage type (as a mapping from old to new)
-// + substitute
-// + bonus flat dmg
-// + bonus rand dmg
-// + set interval
-// + override ignore resist
-
 effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYPE_MAGICAL, int bIgnoreResistances=FALSE)
 {
-    // effect eMain;
+    JXStartEffectMod(JX_DAMAGE_OVER_TIME);
 
-    // // dmg type override
-    // iDmgType = JXGetOverrideDamageType(JX_EFFECT_DAMAGE_OVER_TIME, iDmgType);
+    effect eMain;
 
-    // int bIgnoreDefault= JXGetOverrideIgnoreDefaultEffect(JX_EFFECT_DAMAGE);
-    // if (!bIgnoreDefault)
-    // {
-        //     // check flat bonus
-        //     int iFlatBonus = JXGetOverrideFlatBonus(JX_EFFECT_DAMAGE_OVER_TIME);
-        //     // check random bonus
-        //     int iRandBonus = JXGetOverrideRandBonus(JX_EFFECT_DAMAGE_OVER_TIME);
-        //     // check ignore resist overrid
-        //     int iOvrIgnoreRes = JXGetOverrideIgnoreResistance(JX_EFFECT_DAMAGE_OVER_TIME);
-        //     if (iOvrIgnoreRes != -1) iIgnoreRes = iOvrIgnoreRes;
-        //     float fOvrInterval = JXGetOverrideInterval(JX_EFFECT_OVER_TIME);
-        //     if (fOvrInterval != 0) fInterval = fOvrInterval;
-        //     iDmg = iDmg + iFlatBonus + iRandBonus;
-        //     eMain = EffectLinkEffects(eMain, EffectDamageOverTime(iDmg, fInterval, iDmgType, bIgnoreResistances));
-        // }
+    if (JXIsEffectDisabled())
+    {
+        JXEndEffectMod();
+        return eMain;
+    }
+    iDmg = JXApplyEffectParamModifiers_Int(iDmg, 1);
+    fInterval = JXApplyEffectParamModifiers_Float(fInterval, 2);
+    iDmgType = JXApplyEffectParamModifiers_Int(iDmgType, 3);
+    bIgnoreResistances = JXApplyEffectParamModifiers_Int(bIgnoreResistances, 4);
 
-        // effect eBonusLink = JXGetOverrideBonusEffectLink(JX_EFFECT_DAMAGE_OVER_TIME);
-        // if (GetIsEffectValid(eBonusLink))
-        // {
-            //     // link the bonus effect link
-            //     eMain = EffectLinkEffects(eMain, eBonusLink);
-            // }
+    eMain = EffectDamageOvertime(iDmg, fInterval, iDmgType, bIgnoreResistances);
 
-            // return eMain;
-    return EffectDamageOverTime(iDmg, fInterval, iDmgType, bIgnoreResistances);
+    eMain = JXApplyEffectPropertyModifiers(eMain);
+
+    JxEndEffectMod();
+    return eMain;
 }
-
-
-// struct jx_effect JXOverrideEffectDamageOverTime(int iAmount, float fIntervalSeconds, int iDamageType=DAMAGE_TYPE_MAGICAL, int bIgnoreRes=FALSE)
-// {
-//     string sEffectArgs;
-//     effect eDmg = EffectDamageOverTime(iDmg, fInterval, iDmgType, iIgnoreRes);
-
-//     sEffectArgs = JXOverrideEffectArgsPushInteger("", iDmg);
-//     sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iDmgType);
-//     sEffectArgs = JXOverrideEffectArgsPushFloat(sEffectArgs, fInterval);
-//     sEffectArgs = JXOverrideEffectArgsPushInteger(sEffectArgs, iIgnoreResistances);
-
-//     struct jx_effect DamageEffect = JXMakeOverrideEffect(JX_EFFECT_DAMAGE_OVER_TIME, eDmg,  sEffectArgs);
-//     return DamageEffect;
-
-// }
 
 
 //=============================================================
 // EffectAbilityIncrease
 //=============================================================
-// Possible overrides
-// + flat bonus
-// + random bonus
-// + override ability
-// + bonus inked effects
-// + ignore def effects
 
 effect JXEffectAbilityIncrease(int iAbility, int iModifyBy)
 {
-    // effect eMain;
+    JXStartEffectMod(JX_EFFECT_ABILITY_INCREASE);
 
-    // // ability to increase
-    // iAbility = JXGetOverrideAbilityIncrease(JX_EFFECT_ABILITY_INCREASE, iAbility);
+    effect eMain;
 
-    // int bIgnoreDefault= JXGetOverrideIgnoreDefaultEffect(JX_EFFECT_DAMAGE);
-    // if (!bIgnoreDefault)
-    // {
-        //     // check flat bonus
-        //     int iFlatBonus = JXGetOverrideFlatBonus(JX_EFFECT_DAMAGE_OVER_TIME);
-        //     // check random bonus
-        //     int iRandBonus = JXGetOverrideRandBonus(JX_EFFECT_DAMAGE_OVER_TIME);
-        //     // check ignore resist overrid
-        //     int iOvrIgnoreRes = JXGetOverrideIgnoreResistance(JX_EFFECT_DAMAGE_OVER_TIME);
-        //     if (iOvrIgnoreRes != -1) iIgnoreRes = iOvrIgnoreRes;
-        //     float fOvrInterval = JXGetOverrideInterval(JX_EFFECT_OVER_TIME);
-        //     if (fOvrInterval != 0) fInterval = fOvrInterval;
-        //     iDmg = iDmg + iFlatBonus + iRandBonus;
-        //     eMain = EffectLinkEffects(eMain, EffectDamageOverTime(iDmg, fInterval, iDmgType, bIgnoreResistances));
-        // }
+    if (JXIsEffectDisabled())
+    {
+        JXEndEffectMod();
+        return eMain;
+    }
 
-        // effect eBonusLink = JXGetOverrideBonusEffectLink(JX_EFFECT_DAMAGE_OVER_TIME);
-        // if (GetIsEffectValid(eBonusLink))
-        // {
-            //     // link the bonus effect link
-            //     eMain = EffectLinkEffects(eMain, eBonusLink);
-            // }
+    iAbility = JXApplyEffectParamModifiers_Int(iAbility, 1);
+    iModifyBy = JXApplyEffectParamModifiers_Int(iModifyBy, 2);
 
-            // return eMain;
-    return EffectAbilityIncrease(iAbility, iModifyBy);
+    eMain = EffectAbilityIncrease(iAbility, iModifyBy);
+
+    // eMain = JXApplyEffectPropertyModifiers(eMain);
+
+    JXEndEffectMod();
+    return eMain;
 }
 
 effect JXEffectDamageResistance(int iDamageType, int iAmount, int iLimit=0)
 {
-    return EffectDamageResistance(iDamageType, iAmount, iLimit);
+    JXStartEffectMod(JX_EFFECT_DAMAGE_RESISTANCE);
+
+    effect eMain;
+
+    if (JXIsEffectDisabled())
+    {
+        JXEndEffectMod();
+        return eMain;
+    }
+
+    iDamageType = JXApplyEffectParamModifiers_Int(iDamageType, 1);
+    iAmount = JXApplyEffectParamModifiers_Int(iAmount, 2);
+    iLimit = JXApplyEffectParamModifiers_Int(iLimit, 3);
+
+    eMain = EffectDamageResistance(iDamageType, iAmount, iLimit);
+
+    // eMain = JXApplyEffectPropertyModifiers(eMain)
+
+    JXEndEffectMod();
+    return eMain;
 }
 
 effect JXEffectResurrection()
 {
-    return EffectResurrection();
+    JXStartEffectMod(JX_EFFECT_RESURRECTION);
+
+    effect eMain;
+
+    if (JXIsEffectDisabled())
+    {
+        JXEndEffectMod();
+        return eMain;
+    }
+
+    eMain = EffectResurrection();
+
+    // eMain = JXApplyEffectPropertyModifiers(eMain)
+
+    JXEndEffectMod();
+    return eMain;
 }
 
 effect JXEffectSummonCreature(string sCreatureResref, int iVisualEffectId=VFX_NONE, float fDelay=0.0f, int iUseAppearAnimation=0)
@@ -627,6 +477,9 @@ effect JXEffectSummonCreature(string sCreatureResref, int iVisualEffectId=VFX_NO
     return EffectSummonCreature(sCreatureResref, iVisualEffectId, fDelay, iUseAppearAnimation);
 }
 
+
+//#####################################################
+// atm they are here just for compatibility
 effect JXMagicalEffect(effect eEffect)
 {
     return MagicalEffect(eEffect);
@@ -641,6 +494,7 @@ effect JXExtraordinaryEffect(effect eEffect)
 {
     return ExtraordinaryEffect(eEffect);
 }
+//#####################################################
 
 effect JXEffectACIncrease(int iValue, int iModifyType=AC_DODGE_BONUS, int iDamageType=AC_VS_DAMAGE_TYPE_ALL, int iVsSpiritsOnly=FALSE)
 {
@@ -797,6 +651,8 @@ effect JXEffectSkillIncrease(int iSkill, int iValue)
     return EffectSkillIncrease(iSkill, iValue);
 }
 
+//####################################################
+// ATM for compatibility only
 effect JXVersusAlignmentEffect(effect eEffect, int iLawChaos=ALIGNMENT_ALL, int iGoodEvil=ALIGNMENT_ALL)
 {
     return VersusAlignmentEffect(eEffect, iLawChaos, iGoodEvil);
@@ -811,6 +667,8 @@ effect JXVersusTrapEffect(effect eEffect)
 {
     return VersusTrapEffect(eEffect);
 }
+
+//##################################################
 
 effect JXEffectTurned()
 {
@@ -1116,6 +974,7 @@ effect JXEffectSummonCopy(object oSource, int iVisualEffectId=VFX_NONE, float fD
 // Cutscene Effects
 //=============================================================
 
+// for compatibility only
 effect JXEffectCutsceneParalyze()
 {
     return EffectCutsceneParalyze();
@@ -1167,25 +1026,6 @@ effect JXEffectBeam(int iBeamVisualEffect, object oEffector, int iBodyPart, int 
     return EffectBeam(iBeamVisualEffect, oEffector, iBodyPart, bMissEffect);
 }
 
-
-
-
-
-
-// creates a jx_effect which stores the information about a link of
-// ParentEffect and ChildEffect.
-// You can only link jx_effects with the same iDefaultDurationType
-// Otherwise ParentOverrideEffect is returned
-// struct jx_effect JXOverrideEffectLinkEffects(struct jx_effect ParentOverrideEffect, struct jx_effect ChildOverrideEffect)
-// {
-//     if (ParentOverrideEffect.iDefaultDurationType == ChildOverrideEffect.iDefaultDurationType)
-//     {
-//         ParentOverrideEffect.iNumOfEffects += ChildOverrideEffect.iNumOfEffects;
-//         ParentOverrideEffect.sEffectInfo += JX_EFFECT_SEP + ChildOverrideEffect.sEffectInfo;
-//         ParentOverrideEffect.iEffectSubtype ^= ChildOverrideEffect.iEffectSubtype;
-//     }
-//     return ParentOverrideEffect;
-// }
 
 //=====================================================
 // SIMULATED EFFECTS
