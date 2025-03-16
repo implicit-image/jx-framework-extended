@@ -378,7 +378,7 @@ effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDmgPower=
 
 effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYPE_MAGICAL, int bIgnoreResistances=FALSE)
 {
-    JXStartEffectMod(JX_DAMAGE_OVER_TIME);
+    JXStartEffectMod(JX_EFFECT_DAMAGE_OVER_TIME);
 
     effect eMain;
 
@@ -396,7 +396,7 @@ effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYP
 
     eMain = JXApplyEffectPropertyModifiers(eMain);
 
-    JxEndEffectMod();
+    JXEndEffectMod();
     return eMain;
 }
 
