@@ -315,7 +315,7 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - eEffect Effect to apply to the object
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
-void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iRunOnHitEffects=TRUE);
+void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f);
 
 // Create an area of effect for the current spell and apply it at the specified location.
 // Areas of effect created by this way have the following properties :
@@ -1554,16 +1554,16 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - eEffect Effect to apply to the object
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
-void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int bCheckSelectiveMagic=FALSE)
+void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f)
 {
 
     object oCaster = OBJECT_SELF;
     int iSpellId = JXGetSpellId();
 
-    if (bCheckSelectiveMagic)
-    {
+    // if (bCheckSelectiveMagic)
+    // {
 
-    }
+    // }
 
     // Information about instant effect spells aren't saved
     if (iDuration != DURATION_TYPE_INSTANT)

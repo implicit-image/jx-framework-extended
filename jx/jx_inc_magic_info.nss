@@ -136,7 +136,7 @@ int JXGetSpellType(int iSpellId);
 // Get the level of a spell, innate or depending on a caster class
 // - iClass Class that is able to cast the spell (-1 for innate)
 // * Returns the spell level, or -1 if the spell is not accessible to the class
-int JXGetBaseSpellLevel(int iSpellId, int iClass = -1);
+int JXGetBaseSpellLevel(int iSpellId, int iClass = CLASS_TYPE_INVALID);
 
 // Get the main ability for a spellcasting class
 // - iClass The class from which to get the main spellcasting ability

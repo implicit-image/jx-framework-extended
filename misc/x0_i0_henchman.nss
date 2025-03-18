@@ -59,12 +59,12 @@
 //:: Created On: 09/12/2002
 //:://////////////////////////////////////////////////
 
-#include "jx_inc_magic"
+// #include "nw_i0_spells"
 #include "x0_i0_common"
 #include "nw_i0_plot"
 #include "nw_i0_generic"
 #include "nw_i0_spells"
-
+// #include "jx_inc_magic"
 
 /**********************************************************************
  * CONSTANTS

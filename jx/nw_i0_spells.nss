@@ -78,6 +78,7 @@
 #include "x0_i0_assoc"
 #include "bot9s_inc_constants"
 #include "x2_inc_spellhook"
+
 // #include "jx_inc_magic_effects"
 //=========================================================================
 // * Constants
@@ -93,7 +94,6 @@ const string ITR_ENTRY_PREFIX = "ITR_TARGET_ENTRY"; //prefix for stored targets 
 
 // GZ: Number of spells in GetSpellBreachProtections
 const int NW_I0_SPELLS_MAX_BREACH = 33;
-
 const string VAR_IMMUNE_TO_HEAL = "IMMUNE_TO_HEAL";
 //=========================================================================
 // Prototypes

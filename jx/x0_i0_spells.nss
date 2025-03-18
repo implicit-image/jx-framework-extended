@@ -47,12 +47,14 @@
 //  spellApplyMindBlank(), spellsGenericAreaOfEffect(), spellsInflictTouchAttack(), RollMissileDamage()
 // 2drunk2frag - 05-08-08 - voilated spellsInflictTouchAttack for my own selfish purposes
 
-#include "jx_inc_magic"
 #include "nw_i0_spells"
 #include "x0_i0_henchman"
+#include "x2_i0_spells"
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_metmag"
 #include "cmi_inc_sneakattack"
+#include "jx_inc_magic"
+
 
 //void main(){}
 
@@ -92,8 +94,7 @@ void spellsGenericAreaOfEffect(
         int nRemoveEffectSpell=FALSE, int nRemoveEffect1=0, int nRemoveEffect2=0, int nRemoveEffect3=0,
         int bLineOfSight=FALSE, int nObjectFilter=OBJECT_TYPE_CREATURE,
         int bPersistentObject=FALSE, int bResistCheck=FALSE, int nSavingThrowType=SAVING_THROW_NONE,
-        int nSavingThrowSubType=SAVING_THROW_TYPE_ALL
-        );
+        int nSavingThrowSubType=SAVING_THROW_TYPE_ALL);
 
 
 
@@ -1303,8 +1304,7 @@ void spellsGenericAreaOfEffect(
         int nRemoveEffectSpell=FALSE, int nRemoveEffect1=0, int nRemoveEffect2=0, int nRemoveEffect3=0,
         int bLineOfSight=FALSE, int nObjectFilter=OBJECT_TYPE_CREATURE,
         int bPersistentObject=FALSE, int bResistCheck=FALSE, int nSavingThrowType=SAVING_THROW_NONE,
-        int nSavingThrowSubType=SAVING_THROW_TYPE_ALL
-        )
+        int nSavingThrowSubType=SAVING_THROW_TYPE_ALL)
 {
     //Apply Impact
     if (GetEffectType(eImpact) != 0)

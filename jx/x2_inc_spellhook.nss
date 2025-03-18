@@ -20,7 +20,7 @@
 //:: Updated By: 03/03/07 jallaix
 //:://////////////////////////////////////////////
 // ChazM 8/16/06 added workbench check to X2PreSpellCastCode()
-// ChazM 8/27/06 modified  X2PreSpellCastCode() - Fire "cast spell at" event on a workbench. 
+// ChazM 8/27/06 modified  X2PreSpellCastCode() - Fire "cast spell at" event on a workbench.
 // jallaix 03/03/07 - modified X2PreSpellCastCode to permit the NPC to use the spell-hook
 // jallaix 03/13/07 - modified X2PreSpellCastCode to enable item spell's custom powers
 
