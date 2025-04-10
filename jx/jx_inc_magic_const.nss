@@ -63,6 +63,13 @@ const int JX_SPELLDESCRIPTOR_LIGHT             = 16;
 const int JX_SPELLDESCRIPTOR_MINDAFFECTING     = 17;
 const int JX_SPELLDESCRIPTOR_SONIC             = 18;
 const int JX_SPELLDESCRIPTOR_WATER             = 19;
+const int JX_SPELLDESCRIPTOR_PSIONIC           = 20;
+const int JX_SPELLDESCRIPTOR_CURE              = 21;
+const int JX_SPELLDESCRIPTOR_HARM              = 22;
+const int JX_SPELLDESCRIPTOR_SUMMONING         = 23;
+const int JX_SPELLDESCRIPTOR_COMPULSION        = 24;
+const int JX_SPELLDESCRIPTOR_POLYMORPH         = 25;
+const int JX_SPELLDESCRIPTOR_DISEASE           = 26;
 
 // Spell subschool constants
 const int JX_SPELLSUBSCHOOL_NONE                        = 0;
@@ -79,6 +86,7 @@ const int JX_SPELLSUBSCHOOL_ILLUSION_GLAMER                 = 10;
 const int JX_SPELLSUBSCHOOL_ILLUSION_PATTERN            = 11;
 const int JX_SPELLSUBSCHOOL_ILLUSION_PHANTASM           = 12;
 const int JX_SPELLSUBSCHOOL_ILLUSION_SHADOW                 = 13;
+const int JX_SPELLSUBSCHOOL_ABJURATION_DISPEL = 14;
 
 // Constants used by items to modify the spells they cast
 const string JX_ITEM_SPELL_MM_PREFIX = "JX_ITEM_SPELL_MM_";
@@ -146,10 +154,15 @@ const int JX_FORK_EVENTSPELLCONJURING =             23;
 const int JX_FORK_EVENTSPELLCONJURED =          24;
 const int JX_FORK_EVENTSPELLCAST =              25;
 const int JX_FORK_EVENTSPELLFINISHED =          26;
+// customizable sabing throw function
+const int JX_FORK_SAVINGTHROW         = 27;
+// effect trigger activation
+const int JX_FORK_EFFECT_TRIGGER = 28;
+const int JX_FORK_EFFECT_APPLY_STATUS = 29;
 
 const string MODULE_VAR_JX_USER_POSTCAST = "JX_POST_SPELLSCRIPT";
 
-const string MODULE_VAR_JX_USER_ON_APPLY_SPELL_EFFECT = "JX_ON_APPLY_SPELL_EFFECT";
+const string MODULE_VAR_JX_USER_ON_APPLY_SPELL_EFFECT = "JX_ON_APPLY_SPELL";
 
 //Event handler backup arrays
 
@@ -168,33 +181,6 @@ const string JX_INFO_SEP = "_";
 const string JX_MAP_SEP = ";";
 
 //=============================== EFFECT OVERRIDES ======================================
-
-// TYPE IDENTITIES
-
-const int JX_INT_ADD_ID = 0;
-const int JX_INT_MULTIPLY_ID = 1;
-const int JX_INT_OR_ID = 0;
-
-const float JX_FLOAT_ADD_ID = 0.0f;
-const float JX_FLOAT_MULTIPLY_ID = 1.0f;
-
-const string JX_STRING_CONCAT_ID = "";
-
-// TYPES
-const int JX_TYPE_NONE = -1;
-const int JX_TYPE_INT = 1;
-const int JX_TYPE_FLOAT = 2;
-const int JX_TYPE_STRING = 3;
-const int JX_TYPE_OBJECT = 4;
-const int JX_TYPE_LOCATION = 5;
-const int JX_TYPE_VECTOR = 6;
-
-const string JX_TYPE_NAME_INT = "INT";
-const string JX_TYPE_NAME_FLOAT = "FLOAT";
-const string JX_TYPE_NAME_STRING ="STRING";
-const string JX_TYPE_NAME_OBJECT = "OBJECT";
-const string JX_TYPE_NAME_LOCATION = "LOCATION";
-const string JX_TYPE_NAME_VECTOR = "VECTOR";
 
 
 // JXSetEffectModifierInt(EFFECT_TYPE,
@@ -299,7 +285,7 @@ const int JX_EFFECT_SUMMON_CREATURE = 7;
 const int JX_EFFECT_AC_INCREASE = 8;
 const int JX_EFFECT_SAVING_THROW_INCREASE = 9;
 const int JX_EFFECT_ATTACK_INCREASE = 10;
-const int JX_EFFECT_DMAAGE_REDUCTION = 11;
+const int JX_EFFECT_DAMAGE_REDUCTION = 11;
 const int JX_EFFECT_DAMAGE_INCREASE = 12;
 const int JX_EFFECT_ENTANGLE = 13;
 const int JX_EFFECT_DEATH = 14;
@@ -391,3 +377,9 @@ const int JX_EFFECT_SHAKEN = 98;
 
 
 const int JX_EFFECT_MAX_ID = 99;
+
+
+//========================== Effect statuses ===========
+
+const string JX_EFFECT_STATUS_WET = "JX_S_WET";
+const string JX_EFFECT_STATUS_FROZEN = "JX_S_FROZEN";
