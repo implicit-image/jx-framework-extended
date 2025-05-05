@@ -1,7 +1,7 @@
 // X0_I0_STRINGLIB
 /*
-	This library contains general string-manipulation functions
-	for convenience.
+        This library contains general string-manipulation functions
+        for convenience.
 
 */
 // 09/10/2002 Created By: Naomi Novik
@@ -67,7 +67,7 @@ string Sort(string sList, string sDelimiter=",");
 
 string FormListElement(string sElement, string sDelimiter=",");
 string AppendToList(string sList, string sElement, string sDelimiter=",");
-	
+
 int FindListElementIndex(string sList, string sElement, string sDelimiter=",");
 int GetIsInList(string sList, string sElement, string sDelimiter=",");
 string AppendUniqueToList(string sList, string sElement, string sDelimiter=",");
@@ -157,7 +157,7 @@ string GetTokenByPosition(string sString, string sDelim, int nPos)
         stTok = AdvanceToNextToken(stTok);
         i++;
     }
-    if (i != nPos + 1) 
+    if (i != nPos + 1)
         return "";
 
     return GetNextToken(stTok);
@@ -195,7 +195,7 @@ struct rNameValuePair GetFirstAlpha(string sArray, string sDelimiter=",")
     }
     return (rAlpha);
 }
-	
+
 // remove first occurence of substring from string along with delimiter
 // test,test2,test3,
 // 01234567890123456
@@ -209,29 +209,28 @@ struct rNameValuePair GetFirstAlpha(string sArray, string sDelimiter=",")
 
 string RemoveListElement(string sString, string sSubString, string sDelimiter=",")
 {
-    int iIndex1      	= FindSubString (sString, sSubString);
-	int iDelimiterLength = GetStringLength(sDelimiter);
-    int iSubStrCount	= GetStringLength(sSubString) + iDelimiterLength;
+    int iIndex1      = FindSubString (sString, sSubString);
+    int iDelimiterLength = GetStringLength(sDelimiter);
+    int iSubStrCount = GetStringLength(sSubString) + iDelimiterLength;
 
     int iIndex2     = iSubStrCount + iIndex1;
     int iRightCount = GetStringLength(sString) - iIndex2;
     string sRet;
+    sRet = GetSubString(sString, 0, iIndex1); // first part
+    // if this was last element and there was no delimiter on the right,
+    // iIndex2 will be off the edge, but that's ok, it still returns ""
+    sRet += GetSubString(sString, iIndex2, iRightCount); // last part
 
-	sRet 	= GetSubString(sString, 0, iIndex1); // first part
-	// if this was last element and there was no delimiter on the right,
-	// iIndex2 will be off the edge, but that's ok, it still returns ""
-    sRet    += GetSubString(sString, iIndex2, iRightCount); // last part
-
-	// remove any delimiter on the right (mostly for when we took the last element
-	// off the list, leaving a dangling comma)
+    // remove any delimiter on the right (mostly for when we took the last element
+    // off the list, leaving a dangling comma)
     if (GetStringRight(sRet, iDelimiterLength) == sDelimiter)
-        sRet = GetStringLeft(sRet, GetStringLength(sRet) - iDelimiterLength) ;
+        sRet = GetStringLeft(sRet, GetStringLength(sRet) - iDelimiterLength);
 
     return (sRet);
 }
 
-	
-// Case-sensitive, alphabetical sort of a delimited list.  
+
+// Case-sensitive, alphabetical sort of a delimited list.
 string Sort(string sList, string sDelimiter=",")
 {
     int i = 1;
@@ -259,7 +258,7 @@ string Sort(string sList, string sDelimiter=",")
 }
 
 // Create a list element.  Returns sElement w/ prepended delimiter (unless empty string)
-// doesn't work for 
+// doesn't work for
 string FormListElement(string sElement, string sDelimiter=",")
 {
     if (sElement != "")
@@ -270,11 +269,11 @@ string FormListElement(string sElement, string sDelimiter=",")
 // Add an element to a list.  Will not add empty string Elements.
 string AppendToList(string sList, string sElement, string sDelimiter=",")
 {
-	// don't preceed with delimiter if this is the first element
-	if (sList == "")
-		sDelimiter = "";
+        // don't preceed with delimiter if this is the first element
+        if (sList == "")
+                sDelimiter = "";
 
-	sList += FormListElement(sElement, sDelimiter);
+        sList += FormListElement(sElement, sDelimiter);
     return(sList);
 }
 
@@ -282,7 +281,7 @@ string AppendToList(string sList, string sElement, string sDelimiter=",")
 // return -1 if not found
 int FindListElementIndex(string sList, string sElement, string sDelimiter=",")
 {
-	int bTokenFound 	= FALSE;
+        int bTokenFound 	= FALSE;
     int iValue       	= -1;
     int iCurrent        = 0;
     string sCurrentElement  = "";
@@ -295,7 +294,7 @@ int FindListElementIndex(string sList, string sElement, string sDelimiter=",")
         if (sCurrentElement == sElement)
         {
             iValue   = iCurrent;
-			bTokenFound = TRUE;
+                        bTokenFound = TRUE;
         }
         iCurrent++;
         GetNextToken(stTok);
@@ -306,88 +305,88 @@ int FindListElementIndex(string sList, string sElement, string sDelimiter=",")
 // returns true if element found in list
 int GetIsInList(string sList, string sElement, string sDelimiter=",")
 {
-	int iIndex = FindListElementIndex(sList, sElement, sDelimiter);
+        int iIndex = FindListElementIndex(sList, sElement, sDelimiter);
     return (iIndex != -1);
-}	
+}
 
 
-// Appends sElement to sList only if it does not already exist.  
+// Appends sElement to sList only if it does not already exist.
 // Returns the complete list
 string AppendUniqueToList(string sList, string sElement, string sDelimiter=",")
 {
-	if (!GetIsInList(sList, sElement, sDelimiter))
-		sList = AppendToList(sList, sElement, sDelimiter);
+        if (!GetIsInList(sList, sElement, sDelimiter))
+                sList = AppendToList(sList, sElement, sDelimiter);
 
-	return (sList);
+        return (sList);
 }
 
 // append sElement to global string (treated as a list)
 string AppendGlobalList(string sVarName, string sElement, int bUnique=FALSE, string sDelimiter=",")
 {
-	string sList = GetGlobalString(sVarName);
-	if (bUnique)
-		sList = AppendUniqueToList(sList, sElement, sDelimiter);
-	else
-		sList = AppendToList(sList, sElement, sDelimiter);
+        string sList = GetGlobalString(sVarName);
+        if (bUnique)
+                sList = AppendUniqueToList(sList, sElement, sDelimiter);
+        else
+                sList = AppendToList(sList, sElement, sDelimiter);
 
-	SetGlobalString(sVarName, sList);
-	return (sList);
+        SetGlobalString(sVarName, sList);
+        return (sList);
 }
 
 // Returns string to pad input to length nPadLen
 string GetStringPad( string sInput, int nPadLen, string sPadChar=" " )
 {
-	string sRet = "";
+        string sRet = "";
 
-	int nInputLen = GetStringLength( sInput );
-	
-	while ( nInputLen < nPadLen )
-	{
-		sRet = sRet + sPadChar;
-		nInputLen = nInputLen + 1;
-	}
+        int nInputLen = GetStringLength( sInput );
 
-	return ( sRet );
+        while ( nInputLen < nPadLen )
+        {
+                sRet = sRet + sPadChar;
+                nInputLen = nInputLen + 1;
+        }
+
+        return ( sRet );
 }
 
 // Replace first instance of sMatch in sString with sReplace
 string ReplaceSubString(string sString, string sMatch, string sReplace)
 {
-	int nPosition = FindSubString(sString, sMatch);
-	if (nPosition != -1)
-	{
-		int nStringLeftLength = nPosition+1;
-		int nStringRightLength = GetStringLength(sString) - GetStringLength(sMatch) - nStringLeftLength;
-		sString = GetStringLeft(sString, nStringLeftLength) + sReplace + GetStringRight(sString, nStringRightLength);
-	}
-	return (sString);
+        int nPosition = FindSubString(sString, sMatch);
+        if (nPosition != -1)
+        {
+                int nStringLeftLength = nPosition+1;
+                int nStringRightLength = GetStringLength(sString) - GetStringLength(sMatch) - nStringLeftLength;
+                sString = GetStringLeft(sString, nStringLeftLength) + sReplace + GetStringRight(sString, nStringRightLength);
+        }
+        return (sString);
 }
 
 // Replace all instances of sMatch in sString with sReplace (from left to right)
 string ReplaceAllSubStrings(string sString, string sMatch, string sReplace)
 {
-	string sSearchString = sString;
-	string sWorkingString = "";
-	int nMatchLength = GetStringLength(sMatch);
-	int nStringLeftLength;
-	int nStringRightLength;
-	
-	int nSSPosition = FindSubString(sSearchString, sMatch);
-	while (nSSPosition != -1)
-	{
-		nStringLeftLength = nSSPosition + nMatchLength; // number of chars up to replacement
-		nStringRightLength = GetStringLength(sSearchString) - nStringLeftLength;
-		
-		sWorkingString = GetStringLeft(sSearchString, nStringLeftLength);
-		sSearchString = GetStringRight(sSearchString, nStringRightLength);
-		
-		sWorkingString += GetStringLeft(sWorkingString, nSSPosition + 1) + sReplace;
-		nSSPosition = FindSubString(sSearchString, sMatch);
-	}
-	// all matches replaced, now tack on remaining right part of string.
-	sWorkingString += sSearchString;
-	
-	return (sWorkingString);
+        string sSearchString = sString;
+        string sWorkingString = "";
+        int nMatchLength = GetStringLength(sMatch);
+        int nStringLeftLength;
+        int nStringRightLength;
+
+        int nSSPosition = FindSubString(sSearchString, sMatch);
+        while (nSSPosition != -1)
+        {
+                nStringLeftLength = nSSPosition + nMatchLength; // number of chars up to replacement
+                nStringRightLength = GetStringLength(sSearchString) - nStringLeftLength;
+
+                sWorkingString = GetStringLeft(sSearchString, nStringLeftLength);
+                sSearchString = GetStringRight(sSearchString, nStringRightLength);
+
+                sWorkingString += GetStringLeft(sWorkingString, nSSPosition + 1) + sReplace;
+                nSSPosition = FindSubString(sSearchString, sMatch);
+        }
+        // all matches replaced, now tack on remaining right part of string.
+        sWorkingString += sSearchString;
+
+        return (sWorkingString);
 }
 
 // Remove part of a string beginning at nIndex.  nIndex is a zero based index into the string.
@@ -395,22 +394,22 @@ string ReplaceAllSubStrings(string sString, string sMatch, string sReplace)
 // SpliceString("Hello, 1, 3) returns "Ho"
 string SpliceString(string sString, int nIndex, int nCount)
 {
-	int nStringLeftLength = nIndex; // These are equal because we want to not include where we are pointing to on the left side.
-	int nStringRightLength = GetStringLength(sString) - nCount - nStringLeftLength;
-	sString = GetStringLeft(sString, nStringLeftLength) + GetStringRight(sString, nStringRightLength);
-	return (sString);
+        int nStringLeftLength = nIndex; // These are equal because we want to not include where we are pointing to on the left side.
+        int nStringRightLength = GetStringLength(sString) - nCount - nStringLeftLength;
+        sString = GetStringLeft(sString, nStringLeftLength) + GetStringRight(sString, nStringRightLength);
+        return (sString);
 }
 
 
 // Only here for debugging -- close the comment right below
 // to enable the main routine.
-/* 
+/*
 void main()
-{ 
+{
 
     string sTest = "This|is|a|test";
 
-    // Basic usage: 
+    // Basic usage:
     struct sStringTokenizer stTestTok = GetStringTokenizer(sTest, "|");
     while (HasMoreTokens(stTestTok)) {
         stTestTok = AdvanceToNextToken(stTestTok);
@@ -425,13 +424,13 @@ void main()
         SpeakString("HasMoreTokens: " + IntToString(HasMoreTokens(stTestTok)));
         stTestTok = AdvanceToNextToken(stTestTok);
         SpeakString("Next token: " + GetNextToken(stTestTok));
-    } 
+    }
 
     // Get a specific token
     for (i=0; i < 5; i++) {
-        SpeakString("In position " + IntToString(i) 
+        SpeakString("In position " + IntToString(i)
                     + ": " + GetTokenByPosition(sTest, "|", i));
     }
-    
+
 }
 */

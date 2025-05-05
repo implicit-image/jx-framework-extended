@@ -47,13 +47,13 @@
 //  spellApplyMindBlank(), spellsGenericAreaOfEffect(), spellsInflictTouchAttack(), RollMissileDamage()
 // 2drunk2frag - 05-08-08 - voilated spellsInflictTouchAttack for my own selfish purposes
 
+#include "jx_inc_magic"
 #include "nw_i0_spells"
 #include "x0_i0_henchman"
-#include "x2_i0_spells"
+// #include "x2_i0_spells"
 // JLR - OEI 08/24/05 -- Metamagic changes
 #include "nwn2_inc_metmag"
 #include "cmi_inc_sneakattack"
-#include "jx_inc_magic"
 
 
 //void main(){}
@@ -1927,7 +1927,6 @@ int GZGetHighestSpellcastingClassLevel(object oCreature)
                     nClass == CLASS_TYPE_RANGER || nClass == CLASS_TYPE_PALADIN)
                 {
                     nLevel = GetLevelByClass(nClass,oCreature);
-
                     if (nLevel> nMax)
                     {
                         nMax = nLevel;

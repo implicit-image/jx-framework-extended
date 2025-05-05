@@ -8,15 +8,15 @@
 
 int StartingConditional(int nSpellId)
 {
-	object oPC = GetPCSpeaker();
-	int nSpellShapeLvl = GetLocalInt(oPC, "nSpellShapeLevel");
-	int nHasSpell = GetHasSpell(nSpellId, oPC);
-	if (nHasSpell > 0 && nSpellShapeLvl >= JXGetBaseSpellLevel(nSpellId))
-	{
-	return TRUE;
-	}
-	else
-	{
-	return FALSE;
-	}
+        object oPC = GetPCSpeaker();
+        int nSpellShapeLvl = GetLocalInt(oPC, "nSpellShapeLevel");
+        int nHasSpell = GetHasSpell(nSpellId, oPC);
+        if (nHasSpell > 0 && nSpellShapeLvl >= JXGetBaseSpellLevel(nSpellId))
+        {
+        return TRUE;
+        }
+        else
+        {
+        return FALSE;
+        }
 }

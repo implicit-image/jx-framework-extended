@@ -81,6 +81,10 @@
 #include "jx_inc_magic_class"
 #include "jx_inc_action"
 #include "jx_inc_magic_effects"
+#include "utils"
+
+// to silence errors
+#include "2d2f_includes"
 //**************************************//
 //                                      //
 //              Interface               //
@@ -300,6 +304,7 @@ void JXSetSpellTargetObject(object oTarget, object oCaster = OBJECT_SELF);
 // * Returns the spell target object
 object JXGetSpellTargetObject(object oCaster = OBJECT_SELF);
 
+int JXSavingThrow(int iSavingThrow, object oTarget, int iDC, int iSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus=OBJECT_SELF, float fDelay=0.0f);
 
 //========================================== Spell Effects ==========================================//
 
@@ -448,10 +453,10 @@ int JXGetIgnoreDeadZone(object oCaster);
 
 //========================================== On Apply Spell Effect Hook ==========================================//
 
-int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect);
+int JXOnApplySpellEffectCode(object oCaster, object oTarget);
 
 // Run user defined on_apply_spell_effect script
-int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget, effect eEffect);
+int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget);
 
 // Set the result of running user on_apply_spell_effect script on a target
 // For use in the user script
@@ -1526,13 +1531,6 @@ void JXPrivateSaveSpellInfosOnCreature(object oCaster, object oTarget, int iSpel
         SetLocalString(oTarget, JX_CAST_SPELLS_INFO, sResult);
 }
 
-
-
-
-
-
-
-
 // Apply an effect to the specified location and save spell informations
 // - iDuration DURATION_TYPE_* constant
 // - eEffect Effect to apply at the location
@@ -1554,21 +1552,28 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - eEffect Effect to apply to the object
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
+// - iEffectType JX_EFFECT_TYPE_* of the passed effect
 void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f)
 {
 
     object oCaster = OBJECT_SELF;
     int iSpellId = JXGetSpellId();
 
-    // if (bCheckSelectiveMagic)
+    // list out effect integers
+    // int iCount = 0;
+    // int iEffectInt;
+    // int iEffectType = GetEffectType(eEffect);
+    // Log("Applying Effect type: " + IntToString(iEffectType));
+    // while (iCount < 32) // to account for EffectDamage
     // {
-
+    //     iEffectInt = GetEffectInteger(eEffect, iCount);
+    //     if (iEffectInt == 0) break;
+    //     Log(IntToString(iCount) + ": " + IntToString(iEffectInt));
     // }
 
     // Information about instant effect spells aren't saved
     if (iDuration != DURATION_TYPE_INSTANT)
     {
-
         // Applying an effect from within an area of effect
         if (GetObjectType(oCaster) == OBJECT_TYPE_AREA_OF_EFFECT)
         {
@@ -1579,12 +1584,16 @@ void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float 
         if (GetObjectType(oCaster) == OBJECT_TYPE_PLACEABLE)
         {
             object oSpellCreator = GetLocalObject(oCaster, JX_REAL_CREATOR);
-            if (GetIsObjectValid(oSpellCreator))
-                oCaster = oSpellCreator;
+            if (GetIsObjectValid(oSpellCreator)) oCaster = oSpellCreator;
         }
 
-        if (iSpellId != -1)
-            JXPrivateSaveSpellInfosOnCreature(oCaster, oTarget, iSpellId);
+        if (iSpellId != -1) JXPrivateSaveSpellInfosOnCreature(oCaster, oTarget, iSpellId);
+    }
+
+    // on apply triggers
+    if (!JXOnApplySpellEffectCode(oCaster, oTarget))
+    {
+        return;
     }
 
     eEffect = SetEffectSpellId(eEffect, iSpellId);
@@ -2112,7 +2121,6 @@ struct jx_magic_aura JXGetMagicalAura(object oSource, int bHiddenItemProps = FAL
             }
             eSpellTemp = GetNextEffect(oSource);
         }
-
         if (iBestSpellLevel == -1)  iAuraStrength = JX_AURASTRENGTH_NONE;
         else if (iBestSpellLevel < 4)   iAuraStrength = JX_AURASTRENGTH_FAINT;
         else if (iBestSpellLevel < 7)   iAuraStrength = JX_AURASTRENGTH_MODERATE;
@@ -2232,23 +2240,23 @@ void JXPostSpellCastCode()
 
 //========================================== On Apply Spell Effect Hook ==========================================//
 // TODO: actually make this work
-// int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect)
-// {
-//     int iContinue = JXRunUserDefinedOnApplySpellEffectCode(oCaster, oTarget, eEffect);
-//     // if user script reports false, do no apply any effects
-//     //
-//     switch (iContinue)
-//     {
-//         case -2: // script not found
-//         case -1: // script found, execution failed
-//         case 0:  // script found, exec success, proceed as normal
-//             return TRUE;
-//         case 1:  // script found, execution success, dont apply other effects
-//         default:
-//             return FALSE;
-//     }
-//     return TRUE;
-// }
+int JXOnApplySpellEffectCode(object oCaster, object oTarget)
+{
+    int iContinue = JXRunUserDefinedOnApplySpellEffectScript(oCaster, oTarget);
+    // if user script reports false, do no apply any effects
+    //
+    switch (iContinue)
+    {
+        case -2: // script not found
+        case -1: // script found, execution failed
+        case 0:  // script found, exec success, proceed as normal
+            return TRUE;
+        case 1:  // script found, execution success, dont apply other effects
+        default:
+            return FALSE;
+    }
+    return TRUE;
+}
 
 //#######################################################
 // JXRunUserDefinedOnApplySpellEffectScript
@@ -2256,17 +2264,16 @@ void JXPostSpellCastCode()
 // oTarget - object to which the effect is applied
 // eEffect - the effect being applied
 // TODO: actually fix this
-// int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget, effect eEffect)
+// int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget, struct jx_effect Effect)
 // {
 //     string sScript =  GetLocalString(GetModule(), MODULE_VAR_JX_USER_ON_APPLY_SPELL_EFFECT);
 //     if (sScript != "")
 //     {
-//         string sEffectInfo = JXGetEffectInfo(eEffect);
-//         // on hit script is run on the target we are applying the effect to
-//         // it has to have an object as first param
-//         // and string containing effetc info as the second
+//         AddScriptParameterString(Effect.types);
+//         AddScriptParameterInt(JXGetSpellId());
 //         AddScriptParameterObject(oCaster);
-//         int res = ExecuteScriptEnhanced(sScript, oTarget, FALSE);
+//         AddScriptParameterObject(oTarget);
+//         int res = ExecuteScriptEnhanced(sScript, oTarget, TRUE);
 //         if (res == -1) // execution failed
 //         {
 //             SendMessageToPC(oCaster, "Executing user on apply spell effect script failed");
@@ -2279,8 +2286,47 @@ void JXPostSpellCastCode()
 //     return -2;
 // }
 
+int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget)
+{
+    string sScript =  GetLocalString(GetModule(), MODULE_VAR_JX_USER_ON_APPLY_SPELL_EFFECT);
+    if (sScript != "")
+    {
+        SetLogObject(oCaster);
+        Success("On Apply Script is " + sScript);
+        AddScriptParameterInt(JXGetSpellId());
+        AddScriptParameterObject(oCaster);
+        AddScriptParameterObject(oTarget);
+        int res = ExecuteScriptEnhanced(sScript, oTarget, TRUE);
+        if (res == -1) // execution failed
+        {
+            SetLogObject(oCaster);
+            Error("Executing user on apply spell effect script failed");
+            return 0;
+        }
+        // the variable must be set by on apply spell effect script
+        res = GetLocalInt(oTarget, VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT);
+        return res;
+    }
+    return -1;
+}
+
 // use this function to set the result of on_apply_spell_effect script
 void JXSetOnApplySpellEffectResult(int iValue, object oTarget=OBJECT_SELF)
 {
     SetLocalInt(oTarget, VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT, iValue);
+}
+
+int JXSavingThrow(int iSavingThrow, object oTarget, int iDC, int iSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus=OBJECT_SELF, float fDelay=0.0f)
+{
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iSavingThrow);
+    paramList = JXScriptAddParameterObject(paramList, oTarget);
+    paramList = JXScriptAddParameterInt(paramList, iDC);
+    paramList = JXScriptAddParameterInt(paramList, iSaveType);
+    paramList = JXScriptAddParameterObject(paramList, oSaveVersus);
+    paramList = JXScriptAddParameterFloat(paramList, fDelay);
+
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SAVINGTHROW, paramList);
+
+    return JXScriptGetResponseInt();
 }

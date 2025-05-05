@@ -14,11 +14,11 @@
 #include "jx_inc_magic"
 
 
-int     ApplyMetamagicVariableMods(int nVal, int nValMax);
+int ApplyMetamagicVariableMods(int nVal, int nValMax);
 
-float   ApplyMetamagicDurationMods(float fDuration);
+float ApplyMetamagicDurationMods(float fDuration);
 
-int     ApplyMetamagicDurationTypeMods(int nDurType);
+int ApplyMetamagicDurationTypeMods(int nDurType);
 
 
 int ApplyMetamagicVariableMods(int nVal, int nValMax)
@@ -28,7 +28,7 @@ int ApplyMetamagicVariableMods(int nVal, int nValMax)
 
     // if no metamagic feats then don't go any further (or do any bitwise comparisons!)
     if(nMetaMagic==-1)
-        return nVal;
+    return nVal;
 
     // Need to handle Multiple Metamagics properly here, in case that gets supported in the GUI...
     if (nMetaMagic & METAMAGIC_MAXIMIZE)
@@ -49,7 +49,7 @@ float ApplyMetamagicDurationMods(float fDuration)
 
     // if no metamagic feats then don't go any further (or do any bitwise comparisons!)
     if(nMetaMagic==-1)
-        return fDuration;
+    return fDuration;
 
     if (nMetaMagic & METAMAGIC_PERMANENT)
     {
@@ -73,7 +73,7 @@ int ApplyMetamagicDurationTypeMods(int nDurType)
 
     // if no metamagic feats then don't go any further (or do any bitwise comparisons!)
     if(nMetaMagic==-1)
-        return nDurType;
+    return nDurType;
 
 
     if (nMetaMagic & METAMAGIC_PERMANENT)

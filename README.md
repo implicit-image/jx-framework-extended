@@ -9,10 +9,11 @@ Since nwscript doesnt have lists or similar features, spell and feat categories 
 The impl directory contains the implementation for my Progression Overhaul Mod (in pr_ov directory) and for zMerger (in zMerger directory). I will probably move it to a seperate repo later. If you are using different content pack you have to modify impl/ files to make your spells, classes and feats work with the framework features.
 
 
+### Hooks
+This framework implements a system for running scripts onhttps://b.thumbs.redditmedia.com/Urrt5GSx7Fy-hW0HzDUA-ZCsgsCfozgHR-VuJzG8hHY.png
+
 
 ### Effect modifier API
-
-
 
 ``` nwscript
 
@@ -22,10 +23,12 @@ JXAddEffectModifier(int iJXEffectId, int iModifierType, int iModifierOperationTy
 
 ```
 
+### interfaces
+
+each `jx_<name>_interface.nss` file should implement functions described below.
 
 
-#### file: jx_spell_info_interface.nss
-
+#### file: `jx_spell_info_interface.nss`
 
 
 ``` nwscript
@@ -88,9 +91,9 @@ int JXImplGetBaseSpellLevel(int iSpellId, int iClass = CLASS_TYPE_INVALID)
 
 
 
-#### file: jx_epic_spell_interface.nss
+#### file: `jx_epic_spell_interface.nss`
 
-These functions should correctly add caster levels gained from prestige classes for calculating epic spell save DC.
+These functions should correctly add caster levels gained from prestige classes to add up total caster level in a base class.
 
 ``` nwscript
 int isEpicWizard();
@@ -105,17 +108,32 @@ int isEpicWarlock();
 
 
 
-#### file: jx_invocations_interface.nss
+#### file: `jx_invocations_interface.nss`
 
 ``` nwscript
 
 // Returns the highest level of Eldritch Blast available
+// - oCaster - warlock casting Eldtritch Blast
+// * returns bonus Eldtritch Blast damage die
 int JXImplGetEldritchBlastLevelBonus(object oCaster)
 ```
 
+#### file: `jx_metamagic_interface.nss`
 
+``` nwscript
+// Returns nVal modified by
+// - nVal
+// - nValMax
+//
+int JXImplApplyMetamagicVariableMods(int nVal, int nValMax);
 
-#### file: jx_class_info_interface.nss
+int JXImplApplyMetamagicDurationTypeMods(int iDurType);
+
+int JxImplApplyMetamagicDurationMods(float fDuration);
+
+```
+
+#### file: `jx_class_info_interface.nss`
 
 ``` nwscript
 

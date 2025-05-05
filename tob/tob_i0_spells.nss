@@ -4,10 +4,10 @@
 //:: Copyright (c) 2001 Bioware Corp.
 //:://////////////////////////////////////////////
 /*	Drammel's Note 2/4/2010: This is a copy of the original for use in the Tome of Battle.
-	Using modified versions of the original files caues far too many compatibility issues,
-	therefore a copy is made which is hooked into the relavent overriden files rather than
-	the original.  Thus, I can use all the functionality of the original without worrying about
-	recompiling errors into the original versions.
+        Using modified versions of the original files caues far too many compatibility issues,
+        therefore a copy is made which is hooked into the relavent overriden files rather than
+        the original.  Thus, I can use all the functionality of the original without worrying about
+        recompiling errors into the original versions.
 */
 //:://////////////////////////////////////////////
 //:: Created By: Preston Watamaniuk
@@ -15,7 +15,7 @@
 //:: Updated By: 2003/20/10 Georg Zoeller
 //:: Updated By: 6/21/06 BDF-OEI: updated to use NWN2 VFX
 //:://////////////////////////////////////////////
-// 8/9/06 - BDF-OEI: in spellsCure, added the GetSpellCastItem() check to the GetHasFeat() check to make sure that 
+// 8/9/06 - BDF-OEI: in spellsCure, added the GetSpellCastItem() check to the GetHasFeat() check to make sure that
 // 	clerics with the healing domain power don't get a bonus when using a healin potion
 // 8/28/06 - BDF-OEI: modified all the Remove*() functions to start back at the beginning of the effects list
 // 	in the event that a desired effect is removed; this helps ensure that effects that are linked to other
@@ -54,7 +54,7 @@
 // Drammel - 6/18/2009 - Added Bot9sReflexAdjustedDamage to aid with maneuver and feat checks.
 // Drammel - 9/17/2009 - Edited MySavingThrow to incorperate Iron Heart Focus.
 // Drammel - 10/8/2009 - Edited MySavingThrow to incorperate Aura of Perfect Order.
-// Drammel - 1/24/2010 - Fixed an error with will saves in Aura of Perfect Order.  I've also replaced my constant vaules with their numerical 
+// Drammel - 1/24/2010 - Fixed an error with will saves in Aura of Perfect Order.  I've also replaced my constant vaules with their numerical
 // counterparts in order to facilitate compatibility with other mods that use this file.
 
 #include "bot9s_inc_2da"
@@ -68,9 +68,9 @@
 // * Constants
 //=========================================================================
 // * see spellsIsTarget for a definition of these constants
-const int SPELL_TARGET_ALLALLIES = 1;
-const int SPELL_TARGET_STANDARDHOSTILE = 2;
-const int SPELL_TARGET_SELECTIVEHOSTILE = 3;
+// const int SPELL_TARGET_ALLALLIES = 1;
+// const int SPELL_TARGET_STANDARDHOSTILE = 2;
+// const int SPELL_TARGET_SELECTIVEHOSTILE = 3;
 const int SAVING_THROW_NONE = 4;
 // * used by the IgnoreTargetRules functions
 const string ITR_NUM_ENTRIES = "ITR_NUM_ENTRIES"; //number of stored targets to ignore the check.
@@ -81,7 +81,7 @@ const int NW_I0_SPELLS_MAX_BREACH = 33;
 
 const string VAR_IMMUNE_TO_HEAL = "IMMUNE_TO_HEAL";
 
- 
+
 //=========================================================================
 // Prototypes
 //=========================================================================
@@ -196,13 +196,13 @@ void IgnoreTargetRulesEnqueueTarget(object oCaster, object oTarget);
 // Parameters the same as ActionCastSpellAtObject() in nwscript.nss
 void IgnoreTargetRulesActionCastSpellAtObject(int nSpell, object oTarget, int nMetaMagic=METAMAGIC_ANY, int bCheat=FALSE, int nDomainLevel=0, int nProjectilePathType=PROJECTILE_PATH_TYPE_DEFAULT, int bInstantSpell=FALSE);
 
-// Enqueues a spell that will ignore the spellsIsTarget logic. 
+// Enqueues a spell that will ignore the spellsIsTarget logic.
 // Variation: this will target all within the nShapeType and fShapeSize parameters. (ex SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL)
 //   try to match the nShapeType and fShapeSize parameters to prevent lingerings ITR variables.
 // Other parameters are the same as ActionCastSpellAtObject() in nwscript.nss
 void IgnoreTargetRulesActionCastSpellAtObjectArea(int nShapeType, float fShapeSize, int nSpell, object oTarget, int nMetaMagic=METAMAGIC_ANY, int bCheat=FALSE, int nDomainLevel=0, int nProjectilePathType=PROJECTILE_PATH_TYPE_DEFAULT, int bInstantSpell=FALSE);
 
-// Enqueues a spell that will ignore the spellsIsTarget logic. 
+// Enqueues a spell that will ignore the spellsIsTarget logic.
 // Variation: this will target all within the nShapeType and fShapeSize parameters. (ex SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL)
 //   try to match the nShapeType and fShapeSize parameters to prevent lingerings ITR variables.
 // Other parameters are the same as ActionCastSpellAtLocation() in nwscript.nss
@@ -256,8 +256,8 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
         }
         // 11/10/06 - BDF(OEI): GetCurrentMaster() will return OBJECT_INVALID when the queried object is not in a PC party.
         //	This causes non-PC-party NPCs to affect one another even if they are not hostile to one another.  Bad.
-        else if (oTargetMaster == oSourceMaster 
-                && GetIsObjectValid(oSourceMaster) 
+        else if (oTargetMaster == oSourceMaster
+                && GetIsObjectValid(oSourceMaster)
                 && GetIsObjectValid(oTargetMaster)  )	// This will also ensure that PC party members in multiplayer are affected
         {
             bSelfTarget = TRUE;
@@ -270,8 +270,8 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
     {
         // * I am an associate
         // * of someone
-        
-        
+
+
         // For associates, check target's master (instead of target)
         if ( GetIsReactionTypeHostile(oTargetMaster, oSource) == TRUE )
         {
@@ -281,17 +281,17 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
         // 8/17/06 - BDF-OEI: NWN2 doesn't use personal reputation, so PCs in the same party
         // will consider one another neutral by default; therefore, only hurt associates of HOSTILE PCs
         // Otherwise, we are using personal reputation and neutrality is not a consideration
-		// AWD-OEI only do the following check if we are playing hardcore
-	    if (GetGameDifficulty() > GAME_DIFFICULTY_NORMAL)
-		{
-			if (GetGlobalInt(CAMPAIGN_SWITCH_USE_PERSONAL_REPUTATION) )
-			{
-				if (GetIsReactionTypeFriendly(oTargetMaster,oSource) == FALSE && GetIsPC(oTargetMaster) == TRUE)
-				{
-				   bSelfTarget = TRUE;
-				}        
-			}
-		}
+                // AWD-OEI only do the following check if we are playing hardcore
+            if (GetGameDifficulty() > GAME_DIFFICULTY_NORMAL)
+                {
+                        if (GetGlobalInt(CAMPAIGN_SWITCH_USE_PERSONAL_REPUTATION) )
+                        {
+                                if (GetIsReactionTypeFriendly(oTargetMaster,oSource) == FALSE && GetIsPC(oTargetMaster) == TRUE)
+                                {
+                                   bSelfTarget = TRUE;
+                                }
+                        }
+                }
     }
 
 
@@ -310,10 +310,10 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
     {
         nReturnValue = TRUE;         // Enemy PC
     }
-	else if(bInSameFaction && (GetGameDifficulty() > GAME_DIFFICULTY_NORMAL))
-	{
-		nReturnValue = TRUE;
-	}
+        else if(bInSameFaction && (GetGameDifficulty() > GAME_DIFFICULTY_NORMAL))
+        {
+                nReturnValue = TRUE;
+        }
     else if (bNotAFriend && (GetGameDifficulty() > GAME_DIFFICULTY_NORMAL))
     {
         if (GetModuleSwitchValue(MODULE_SWITCH_ENABLE_NPC_AOE_HURT_ALLIES) == TRUE)
@@ -355,33 +355,33 @@ int GetIsStandardHostileTarget(object oTarget, object oSource)
 
 int spellsIsTarget(object oTarget, int nTargetType, object oSource)
 {
-	// If the target is a ScriptHidden creature, we do not want to affect it.
-	if ( GetScriptHidden(oTarget) == TRUE )
-	{
-		return FALSE;
-	}
-	
-	// If we want to ignore the rules of target selection for this spell, always return true.
-	int nEntry = IgnoreTargetRulesGetFirstIndex(oSource, oTarget);	
-	if (nEntry != -1)
-	{
-		IgnoreTargetRulesRemoveEntry(oSource, nEntry);
-		return TRUE;	
-	}		
-	
+        // If the target is a ScriptHidden creature, we do not want to affect it.
+        if ( GetScriptHidden(oTarget) == TRUE )
+        {
+                return FALSE;
+        }
+
+        // If we want to ignore the rules of target selection for this spell, always return true.
+        int nEntry = IgnoreTargetRulesGetFirstIndex(oSource, oTarget);
+        if (nEntry != -1)
+        {
+                IgnoreTargetRulesRemoveEntry(oSource, nEntry);
+                return TRUE;
+        }
+
     // * if dead, not a valid target
-	// JWR-OEI DEAD is invalid, but DYING is valid!
+        // JWR-OEI DEAD is invalid, but DYING is valid!
     if (GetIsDead(oTarget, TRUE) == TRUE)
     {
         return FALSE;
     }
 
-	// early out if the targets are the same...
-	if ( oTarget == oSource ) 
-	{
-		if ( nTargetType == SPELL_TARGET_ALLALLIES )	return TRUE; 			
-		//else											return FALSE;
-	}
+        // early out if the targets are the same...
+        if ( oTarget == oSource )
+        {
+                if ( nTargetType == SPELL_TARGET_ALLALLIES )	return TRUE;
+                //else											return FALSE;
+        }
 
 
     int nReturnValue = FALSE;
@@ -409,14 +409,14 @@ int spellsIsTarget(object oTarget, int nTargetType, object oSource)
         // * Word of Faith, bard songs that should never affect friendlies
         case SPELL_TARGET_SELECTIVEHOSTILE:
         {
-			// 10/23/06 - BDF(OEI): added GetIsReactionTypeHostile() since GetIsEnemy may not capture all cases
-            if( GetIsEnemy(oTarget,oSource) || GetIsReactionTypeHostile(oTarget, oSource) )	
+                        // 10/23/06 - BDF(OEI): added GetIsReactionTypeHostile() since GetIsEnemy may not capture all cases
+            if( GetIsEnemy(oTarget,oSource) || GetIsReactionTypeHostile(oTarget, oSource) )
             {
                 nReturnValue = TRUE;
             }
             break;
         }
-    }	
+    }
 
     return nReturnValue;
 }
@@ -448,13 +448,13 @@ int GetCureDamageTotal(object oTarget, int nDamage, int nMaxExtraDamage, int nMa
 {
     int nMetaMagic = GetMetaMagicFeat();
     int nExtraDamage = GetCasterLevel(OBJECT_SELF); // * figure out the bonus damage
-       
+
     if (nExtraDamage > nMaxExtraDamage)
     {
         nExtraDamage = nMaxExtraDamage;
     }
-    
-	// * if low or normal difficulty is treated as MAXIMIZED
+
+        // * if low or normal difficulty is treated as MAXIMIZED
     if( GetIsPC(GetFactionLeader(oTarget)) &&
        (GetGameDifficulty() < GAME_DIFFICULTY_CORE_RULES) )
     {
@@ -477,9 +477,9 @@ int GetCureDamageTotal(object oTarget, int nDamage, int nMaxExtraDamage, int nMa
             nDamage = nDamage + nMaximized;
         }
     }
-	
-	// 8/9/06 - BDF-OEI: added the GetSpellCastItem() check to the GetHasFeat() check to make sure that 
-	// 	clerics with the healing domain power don't get a bonus when using a healin potion
+
+        // 8/9/06 - BDF-OEI: added the GetSpellCastItem() check to the GetHasFeat() check to make sure that
+        // 	clerics with the healing domain power don't get a bonus when using a healin potion
     if ( nMetaMagic == METAMAGIC_EMPOWER || (GetHasFeat( FEAT_HEALING_DOMAIN_POWER ) && !GetIsObjectValid( GetSpellCastItem() )) )
     {
         nDamage = nDamage + (nDamage/2);
@@ -493,37 +493,37 @@ int GetCureDamageTotal(object oTarget, int nDamage, int nMaxExtraDamage, int nMa
         nDamage = nDamage + (2 * nSpellLvl);
     }
 
-	// Drammel - 5/8/2009 Support for the Crusader's Delayed Damage Pool.
-	if (GetLevelByClass(70, oTarget) > 0) //CLASS_TYPE_CRUSADER
-	{
-		object oToB = GetItemPossessedBy(oTarget, "tob");
+        // Drammel - 5/8/2009 Support for the Crusader's Delayed Damage Pool.
+        if (GetLevelByClass(70, oTarget) > 0) //CLASS_TYPE_CRUSADER
+        {
+                object oToB = GetItemPossessedBy(oTarget, "tob");
 
-		if ((GetIsObjectValid(oToB)) && (GetLocalInt(oToB, "FuriousCounterstrike") == 0))
-		{
-			int nHp = GetCurrentHitPoints(oTarget);
-			int nMaxHp = GetMaxHitPoints(oTarget);
-			int nSurplus = nHp + nDamage;
+                if ((GetIsObjectValid(oToB)) && (GetLocalInt(oToB, "FuriousCounterstrike") == 0))
+                {
+                        int nHp = GetCurrentHitPoints(oTarget);
+                        int nMaxHp = GetMaxHitPoints(oTarget);
+                        int nSurplus = nHp + nDamage;
 
-			if (nSurplus > nMaxHp)
-			{
-				int nHeal = nMaxHp - nSurplus;
+                        if (nSurplus > nMaxHp)
+                        {
+                                int nHeal = nMaxHp - nSurplus;
 
-				SetLocalInt(oToB, "DDPoolCanHeal", 1);
-				SetLocalInt(oToB, "DDPoolHealValue", nHeal);
-				DelayCommand(6.0f, SetLocalInt(oToB, "DDPoolCanHeal", 1));
-				DelayCommand(6.0f, SetLocalInt(oToB, "DDPoolHealValue", 0));
-			}
-		}
-	}
+                                SetLocalInt(oToB, "DDPoolCanHeal", 1);
+                                SetLocalInt(oToB, "DDPoolHealValue", nHeal);
+                                DelayCommand(6.0f, SetLocalInt(oToB, "DDPoolCanHeal", 1));
+                                DelayCommand(6.0f, SetLocalInt(oToB, "DDPoolHealValue", 0));
+                        }
+                }
+        }
 
-	return (nDamage);
+        return (nDamage);
 }
 
 
 //	spellsCure
 //    Used by the 'cure' series of spells.
 //    Will do max heal/damage if at normal or low difficulty.  Random rolls occur at higher difficulties.
-// 8/9/06 - BDF-OEI: added the GetSpellCastItem() check to the GetHasFeat() check to make sure that 
+// 8/9/06 - BDF-OEI: added the GetSpellCastItem() check to the GetHasFeat() check to make sure that
 // 	clerics with the healing domain power don't get a bonus when using a healin potion
 //
 //	Heal spells typically do a random amount +1/level up to a max.
@@ -538,100 +538,100 @@ int GetCureDamageTotal(object oTarget, int nDamage, int nMaxExtraDamage, int nMa
 void spellsCure(int nDamage, int nMaxExtraDamage, int nMaximized, int vfx_impactHurt, int vfx_impactHeal, int nSpellID)
 {
     object oTarget = GetSpellTargetObject();
-	int nDamageTotal = GetCureDamageTotal(oTarget, nDamage, nMaxExtraDamage, nMaximized, nSpellID);
- 	int bIsHealingSpell=TRUE;
-	int bHarmTouchAttack=TRUE;
-	spellsHealOrHarmTarget(oTarget, nDamageTotal, vfx_impactHurt, vfx_impactHurt, vfx_impactHeal, nSpellID, bIsHealingSpell, bHarmTouchAttack);
+        int nDamageTotal = GetCureDamageTotal(oTarget, nDamage, nMaxExtraDamage, nMaximized, nSpellID);
+        int bIsHealingSpell=TRUE;
+        int bHarmTouchAttack=TRUE;
+        spellsHealOrHarmTarget(oTarget, nDamageTotal, vfx_impactHurt, vfx_impactHurt, vfx_impactHeal, nSpellID, bIsHealingSpell, bHarmTouchAttack);
 
 }
 
 // this could be a harm spell cast on undead or a heal spell cast on non-undead
 void DoHealing(object oTarget, int nDamageTotal, int vfx_impactHeal)
 {
-	//Set the heal effect
-	//eWound- Cure spells now remove the wounding effect, which causes targets to bleed out - PKM-OEI 09.06.06
-	effect eHeal = EffectHeal(nDamageTotal);
-	RemoveEffectOfType(oTarget, EFFECT_TYPE_WOUNDING);
-	//Apply heal effect and VFX impact
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
-	effect eVis2 = EffectVisualEffect(vfx_impactHeal);
-	ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
+        //Set the heal effect
+        //eWound- Cure spells now remove the wounding effect, which causes targets to bleed out - PKM-OEI 09.06.06
+        effect eHeal = EffectHeal(nDamageTotal);
+        RemoveEffectOfType(oTarget, EFFECT_TYPE_WOUNDING);
+        //Apply heal effect and VFX impact
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eHeal, oTarget);
+        effect eVis2 = EffectVisualEffect(vfx_impactHeal);
+        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis2, oTarget);
 }
 
 // this could be a harm spell cast on non-undead or a heal spell cast on undead
 void DoHarming (object oTarget, int nDamageTotal, int nDamageType, int vfx_impactHurt, int bTouchAttack)
 {
-	if (bTouchAttack)
-	{
-		// Returns 0 on a miss, 1 on a hit, and 2 on a critical hit.
-		int nTouch = TouchAttackMelee(oTarget);
-		if (nTouch == 0)
-			return;
-	}			
+        if (bTouchAttack)
+        {
+                // Returns 0 on a miss, 1 on a hit, and 2 on a critical hit.
+                int nTouch = TouchAttackMelee(oTarget);
+                if (nTouch == 0)
+                        return;
+        }
 
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-	{
-		if (!MyResistSpell(OBJECT_SELF, oTarget))
-		{
-			// Returns 0 if the saving throw roll failed, 1 if the saving throw roll succeeded and 2 if the target was immune 
-			int nSave = WillSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, OBJECT_SELF);
-			if	(nSave != 2)
-			{
-				// successful save = half damage 
-				if  (nSave == 1)
-				{
-					if (GetHasFeat(6818, oTarget)) //Mettle
-					{
-						nDamageTotal = 0;
-					}
-					else nDamageTotal = nDamageTotal/2;
-				}
-				
-				effect eDam = EffectDamage(nDamageTotal, nDamageType);
-				//Apply the VFX impact and effects
-				DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-				effect eVis = EffectVisualEffect(vfx_impactHurt);
-				ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-			}						
-		}
-	}
+        if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+        {
+                if (!MyResistSpell(OBJECT_SELF, oTarget))
+                {
+                        // Returns 0 if the saving throw roll failed, 1 if the saving throw roll succeeded and 2 if the target was immune
+                        int nSave = WillSave(oTarget, GetSpellSaveDC(), SAVING_THROW_TYPE_NONE, OBJECT_SELF);
+                        if	(nSave != 2)
+                        {
+                                // successful save = half damage
+                                if  (nSave == 1)
+                                {
+                                        if (GetHasFeat(6818, oTarget)) //Mettle
+                                        {
+                                                nDamageTotal = 0;
+                                        }
+                                        else nDamageTotal = nDamageTotal/2;
+                                }
+
+                                effect eDam = EffectDamage(nDamageTotal, nDamageType);
+                                //Apply the VFX impact and effects
+                                DelayCommand(1.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                                effect eVis = EffectVisualEffect(vfx_impactHurt);
+                                ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+                        }
+                }
+        }
 }
 
 
 // This spell routes healing and harming out depending on whether we are undead or not.
 void spellsHealOrHarmTarget(object oTarget, int nDamageTotal, int vfx_impactNormalHurt, int vfx_impactUndeadHurt, int vfx_impactHeal, int nSpellID, int bIsHealingSpell=TRUE, int bHarmTouchAttack=TRUE)
 {
-	int bHarmful = FALSE;
-	
+        int bHarmful = FALSE;
+
     // abort for creatures immune to heal.
     if (GetLocalInt(oTarget, VAR_IMMUNE_TO_HEAL))
         return;
-		
-		
-	int bIsUndead = (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD);
+
+
+        int bIsUndead = (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD);
     if (!bIsUndead) // target is normal folks.
     {
-		if (bIsHealingSpell) // healing spell 
-			DoHealing(oTarget, nDamageTotal, vfx_impactHeal);
-		else // harming spell
-		{
-			DoHarming (oTarget, nDamageTotal, DAMAGE_TYPE_NEGATIVE, vfx_impactNormalHurt, bHarmTouchAttack);
-			bHarmful = TRUE;
-		}			
+                if (bIsHealingSpell) // healing spell
+                        DoHealing(oTarget, nDamageTotal, vfx_impactHeal);
+                else // harming spell
+                {
+                        DoHarming (oTarget, nDamageTotal, DAMAGE_TYPE_NEGATIVE, vfx_impactNormalHurt, bHarmTouchAttack);
+                        bHarmful = TRUE;
+                }
     }
     else // target is undead
     {
-		if (bIsHealingSpell) // heal spell on undead harms
-		{
-			DoHarming (oTarget, nDamageTotal, DAMAGE_TYPE_POSITIVE, vfx_impactUndeadHurt, bHarmTouchAttack);
-			bHarmful = TRUE;
-		}			
-		else // harming spell on undead heals!
-			DoHealing(oTarget, nDamageTotal, vfx_impactHeal);
-		
+                if (bIsHealingSpell) // heal spell on undead harms
+                {
+                        DoHarming (oTarget, nDamageTotal, DAMAGE_TYPE_POSITIVE, vfx_impactUndeadHurt, bHarmTouchAttack);
+                        bHarmful = TRUE;
+                }
+                else // harming spell on undead heals!
+                        DoHealing(oTarget, nDamageTotal, vfx_impactHeal);
+
     }
 
-	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpellID, bHarmful));
+        SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpellID, bHarmful));
 }
 
 //::///////////////////////////////////////////////
@@ -656,9 +656,9 @@ void DoSpellBreach(object oTarget, int nTotal, int nSR, int nSpellId = -1)
     }
     effect eSR = EffectSpellResistanceDecrease(nSR);
     effect eDur;
-	
-	if ( nSpellId == SPELL_LESSER_SPELL_BREACH )	eDur = EffectVisualEffect( VFX_DUR_SPELL_LESSER_SPELL_BREACH );
-	else											eDur = EffectVisualEffect( VFX_DUR_SPELL_GREATER_SPELL_BREACH );
+
+        if ( nSpellId == SPELL_LESSER_SPELL_BREACH )	eDur = EffectVisualEffect( VFX_DUR_SPELL_LESSER_SPELL_BREACH );
+        else											eDur = EffectVisualEffect( VFX_DUR_SPELL_GREATER_SPELL_BREACH );
 
     //effect eVis = EffectVisualEffect(VFX_HIT_SPELL_ABJURATION);
     int nCnt, nIdx;
@@ -785,13 +785,13 @@ void RemoveTempHitPoints()
     eProtection = GetFirstEffect(OBJECT_SELF);
     while (GetIsEffectValid(eProtection))
     {
-      	if(GetEffectType(eProtection) == EFFECT_TYPE_TEMPORARY_HITPOINTS)
-	  	{
-       		RemoveEffect(OBJECT_SELF, eProtection);
-      		eProtection = GetFirstEffect(OBJECT_SELF);	// 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
-		}
-		else 	eProtection = GetNextEffect(OBJECT_SELF);
-	}
+        if(GetEffectType(eProtection) == EFFECT_TYPE_TEMPORARY_HITPOINTS)
+                {
+                RemoveEffect(OBJECT_SELF, eProtection);
+                eProtection = GetFirstEffect(OBJECT_SELF);	// 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
+                }
+                else 	eProtection = GetNextEffect(OBJECT_SELF);
+        }
 }
 
 // * Kovi. removes any effects from this type of spell
@@ -799,16 +799,16 @@ void RemoveTempHitPoints()
 // * mage armors
 void RemoveEffectsFromSpell(object oTarget, int SpellID)
 {
-  	effect eLook = GetFirstEffect(oTarget);
-  	while (GetIsEffectValid(eLook))
-	{
-    	if (GetEffectSpellId(eLook) == SpellID)
-		{
-      		RemoveEffect(oTarget, eLook);
-			eLook = GetFirstEffect(oTarget);	// 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
-		}
-		else	eLook = GetNextEffect(oTarget);
-  	}
+        effect eLook = GetFirstEffect(oTarget);
+        while (GetIsEffectValid(eLook))
+        {
+        if (GetEffectSpellId(eLook) == SpellID)
+                {
+                RemoveEffect(oTarget, eLook);
+                        eLook = GetFirstEffect(oTarget);	// 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
+                }
+                else	eLook = GetNextEffect(oTarget);
+        }
 }
 
 int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
@@ -821,7 +821,7 @@ int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
     effect eSR = EffectVisualEffect( VFX_DUR_SPELL_SPELL_RESISTANCE );	// uses NWN2 VFX
     effect eGlobe = EffectVisualEffect( VFX_DUR_SPELL_GLOBE_INV_LESS );	// uses NWN2 VFX
     effect eMantle = EffectVisualEffect( VFX_DUR_SPELL_SPELL_MANTLE );	// uses NWN2 VFX
-	
+
     if(nResist == 1) //Spell Resistance
     {
         DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eSR, oTarget));
@@ -843,7 +843,7 @@ int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
 
 int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus = OBJECT_SELF, float fDelay = 0.0)
 {
-	int nSpellID = GetSpellId();
+        int nSpellID = GetSpellId();
 
     /*
         return 0 = FAILED SAVE
@@ -851,275 +851,275 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
         return 2 = IMMUNE TO WHAT WAS BEING SAVED AGAINST
     */
 
-	if (GetHasFeat(6844)) //Shadow Trickster
-	{
-		object oToB = GetItemPossessedBy(OBJECT_SELF, "tob");
+        if (GetHasFeat(6844)) //Shadow Trickster
+        {
+                object oToB = GetItemPossessedBy(OBJECT_SELF, "tob");
 
-		if (GetIsObjectValid(oToB))
-		{
-			int nStance = GetLocalInt(oToB, "Stance");
-			int nStance2 = GetLocalInt(oToB, "Stance2");
-			
-			if (nStance == 116 || nStance2 == 116 || nStance == 117 || nStance2 == 117
-			|| nStance == 119 || nStance2 == 119 || nStance == 122 || nStance2 == 122
-			|| nStance == 129 || nStance2 == 129 || nStance == 139 || nStance2 == 139)
-			{
-				string sSchool = tob_Get2daString("spells", "School", nSpellID);
+                if (GetIsObjectValid(oToB))
+                {
+                        int nStance = GetLocalInt(oToB, "Stance");
+                        int nStance2 = GetLocalInt(oToB, "Stance2");
 
-				if (sSchool == "I")
-				{
-					nDC += 2;
-				}
-			}
-		}
-	}
+                        if (nStance == 116 || nStance2 == 116 || nStance == 117 || nStance2 == 117
+                        || nStance == 119 || nStance2 == 119 || nStance == 122 || nStance2 == 122
+                        || nStance == 129 || nStance2 == 129 || nStance == 139 || nStance2 == 139)
+                        {
+                                string sSchool = tob_Get2daString("spells", "School", nSpellID);
 
-	// -------------------------------------------------------------------------
+                                if (sSchool == "I")
+                                {
+                                        nDC += 2;
+                                }
+                        }
+                }
+        }
+
+        // -------------------------------------------------------------------------
     // GZ: sanity checks to prevent wrapping around
     // -------------------------------------------------------------------------
 
-	if (nDC<1)
-	{
-		nDC = 1;
-	}
-	else if (nDC > 255)
-	{
-		nDC = 255;
-	}
+        if (nDC<1)
+        {
+                nDC = 1;
+        }
+        else if (nDC > 255)
+        {
+                nDC = 255;
+        }
 
-	effect eVis;
-	int bValid = FALSE;
-	object oToB = GetItemPossessedBy(oTarget, "tob");
+        effect eVis;
+        int bValid = FALSE;
+        object oToB = GetItemPossessedBy(oTarget, "tob");
 
-	if (GetLocalInt(oTarget, "AuraOfPerfectOrder") == 1) //Assumed that the Target has the Tome of Battle if this is set to 1.
-	{
-		if ((GetLocalInt(oToB, "Stance") == 29/*STANCE_AURA_OF_PERFECT_ORDER*/) || (GetLocalInt(oToB, "Stance2") == 29/*STANCE_AURA_OF_PERFECT_ORDER*/))
-		{// From here we're attempting to rebuild the Saving Throw functions.
+        if (GetLocalInt(oTarget, "AuraOfPerfectOrder") == 1) //Assumed that the Target has the Tome of Battle if this is set to 1.
+        {
+                if ((GetLocalInt(oToB, "Stance") == 29/*STANCE_AURA_OF_PERFECT_ORDER*/) || (GetLocalInt(oToB, "Stance2") == 29/*STANCE_AURA_OF_PERFECT_ORDER*/))
+                {// From here we're attempting to rebuild the Saving Throw functions.
 
-			SetLocalInt(oTarget, "AuraOfPerfectOrder", 0); // Used only once per round.
-			SetLocalInt(oToB, "SaveType", nSavingThrow);
-			SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+                        SetLocalInt(oTarget, "AuraOfPerfectOrder", 0); // Used only once per round.
+                        SetLocalInt(oToB, "SaveType", nSavingThrow);
+                        SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-			int nBaseSave;
+                        int nBaseSave;
 
-			if (nSavingThrow == SAVING_THROW_FORT)
-			{
-				nBaseSave = GetFortitudeSavingThrow(oTarget);// Tested to confirm it does add effect bonuses.
-			}
-			else if (nSavingThrow == SAVING_THROW_REFLEX)
-			{
-				nBaseSave = GetReflexSavingThrow(oTarget);
-			}
-			else if (nSavingThrow == SAVING_THROW_WILL)
-			{
-				nBaseSave = GetWillSavingThrow(oTarget);
-			}
+                        if (nSavingThrow == SAVING_THROW_FORT)
+                        {
+                                nBaseSave = GetFortitudeSavingThrow(oTarget);// Tested to confirm it does add effect bonuses.
+                        }
+                        else if (nSavingThrow == SAVING_THROW_REFLEX)
+                        {
+                                nBaseSave = GetReflexSavingThrow(oTarget);
+                        }
+                        else if (nSavingThrow == SAVING_THROW_WILL)
+                        {
+                                nBaseSave = GetWillSavingThrow(oTarget);
+                        }
 
-			if ((11 + nBaseSave) < nDC)
-			{
-				bValid = 0;
-			}
-			else bValid = 1;
+                        if ((11 + nBaseSave) < nDC)
+                        {
+                                bValid = 0;
+                        }
+                        else bValid = 1;
 
-			if (nSaveType == SAVING_THROW_TYPE_CHAOS)
-			{
-				bValid = 2; // It is an Aura of Perfect Order after all.
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_DEATH) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH)))
-			{
-				bValid = 2;
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_DISEASE) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE)))
-			{
-				bValid = 2;
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_FEAR) && (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR)))
-			{
-				bValid = 2;
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_MIND_SPELLS) && (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)))
-			{
-				bValid = 2;
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_POISON) && (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON)))
-			{
-				bValid = 2;
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_TRAP) && (GetIsImmune(oTarget, IMMUNITY_TYPE_TRAP)))
-			{
-				bValid = 2;
-			}
+                        if (nSaveType == SAVING_THROW_TYPE_CHAOS)
+                        {
+                                bValid = 2; // It is an Aura of Perfect Order after all.
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_DEATH) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH)))
+                        {
+                                bValid = 2;
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_DISEASE) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE)))
+                        {
+                                bValid = 2;
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_FEAR) && (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR)))
+                        {
+                                bValid = 2;
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_MIND_SPELLS) && (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)))
+                        {
+                                bValid = 2;
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_POISON) && (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON)))
+                        {
+                                bValid = 2;
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_TRAP) && (GetIsImmune(oTarget, IMMUNITY_TYPE_TRAP)))
+                        {
+                                bValid = 2;
+                        }
 
-			int nMessage; // For the sheer sake of producing the saving throw message without a lot of clunky duplication.
+                        int nMessage; // For the sheer sake of producing the saving throw message without a lot of clunky duplication.
 
-			if (bValid == 0)
-			{
-				if (nSavingThrow == SAVING_THROW_FORT)
-				{
-					nMessage = FortitudeSave(oTarget, 255, nSaveType, oSaveVersus);
-				}
-				else if (nSavingThrow == SAVING_THROW_REFLEX)
-				{
-					nMessage = ReflexSave(oTarget, 255, nSaveType, oSaveVersus);
-				}
-				else if (nSavingThrow == SAVING_THROW_WILL)
-				{
-					nMessage = WillSave(oTarget, 255, nSaveType, oSaveVersus);
-				}
-			}
-			else
-			{
-				if (nSavingThrow == SAVING_THROW_FORT)
-				{
-					nMessage = FortitudeSave(oTarget, 1, nSaveType, oSaveVersus);
-				}
-				else if (nSavingThrow == SAVING_THROW_REFLEX)
-				{
-					nMessage = ReflexSave(oTarget, 1, nSaveType, oSaveVersus);
-				}
-				else if (nSavingThrow == SAVING_THROW_WILL)
-				{
-					nMessage = WillSave(oTarget, 1, nSaveType, oSaveVersus);
-				}
-			}
-		}
-	}
-	else if (nSavingThrow == SAVING_THROW_FORT)
-	{	
-		if (GetIsObjectValid(oToB))
-		{
-			SetLocalInt(oToB, "SaveType", SAVING_THROW_FORT);
-			SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
-		}
+                        if (bValid == 0)
+                        {
+                                if (nSavingThrow == SAVING_THROW_FORT)
+                                {
+                                        nMessage = FortitudeSave(oTarget, 255, nSaveType, oSaveVersus);
+                                }
+                                else if (nSavingThrow == SAVING_THROW_REFLEX)
+                                {
+                                        nMessage = ReflexSave(oTarget, 255, nSaveType, oSaveVersus);
+                                }
+                                else if (nSavingThrow == SAVING_THROW_WILL)
+                                {
+                                        nMessage = WillSave(oTarget, 255, nSaveType, oSaveVersus);
+                                }
+                        }
+                        else
+                        {
+                                if (nSavingThrow == SAVING_THROW_FORT)
+                                {
+                                        nMessage = FortitudeSave(oTarget, 1, nSaveType, oSaveVersus);
+                                }
+                                else if (nSavingThrow == SAVING_THROW_REFLEX)
+                                {
+                                        nMessage = ReflexSave(oTarget, 1, nSaveType, oSaveVersus);
+                                }
+                                else if (nSavingThrow == SAVING_THROW_WILL)
+                                {
+                                        nMessage = WillSave(oTarget, 1, nSaveType, oSaveVersus);
+                                }
+                        }
+                }
+        }
+        else if (nSavingThrow == SAVING_THROW_FORT)
+        {
+                if (GetIsObjectValid(oToB))
+                {
+                        SetLocalInt(oToB, "SaveType", SAVING_THROW_FORT);
+                        SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+                }
 
-		bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
-	}
-	else if (nSavingThrow == SAVING_THROW_REFLEX)
-	{
-		if (GetIsObjectValid(oToB))
-		{
-			SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
-			SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
-		}
+                bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
+        }
+        else if (nSavingThrow == SAVING_THROW_REFLEX)
+        {
+                if (GetIsObjectValid(oToB))
+                {
+                        SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
+                        SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+                }
 
-		bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
-	}
-	else if (nSavingThrow == SAVING_THROW_WILL)
+                bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
+        }
+        else if (nSavingThrow == SAVING_THROW_WILL)
     {
-		if (GetIsObjectValid(oToB))
-		{
-			SetLocalInt(oToB, "SaveType", SAVING_THROW_WILL);
-			SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
-		}
+                if (GetIsObjectValid(oToB))
+                {
+                        SetLocalInt(oToB, "SaveType", SAVING_THROW_WILL);
+                        SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+                }
 
-		bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
+                bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
     }
 
-	if (GetIsObjectValid(oToB) && (bValid == 0) && (GetLocalInt(oToB, "Counter") == 84/*COUNTER_IRON_HEART_FOCUS*/) && (GetLocalInt(oToB, "Swift") == 0))
-	{ //Priotity is given to Iron Heart Focus over Zealous Surge because Zealous Surge has a once per day use.
-		SetLocalInt(oToB, "IronHeartFocus", 1);
+        if (GetIsObjectValid(oToB) && (bValid == 0) && (GetLocalInt(oToB, "Counter") == 84/*COUNTER_IRON_HEART_FOCUS*/) && (GetLocalInt(oToB, "Swift") == 0))
+        { //Priotity is given to Iron Heart Focus over Zealous Surge because Zealous Surge has a once per day use.
+                SetLocalInt(oToB, "IronHeartFocus", 1);
 
-		if (nSavingThrow == SAVING_THROW_FORT)
-		{	
-			SetLocalInt(oToB, "SaveType", SAVING_THROW_FORT);
-			SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+                if (nSavingThrow == SAVING_THROW_FORT)
+                {
+                        SetLocalInt(oToB, "SaveType", SAVING_THROW_FORT);
+                        SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-			bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
-		}
-		else if (nSavingThrow == SAVING_THROW_REFLEX)
-		{
-			SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
-			SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+                        bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
+                }
+                else if (nSavingThrow == SAVING_THROW_REFLEX)
+                {
+                        SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
+                        SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-			bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
-		}
-		else if (nSavingThrow == SAVING_THROW_WILL)
-		{
-			SetLocalInt(oToB, "SaveType", SAVING_THROW_WILL);
-			SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-			DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+                        bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
+                }
+                else if (nSavingThrow == SAVING_THROW_WILL)
+                {
+                        SetLocalInt(oToB, "SaveType", SAVING_THROW_WILL);
+                        SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+                        DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-			bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
-		}
-	}
+                        bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
+                }
+        }
 
-	if ((GetHasFeat(6815, oTarget)) && (bValid == 0)) //Zealous Surge
-	{// Assuemed that oToB is valid if you have this feat.
-		if ((GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
-		{
-			FloatingTextStringOnCreature("<color=cyan>*Zealous Surge!*</color>", oTarget, TRUE, 5.0f, COLOR_CYAN, COLOR_BLUE_DARK);
-			SetLocalInt(oToB, "ZealousSurgeUse", 0);
+        if ((GetHasFeat(6815, oTarget)) && (bValid == 0)) //Zealous Surge
+        {// Assuemed that oToB is valid if you have this feat.
+                if ((GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
+                {
+                        FloatingTextStringOnCreature("<color=cyan>*Zealous Surge!*</color>", oTarget, TRUE, 5.0f, COLOR_CYAN, COLOR_BLUE_DARK);
+                        SetLocalInt(oToB, "ZealousSurgeUse", 0);
 
-			if (nSavingThrow == SAVING_THROW_FORT)
-			{	
-				SetLocalInt(oToB, "SaveType", SAVING_THROW_FORT);
-				SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-				DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-				DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+                        if (nSavingThrow == SAVING_THROW_FORT)
+                        {
+                                SetLocalInt(oToB, "SaveType", SAVING_THROW_FORT);
+                                SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+                                DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+                                DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-				bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
-			}
-			else if (nSavingThrow == SAVING_THROW_REFLEX)
-			{
-				SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
-				SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-				DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-				DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+                                bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
+                        }
+                        else if (nSavingThrow == SAVING_THROW_REFLEX)
+                        {
+                                SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
+                                SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+                                DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+                                DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-				bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
-			}
-			else if (nSavingThrow == SAVING_THROW_WILL)
-		    {
-				SetLocalInt(oToB, "SaveType", SAVING_THROW_WILL);
-				SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-				DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-				DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+                                bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
+                        }
+                        else if (nSavingThrow == SAVING_THROW_WILL)
+                    {
+                                SetLocalInt(oToB, "SaveType", SAVING_THROW_WILL);
+                                SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+                                DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+                                DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-				bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
-		    }
-		}
-	}
+                                bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
+                    }
+                }
+        }
 
-	if (bValid == 0)
-	{
-		if ((nSaveType == SAVING_THROW_TYPE_DEATH
-		|| nSpellID == SPELL_WEIRD
-		|| nSpellID == SPELL_FINGER_OF_DEATH) &&
-		nSpellID != SPELL_HORRID_WILTING)
-		{
-			eVis = EffectVisualEffect(VFX_IMP_DEATH);
-			DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-		}
-	}
+        if (bValid == 0)
+        {
+                if ((nSaveType == SAVING_THROW_TYPE_DEATH
+                || nSpellID == SPELL_WEIRD
+                || nSpellID == SPELL_FINGER_OF_DEATH) &&
+                nSpellID != SPELL_HORRID_WILTING)
+                {
+                        eVis = EffectVisualEffect(VFX_IMP_DEATH);
+                        DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+                }
+        }
 
-	if (bValid == 1 || bValid == 2)
-	{
-		if (bValid == 2)
-		{
-			eVis = EffectVisualEffect( VFX_DUR_SPELL_SPELL_RESISTANCE );	// makes use of NWN2 VFX
+        if (bValid == 1 || bValid == 2)
+        {
+                if (bValid == 2)
+                {
+                        eVis = EffectVisualEffect( VFX_DUR_SPELL_SPELL_RESISTANCE );	// makes use of NWN2 VFX
             /*
             If the spell is save immune then the link must be applied in order to get the true immunity
             to be resisted.  That is the reason for returing false and not true.  True blocks the
             application of effects.
             */
-			bValid = FALSE;
-		}
-		DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
-	}
-	return bValid;
+                        bValid = FALSE;
+                }
+                DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
+        }
+        return bValid;
 }
 
 // Since I'm having to recomplie everything with a save in it I might as well use this to my advantage.
@@ -1127,116 +1127,116 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 // maneuvers and feats.
 int Bot9sReflexAdjustedDamage(int nDamage, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus=OBJECT_SELF)
 {
-	int nReturn, nMod, bValid;
-	object oToB = GetItemPossessedBy(oTarget, "tob");
+        int nReturn, nMod, bValid;
+        object oToB = GetItemPossessedBy(oTarget, "tob");
 
-	if (GetIsObjectValid(oToB))
-	{
-		SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
-		SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-		DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-		DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+        if (GetIsObjectValid(oToB))
+        {
+                SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
+                SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+                DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+                DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-		if ((GetLocalInt(oToB, "Stance") == 29/*STANCE_AURA_OF_PERFECT_ORDER*/) || (GetLocalInt(oToB, "Stance2") == 29/*STANCE_AURA_OF_PERFECT_ORDER*/))
-		{
-			nMod = 1;
-		}
-		else if (GetLocalInt(oToB, "Counter") == 83/*COUNTER_IRON_HEART_FOCUS*/)
-		{
-			nMod = 1;
-		}
-		else if ((GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
-		{
-			nMod = 1;
-		}
+                if ((GetLocalInt(oToB, "Stance") == 29/*STANCE_AURA_OF_PERFECT_ORDER*/) || (GetLocalInt(oToB, "Stance2") == 29/*STANCE_AURA_OF_PERFECT_ORDER*/))
+                {
+                        nMod = 1;
+                }
+                else if (GetLocalInt(oToB, "Counter") == 83/*COUNTER_IRON_HEART_FOCUS*/)
+                {
+                        nMod = 1;
+                }
+                else if ((GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
+                {
+                        nMod = 1;
+                }
 
-		if (nMod == 1)
-		{
-			int nBaseSave = GetReflexSavingThrow(oTarget);
-			int nSave;
+                if (nMod == 1)
+                {
+                        int nBaseSave = GetReflexSavingThrow(oTarget);
+                        int nSave;
 
-			// From here we're attempting to rebuild the Saving Throw functions.
-			if (GetLocalInt(oTarget, "AuraOfPerfectOrder") == 1) //Assumed that the Target has the Tome of Battle if this is set to 1.
-			{
-				nSave = 11 + nBaseSave;
-			}
-			else nSave = d20(1) + nBaseSave;
-			
-			if (nSave < nDC)
-			{
-				bValid = 0;
-			}
-			else bValid = 1;
+                        // From here we're attempting to rebuild the Saving Throw functions.
+                        if (GetLocalInt(oTarget, "AuraOfPerfectOrder") == 1) //Assumed that the Target has the Tome of Battle if this is set to 1.
+                        {
+                                nSave = 11 + nBaseSave;
+                        }
+                        else nSave = d20(1) + nBaseSave;
 
-			if (nSaveType == SAVING_THROW_TYPE_CHAOS)
-			{
-				bValid = 2; // It is an Aura of Perfect Order after all.
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_DEATH) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH)))
-			{
-				bValid = 2;
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_DISEASE) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE)))
-			{
-				bValid = 2;
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_FEAR) && (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR)))
-			{
-				bValid = 2;
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_MIND_SPELLS) && (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)))
-			{
-				bValid = 2;
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_POISON) && (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON)))
-			{
-				bValid = 2;
-			}
-			else if ((nSaveType == SAVING_THROW_TYPE_TRAP) && (GetIsImmune(oTarget, IMMUNITY_TYPE_TRAP)))
-			{
-				bValid = 2;
-			}
+                        if (nSave < nDC)
+                        {
+                                bValid = 0;
+                        }
+                        else bValid = 1;
 
-			if ((bValid == 0) && (GetLocalInt(oToB, "Counter") == 83/*COUNTER_IRON_HEART_FOCUS*/) && (GetLocalInt(oToB, "Swift") == 0))
-			{
-				SetLocalInt(oToB, "IronHeartFocus", 1);
+                        if (nSaveType == SAVING_THROW_TYPE_CHAOS)
+                        {
+                                bValid = 2; // It is an Aura of Perfect Order after all.
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_DEATH) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH)))
+                        {
+                                bValid = 2;
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_DISEASE) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE)))
+                        {
+                                bValid = 2;
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_FEAR) && (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR)))
+                        {
+                                bValid = 2;
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_MIND_SPELLS) && (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)))
+                        {
+                                bValid = 2;
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_POISON) && (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON)))
+                        {
+                                bValid = 2;
+                        }
+                        else if ((nSaveType == SAVING_THROW_TYPE_TRAP) && (GetIsImmune(oTarget, IMMUNITY_TYPE_TRAP)))
+                        {
+                                bValid = 2;
+                        }
 
-				nSave = d20(1) + nBaseSave;
+                        if ((bValid == 0) && (GetLocalInt(oToB, "Counter") == 83/*COUNTER_IRON_HEART_FOCUS*/) && (GetLocalInt(oToB, "Swift") == 0))
+                        {
+                                SetLocalInt(oToB, "IronHeartFocus", 1);
 
-				if (nSave < nDC)
-				{
-					bValid = 0;
-				}
-				else bValid = 1;
-			}
+                                nSave = d20(1) + nBaseSave;
 
-			if ((bValid == 0) && (GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
-			{
-				FloatingTextStringOnCreature("<color=cyan>*Zealous Surge!*</color>", oTarget, TRUE, 5.0f, COLOR_CYAN, COLOR_BLUE_DARK);
-				SetLocalInt(oToB, "ZealousSurgeUse", 0);
+                                if (nSave < nDC)
+                                {
+                                        bValid = 0;
+                                }
+                                else bValid = 1;
+                        }
 
-				nSave = d20(1) + nBaseSave;
+                        if ((bValid == 0) && (GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
+                        {
+                                FloatingTextStringOnCreature("<color=cyan>*Zealous Surge!*</color>", oTarget, TRUE, 5.0f, COLOR_CYAN, COLOR_BLUE_DARK);
+                                SetLocalInt(oToB, "ZealousSurgeUse", 0);
 
-				if (nSave < nDC)
-				{
-					bValid = 0;
-				}
-				else bValid = 1;
-			}
-		}
-	}
+                                nSave = d20(1) + nBaseSave;
 
-	if (nMod == 1)
-	{
-		if (bValid == 0)// This does nothing except trigger the saving throw message in the combat log.
-		{
-			nReturn = GetReflexAdjustedDamage(nDamage, oTarget, 255, nSaveType, oSaveVersus);
-		}
-		else nReturn = GetReflexAdjustedDamage(nDamage, oTarget, 1, nSaveType, oSaveVersus);
-	}
-	else nReturn = GetReflexAdjustedDamage(nDamage, oTarget, nDC, nSaveType, oSaveVersus);
+                                if (nSave < nDC)
+                                {
+                                        bValid = 0;
+                                }
+                                else bValid = 1;
+                        }
+                }
+        }
 
-	return nReturn;
+        if (nMod == 1)
+        {
+                if (bValid == 0)// This does nothing except trigger the saving throw message in the combat log.
+                {
+                        nReturn = GetReflexAdjustedDamage(nDamage, oTarget, 255, nSaveType, oSaveVersus);
+                }
+                else nReturn = GetReflexAdjustedDamage(nDamage, oTarget, 1, nSaveType, oSaveVersus);
+        }
+        else nReturn = GetReflexAdjustedDamage(nDamage, oTarget, nDC, nSaveType, oSaveVersus);
+
+        return nReturn;
 }
 
 // * Will pass back a linked effect for all the protection from alignment spells.  The power represents the multiplier of strength.
@@ -1282,7 +1282,7 @@ effect CreateDoomEffectsLink()
 
     return eLink;
 }
- 
+
 void RemoveSpellEffects(int nSpell_ID, object oCaster, object oTarget)
 {
     //Declare major variables
@@ -1299,18 +1299,18 @@ void RemoveSpellEffects(int nSpell_ID, object oCaster, object oTarget)
                 if(GetEffectSpellId(eAOE) == nSpell_ID)
                 {
                     RemoveEffect(oTarget, eAOE);
-					eAOE = GetFirstEffect(oTarget);	// 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
+                                        eAOE = GetFirstEffect(oTarget);	// 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
                 }
-				else
-				{
-					eAOE = GetNextEffect(oTarget);
-				}
+                                else
+                                {
+                                        eAOE = GetNextEffect(oTarget);
+                                }
             }
-			else
-			{
-            	//Get next effect on the target
-            	eAOE = GetNextEffect(oTarget);
-			}
+                        else
+                        {
+                //Get next effect on the target
+                eAOE = GetNextEffect(oTarget);
+                        }
         }
     }
 }
@@ -1328,13 +1328,13 @@ void RemoveSpecificEffect(int nEffectTypeID, object oTarget)
         {
             //If the effect was created by the spell then remove it
             RemoveEffect(oTarget, eAOE);
-			eAOE = GetFirstEffect(oTarget);	// 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
+                        eAOE = GetFirstEffect(oTarget);	// 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
         }
-		else
-		{
-        	//Get next effect on the target
-        	eAOE = GetNextEffect(oTarget);
-		}
+                else
+                {
+                //Get next effect on the target
+                eAOE = GetNextEffect(oTarget);
+                }
     }
 }
 
@@ -1434,11 +1434,11 @@ int RemoveProtections(int nSpell_ID, object oTarget, int nCount)
             if(GetEffectSpellId(eProtection) == nSpell_ID)
             {
                 RemoveEffect(oTarget, eProtection);
-				eProtection = GetFirstEffect(oTarget);	// 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
+                                eProtection = GetFirstEffect(oTarget);	// 8/28/06 - BDF-OEI: start back at the beginning to ensure that linked effects are removed safely
                 //return 1;
                 nCnt++;
             }
-			else eProtection = GetNextEffect(oTarget);//Get next effect on the target
+                        else eProtection = GetNextEffect(oTarget);//Get next effect on the target
         }
     }
     if(nCnt > 0)
@@ -1583,29 +1583,29 @@ void TrapDoElectricalDamage(int ngDamageMaster, int nSaveDC, int nSecondary)
                 }
                 else
                 {
-					nDamage /= 2;
-				}
-				if (nDamage > 0)
-				{
+                                        nDamage /= 2;
+                                }
+                                if (nDamage > 0)
+                                {
                     //Set the damage effect
-					eDam = EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
+                                        eDam = EffectDamage(nDamage, DAMAGE_TYPE_ELECTRICAL);
                     //Apply the VFX impact and damage effect
-					DelayCommand(0.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, o2ndTarget));
-					ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, o2ndTarget);
-					//Connect the lightning stream from one target to another.
-					ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLightning, o2ndTarget, 0.75);
-					//Set the last target as the new start for the lightning stream
-					eLightning = EffectBeam(VFX_BEAM_LIGHTNING, o2ndTarget, BODY_NODE_CHEST);	// no longer using NWN1 VFX; does this still work?
-				}
-			}
-			//Reset the damage
-			nDamage = nDamageMaster;
-			//Increment the count
-			nCount++;
-		}
-		//Get next target in the shape.
-		o2ndTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTarget);
-	}
+                                        DelayCommand(0.0, ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, o2ndTarget));
+                                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, o2ndTarget);
+                                        //Connect the lightning stream from one target to another.
+                                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eLightning, o2ndTarget, 0.75);
+                                        //Set the last target as the new start for the lightning stream
+                                        eLightning = EffectBeam(VFX_BEAM_LIGHTNING, o2ndTarget, BODY_NODE_CHEST);	// no longer using NWN1 VFX; does this still work?
+                                }
+                        }
+                        //Reset the damage
+                        nDamage = nDamageMaster;
+                        //Increment the count
+                        nCount++;
+                }
+                //Get next target in the shape.
+                o2ndTarget = GetNextObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_LARGE, lTarget);
+        }
 }
 
 // Iterates through the list of objects on oCaster. Returns the index of the first occurance of oTarget.
@@ -1613,29 +1613,29 @@ void TrapDoElectricalDamage(int ngDamageMaster, int nSaveDC, int nSecondary)
 // Returns -1 if the entry is not in the list.
 int IgnoreTargetRulesGetFirstIndex(object oCaster, object oTarget)
 {
-	int nITREntries = GetLocalInt(oCaster, ITR_NUM_ENTRIES), i;
-	object oEntry;
-	for (i=1; i<=nITREntries; i++)
-	{
-		oEntry = GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(i));
-		if (oEntry == oTarget)
-			return i;
-	}
-	return -1;
+        int nITREntries = GetLocalInt(oCaster, ITR_NUM_ENTRIES), i;
+        object oEntry;
+        for (i=1; i<=nITREntries; i++)
+        {
+                oEntry = GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(i));
+                if (oEntry == oTarget)
+                        return i;
+        }
+        return -1;
 }
 
 // Regarding the list of objects on oCaster - this removes the entry with index nEntry from the list.
 // side affect is that it changes the order of the list. But order is not important with the ITR object list.
 void IgnoreTargetRulesRemoveEntry(object oCaster, int nEntry)
 {
-	int nITREntries = GetLocalInt(oCaster, ITR_NUM_ENTRIES);
-	if ((nITREntries>0) && (nEntry>0) && (nEntry<=nITREntries))
-	{
-		object oEntry = GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries));
-		SetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nEntry), GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries))); //replace nEntry with last object in list.
-		DeleteLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries));
-		SetLocalInt(oCaster, ITR_NUM_ENTRIES, nITREntries-1); //decrement list total
-	}
+        int nITREntries = GetLocalInt(oCaster, ITR_NUM_ENTRIES);
+        if ((nITREntries>0) && (nEntry>0) && (nEntry<=nITREntries))
+        {
+                object oEntry = GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries));
+                SetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nEntry), GetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries))); //replace nEntry with last object in list.
+                DeleteLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries));
+                SetLocalInt(oCaster, ITR_NUM_ENTRIES, nITREntries-1); //decrement list total
+        }
 }
 
 //Enqueues a target on a spell caster as an acceptable target to bypass the spellsIsTarget() check on.
@@ -1643,9 +1643,9 @@ void IgnoreTargetRulesRemoveEntry(object oCaster, int nEntry)
 // oTarget - the spell target.
 void IgnoreTargetRulesEnqueueTarget(object oCaster, object oTarget)
 {
-	int nITREntries = GetLocalInt(oCaster, ITR_NUM_ENTRIES) + 1;
-	SetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries), oTarget);
-	SetLocalInt(oCaster,ITR_NUM_ENTRIES,nITREntries);
+        int nITREntries = GetLocalInt(oCaster, ITR_NUM_ENTRIES) + 1;
+        SetLocalObject(oCaster, ITR_ENTRY_PREFIX + IntToString(nITREntries), oTarget);
+        SetLocalInt(oCaster,ITR_NUM_ENTRIES,nITREntries);
 }
 
 
@@ -1654,11 +1654,11 @@ void IgnoreTargetRulesEnqueueTarget(object oCaster, object oTarget)
 // Parameters the same as ActionCastSpellAtObject() in nwscript.nss
 void IgnoreTargetRulesActionCastSpellAtObject(int nSpell, object oTarget, int nMetaMagic=METAMAGIC_ANY, int bCheat=FALSE, int nDomainLevel=0, int nProjectilePathType=PROJECTILE_PATH_TYPE_DEFAULT, int bInstantSpell=FALSE)
 {
-	IgnoreTargetRulesEnqueueTarget(OBJECT_SELF, oTarget);
-	ActionCastSpellAtObject(nSpell, oTarget, nMetaMagic,bCheat,nDomainLevel,nProjectilePathType, bInstantSpell);
+        IgnoreTargetRulesEnqueueTarget(OBJECT_SELF, oTarget);
+        ActionCastSpellAtObject(nSpell, oTarget, nMetaMagic,bCheat,nDomainLevel,nProjectilePathType, bInstantSpell);
 }
 
-// Enqueues a spell that will ignore the spellsIsTarget logic. 
+// Enqueues a spell that will ignore the spellsIsTarget logic.
 // Variation: this will target all within the nShapeType and fShapeSize parameters. (ex SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL)
 //   try to match the nShapeType and fShapeSize parameters to prevent lingerings ITR variables.
 // Other parameters are the same as ActionCastSpellAtObject() in nwscript.nss
@@ -1667,14 +1667,14 @@ void IgnoreTargetRulesActionCastSpellAtObjectArea(int nShapeType, float fShapeSi
     oTarget = GetFirstObjectInShape(nShapeType, fShapeSize, GetLocation(OBJECT_SELF));
     while(GetIsObjectValid(oTarget))
     {
-		IgnoreTargetRulesEnqueueTarget(OBJECT_SELF, oTarget);		
+                IgnoreTargetRulesEnqueueTarget(OBJECT_SELF, oTarget);
         //Get the next target in the specified area around the caster
         oTarget = GetNextObjectInShape(nShapeType, fShapeSize, GetLocation(OBJECT_SELF));
-	}
-	ActionCastSpellAtObject(nSpell,oTarget,nMetaMagic,bCheat, nDomainLevel,nProjectilePathType, bInstantSpell);		
+        }
+        ActionCastSpellAtObject(nSpell,oTarget,nMetaMagic,bCheat, nDomainLevel,nProjectilePathType, bInstantSpell);
 }
 
-// Enqueues a spell that will ignore the spellsIsTarget logic. 
+// Enqueues a spell that will ignore the spellsIsTarget logic.
 // Variation: this will target all within the nShapeType and fShapeSize parameters. (ex SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL)
 //   try to match the nShapeType and fShapeSize parameters to prevent lingerings ITR variables.
 // Other parameters are the same as ActionCastSpellAtLocation() in nwscript.nss
@@ -1683,9 +1683,9 @@ void IgnoreTargetRulesActionCastSpellAtLocationArea(int nShapeType, float fShape
     object oTarget = GetFirstObjectInShape(nShapeType, fShapeSize, lTargetLocation);
     while(GetIsObjectValid(oTarget))
     {
-		IgnoreTargetRulesEnqueueTarget(OBJECT_SELF, oTarget);		
+                IgnoreTargetRulesEnqueueTarget(OBJECT_SELF, oTarget);
         //Get the next target in the specified area around the caster
         oTarget = GetNextObjectInShape(nShapeType, fShapeSize, lTargetLocation);
-	}
-	ActionCastSpellAtLocation(nSpell,lTargetLocation,nMetaMagic,bCheat,nProjectilePathType, bInstantSpell);
+        }
+        ActionCastSpellAtLocation(nSpell,lTargetLocation,nMetaMagic,bCheat,nProjectilePathType, bInstantSpell);
 }

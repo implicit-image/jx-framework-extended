@@ -22,15 +22,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
 //**************************************//
 //                                      //
 //              Interface               //
@@ -96,15 +87,11 @@ string JXLocationToString(location lLocation);
 // * Returns a loation corresponding to the string
 location JXStringToLocation(string sLocation);
 
-string JXTypeName(int iType);
-
 string JXEffectName(int iEffect);
 
 string JXModName(int iMod);
 
 string JXModOpName(int iModOp);
-
-void JXPrintFunctionCall(string sFunctionName, string sMsg="", string sArg1="", string sArg2="", string sArg3="", string sArg4="", string sArg5="", string sArg6="", string sArg7="");
 
 
 
@@ -436,23 +423,6 @@ location JXStringToLocation(string sLocation)
     return Location(oArea, vPosition, fOrientation);
 }
 
-
-string JXTypeName(int iType)
-{
-    switch(iType)
-    {
-        case JX_TYPE_INT:      return JX_TYPE_NAME_INT;
-        case JX_TYPE_FLOAT:    return JX_TYPE_NAME_FLOAT;
-        case JX_TYPE_STRING:   return JX_TYPE_NAME_STRING;
-        case JX_TYPE_OBJECT:   return JX_TYPE_NAME_OBJECT;
-        case JX_TYPE_LOCATION: return JX_TYPE_NAME_OBJECT;
-        case JX_TYPE_VECTOR:   return JX_TYPE_NAME_VECTOR;
-        default:               return "";
-    }
-    return "";
-}
-
-
 string JXEffectName(int iEffect)
 {
     switch (iEffect)
@@ -467,7 +437,7 @@ string JXEffectName(int iEffect)
         case JX_EFFECT_AC_INCREASE:                return "JX_EFFECT_AC_INCREASE";
         case JX_EFFECT_SAVING_THROW_INCREASE:      return "JX_EFFECT_SAVING_THROW_INCREASE";
         case JX_EFFECT_ATTACK_INCREASE:            return "JX_EFFECT_ATTACK_INCREASE";
-        case JX_EFFECT_DMAAGE_REDUCTION:           return "JX_EFFECT_DMAAGE_REDUCTION";
+        case JX_EFFECT_DAMAGE_REDUCTION:           return "JX_EFFECT_DMAAGE_REDUCTION";
         case JX_EFFECT_DAMAGE_INCREASE:            return "JX_EFFECT_DAMAGE_INCREASE";
         case JX_EFFECT_ENTANGLE:                   return "JX_EFFECT_ENTANGLE";
         case JX_EFFECT_DEATH:                      return "JX_EFFECT_DEATH";
@@ -602,30 +572,4 @@ string JXModOpName(int iModOp)
         default: return "<INVALID EFFECT MOD OP ID(" + IntToString(iModOp) + ")>";
     }
     return "<INVALID EFFECT MOD OP ID(" + IntToString(iModOp) + ")>";
-}
-
-
-void JXPrintFunctionCall(string sFunctionName, string sMsg="",  string sArg1="", string sArg2="", string sArg3="", string sArg4="", string sArg5="", string sArg6="", string sArg7="")
-{
-    int i = 1;
-    string sArg = sArg1;
-    Log("Calling " + sFunctionName);
-    while (i < 8 && sArg != "")
-    {
-        if (sArg1 != "" && i == 1) sArg = sArg1;
-        if (sArg2 != "" && i == 2) sArg = sArg2;
-        if (sArg3 != "" && i == 3) sArg = sArg3;
-        if (sArg4 != "" && i == 4) sArg = sArg4;
-        if (sArg5 != "" && i == 5) sArg = sArg5;
-        if (sArg6 != "" && i == 6) sArg = sArg6;
-        if (sArg7 != "" && i == 7) sArg = sArg7;
-        Log(IntToString(i) + ": " + sArg);
-        i++;
-    }
-    if (sMsg != "")
-    {
-        Log(">>------------------");
-        Log(sMsg);
-        Log(">>------------------");
-    }
 }

@@ -159,5 +159,5 @@ int JXImplEventActionCastSpellCast(object oCaster, int iSpellId, object oTarget,
 // - iResult FALSE if the spellcasting action hasn't been performed successfully
 void JXImplEventActionCastSpellFinished(object oCaster, int iSpellId, object oTarget, location lTarget, int iCasterLevel, int iMetaMagicFeat, int iSpellSaveDC, int iClass, int iResult)
 {
-	return;
+    return;
 }

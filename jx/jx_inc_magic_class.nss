@@ -1,5 +1,3 @@
-#include "cmi_includes"
-#include "2d2f_includes"
 #include "jx_inc_magic_info"
 //========================================== Caster Class Search ==========================================//
 

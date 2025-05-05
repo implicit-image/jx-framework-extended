@@ -190,6 +190,12 @@ effect JXEffectSpellLevelAbsorption(int iMaxSpellLevelAbsorbed, int iTotalSpellL
 
 effect JXEffectMissChance(int iPercentage, int iMissChanceType=MISS_CHANCE_TYPE_NORMAL);
 
+effect JXEffectDisappearAppear(location lLocation, int iAnimation=1);
+
+effect JXEffectDisappear(int iAnimation=1);
+
+effect JXEffectAppear(int iAnimation=1);
+
 effect JXEffectModifyAttacks(int iAttacks);
 
 effect JXEffectDamageShield(int iDamageAmount, int iRandomAmount, int iDamageType);
@@ -303,11 +309,39 @@ effect JXEffectBeam(int iBeamVisualEffect, object oEffector, int iBodyPart, int 
 //simulates shaken effect
 effect JXEffectShaken();
 
+effect JXEffectSickened();
+
+effect JXEffectFatigue();
+
+effect JXEffectExhausted();
+
+
+
+//=========================================================
+// UTILITY FUNCTIONS
+//=========================================================
+
+effect JXEffectLinkEffects(effect e1, effect e2);
+
+effect JXEffectLink3Effects(effect e1, effect e2, effect e3);
+
+effect JXEffectLink4Effects(effect e1, effect e2, effect e3, effect e4);
+
+effect JXEffectLink5Effects(effect e1, effect e2, effect e3, effect e4, effect e5);
+
+effect JXEffectLink6Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6);
+
+effect JXEffectLink7Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7);
+
+effect JXEffectLink8Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8);
+
+effect JXEffectLink9Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8, effect e9);
+
+effect JXEffectLink10Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8, effect e9, effect e10);
+
+
 
 //================================================IMPLEMENTATION====================================
-
-
-
 
 
 //=======================================================
@@ -790,6 +824,21 @@ effect JXEffectMissChance(int iPercentage, int iMissChanceType=MISS_CHANCE_TYPE_
     return EffectMissChance(iPercentage, iMissChanceType);
 }
 
+effect JXEffectDisappearAppear(location lLocation, int iAnimation=1)
+{
+    return EffectDisappearAppear(lLocation, iAnimation);
+}
+
+effect JXEffectDisappear(int iAnimation=1)
+{
+    return EffectDisappear(iAnimation);
+}
+
+effect JXEffectAppear(int iAnimation=1)
+{
+    return EffectAppear(iAnimation);
+}
+
 effect JXEffectModifyAttacks(int iAttacks)
 {
     return EffectModifyAttacks(iAttacks);
@@ -1040,4 +1089,134 @@ effect JXEffectShaken()
     effect eShakenLink = EffectLinkEffects(eAttackPen, eSavePen);
     eShakenLink = EffectLinkEffects(eShakenLink, eSkillPen);
     return eShakenLink;
+}
+
+effect JXEffectSickened()
+{
+    effect eAttackPenalty = EffectAttackDecrease(2);
+    effect eDamagePenalty = EffectDamageDecrease(2);
+    effect eSavePenalty = EffectSavingThrowDecrease(SAVING_THROW_ALL, 2);
+    effect eSkillPenalty = EffectSkillDecrease(SKILL_ALL_SKILLS, 2);
+    //effect eAbilityPenalty = EffectAbilityDecrease(, 2);
+
+    effect eRet = EffectLinkEffects (eAttackPenalty, eDamagePenalty);
+    eRet = EffectLinkEffects(eRet, eSavePenalty);
+    eRet = EffectLinkEffects(eRet, eSkillPenalty);
+    eRet = ExtraordinaryEffect(eRet);
+    return (eRet);
+}
+
+effect JXEffectFatigue()
+{
+    // Create the fatigue penalty
+    effect eStrPenalty = EffectAbilityDecrease(ABILITY_STRENGTH, 2);
+    effect eDexPenalty = EffectAbilityDecrease(ABILITY_DEXTERITY, 2);
+    effect eMovePenalty = EffectMovementSpeedDecrease(10);  // 10% decrease
+
+    effect eRet = EffectLinkEffects (eStrPenalty, eDexPenalty);
+    eRet = EffectLinkEffects(eRet, eMovePenalty);
+    eRet = ExtraordinaryEffect(eRet);
+    return (eRet);
+}
+
+effect JXEffectExhausted()
+{
+    effect eStrPenalty = EffectAbilityDecrease(ABILITY_STRENGTH, 6);
+    effect eDexPenalty = EffectAbilityDecrease(ABILITY_DEXTERITY, 6);
+    effect eMovePenalty = EffectMovementSpeedDecrease(50);  // 50% decrease
+
+    effect eRet = EffectLinkEffects (eStrPenalty, eDexPenalty);
+    eRet = EffectLinkEffects(eRet, eMovePenalty);
+    eRet = ExtraordinaryEffect(eRet);
+    return (eRet);
+}
+
+// for compatibility atp.
+effect JXEffectLinkEffects(effect e1, effect e2)
+{
+    return EffectLinkEffects(e1, e2);
+}
+
+effect JXEffectLink3Effects(effect e1, effect e2, effect e3)
+{
+    e1 = EffectLinkEffects(e1, e2);
+    e1 = EffectLinkEffects(e1, e3);
+    return e1;
+}
+
+effect JXEffectLink4Effects(effect e1, effect e2, effect e3, effect e4)
+{
+    e1 = EffectLinkEffects(e1, e2);
+    e1 = EffectLinkEffects(e1, e3);
+    e1 = EffectLinkEffects(e1, e4);
+    return e1;
+}
+
+effect JXEffectLink5Effects(effect e1, effect e2, effect e3, effect e4, effect e5)
+{
+    e1 = EffectLinkEffects(e1, e2);
+    e1 = EffectLinkEffects(e1, e3);
+    e1 = EffectLinkEffects(e1, e4);
+    e1 = EffectLinkEffects(e1, e5);
+    return e1;
+}
+
+effect JXEffectLink6Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6)
+{
+    e1 = EffectLinkEffects(e1, e2);
+    e1 = EffectLinkEffects(e1, e3);
+    e1 = EffectLinkEffects(e1, e4);
+    e1 = EffectLinkEffects(e1, e5);
+    e1 = EffectLinkEffects(e1, e6);
+    return e1;
+}
+
+effect JXEffectLink7Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7)
+{
+    e1 = EffectLinkEffects(e1, e2);
+    e1 = EffectLinkEffects(e1, e3);
+    e1 = EffectLinkEffects(e1, e4);
+    e1 = EffectLinkEffects(e1, e5);
+    e1 = EffectLinkEffects(e1, e6);
+    e1 = EffectLinkEffects(e1, e7);
+    return e1;
+}
+
+effect JXEffectLink8Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8)
+{
+    e1 = EffectLinkEffects(e1, e2);
+    e1 = EffectLinkEffects(e1, e3);
+    e1 = EffectLinkEffects(e1, e4);
+    e1 = EffectLinkEffects(e1, e5);
+    e1 = EffectLinkEffects(e1, e6);
+    e1 = EffectLinkEffects(e1, e7);
+    e1 = EffectLinkEffects(e1, e8);
+    return e1;
+}
+
+effect JXEffectLink9Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8, effect e9)
+{
+    e1 = EffectLinkEffects(e1, e2);
+    e1 = EffectLinkEffects(e1, e3);
+    e1 = EffectLinkEffects(e1, e4);
+    e1 = EffectLinkEffects(e1, e5);
+    e1 = EffectLinkEffects(e1, e6);
+    e1 = EffectLinkEffects(e1, e7);
+    e1 = EffectLinkEffects(e1, e8);
+    e1 = EffectLinkEffects(e1, e9);
+    return e1;
+}
+
+effect JXEffectLink10Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8, effect e9, effect e10)
+{
+    e1 = EffectLinkEffects(e1, e2);
+    e1 = EffectLinkEffects(e1, e3);
+    e1 = EffectLinkEffects(e1, e4);
+    e1 = EffectLinkEffects(e1, e5);
+    e1 = EffectLinkEffects(e1, e6);
+    e1 = EffectLinkEffects(e1, e7);
+    e1 = EffectLinkEffects(e1, e8);
+    e1 = EffectLinkEffects(e1, e9);
+    e1 = EffectLinkEffects(e1, e10);
+    return e1;
 }

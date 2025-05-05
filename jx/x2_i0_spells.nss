@@ -13,11 +13,9 @@
 // ChazM 1/29/07 - modified GetBestAOEBehavior(), added GetIsHealingRelatedSpell(), other minor changes
 // jallaix 03/13/07 - modified CheckAndApplyTerrifyingRage() to use JXApplyAreaEffectToObject()
 // jallaix 04/22/07 - compatibility with patch 1.05
-
-#include "jx_inc_magic"
 #include "x2_inc_itemprop"
 #include "jx_inc_magic"
-#include "nw_i0_spells"
+// #include "nw_i0_spells"
 #include "x0_i0_spells"
 
 //------------------------------------------------------------------------------
@@ -381,7 +379,7 @@ void DoMindBlast(int nDC, int nDuration, float fRange)
             // already stunned
             if (GetHasSpellEffect(JXGetSpellId(),oTarget))
             {
-                 // only affects the targeted object
+                // only affects the targeted object
                 JXApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_IMP_STUN), oTarget);
                 int nDamage;
                 if (GetLevelByClass(CLASS_TYPE_SHIFTER,OBJECT_SELF)>0)
@@ -513,7 +511,7 @@ int GetBestAOEBehavior(int nSpellID, int iCasterLevel=-1)
         if (nSpellID == SPELL_GREASE)
         {
            if (spellsIsFlying(OBJECT_SELF))
-           return X2_SPELL_AOEBEHAVIOR_IGNORE;
+             return X2_SPELL_AOEBEHAVIOR_IGNORE;
         }
         if (GetHasSpell(SPELL_GUST_OF_WIND))
             return X2_SPELL_AOEBEHAVIOR_GUST;

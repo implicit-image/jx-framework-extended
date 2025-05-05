@@ -154,7 +154,7 @@ const int JX_FORK_EVENTSPELLCONJURING =             23;
 const int JX_FORK_EVENTSPELLCONJURED =          24;
 const int JX_FORK_EVENTSPELLCAST =              25;
 const int JX_FORK_EVENTSPELLFINISHED =          26;
-// customizable sabing throw function
+// customizable saving throw function
 const int JX_FORK_SAVINGTHROW         = 27;
 // effect trigger activation
 const int JX_FORK_EFFECT_TRIGGER = 28;
@@ -248,7 +248,6 @@ const int JX_EFFECT_MOD_OP_PARAM_MAP = 14;
 const int JX_EFFECT_MOD_OP_PROP_SUBTYPE = 15;
 const int JX_EFFECT_MOD_OP_PROP_VS_RACIAL = 16;
 const int JX_EFFECT_MOD_OP_PROP_VS_ALIGN = 17;
-
 const int JX_EFFECT_MOD_OP_MAX_ID = 18;
 
 //###########################################

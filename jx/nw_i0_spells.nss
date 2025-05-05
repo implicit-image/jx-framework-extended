@@ -76,7 +76,7 @@
 #include "x2_inc_itemprop"
 #include "x0_i0_petrify"
 #include "x0_i0_assoc"
-#include "bot9s_inc_constants"
+// #include "bot9s_inc_constants"
 #include "x2_inc_spellhook"
 
 // #include "jx_inc_magic_effects"
@@ -89,9 +89,10 @@ const int SPELL_TARGET_STANDARDHOSTILE = 2;
 const int SPELL_TARGET_SELECTIVEHOSTILE = 3;
 const int SAVING_THROW_NONE = 4;
 // * used by the IgnoreTargetRules functions
-const string ITR_NUM_ENTRIES = "ITR_NUM_ENTRIES"; //number of stored targets to ignore the check.
-const string ITR_ENTRY_PREFIX = "ITR_TARGET_ENTRY"; //prefix for stored targets (ITR_TARGET_ENTRY1, ITR_TARGET_ENTRY15, etc)
-
+//number of stored targets to ignore the check.
+const string ITR_NUM_ENTRIES = "ITR_NUM_ENTRIES";
+//prefix for stored targets (ITR_TARGET_ENTRY1, ITR_TARGET_ENTRY15, etc)
+const string ITR_ENTRY_PREFIX = "ITR_TARGET_ENTRY";
 // GZ: Number of spells in GetSpellBreachProtections
 const int NW_I0_SPELLS_MAX_BREACH = 33;
 const string VAR_IMMUNE_TO_HEAL = "IMMUNE_TO_HEAL";
@@ -412,7 +413,7 @@ int spellsIsTarget(object oTarget, int nTargetType, object oSource)
     {
         // * this kind of spell will affect all friendlies and anyone in my
         // * party, even if we are upset with each other currently.
-        case SPELL_TARGET_ALLALLIES:
+        case 1://SPELL_TARGET_ALLALLIES:
         {
 
             if(GetIsReactionTypeFriendly(oTarget,oSource) || GetFactionEqual(oTarget,oSource))
@@ -421,7 +422,7 @@ int spellsIsTarget(object oTarget, int nTargetType, object oSource)
             }
             break;
         }
-        case SPELL_TARGET_STANDARDHOSTILE:
+        case 2://SPELL_TARGET_STANDARDHOSTILE:
         {
             nReturnValue = GetIsStandardHostileTarget(oTarget, oSource);
             break;
@@ -429,7 +430,7 @@ int spellsIsTarget(object oTarget, int nTargetType, object oSource)
         // * only harms enemies, ever
         // * current list:call lightning, isaac missiles, firebrand, chain lightning, dirge, Nature's balance,
         // * Word of Faith, bard songs that should never affect friendlies
-        case SPELL_TARGET_SELECTIVEHOSTILE:
+        case 3: //SPELL_TARGET_SELECTIVEHOSTILE:
         {
             // 10/23/06 - BDF(OEI): added GetIsReactionTypeHostile() since GetIsEnemy may not capture all cases
             if( GetIsEnemy(oTarget,oSource) || GetIsReactionTypeHostile(oTarget, oSource) )
@@ -538,30 +539,30 @@ int GetCureDamageTotal(object oTarget, int nDamage, int nMaxExtraDamage, int nMa
         nDamage = nDamage + (2 * nSpellLvl);
     }
 
-    // Drammel - 5/8/2009 Support for the Crusader's Delayed Damage Pool.
-    if (GetLevelByClass(CLASS_TYPE_CRUSADER, oTarget) > 0)
-    {
-        string sName = GetName(oTarget);
-        string sToB = sName + "tob";
-        object oToB = GetObjectByTag(sToB);
+    // // Drammel - 5/8/2009 Support for the Crusader's Delayed Damage Pool.
+    // if (GetLevelByClass(CLASS_TYPE_CRUSADER, oTarget) > 0)
+    // {
+    //     string sName = GetName(oTarget);
+    //     string sToB = sName + "tob";
+    //     object oToB = GetObjectByTag(sToB);
 
-        if ((GetIsObjectValid(oToB)) && (GetLocalInt(oToB, "FuriousCounterstrike") == 0))
-        {
-            int nHp = GetCurrentHitPoints(oTarget);
-            int nMaxHp = GetMaxHitPoints(oTarget);
-            int nSurplus = nHp + nDamage;
+    //     if ((GetIsObjectValid(oToB)) && (GetLocalInt(oToB, "FuriousCounterstrike") == 0))
+    //     {
+    //         int nHp = GetCurrentHitPoints(oTarget);
+    //         int nMaxHp = GetMaxHitPoints(oTarget);
+    //         int nSurplus = nHp + nDamage;
 
-            if (nSurplus > nMaxHp)
-            {
-                int nHeal = nMaxHp - nSurplus;
+    //         if (nSurplus > nMaxHp)
+    //         {
+    //             int nHeal = nMaxHp - nSurplus;
 
-                SetLocalInt(oToB, "DDPoolCanHeal", 1);
-                SetLocalInt(oToB, "DDPoolHealValue", nHeal);
-                DelayCommand(6.0f, SetLocalInt(oToB, "DDPoolCanHeal", 1));
-                DelayCommand(6.0f, SetLocalInt(oToB, "DDPoolHealValue", 0));
-            }
-        }
-    }
+    //             SetLocalInt(oToB, "DDPoolCanHeal", 1);
+    //             SetLocalInt(oToB, "DDPoolHealValue", nHeal);
+    //             DelayCommand(6.0f, SetLocalInt(oToB, "DDPoolCanHeal", 1));
+    //             DelayCommand(6.0f, SetLocalInt(oToB, "DDPoolHealValue", 0));
+    //         }
+    //     }
+    // }
 
     return (nDamage);
 }
@@ -617,7 +618,7 @@ void DoHarming (object oTarget, int nDamageTotal, int nDamageType, int vfx_impac
     //SendMessageToPC(GetFirstPC(), "nZombified = " + IntToString(GetLocalInt(oTarget,"nZombified")));
 
     int nZombified = GetLocalInt(oTarget,"nZombified");
-    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF) && !nZombified)
+    if (spellsIsTarget(oTarget, 2/*SPELL_TARGET_STANDARDHOSTILE*/, OBJECT_SELF) && !nZombified)
     {
         if (!MyResistSpell(OBJECT_SELF, oTarget))
         {
@@ -956,25 +957,25 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
         return 2 = IMMUNE TO WHAT WAS BEING SAVED AGAINST
     */
 
-    if (GetHasFeat(FEAT_SHADOW_TRICKSTER))
-    {
-        string sToB = GetFirstName(OBJECT_SELF) + "tob";
-        object oToB = GetObjectByTag(sToB);
-        int nStance = GetLocalInt(oToB, "Stance");
-        int nStance2 = GetLocalInt(oToB, "Stance2");
+    // if (GetHasFeat(FEAT_SHADOW_TRICKSTER))
+    // {
+    //     string sToB = GetFirstName(OBJECT_SELF) + "tob";
+    //     object oToB = GetObjectByTag(sToB);
+    //     int nStance = GetLocalInt(oToB, "Stance");
+    //     int nStance2 = GetLocalInt(oToB, "Stance2");
 
-        if (nStance == 116 || nStance2 == 116 || nStance == 117 || nStance2 == 117
-        || nStance == 119 || nStance2 == 119 || nStance == 122 || nStance2 == 122
-        || nStance == 129 || nStance2 == 129 || nStance == 139 || nStance2 == 139)
-        {
-            string sSchool = GetLocalString(oToB, "spells_School" + IntToString(nSpellID));
+    //     if (nStance == 116 || nStance2 == 116 || nStance == 117 || nStance2 == 117
+    //     || nStance == 119 || nStance2 == 119 || nStance == 122 || nStance2 == 122
+    //     || nStance == 129 || nStance2 == 129 || nStance == 139 || nStance2 == 139)
+    //     {
+    //         string sSchool = GetLocalString(oToB, "spells_School" + IntToString(nSpellID));
 
-            if (sSchool == "I")
-            {
-                nDC += 2;
-            }
-        }
-    }
+    //         if (sSchool == "I")
+    //         {
+    //             nDC += 2;
+    //         }
+    //     }
+    // }
 
     // -------------------------------------------------------------------------
     // GZ: sanity checks to prevent wrapping around
@@ -993,103 +994,104 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
     int bValid = FALSE;
     string sToB = GetFirstName(oTarget) + "tob";
     object oToB = GetObjectByTag(sToB);
+    // FIXME: bot9s code
+    // if (GetLocalInt(oTarget, "AuraOfPerfectOrder") == 1) //Assumed that the Target has the Tome of Battle if this is set to 1.
+    // {
+    //     if ((GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER) || (GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER))
+    //     {// From here we're attempting to rebuild the Saving Throw functions.
 
-    if (GetLocalInt(oTarget, "AuraOfPerfectOrder") == 1) //Assumed that the Target has the Tome of Battle if this is set to 1.
-    {
-        if ((GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER) || (GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER))
-        {// From here we're attempting to rebuild the Saving Throw functions.
+    //         SetLocalInt(oTarget, "AuraOfPerfectOrder", 0); // Used only once per round.
+    //         SetLocalInt(oToB, "SaveType", nSavingThrow);
+    //         SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+    //         DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+    //         DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-            SetLocalInt(oTarget, "AuraOfPerfectOrder", 0); // Used only once per round.
-            SetLocalInt(oToB, "SaveType", nSavingThrow);
-            SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-            DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-            DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+    //         int nBaseSave;
 
-            int nBaseSave;
+    //         if (nSavingThrow == SAVING_THROW_FORT)
+    //         {
+    //             nBaseSave = GetFortitudeSavingThrow(oTarget);// Tested to confirm it does add effect bonuses.
+    //         }
+    //         else if (nSavingThrow == SAVING_THROW_REFLEX)
+    //         {
+    //             nBaseSave = GetReflexSavingThrow(oTarget);
+    //         }
+    //         else if (nSavingThrow == SAVING_THROW_WILL)
+    //         {
+    //             nSavingThrow = GetWillSavingThrow(oTarget);
+    //         }
 
-            if (nSavingThrow == SAVING_THROW_FORT)
-            {
-                nBaseSave = GetFortitudeSavingThrow(oTarget);// Tested to confirm it does add effect bonuses.
-            }
-            else if (nSavingThrow == SAVING_THROW_REFLEX)
-            {
-                nBaseSave = GetReflexSavingThrow(oTarget);
-            }
-            else if (nSavingThrow == SAVING_THROW_WILL)
-            {
-                nSavingThrow = GetWillSavingThrow(oTarget);
-            }
+    //         if ((11 + nBaseSave) < nDC)
+    //         {
+    //             bValid = 0;
+    //         }
+    //         else bValid = 1;
 
-            if ((11 + nBaseSave) < nDC)
-            {
-                bValid = 0;
-            }
-            else bValid = 1;
+    //         if (nSaveType == SAVING_THROW_TYPE_CHAOS)
+    //         {
+    //             bValid = 2; // It is an Aura of Perfect Order after all.
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_DEATH) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH)))
+    //         {
+    //             bValid = 2;
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_DISEASE) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE)))
+    //         {
+    //             bValid = 2;
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_FEAR) && (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR)))
+    //         {
+    //             bValid = 2;
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_MIND_SPELLS) && (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)))
+    //         {
+    //             bValid = 2;
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_POISON) && (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON)))
+    //         {
+    //             bValid = 2;
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_TRAP) && (GetIsImmune(oTarget, IMMUNITY_TYPE_TRAP)))
+    //         {
+    //             bValid = 2;
+    //         }
 
-            if (nSaveType == SAVING_THROW_TYPE_CHAOS)
-            {
-                bValid = 2; // It is an Aura of Perfect Order after all.
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_DEATH) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH)))
-            {
-                bValid = 2;
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_DISEASE) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE)))
-            {
-                bValid = 2;
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_FEAR) && (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR)))
-            {
-                bValid = 2;
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_MIND_SPELLS) && (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)))
-            {
-                bValid = 2;
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_POISON) && (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON)))
-            {
-                bValid = 2;
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_TRAP) && (GetIsImmune(oTarget, IMMUNITY_TYPE_TRAP)))
-            {
-                bValid = 2;
-            }
+    //         int nMessage; // For the sheer sake of producing the saving throw message without a lot of clunky duplication.
 
-            int nMessage; // For the sheer sake of producing the saving throw message without a lot of clunky duplication.
-
-            if (bValid == 0)
-            {
-                if (nSavingThrow == SAVING_THROW_FORT)
-                {
-                    nMessage = FortitudeSave(oTarget, 255, nSaveType, oSaveVersus);
-                }
-                else if (nSavingThrow == SAVING_THROW_REFLEX)
-                {
-                    nMessage = ReflexSave(oTarget, 255, nSaveType, oSaveVersus);
-                }
-                else if (nSavingThrow == SAVING_THROW_WILL)
-                {
-                    nMessage = WillSave(oTarget, 255, nSaveType, oSaveVersus);
-                }
-            }
-            else
-            {
-                if (nSavingThrow == SAVING_THROW_FORT)
-                {
-                    nMessage = FortitudeSave(oTarget, 1, nSaveType, oSaveVersus);
-                }
-                else if (nSavingThrow == SAVING_THROW_REFLEX)
-                {
-                    nMessage = ReflexSave(oTarget, 1, nSaveType, oSaveVersus);
-                }
-                else if (nSavingThrow == SAVING_THROW_WILL)
-                {
-                    nMessage = WillSave(oTarget, 1, nSaveType, oSaveVersus);
-                }
-            }
-        }
-    }
-    else if (nSavingThrow == SAVING_THROW_FORT)
+    //         if (bValid == 0)
+    //         {
+    //             if (nSavingThrow == SAVING_THROW_FORT)
+    //             {
+    //                 nMessage = FortitudeSave(oTarget, 255, nSaveType, oSaveVersus);
+    //             }
+    //             else if (nSavingThrow == SAVING_THROW_REFLEX)
+    //             {
+    //                 nMessage = ReflexSave(oTarget, 255, nSaveType, oSaveVersus);
+    //             }
+    //             else if (nSavingThrow == SAVING_THROW_WILL)
+    //             {
+    //                 nMessage = WillSave(oTarget, 255, nSaveType, oSaveVersus);
+    //             }
+    //         }
+    //         else
+    //         {
+    //             if (nSavingThrow == SAVING_THROW_FORT)
+    //             {
+    //                 nMessage = FortitudeSave(oTarget, 1, nSaveType, oSaveVersus);
+    //             }
+    //             else if (nSavingThrow == SAVING_THROW_REFLEX)
+    //             {
+    //                 nMessage = ReflexSave(oTarget, 1, nSaveType, oSaveVersus);
+    //             }
+    //             else if (nSavingThrow == SAVING_THROW_WILL)
+    //             {
+    //                 nMessage = WillSave(oTarget, 1, nSaveType, oSaveVersus);
+    //             }
+    //         }
+    //     }
+    // }
+    /*else*/
+    if (nSavingThrow == SAVING_THROW_FORT)
     {
         if (GetIsObjectValid(oToB))
         {
@@ -1125,76 +1127,76 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 
         bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
     }
+    //FIXME: bot9s code
+    // if (GetIsObjectValid(oToB) && (bValid == 0) && (GetLocalInt(oToB, "Counter") == COUNTER_IRON_HEART_FOCUS) && (GetLocalInt(oToB, "Swift") == 0))
+    // { //Priotity is given to Iron Heart Focus over Zealous Surge because Zealous Surge has a once per day use.
+    //     SetLocalInt(oToB, "IronHeartFocus", 1);
 
-    if (GetIsObjectValid(oToB) && (bValid == 0) && (GetLocalInt(oToB, "Counter") == COUNTER_IRON_HEART_FOCUS) && (GetLocalInt(oToB, "Swift") == 0))
-    { //Priotity is given to Iron Heart Focus over Zealous Surge because Zealous Surge has a once per day use.
-        SetLocalInt(oToB, "IronHeartFocus", 1);
+    //     if (nSavingThrow == SAVING_THROW_FORT)
+    //     {
+    //         SetLocalInt(oToB, "SaveType", SAVING_THROW_FORT);
+    //         SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+    //         DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+    //         DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-        if (nSavingThrow == SAVING_THROW_FORT)
-        {
-            SetLocalInt(oToB, "SaveType", SAVING_THROW_FORT);
-            SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-            DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-            DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+    //         bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
+    //     }
+    //     else if (nSavingThrow == SAVING_THROW_REFLEX)
+    //     {
+    //         SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
+    //         SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+    //         DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+    //         DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-            bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
-        }
-        else if (nSavingThrow == SAVING_THROW_REFLEX)
-        {
-            SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
-            SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-            DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-            DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+    //         bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
+    //     }
+    //     else if (nSavingThrow == SAVING_THROW_WILL)
+    //     {
+    //         SetLocalInt(oToB, "SaveType", SAVING_THROW_WILL);
+    //         SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+    //         DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+    //         DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-            bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
-        }
-        else if (nSavingThrow == SAVING_THROW_WILL)
-        {
-            SetLocalInt(oToB, "SaveType", SAVING_THROW_WILL);
-            SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-            DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-            DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+    //         bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
+    //     }
+    // }
 
-            bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
-        }
-    }
+    // if ((GetHasFeat(FEAT_ZEALOUS_SURGE, oTarget)) && (bValid == 0))
+    // {// Assuemed that oToB is valid if you have this feat.
+    //     if ((GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
+    //     {
+    //         FloatingTextStringOnCreature("<color=cyan>*Zealous Surge!*</color>", oTarget, TRUE, 5.0f, COLOR_CYAN, COLOR_BLUE_DARK);
+    //         SetLocalInt(oToB, "ZealousSurgeUse", 0);
 
-    if ((GetHasFeat(FEAT_ZEALOUS_SURGE, oTarget)) && (bValid == 0))
-    {// Assuemed that oToB is valid if you have this feat.
-        if ((GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
-        {
-            FloatingTextStringOnCreature("<color=cyan>*Zealous Surge!*</color>", oTarget, TRUE, 5.0f, COLOR_CYAN, COLOR_BLUE_DARK);
-            SetLocalInt(oToB, "ZealousSurgeUse", 0);
+    //         if (nSavingThrow == SAVING_THROW_FORT)
+    //         {
+    //             SetLocalInt(oToB, "SaveType", SAVING_THROW_FORT);
+    //             SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+    //             DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+    //             DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-            if (nSavingThrow == SAVING_THROW_FORT)
-            {
-                SetLocalInt(oToB, "SaveType", SAVING_THROW_FORT);
-                SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-                DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-                DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+    //             bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
+    //         }
+    //         else if (nSavingThrow == SAVING_THROW_REFLEX)
+    //         {
+    //             SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
+    //             SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+    //             DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+    //             DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-                bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
-            }
-            else if (nSavingThrow == SAVING_THROW_REFLEX)
-            {
-                SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
-                SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-                DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-                DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+    //             bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
+    //         }
+    //         else if (nSavingThrow == SAVING_THROW_WILL)
+    //         {
+    //             SetLocalInt(oToB, "SaveType", SAVING_THROW_WILL);
+    //             SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+    //             DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+    //             DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
-                bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
-            }
-            else if (nSavingThrow == SAVING_THROW_WILL)
-            {
-                SetLocalInt(oToB, "SaveType", SAVING_THROW_WILL);
-                SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-                DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-                DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
-
-                bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
-            }
-        }
-    }
+    //             bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
+    //         }
+    //     }
+    // }
 
     nSpellID = JXGetSpellId();
 
@@ -1253,19 +1255,19 @@ int Bot9sReflexAdjustedDamage(int nDamage, object oTarget, int nDC, int nSaveTyp
         SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
         DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
         DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
-
-        if ((GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER) || (GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER))
-        {
-            nMod = 1;
-        }
-        else if (GetLocalInt(oToB, "Counter") == COUNTER_IRON_HEART_FOCUS)
-        {
-            nMod = 1;
-        }
-        else if ((GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
-        {
-            nMod = 1;
-        }
+        // FIXME: bot9s code
+        // if ((GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER) || (GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER))
+        // {
+        //     nMod = 1;
+        // }
+        // else if (GetLocalInt(oToB, "Counter") == COUNTER_IRON_HEART_FOCUS)
+        // {
+        //     nMod = 1;
+        // }
+        // else if ((GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
+        // {
+        //     nMod = 1;
+        // }
 
         if (nMod == 1)
         {
@@ -1313,19 +1315,19 @@ int Bot9sReflexAdjustedDamage(int nDamage, object oTarget, int nDC, int nSaveTyp
             {
                 bValid = 2;
             }
+            // FIXME: bot9s code
+            // if ((bValid == 0) && (GetLocalInt(oToB, "Counter") == COUNTER_IRON_HEART_FOCUS) && (GetLocalInt(oToB, "Swift") == 0))
+            // {
+            //     SetLocalInt(oToB, "IronHeartFocus", 1);
 
-            if ((bValid == 0) && (GetLocalInt(oToB, "Counter") == COUNTER_IRON_HEART_FOCUS) && (GetLocalInt(oToB, "Swift") == 0))
-            {
-                SetLocalInt(oToB, "IronHeartFocus", 1);
+            //     nSave = d20(1) + nBaseSave;
 
-                nSave = d20(1) + nBaseSave;
-
-                if (nSave < nDC)
-                {
-                    bValid = 0;
-                }
-                else bValid = 1;
-            }
+            //     if (nSave < nDC)
+            //     {
+            //         bValid = 0;
+            //     }
+            //     else bValid = 1;
+            // }
 
             if ((bValid == 0) && (GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
             {
