@@ -13,7 +13,7 @@ void main()
 
     int iOperation = JXScriptGetForkOperation();
 
-    Log("Running jx_effect_fork.")
+    Log("Running jx_effect_fork.");
 
     switch (iOperation)
     {
