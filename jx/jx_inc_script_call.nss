@@ -317,9 +317,9 @@ void JXScriptCall(string sScript, struct script_param_list paramList, object oTa
 {
     if (!GetIsObjectValid(oTarget)) return;
 
-    /* SetLocalString(oTarget, JX_SCRIPT_PARAMETERS, paramList.sParamList); */
+    SetLocalString(oTarget, JX_SCRIPT_PARAMETERS, paramList.sParamList);
     AddScriptParameterString(paramList.sParamList);
-    ExecuteScriptEnhanced(sScript, oTarget, FALSE);
+    ExecuteScript(sScript, oTarget);
 }
 
 // Execute a script fork (a script that contains a list of operations), using a list of parameters.
