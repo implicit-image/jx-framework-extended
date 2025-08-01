@@ -444,8 +444,8 @@ int DoCubeParalyze(object oTarget, object oSource, int nSaveDC=16)
                       SAVING_THROW_TYPE_POISON,
                       oSource) == 0)
     {
-        effect ePara = EffectParalyze(nSaveDC, SAVING_THROW_T);
-        effect eDur = EffecttVisualEffect(VFX_DUR_PARALYZED);
+        effect ePara = EffectParalyze(nSaveDC, SAVING_THROW_FORT);
+        effect eDur = EffectVisualEffect(VFX_DUR_PARALYZED);
         ePara = EffectLinkEffects(eDur,ePara);
         ePara = EffectLinkEffects(EffectVisualEffect(VFX_DUR_FREEZE_ANIMATION),ePara);
         JXApplyEffectToObject(DURATION_TYPE_TEMPORARY,
