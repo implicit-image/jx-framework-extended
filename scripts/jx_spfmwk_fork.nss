@@ -267,8 +267,9 @@ void main()
             break;
         case JX_FORK_SPELL_DC_BONUS_FROM_SPELL:
             JXScriptSetResponseInt(
-                JXScriptGetParameterInt(paramList, 1),
-                JXScriptGetParameterObject(paramList, 2));
+                JXImplGetSpellDCBonusFromSpell(
+                    JXScriptGetParameterInt(paramList, 1),
+                    JXScriptGetParameterObject(paramList, 2)));
             break;
         case JX_FORK_COMPUTED_CL_FROM_CLASS:
             JXScriptSetResponseInt(
@@ -284,9 +285,10 @@ void main()
             break;
         case JX_FORK_PRACTISED_SPELLCASTER_BONUS:
             JXScriptSetResponseInt(
-                JXScriptGetParameterObject(paramList, 1),
-                JXScriptGetParameterInt(paramList, 2),
-                JXScriptGetParameterInt(paramList, 3));
+                JXImplGetCLBonusFromPractisedSpellcaster(
+                    JXScriptGetParameterObject(paramList, 1),
+                    JXScriptGetParameterInt(paramList, 2),
+                    JXScriptGetParameterInt(paramList, 3)));
             break;
         case JX_FORK_ELDRITCH_BLAST_LEVEL_BONUS:
             JXScriptSetResponseInt(
