@@ -343,7 +343,7 @@ effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDmgPower=
     effect eMain;
     iDmg = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmg, 1);
     iDmgType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmgType, 2);
-    iDmgPower = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmgPower, 3);
+    iDmgPower = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmgPower, 3);
     bIgnoreRes = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, bIgnoreRes, 4);
     eMain = EffectDamage(iDmg, iDmgType, iDmgPower, bIgnoreRes);
     return eMain;
