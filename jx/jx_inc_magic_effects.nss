@@ -1,5 +1,5 @@
 #include "utils"
-
+#include "jx_effect_param_interface"
 
 /*
 In order to use effect overrides you need to set them in the precast script.
@@ -325,7 +325,7 @@ object JXApplyEffectParamModifier_Object(int iJXEffectType, object oValue, int i
 effect JXEffectHeal(int iDmgToHeal)
 {
     effect eMain;
-    iDmgToHeal = JXApplyEffectParamModifier_Int(JX_EFFECT_HEAL, iDmgToHeal, 1);
+    iDmgToHeal = JXImplApplyEffectParamModifier_Int(JX_EFFECT_HEAL, iDmgToHeal, 1);
     eMain = EffectHeal(iDmgToHeal);
     return eMain;
 }
@@ -341,10 +341,10 @@ effect JXEffectHeal(int iDmgToHeal)
 effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDmgPower=DAMAGE_POWER_NORMAL, int bIgnoreRes=FALSE)
 {
     effect eMain;
-    iDmg = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmg, 1);
-    iDmgType = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmgType, 2);
+    iDmg = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmg, 1);
+    iDmgType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmgType, 2);
     iDmgPower = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmgPower, 3);
-    bIgnoreRes = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, bIgnoreRes, 4);
+    bIgnoreRes = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, bIgnoreRes, 4);
     eMain = EffectDamage(iDmg, iDmgType, iDmgPower, bIgnoreRes);
     return eMain;
 }
@@ -358,10 +358,10 @@ effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDmgPower=
 effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYPE_MAGICAL, int bIgnoreResistances=FALSE)
 {
     effect eMain;
-    iDmg = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_OVER_TIME, iDmg, 1);
-    fInterval = JXApplyEffectParamModifier_Float(JX_EFFECT_DAMAGE_OVER_TIME, fInterval, 2);
-    iDmgType = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_OVER_TIME, iDmgType, 3);
-    bIgnoreResistances = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_OVER_TIME, bIgnoreResistances, 4);
+    iDmg = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_OVER_TIME, iDmg, 1);
+    fInterval = JXImplApplyEffectParamModifier_Float(JX_EFFECT_DAMAGE_OVER_TIME, fInterval, 2);
+    iDmgType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_OVER_TIME, iDmgType, 3);
+    bIgnoreResistances = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_OVER_TIME, bIgnoreResistances, 4);
     eMain = EffectDamageOverTime(iDmg, fInterval, iDmgType, bIgnoreResistances);
     return eMain;
 }
@@ -374,8 +374,8 @@ effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYP
 effect JXEffectAbilityIncrease(int iAbility, int iModifyBy)
 {
     effect eMain;
-    iAbility = JXApplyEffectParamModifier_Int(JX_EFFECT_ABILITY_INCREASE, iAbility, 1);
-    iModifyBy = JXApplyEffectParamModifier_Int(JX_EFFECT_ABILITY_INCREASE, iModifyBy, 2);
+    iAbility = JXImplApplyEffectParamModifier_Int(JX_EFFECT_ABILITY_INCREASE, iAbility, 1);
+    iModifyBy = JXImplApplyEffectParamModifier_Int(JX_EFFECT_ABILITY_INCREASE, iModifyBy, 2);
     eMain = EffectAbilityIncrease(iAbility, iModifyBy);
     return eMain;
 }
@@ -383,9 +383,9 @@ effect JXEffectAbilityIncrease(int iAbility, int iModifyBy)
 effect JXEffectDamageResistance(int iDamageType, int iAmount, int iLimit=0)
 {
     effect eMain;
-    iDamageType = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_RESISTANCE, iDamageType, 1);
-    iAmount = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_RESISTANCE, iAmount, 2);
-    iLimit = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_RESISTANCE, iLimit, 3);
+    iDamageType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_RESISTANCE, iDamageType, 1);
+    iAmount = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_RESISTANCE, iAmount, 2);
+    iLimit = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_RESISTANCE, iLimit, 3);
     eMain = EffectDamageResistance(iDamageType, iAmount, iLimit);
     return eMain;
 }
@@ -400,10 +400,10 @@ effect JXEffectResurrection()
 effect JXEffectSummonCreature(string sCreatureResref, int iVisualEffectId=VFX_NONE, float fDelay=0.0f, int iUseAppearAnimation=0)
 {
     effect eMain;
-    sCreatureResref = JXApplyEffectParamModifier_String(JX_EFFECT_SUMMON_CREATURE, sCreatureResref, 1);
-    iVisualEffectId = JXApplyEffectParamModifier_Int(JX_EFFECT_SUMMON_CREATURE, iVisualEffectId, 2);
-    fDelay = JXApplyEffectParamModifier_Float(JX_EFFECT_SUMMON_CREATURE, fDelay, 3);
-    iUseAppearAnimation = JXApplyEffectParamModifier_Int(JX_EFFECT_SUMMON_CREATURE, iUseAppearAnimation, 4);
+    sCreatureResref = JXImplApplyEffectParamModifier_String(JX_EFFECT_SUMMON_CREATURE, sCreatureResref, 1);
+    iVisualEffectId = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SUMMON_CREATURE, iVisualEffectId, 2);
+    fDelay = JXImplApplyEffectParamModifier_Float(JX_EFFECT_SUMMON_CREATURE, fDelay, 3);
+    iUseAppearAnimation = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SUMMON_CREATURE, iUseAppearAnimation, 4);
     eMain = EffectSummonCreature(sCreatureResref, iVisualEffectId, fDelay, iUseAppearAnimation);
     return eMain;
 }
@@ -430,10 +430,10 @@ effect JXExtraordinaryEffect(effect eEffect)
 effect JXEffectACIncrease(int iValue, int iModifyType=AC_DODGE_BONUS, int iDamageType=AC_VS_DAMAGE_TYPE_ALL, int iVsSpiritsOnly=FALSE)
 {
     effect eMain;
-    iValue = JXApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iValue, 1);
-    iModifyType = JXApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iModifyType, 2);
-    iDamageType = JXApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iDamageType, 3);
-    iVsSpiritsOnly = JXApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iVsSpiritsOnly, 4);
+    iValue = JXImplApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iValue, 1);
+    iModifyType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iModifyType, 2);
+    iDamageType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iDamageType, 3);
+    iVsSpiritsOnly = JXImplApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iVsSpiritsOnly, 4);
     eMain = EffectACIncrease(iValue, iModifyType, iDamageType, iVsSpiritsOnly);
     return eMain;
 }
@@ -441,9 +441,9 @@ effect JXEffectACIncrease(int iValue, int iModifyType=AC_DODGE_BONUS, int iDamag
 effect JXEffectSavingThrowIncrease(int iSave, int iValue, int iSaveType=SAVING_THROW_TYPE_ALL, int iVsSpiritsOnly=FALSE)
 {
     effect eMain;
-    iSave = JXApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_INCREASE, iSave, 1);
-    iValue = JXApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_INCREASE, iValue, 2);
-    iVsSpiritsOnly = JXApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_INCREASE, iVsSpiritsOnly, 3);
+    iSave = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_INCREASE, iSave, 1);
+    iValue = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_INCREASE, iValue, 2);
+    iVsSpiritsOnly = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_INCREASE, iVsSpiritsOnly, 3);
     eMain = EffectSavingThrowIncrease(iSave, iValue, iSaveType, iVsSpiritsOnly);
     return eMain;
 }
@@ -451,8 +451,8 @@ effect JXEffectSavingThrowIncrease(int iSave, int iValue, int iSaveType=SAVING_T
 effect JXEffectAttackIncrease(int iBonus, int iModifierType=ATTACK_BONUS_MISC)
 {
     effect eMain;
-    iBonus = JXApplyEffectParamModifier_Int(JX_EFFECT_ATTACK_INCREASE, iBonus, 1);
-    iModifierType = JXApplyEffectParamModifier_Int(JX_EFFECT_ATTACK_INCREASE, iModifierType, 2);
+    iBonus = JXImplApplyEffectParamModifier_Int(JX_EFFECT_ATTACK_INCREASE, iBonus, 1);
+    iModifierType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_ATTACK_INCREASE, iModifierType, 2);
     eMain = EffectAttackIncrease (iBonus, iModifierType);
     return eMain;
 }
@@ -460,10 +460,10 @@ effect JXEffectAttackIncrease(int iBonus, int iModifierType=ATTACK_BONUS_MISC)
 effect JXEffectDamageReduction(int iAmount, int iDmgPower=DAMAGE_POWER_NORMAL, int iLimit=0, int iDRType=DR_TYPE_MAGICBONUS)
 {
     effect eMain;
-    iAmount = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iAmount, 1);
-    iDmgPower = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iDmgPower, 2);
-    iLimit = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iLimit, 3);
-    iDRType = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iDRType, 4);
+    iAmount = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iAmount, 1);
+    iDmgPower = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iDmgPower, 2);
+    iLimit = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iLimit, 3);
+    iDRType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iDRType, 4);
     eMain = EffectDamageReduction (iAmount, iDmgPower, iLimit, iDRType);
     return eMain;
 }
@@ -471,9 +471,9 @@ effect JXEffectDamageReduction(int iAmount, int iDmgPower=DAMAGE_POWER_NORMAL, i
 effect JXEffectDamageIncrease(int iBonus, int iDamageType=DAMAGE_TYPE_MAGICAL, int iVersusRace=-1)
 {
     effect eMain;
-    iBonus = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iBonus, 1);
-    iDamageType = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iDamageType, 2);
-    iVersusRace = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iVersusRace, 3);
+    iBonus = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iBonus, 1);
+    iDamageType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iDamageType, 2);
+    iVersusRace = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iVersusRace, 3);
     eMain = EffectDamageIncrease (iBonus, iDamageType, iVersusRace);
     return eMain;
 }
@@ -486,9 +486,9 @@ effect JXEffectEntangle()
 effect JXEffectDeath(int iSpectacularDeath=FALSE, int iDisplayFeedback=TRUE, int iIgnoreDeathImmunity=FALSE, int iPurgeEffects=TRUE)
 {
     effect eMain;
-    iSpectacularDeath = JXApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iSpectacularDeath, 1);
-    iDisplayFeedback = JXApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iDisplayFeedback, 2);
-    iIgnoreDeathImmunity = JXApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iIgnoreDeathImmunity, 3);
+    iSpectacularDeath = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iSpectacularDeath, 1);
+    iDisplayFeedback = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iDisplayFeedback, 2);
+    iIgnoreDeathImmunity = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iIgnoreDeathImmunity, 3);
     eMain = EffectDeath (iSpectacularDeath, iDisplayFeedback, iIgnoreDeathImmunity, iPurgeEffects);
     return eMain;
 }
@@ -1149,70 +1149,70 @@ effect JXEffectLink10Effects(effect e1, effect e2, effect e3, effect e4, effect 
     return e1;
 }
 
-int JXApplyEffectParamModifier_Int(int iJXEffectType, int iValue, int iParamPos=1)
-{
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
-    // paramList = JXScriptAddParameterInt(paramList, iValue);
-    // paramList = JXScriptAddParameterInt(paramList, iParamPos);
-    //
-    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_INT, paramList);
-
-    AddScriptParameterInt(iJXEffectType);
-    AddScriptParameterInt(iValue);
-    AddScriptParameterInt(iParamPos);
-    ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_INT_FORKSCRIPT, OBJECT_SELF);
-
-    return JXScriptGetResponseInt();
-}
-
-float JXApplyEffectParamModifier_Float(int iJXEffectType, float fValue, int iParamPos=1)
-{
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
-    // paramList = JXScriptAddParameterFloat(paramList, fValue);
-    // paramList = JXScriptAddParameterInt(paramList, iParamPos);
-    //
-    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_FLOAT, paramList);
-
-    AddScriptParameterInt(iJXEffectType);
-    AddScriptParameterFloat(fValue);
-    AddScriptParameterInt(iParamPos);
-    ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_FLOAT_FORKSCRIPT, OBJECT_SELF);
-
-    return JXScriptGetResponseFloat();
-}
-
-string JXApplyEffectParamModifier_String(int iJXEffectType, string sValue, int iParamPos=1)
-{
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
-    // paramList = JXScriptAddParameterString(paramList, sValue);
-    // paramList = JXScriptAddParameterInt(paramList, iParamPos);
-    //
-    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_STRING, paramList);
-
-    AddScriptParameterInt(iJXEffectType);
-    AddScriptParameterString(sValue);
-    AddScriptParameterInt(iParamPos);
-    ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_STRING_FORKSCRIPT, OBJECT_SELF);
-
-    return JXScriptGetResponseString();
-}
-
-object JXApplyEffectParamModifier_Object(int iJXEffectType, object oValue, int iParamPos=1)
-{
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
-    // paramList = JXScriptAddParameterObject(paramList, oValue);
-    // paramList = JXScriptAddParameterInt(paramList, iParamPos);
-    //
-    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_STRING, paramList);
-
-    AddScriptParameterInt(iJXEffectType);
-    AddScriptParameterObject(oValue);
-    AddScriptParameterInt(iParamPos);
-    ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_OBJECT_FORKSCRIPT, OBJECT_SELF);
-
-    return JXScriptGetResponseObject();
-}
+// int JXImplApplyEffectParamModifier_Int(int iJXEffectType, int iValue, int iParamPos=1)
+// {
+//     // struct script_param_list paramList;
+//     // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
+//     // paramList = JXScriptAddParameterInt(paramList, iValue);
+//     // paramList = JXScriptAddParameterInt(paramList, iParamPos);
+//     //
+//     // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_INT, paramList);
+//
+//     AddScriptParameterInt(iJXEffectType);
+//     AddScriptParameterInt(iValue);
+//     AddScriptParameterInt(iParamPos);
+//     ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_INT_FORKSCRIPT, OBJECT_SELF);
+//
+//     return JXScriptGetResponseInt();
+// }
+//
+// float JXImplApplyEffectParamModifier_Float(int iJXEffectType, float fValue, int iParamPos=1)
+// {
+//     // struct script_param_list paramList;
+//     // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
+//     // paramList = JXScriptAddParameterFloat(paramList, fValue);
+//     // paramList = JXScriptAddParameterInt(paramList, iParamPos);
+//     //
+//     // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_FLOAT, paramList);
+//
+//     AddScriptParameterInt(iJXEffectType);
+//     AddScriptParameterFloat(fValue);
+//     AddScriptParameterInt(iParamPos);
+//     ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_FLOAT_FORKSCRIPT, OBJECT_SELF);
+//
+//     return JXScriptGetResponseFloat();
+// }
+//
+// string JXImplApplyEffectParamModifier_String(int iJXEffectType, string sValue, int iParamPos=1)
+// {
+//     // struct script_param_list paramList;
+//     // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
+//     // paramList = JXScriptAddParameterString(paramList, sValue);
+//     // paramList = JXScriptAddParameterInt(paramList, iParamPos);
+//     //
+//     // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_STRING, paramList);
+//
+//     AddScriptParameterInt(iJXEffectType);
+//     AddScriptParameterString(sValue);
+//     AddScriptParameterInt(iParamPos);
+//     ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_STRING_FORKSCRIPT, OBJECT_SELF);
+//
+//     return JXScriptGetResponseString();
+// }
+//
+// object JXImplApplyEffectParamModifier_Object(int iJXEffectType, object oValue, int iParamPos=1)
+// {
+//     // struct script_param_list paramList;
+//     // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
+//     // paramList = JXScriptAddParameterObject(paramList, oValue);
+//     // paramList = JXScriptAddParameterInt(paramList, iParamPos);
+//     //
+//     // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_STRING, paramList);
+//
+//     AddScriptParameterInt(iJXEffectType);
+//     AddScriptParameterObject(oValue);
+//     AddScriptParameterInt(iParamPos);
+//     ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_OBJECT_FORKSCRIPT, OBJECT_SELF);
+//
+//     return JXScriptGetResponseObject();
+// }

@@ -389,7 +389,7 @@ const int JX_EFFECT_APPEAR = 100;
 const int JX_EFFECT_SHAKEN = 101;
 
 
-// const int JX_EFFECT_MAX_ID = 101;
+const int JX_EFFECT_MAX_ID = 101;
 
 
 //========================== Effect statuses ===========

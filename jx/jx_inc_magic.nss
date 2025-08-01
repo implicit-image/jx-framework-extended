@@ -80,7 +80,7 @@
 #include "jx_inc_magic_item"
 #include "jx_inc_magic_class"
 #include "jx_inc_action"
-#include "jx_inc_magic_effects"
+// #include "jx_inc_magic_effects"
 #include "jx_inc_magic_wild"
 
 #include "utils"
