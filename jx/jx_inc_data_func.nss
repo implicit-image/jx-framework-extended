@@ -14,7 +14,7 @@
 // 09/09/2007 : Moved JXItemPropertyToString() & JXStringToItemProperty() from "jx_inc_magic_item.nss"
 //              Added JXLocationToString() & JXStringToLocation()
 //:://////////////////////////////////////////////
-
+#include "jx_inc_magic_const"
 #include "x2_inc_itemprop"
 #include "utils"
 
