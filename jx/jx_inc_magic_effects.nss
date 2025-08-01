@@ -474,7 +474,7 @@ effect JXEffectDamageIncrease(int iBonus, int iDamageType=DAMAGE_TYPE_MAGICAL, i
     iBonus = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iBonus, 1);
     iDamageType = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iDamageType, 2);
     iVersusRace = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iVersusRace, 3);
-    eMain = EffectDamageIncrease (iBonus, iDamageType, iVersusRace)
+    eMain = EffectDamageIncrease (iBonus, iDamageType, iVersusRace);
     return eMain;
 }
 
@@ -489,7 +489,7 @@ effect JXEffectDeath(int iSpectacularDeath=FALSE, int iDisplayFeedback=TRUE, int
     iSpectacularDeath = JXApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iSpectacularDeath, 1);
     iDisplayFeedback = JXApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iDisplayFeedback, 2);
     iIgnoreDeathImmunity = JXApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iIgnoreDeathImmunity, 3);
-    eMain = EffectDeath (iSpectacularDeath, iDisplayFeedback, iIgnoreDeathImmunity, iPurgeEffects)
+    eMain = EffectDeath (iSpectacularDeath, iDisplayFeedback, iIgnoreDeathImmunity, iPurgeEffects);
     return eMain;
 }
 
