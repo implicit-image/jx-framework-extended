@@ -89,24 +89,24 @@ int oei_GetCureDamageTotal(object oTarget, int nDamage, int nMaxExtraDamage, int
 {
     int nMetaMagic = JXGetMetaMagicFeat();
     int nExtraDamage; // * figure out the bonus damage
-	if (nSpellID == SPELL_BG_Cure_Light_Wounds || nSpellID == SPELL_BG_Cure_Moderate_Wounds ||
-		nSpellID == SPELL_BG_Cure_Serious_Wounds || nSpellID == SPELL_BG_Cure_Critical_Wounds)
-	{
+    if (nSpellID == SPELL_BG_Cure_Light_Wounds || nSpellID == SPELL_BG_Cure_Moderate_Wounds ||
+        nSpellID == SPELL_BG_Cure_Serious_Wounds || nSpellID == SPELL_BG_Cure_Critical_Wounds)
+    {
         nExtraDamage = GetBlackguardCasterLevel(OBJECT_SELF);
-	}
-	else
-	{
-		nExtraDamage = JXGetCasterLevel(OBJECT_SELF);
-	}
-       
+    }
+    else
+    {
+        nExtraDamage = JXGetCasterLevel(OBJECT_SELF);
+    }
+
     if (nExtraDamage > nMaxExtraDamage)
     {
         nExtraDamage = nMaxExtraDamage;
     }
-    
-	// * if low or normal difficulty is treated as MAXIMIZED
-    if( GetIsPC(GetFactionLeader(oTarget)) &&
-       (GetGameDifficulty() < GAME_DIFFICULTY_CORE_RULES) )
+
+    // low or normal difficulty is treated as MAXIMIZED
+    if( GetIsPC(GetFactionLeader(oTarget))
+        && (GetGameDifficulty() < GAME_DIFFICULTY_CORE_RULES) )
     {
         nDamage = nMaximized + nExtraDamage;
     }
@@ -127,9 +127,9 @@ int oei_GetCureDamageTotal(object oTarget, int nDamage, int nMaxExtraDamage, int
             nDamage = nDamage + nMaximized;
         }
     }
-	
-	// 8/9/06 - BDF-OEI: added the GetSpellCastItem() check to the GetHasFeat() check to make sure that 
-	// 	clerics with the healing domain power don't get a bonus when using a healin potion
+
+    // 8/9/06 - BDF-OEI: added the GetSpellCastItem() check to the GetHasFeat() check to make sure that
+    //  clerics with the healing domain power don't get a bonus when using a healin potion
     if ( nMetaMagic & METAMAGIC_EMPOWER || (GetHasFeat( FEAT_HEALING_DOMAIN_POWER ) && !GetIsObjectValid( GetSpellCastItem() )) )
     {
         nDamage = nDamage + (nDamage/2);
@@ -142,126 +142,126 @@ int oei_GetCureDamageTotal(object oTarget, int nDamage, int nMaxExtraDamage, int
         int nSpellLvl = GetSpellLevel(nSpellID);
         nDamage = nDamage + (2 * nSpellLvl);
     }
-	
-	return (nDamage);
+
+    return (nDamage);
 }
 
 
 // this could be a harm spell cast on non-undead or a heal spell cast on undead
 void oei_DoHarming (object oTarget, int nDamageTotal, int nDamageType, int vfx_impactHurt, int bTouchAttack, int nSpellID)
 {
-	if (bTouchAttack)
-	{
-		// Returns 0 on a miss, 1 on a hit, and 2 on a critical hit.
-		int nTouch = TouchAttackMelee(oTarget);
-		if (nTouch == 0)
-			return;
-		if (GetHasFeat(FEAT_MELEE_TOUCH_SPELL_SPECIALIZATION))
-		{
-			nDamageTotal += 2; // * GetSpellLevel(nSpellID);
-		}
-	}			
+    if (bTouchAttack)
+    {
+        // Returns 0 on a miss, 1 on a hit, and 2 on a critical hit.
+        int nTouch = TouchAttackMelee(oTarget);
+        if (nTouch == 0)
+            return;
+        if (GetHasFeat(FEAT_MELEE_TOUCH_SPELL_SPECIALIZATION))
+        {
+            nDamageTotal += 2; // * GetSpellLevel(nSpellID);
+        }
+    }
 
-	if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
-	{
-		if (!MyResistSpell(OBJECT_SELF, oTarget))
-		{
-			// Returns 0 if the saving throw roll failed, 1 if the saving throw roll succeeded and 2 if the target was immune 
-			int nSpellDC;
-			// check blackguard spells
-			if (nSpellID == SPELL_BG_Cure_Light_Wounds || nSpellID == SPELL_BG_Cure_Moderate_Wounds ||
-				nSpellID == SPELL_BG_Cure_Serious_Wounds || nSpellID == SPELL_BG_Cure_Critical_Wounds)
-			{
-        		nSpellDC = oei_GetSpellSaveDCSaveWithSpellID(ABILITY_WISDOM, nSpellID);
-			}
-			else
-			{
-				nSpellDC =  JXGetSpellSaveDC();
-			}
-			int nSave = WillSave(oTarget, nSpellDC, SAVING_THROW_TYPE_POSITIVE, OBJECT_SELF);
-			if	(nSave != 2)
-			{
-				// successful save = half damage 
-				if  (nSave == 1)
-				{	
-					if (GetHasFeat(6818, oTarget)) //Mettle
-					{
-						nDamageTotal = 0;
-					}
-                	else
-						nDamageTotal = nDamageTotal/2;
-				}
-				
-				effect eDam = EffectDamage(nDamageTotal, nDamageType);
-				//Apply the VFX impact and effects
-				DelayCommand(1.0, JXApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
-				effect eVis = EffectVisualEffect(vfx_impactHurt);
-				JXApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
-			}						
-		}
-	}
+    if (spellsIsTarget(oTarget, SPELL_TARGET_STANDARDHOSTILE, OBJECT_SELF))
+    {
+        if (!MyResistSpell(OBJECT_SELF, oTarget))
+        {
+            // Returns 0 if the saving throw roll failed, 1 if the saving throw roll succeeded and 2 if the target was immune
+            int nSpellDC;
+            // check blackguard spells
+            if (nSpellID == SPELL_BG_Cure_Light_Wounds || nSpellID == SPELL_BG_Cure_Moderate_Wounds ||
+                nSpellID == SPELL_BG_Cure_Serious_Wounds || nSpellID == SPELL_BG_Cure_Critical_Wounds)
+            {
+                nSpellDC = oei_GetSpellSaveDCSaveWithSpellID(ABILITY_WISDOM, nSpellID);
+            }
+            else
+            {
+                nSpellDC =  JXGetSpellSaveDC();
+            }
+            int nSave = WillSave(oTarget, nSpellDC, SAVING_THROW_TYPE_POSITIVE, OBJECT_SELF);
+            if  (nSave != 2)
+            {
+                // successful save = half damage
+                if  (nSave == 1)
+                {
+                    if (GetHasFeat(6818, oTarget)) //Mettle
+                    {
+                        nDamageTotal = 0;
+                    }
+                    else
+                        nDamageTotal = nDamageTotal/2;
+                }
+
+                effect eDam = EffectDamage(nDamageTotal, nDamageType);
+                //Apply the VFX impact and effects
+                DelayCommand(1.0, JXApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget));
+                effect eVis = EffectVisualEffect(vfx_impactHurt);
+                JXApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget);
+            }
+        }
+    }
 }
 
 
 // This spell routes healing and harming out depending on whether we are undead or not.
 void oei_spellsHealOrHarmTarget(object oTarget, int nDamageTotal, int vfx_impactNormalHurt, int vfx_impactUndeadHurt, int vfx_impactHeal, int nSpellID, int bIsHealingSpell=TRUE, int bHarmTouchAttack=TRUE)
 {
-	int bHarmful = FALSE;
-	
+    int bHarmful = FALSE;
+
     // abort for creatures immune to heal.
     if (GetLocalInt(oTarget, VAR_IMMUNE_TO_HEAL))
         return;
-		
-	int nZombified = GetLocalInt(oTarget,"nZombified");
-	int bIsUndead = (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD);
+
+    int nZombified = GetLocalInt(oTarget,"nZombified");
+    int bIsUndead = (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD);
     if (!bIsUndead && !nZombified) // target is normal folks.
     {
-		if (bIsHealingSpell) // healing spell 
-			DoHealing(oTarget, nDamageTotal, vfx_impactHeal);
-		else // harming spell
-		{
-			oei_DoHarming (oTarget, nDamageTotal, DAMAGE_TYPE_NEGATIVE, vfx_impactNormalHurt, bHarmTouchAttack, nSpellID);
-			bHarmful = TRUE;
-		}			
+        if (bIsHealingSpell) // healing spell
+            DoHealing(oTarget, nDamageTotal, vfx_impactHeal);
+        else // harming spell
+        {
+            oei_DoHarming (oTarget, nDamageTotal, DAMAGE_TYPE_NEGATIVE, vfx_impactNormalHurt, bHarmTouchAttack, nSpellID);
+            bHarmful = TRUE;
+        }
     }
     else // target is undead
     {
-		if (bIsHealingSpell) // heal spell on undead harms
-		{
-			oei_DoHarming (oTarget, nDamageTotal, DAMAGE_TYPE_POSITIVE, vfx_impactUndeadHurt, bHarmTouchAttack, nSpellID);
-			bHarmful = TRUE;
-		}			
-		else // harming spell on undead heals!
-			DoHealing(oTarget, nDamageTotal, vfx_impactHeal);
-		
+        if (bIsHealingSpell) // heal spell on undead harms
+        {
+            oei_DoHarming (oTarget, nDamageTotal, DAMAGE_TYPE_POSITIVE, vfx_impactUndeadHurt, bHarmTouchAttack, nSpellID);
+            bHarmful = TRUE;
+        }
+        else // harming spell on undead heals!
+            DoHealing(oTarget, nDamageTotal, vfx_impactHeal);
+
     }
 
-	SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpellID, bHarmful));
+    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, nSpellID, bHarmful));
 }
 
 
-//	spellsCure
+//  spellsCure
 //    Used by the 'cure' series of spells.
 //    Will do max heal/damage if at normal or low difficulty.  Random rolls occur at higher difficulties.
-// 8/9/06 - BDF-OEI: added the GetSpellCastItem() check to the GetHasFeat() check to make sure that 
-// 	clerics with the healing domain power don't get a bonus when using a healin potion
+// 8/9/06 - BDF-OEI: added the GetSpellCastItem() check to the GetHasFeat() check to make sure that
+//  clerics with the healing domain power don't get a bonus when using a healin potion
 //
-//	Heal spells typically do a random amount +1/level up to a max.
+//  Heal spells typically do a random amount +1/level up to a max.
 //
 // Parameters:
-//	int nDamage 		- base amount of damage to heal (or cause)
-//	int nMaxExtraDamage - an extra amount equal to the Caster's Level is applied, cappen by nMaxExtraDamage
-//	int nMaximized 		- This is the max base amount.  (Do not include nMaxExtraDamage)
-//  int vfx_impactHurt	- Impact effect to use for when a creature is harmed
-// 	int vfx_impactHeal	- Impact effect to use for when a creature is healed
-// 	int nSpellID		- The SpellID that is being cast (Spell cast event will be triggered on target).
+//  int nDamage         - base amount of damage to heal (or cause)
+//  int nMaxExtraDamage - an extra amount equal to the Caster's Level is applied, cappen by nMaxExtraDamage
+//  int nMaximized      - This is the max base amount.  (Do not include nMaxExtraDamage)
+//  int vfx_impactHurt  - Impact effect to use for when a creature is harmed
+//  int vfx_impactHeal  - Impact effect to use for when a creature is healed
+//  int nSpellID        - The SpellID that is being cast (Spell cast event will be triggered on target).
 void oei_spellsCure(int nDamage, int nMaxExtraDamage, int nMaximized, int vfx_impactHurt, int vfx_impactHeal, int nSpellID)
 {
     object oTarget = JXGetSpellTargetObject();
-	int nDamageTotal = oei_GetCureDamageTotal(oTarget, nDamage, nMaxExtraDamage, nMaximized, nSpellID);
- 	int bIsHealingSpell=TRUE;
-	int bHarmTouchAttack=TRUE;
-	oei_spellsHealOrHarmTarget(oTarget, nDamageTotal, vfx_impactHurt, vfx_impactHurt, vfx_impactHeal, nSpellID, bIsHealingSpell, bHarmTouchAttack);
+    int nDamageTotal = oei_GetCureDamageTotal(oTarget, nDamage, nMaxExtraDamage, nMaximized, nSpellID);
+    int bIsHealingSpell=TRUE;
+    int bHarmTouchAttack=TRUE;
+    oei_spellsHealOrHarmTarget(oTarget, nDamageTotal, vfx_impactHurt, vfx_impactHurt, vfx_impactHeal, nSpellID, bIsHealingSpell, bHarmTouchAttack);
 
 }
 
@@ -319,8 +319,8 @@ void oei_spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximiz
         nDamage = nDamage + (nDamage / 2);
     }
 
-	int nTouch = TouchAttackMelee(oTarget);
-	int nZombified = GetLocalInt(oTarget,"nZombified");
+    int nTouch = TouchAttackMelee(oTarget);
+    int nZombified = GetLocalInt(oTarget,"nZombified");
     //Check that the target is undead
     if (GetRacialType(oTarget) == RACIAL_TYPE_UNDEAD || nZombified > 0)
     {
@@ -348,25 +348,25 @@ void oei_spellsInflictTouchAttack(int nDamage, int nMaxExtraDamage, int nMaximiz
                 // A succesful will save halves the damage
                 if(MySavingThrow(SAVING_THROW_WILL, oTarget, nSpellDC, SAVING_THROW_TYPE_NEGATIVE, OBJECT_SELF))
                 {
-					if (GetHasFeat(6818, oTarget)) //Mettle
-					{
-						nDamageTotal = 0;
-					}
-                	else
-                   		nDamageTotal = nDamageTotal / 2;
+                    if (GetHasFeat(6818, oTarget)) //Mettle
+                    {
+                        nDamageTotal = 0;
+                    }
+                    else
+                        nDamageTotal = nDamageTotal / 2;
                 }
-				
-				if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
-				{	nDamageTotal *= 2;
-					nDamageTotal += GetMeleeTouchSpecDamage(OBJECT_SELF, 1, TRUE);
-				}
-				else
-				{	nDamageTotal += GetMeleeTouchSpecDamage(OBJECT_SELF, 1, FALSE);
-				}
-				
-				if (StringToInt(Get2DAString("cmi_options","Value",CMI_OPTIONS_SneakAttackSpells)))
-				{	nDamageTotal += EvaluateSneakAttack(oTarget, OBJECT_SELF);	}
-				
+
+                if (nTouch == TOUCH_ATTACK_RESULT_CRITICAL && !GetIsImmune(oTarget, IMMUNITY_TYPE_CRITICAL_HIT))
+                {   nDamageTotal *= 2;
+                    nDamageTotal += GetMeleeTouchSpecDamage(OBJECT_SELF, 1, TRUE);
+                }
+                else
+                {   nDamageTotal += GetMeleeTouchSpecDamage(OBJECT_SELF, 1, FALSE);
+                }
+
+                if (StringToInt(Get2DAString("cmi_options","Value",CMI_OPTIONS_SneakAttackSpells)))
+                {   nDamageTotal += EvaluateSneakAttack(oTarget, OBJECT_SELF);  }
+
                 effect eVis = EffectVisualEffect(vfx_impactHurt);
                 effect eDam = EffectDamage(nDamageTotal,DAMAGE_TYPE_NEGATIVE);
                 //Apply the VFX impact and effects

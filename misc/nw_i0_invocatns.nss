@@ -49,7 +49,6 @@
 #include "nwn2_inc_spells"
 #include "ginc_debug"
 #include "cmi_ginc_spells"
-#include "jx_invocations_interface"
 
 const int STRREF_HELLFIRE_BONUS             = 220796;  // Bonus Damage (Hellfire): ( in use )
 const int STRREF_HELLFIRE_SHIELD_NAME   = 220779;  // Hellfire Shield ( in use )
@@ -63,6 +62,10 @@ const int STRREF_HELLFIRE_SHIELD_NO_CON = 233608; //Constitution isn't high enou
 
 // JWR-OEI: 09/24/2008 - Global Variable to track CON damage output
 int nHellfireConDmg = 0;
+
+int JXGetEldtritchBlastLevelBonus(object oCaster);
+
+int JXEldtrichOnHitCode(object oCaster, object oTarget, int iSpellId);
 
 // JWR - OEI 06/18/2008 -- Hellfire Warlock Damage Bonus functions
 void HellfireShieldFeedbackMsg(int x, int strref, object oCaster);
@@ -78,7 +81,7 @@ int GetEldritchBlastLevel(object oCaster);
 int GetEldritchBlastDmg(object oCaster, object oTarget, int nAllowReflexSave=FALSE, int nIgnoreResists=FALSE, int nHalfDmg=FALSE, int nTouch=1, int bCalledFromShape=FALSE);
 
 // Does the actual Eldritch Blast...returns TRUE if it succeeded (so can do secondary effects)
-int DoEldritchBlast(object oCaster, 
+int DoEldritchBlast(object oCaster,
                     object oTarget,
                     int bCalledFromShape = FALSE,
                     int bDoTouchTest = TRUE,
@@ -200,7 +203,7 @@ int GetEldritchBlastLevel(object oCaster)
     else if ( GetHasFeat(FEAT_ELDRITCH_BLAST_3, oCaster ) )     { nBlstLvl = 3; }
     else if ( GetHasFeat(FEAT_ELDRITCH_BLAST_2, oCaster ) )     { nBlstLvl = 2; }
     else if ( GetHasFeat(FEAT_ELDRITCH_BLAST_1, oCaster ) )     { nBlstLvl = 1; }
-    
+
     // AFW-OEI 02/21/2007: Epic Eldritch Blasts
     if      (GetHasFeat(FEAT_EPIC_ELDRITCH_BLAST_10, oCaster))      { nBlstLvl += 10; }
     else if (GetHasFeat(FEAT_EPIC_ELDRITCH_BLAST_9, oCaster) )      { nBlstLvl +=  9; }
@@ -212,7 +215,7 @@ int GetEldritchBlastLevel(object oCaster)
     else if (GetHasFeat(FEAT_EPIC_ELDRITCH_BLAST_3, oCaster) )      { nBlstLvl +=  3; }
     else if (GetHasFeat(FEAT_EPIC_ELDRITCH_BLAST_2, oCaster) )      { nBlstLvl +=  2; }
     else if (GetHasFeat(FEAT_EPIC_ELDRITCH_BLAST_1, oCaster) )      { nBlstLvl +=  1; }
- 
+
     object oNeck = GetItemInSlot(INVENTORY_SLOT_NECK, oCaster);
     if ( GetIsObjectValid(oNeck))
     {
@@ -223,7 +226,7 @@ int GetEldritchBlastLevel(object oCaster)
             nBlstLvl += 2;
     }
 
-    int nBonus = JXImplGetEldtritchBlastLevelBonus(oCaster);
+    int nBonus = JXGetEldtritchBlastLevelBonus(oCaster);
     nBlstLvl += nBonus;
 
 // NOTE: Need to Add in Prestige "+1 Spellcasting" Bonuses here...
@@ -258,13 +261,13 @@ int GetEldritchBlastDmg(object oCaster, object oTarget, int nAllowReflexSave, in
             nDmgDice += nBonusDice;
             nDmg = d6(nDmgDice * 2);
         }
-        
+
         // AFW-OEI 02/20/2007: Eldritch Master increases damage by 50%
         if (GetHasFeat(FEAT_EPIC_ELDRITCH_MASTER, oCaster))
         {
             nDmg = nDmg + nDmg/2;
         }
-        
+
         if ( nHalfDmg )
         {
             nDmg = nDmg / 2;
@@ -273,7 +276,7 @@ int GetEldritchBlastDmg(object oCaster, object oTarget, int nAllowReflexSave, in
                 nDmg = 1;
             }
         }
-        
+
         // Some Invocations allow chance to halve the damage
         if ( nAllowReflexSave )
         {
@@ -352,7 +355,7 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
         {
             nBonus = 2;
         }
-    
+
         nTouch      = TouchAttackRanged(oTarget, TRUE, nBonus);
         if (GetLocalInt(OBJECT_SELF, "NW_EB_TOUCH_RESULT")) //collect only when requested
         {
@@ -392,7 +395,7 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
             float fDelay = 0.0;
             effect eDam = EffectDamage(nDmg, nDmgType);
             effect eVis = EffectVisualEffect( nHitVFX );
-            
+
             //Apply the damage effect
             JXApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget);
             DelayCommand( fDelay, JXApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget) );
@@ -409,6 +412,8 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
         {
             JXApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oTarget,1.0);
         }
+        // Run on hit code
+        JXEldtrichOnHitCode(oCaster, oTarget, JXGetSpellId());
     }
     return FALSE;
 }
@@ -580,7 +585,7 @@ void RunEssenceBrimstoneBlastImpact(object oTarget, object oCaster, int nRoundsL
         {
             int nDmg = d6(2);
             effect eDmg = EffectDamage(nDmg,DAMAGE_TYPE_FIRE);
-            
+
 
             JXApplyEffectToObject(DURATION_TYPE_INSTANT,eDmg,oTarget);
             //JXApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVFX, oTarget, 6.0);   // handled by DoEldritchBlast()
@@ -974,67 +979,67 @@ int DoShapeEldritchChain()
     int nHitVFX = VFX_INVOCATION_ELDRITCH_HIT;  // default nHitVFX is Eldritch
 
     // adjust the VFX according to the essence
-    if ( nMetaMagic & METAMAGIC_INVOC_DRAINING_BLAST )         
+    if ( nMetaMagic & METAMAGIC_INVOC_DRAINING_BLAST )
     {
         nChain1VFX = VFX_INVOCATION_DRAINING_CHAIN;
         nChain2VFX = VFX_INVOCATION_DRAINING_CHAIN2;
         nHitVFX = VFX_INVOCATION_DRAINING_HIT;
     }
-    else if ( nMetaMagic & METAMAGIC_INVOC_FRIGHTFUL_BLAST )   
+    else if ( nMetaMagic & METAMAGIC_INVOC_FRIGHTFUL_BLAST )
     {
         nChain1VFX = VFX_INVOCATION_FRIGHTFUL_CHAIN;
         nChain2VFX = VFX_INVOCATION_FRIGHTFUL_CHAIN2;
         nHitVFX = VFX_INVOCATION_FRIGHTFUL_HIT;
     }
-    else if ( nMetaMagic & METAMAGIC_INVOC_BESHADOWED_BLAST )  
+    else if ( nMetaMagic & METAMAGIC_INVOC_BESHADOWED_BLAST )
     {
         nChain1VFX = VFX_INVOCATION_BESHADOWED_CHAIN;
         nChain2VFX = VFX_INVOCATION_BESHADOWED_CHAIN2;
         nHitVFX = VFX_INVOCATION_BESHADOWED_HIT;
     }
-    else if ( nMetaMagic & METAMAGIC_INVOC_BRIMSTONE_BLAST )   
+    else if ( nMetaMagic & METAMAGIC_INVOC_BRIMSTONE_BLAST )
     {
         nChain1VFX = VFX_INVOCATION_BRIMSTONE_CHAIN;
         nChain2VFX = VFX_INVOCATION_BRIMSTONE_CHAIN2;
         nHitVFX = VFX_INVOCATION_BRIMSTONE_HIT;
     }
-    else if ( nMetaMagic & METAMAGIC_INVOC_HELLRIME_BLAST )    
+    else if ( nMetaMagic & METAMAGIC_INVOC_HELLRIME_BLAST )
     {
         nChain1VFX = VFX_INVOCATION_HELLRIME_CHAIN;
         nChain2VFX = VFX_INVOCATION_HELLRIME_CHAIN2;
         nHitVFX = VFX_INVOCATION_HELLRIME_HIT;
     }
-    else if ( nMetaMagic & METAMAGIC_INVOC_BEWITCHING_BLAST )  
+    else if ( nMetaMagic & METAMAGIC_INVOC_BEWITCHING_BLAST )
     {
         nChain1VFX = VFX_INVOCATION_BEWITCHING_CHAIN;
         nChain2VFX = VFX_INVOCATION_BEWITCHING_CHAIN2;
         nHitVFX = VFX_INVOCATION_BEWITCHING_HIT;
     }
-    else if ( nMetaMagic & METAMAGIC_INVOC_NOXIOUS_BLAST )     
+    else if ( nMetaMagic & METAMAGIC_INVOC_NOXIOUS_BLAST )
     {
         nChain1VFX = VFX_INVOCATION_NOXIOUS_CHAIN;
         nChain2VFX = VFX_INVOCATION_NOXIOUS_CHAIN2;
         nHitVFX = VFX_INVOCATION_NOXIOUS_HIT;
     }
-    else if ( nMetaMagic & METAMAGIC_INVOC_VITRIOLIC_BLAST )   
+    else if ( nMetaMagic & METAMAGIC_INVOC_VITRIOLIC_BLAST )
     {
         nChain1VFX = VFX_INVOCATION_VITRIOLIC_CHAIN;
         nChain2VFX = VFX_INVOCATION_VITRIOLIC_CHAIN2;
         nHitVFX = VFX_INVOCATION_VITRIOLIC_HIT;
     }
-    else if ( nMetaMagic & METAMAGIC_INVOC_UTTERDARK_BLAST )   
+    else if ( nMetaMagic & METAMAGIC_INVOC_UTTERDARK_BLAST )
     {
         nChain1VFX = VFX_INVOCATION_UTTERDARK_CHAIN;
         nChain2VFX = VFX_INVOCATION_UTTERDARK_CHAIN2;
         nHitVFX = VFX_INVOCATION_UTTERDARK_HIT;
     }
-    else if ( nMetaMagic & METAMAGIC_INVOC_HINDERING_BLAST )   
+    else if ( nMetaMagic & METAMAGIC_INVOC_HINDERING_BLAST )
     {
         nChain1VFX = VFX_INVOCATION_HINDERING_CHAIN;
         nChain2VFX = VFX_INVOCATION_HINDERING_CHAIN2;
         nHitVFX = VFX_INVOCATION_HINDERING_HIT;
     }
-    else if ( nMetaMagic & METAMAGIC_INVOC_BINDING_BLAST )   
+    else if ( nMetaMagic & METAMAGIC_INVOC_BINDING_BLAST )
     {
         nChain1VFX = VFX_INVOCATION_BINDING_CHAIN;
         nChain2VFX = VFX_INVOCATION_BINDING_CHAIN2;
@@ -1092,7 +1097,7 @@ int DoShapeEldritchChain()
     if (GetHasFeat(FEAT_EPIC_ELDRITCH_MASTER, OBJECT_SELF))
     {
         nBonus = 2;
-    }   
+    }
 
     //Get the first target in the spell shape
     oTarget = GetFirstObjectInShape(SHAPE_SPHERE, RADIUS_SIZE_COLOSSAL, GetLocation(oFirstTarget), TRUE, OBJECT_TYPE_CREATURE );
@@ -1259,7 +1264,7 @@ int DoShapeEldritchDoom()
     else if ( nMetaMagic & METAMAGIC_INVOC_UTTERDARK_BLAST )   { nDoomVFX = VFX_INVOCATION_UTTERDARK_DOOM; }
     else if ( nMetaMagic & METAMAGIC_INVOC_HINDERING_BLAST )   { nDoomVFX = VFX_INVOCATION_HINDERING_DOOM; }
     else if ( nMetaMagic & METAMAGIC_INVOC_BINDING_BLAST )     { nDoomVFX = VFX_INVOCATION_BINDING_DOOM; }
- 
+
    //Declare major variables
     //Get the spell target location as opposed to the spell target.
     location lTarget = JXGetSpellTargetLocation();
@@ -1298,3 +1303,25 @@ int DoShapeEldritchDoom()
 //void main() {}    // keep this line uncommented before saving/checking in; used only for compiling purposes
 
 // --------------------------------------------------------------------------------------------------------------------
+
+int JXGetEldtritchBlastLevelBonus(object oCaster)
+{
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCaster);
+
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_ELDRITCH_BLAST_LEVEL_BONUS, paramList);
+
+    return JXScriptGetResponseInt();
+}
+
+int JXEldtrichOnHitCode(object oCaster, object oTarget, int iSpellId)
+{
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCaster);
+    paramList = JXScriptAddParameterObject(paramList, oTarget);
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_ELDRITCH_BLAST_ON_HIT_CODE, paramList);
+
+    return JXScriptGetResponseInt();
+}

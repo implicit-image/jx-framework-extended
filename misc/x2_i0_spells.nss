@@ -158,78 +158,91 @@ int GetIsMagicalItem(object oItem)
     //Declare major variables
     int nProperty;
 
-    if((GetItemHasItemProperty(oItem, ITEM_PROPERTY_ABILITY_BONUS)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_AC_BONUS)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_AC_BONUS_VS_ALIGNMENT_GROUP)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_AC_BONUS_VS_DAMAGE_TYPE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_AC_BONUS_VS_RACIAL_GROUP)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_AC_BONUS_VS_SPECIFIC_ALIGNMENT)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ATTACK_BONUS)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_ALIGNMENT_GROUP)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_RACIAL_GROUP)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ATTACK_BONUS_VS_SPECIFIC_ALIGNMENT)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_BASE_ITEM_WEIGHT_REDUCTION)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_BONUS_FEAT)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_CAST_SPELL)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_BONUS)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_BONUS_VS_ALIGNMENT_GROUP)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_BONUS_VS_RACIAL_GROUP)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_BONUS_VS_SPECIFIC_ALIGNMENT)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_REDUCTION)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_RESISTANCE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_VULNERABILITY)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DARKVISION)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_ABILITY_SCORE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_AC)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_ATTACK_MODIFIER)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_DAMAGE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_ENHANCEMENT_MODIFIER)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_SAVING_THROWS)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_SAVING_THROWS_SPECIFIC)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_SKILL_MODIFIER)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ENHANCED_CONTAINER_REDUCED_WEIGHT)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_ALIGNMENT_GROUP)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_RACIAL_GROUP)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_SPECIFIC_ALIGNEMENT)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_EXTRA_MELEE_DAMAGE_TYPE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_EXTRA_RANGED_DAMAGE_TYPE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_FREEDOM_OF_MOVEMENT)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_HASTE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_HOLY_AVENGER)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMMUNITY_DAMAGE_TYPE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMMUNITY_MISCELLANEOUS)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMMUNITY_SPECIFIC_SPELL)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMMUNITY_SPELL_SCHOOL)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMMUNITY_SPELLS_BY_LEVEL)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMPROVED_EVASION)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_KEEN)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_LIGHT)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_MASSIVE_CRITICALS)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_MIGHTY)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_MIND_BLANK)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_MONSTER_DAMAGE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_NO_DAMAGE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ON_HIT_PROPERTIES)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ON_MONSTER_HIT)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_POISON)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_REGENERATION)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_REGENERATION_VAMPIRIC)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_SAVING_THROW_BONUS)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_SAVING_THROW_BONUS_SPECIFIC)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_SKILL_BONUS)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_SPELL_RESISTANCE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_THIEVES_TOOLS)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_TRAP)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_TRUE_SEEING)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_TURN_RESISTANCE)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_UNLIMITED_AMMUNITION)) ||
-      (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ONHITCASTSPELL))
-      )
-   {
+    if ((GetItemHasItemProperty(oItem, ITEM_PROPERTY_ABILITY_BONUS))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_AC_BONUS))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_AC_BONUS_VS_ALIGNMENT_GROUP))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_AC_BONUS_VS_DAMAGE_TYPE))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_AC_BONUS_VS_RACIAL_GROUP))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_AC_BONUS_VS_SPECIFIC_ALIGNMENT))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ATTACK_BONUS))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_ATTACK_BONUS_VS_ALIGNMENT_GROUP))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_ATTACK_BONUS_VS_RACIAL_GROUP))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_ATTACK_BONUS_VS_SPECIFIC_ALIGNMENT))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_BASE_ITEM_WEIGHT_REDUCTION))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_BONUS_FEAT))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_CAST_SPELL))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_BONUS))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_DAMAGE_BONUS_VS_ALIGNMENT_GROUP))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_BONUS_VS_RACIAL_GROUP))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_DAMAGE_BONUS_VS_SPECIFIC_ALIGNMENT))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_REDUCTION))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_RESISTANCE))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DAMAGE_VULNERABILITY))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DARKVISION))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_ABILITY_SCORE))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_AC))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_ATTACK_MODIFIER))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_DAMAGE))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_DECREASED_ENHANCEMENT_MODIFIER))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_SAVING_THROWS))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_DECREASED_SAVING_THROWS_SPECIFIC))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_DECREASED_SKILL_MODIFIER))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_ENHANCED_CONTAINER_REDUCED_WEIGHT))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ENHANCEMENT_BONUS))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_ALIGNMENT_GROUP))
+        || (GetItemHasItemProperty(oItem,
+                                   ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_RACIAL_GROUP))
+        || (GetItemHasItemProperty(
+            oItem,
+            ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_SPECIFIC_ALIGNEMENT))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_EXTRA_MELEE_DAMAGE_TYPE))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_EXTRA_RANGED_DAMAGE_TYPE))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_FREEDOM_OF_MOVEMENT))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_HASTE))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_HOLY_AVENGER))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMMUNITY_DAMAGE_TYPE))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMMUNITY_MISCELLANEOUS))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMMUNITY_SPECIFIC_SPELL))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMMUNITY_SPELL_SCHOOL))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMMUNITY_SPELLS_BY_LEVEL))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_IMPROVED_EVASION))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_KEEN))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_LIGHT))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_MASSIVE_CRITICALS))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_MIGHTY))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_MIND_BLANK))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_MONSTER_DAMAGE))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_NO_DAMAGE))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ON_HIT_PROPERTIES))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ON_MONSTER_HIT))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_POISON))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_REGENERATION))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_REGENERATION_VAMPIRIC))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_SAVING_THROW_BONUS))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_SAVING_THROW_BONUS_SPECIFIC))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_SKILL_BONUS))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_SPELL_RESISTANCE))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_THIEVES_TOOLS))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_TRAP))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_TRUE_SEEING))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_TURN_RESISTANCE))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_UNLIMITED_AMMUNITION))
+        || (GetItemHasItemProperty(oItem, ITEM_PROPERTY_ONHITCASTSPELL)))
+    {
         return TRUE;
-   }
-   return FALSE;
+    }
+    return FALSE;
 }
 
 
@@ -249,15 +262,18 @@ int GetIsMagicStatBonus(object oCaster)
             nAbility = ABILITY_INTELLIGENCE;
         }
     }
-    if(nClass = GetLevelByClass(CLASS_TYPE_BARD, oCaster) || GetLevelByClass(CLASS_TYPE_SORCERER, oCaster))
+    if(nClass = GetLevelByClass(CLASS_TYPE_BARD, oCaster)
+        || GetLevelByClass(CLASS_TYPE_SORCERER, oCaster))
     {
         if(nClass > 0)
         {
             nAbility = ABILITY_CHARISMA;
         }
     }
-    else if(nClass = GetLevelByClass(CLASS_TYPE_CLERIC, oCaster) || GetLevelByClass(CLASS_TYPE_DRUID, oCaster)
-         || GetLevelByClass(CLASS_TYPE_PALADIN, oCaster) || GetLevelByClass(CLASS_TYPE_RANGER, oCaster))
+    else if(nClass = GetLevelByClass(CLASS_TYPE_CLERIC, oCaster)
+        || GetLevelByClass(CLASS_TYPE_DRUID, oCaster)
+        || GetLevelByClass(CLASS_TYPE_PALADIN, oCaster)
+        || GetLevelByClass(CLASS_TYPE_RANGER, oCaster))
     {
         if(nClass > 0)
         {
@@ -294,28 +310,32 @@ void CheckAndApplyThunderingRage(int nRounds)
 
         if (GetIsObjectValid(oWeapon))
         {
-           IPSafeAddItemProperty(oWeapon, ItemPropertyMassiveCritical(IP_CONST_DAMAGEBONUS_2d6),
-                                 RoundsToSeconds(nRounds),X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
-           IPSafeAddItemProperty(oWeapon, ItemPropertyVisualEffect(ITEM_VISUAL_SONIC), RoundsToSeconds(nRounds),
-                                 X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, TRUE);
-           /*
-           IPSafeAddItemProperty(oWeapon, ItemPropertyOnHitProps(IP_CONST_ONHIT_DEAFNESS,IP_CONST_ONHIT_SAVEDC_14,IP_CONST_ONHIT_DURATION_100_PERCENT_3_ROUND),
-                                 RoundsToSeconds(nRounds), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, TRUE);
-           */
+            IPSafeAddItemProperty(
+                oWeapon,
+                ItemPropertyMassiveCritical(IP_CONST_DAMAGEBONUS_2d6),
+                RoundsToSeconds(nRounds),
+                X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
+            IPSafeAddItemProperty(
+                oWeapon,
+                ItemPropertyVisualEffect(ITEM_VISUAL_SONIC),
+                RoundsToSeconds(nRounds),
+                X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, TRUE);
         }
 
         oWeapon =  GetItemInSlot(INVENTORY_SLOT_LEFTHAND);
 
         if (GetIsObjectValid(oWeapon) )
         {
-           IPSafeAddItemProperty(oWeapon, ItemPropertyMassiveCritical(IP_CONST_DAMAGEBONUS_2d6),
-                                 RoundsToSeconds(nRounds),X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
-           IPSafeAddItemProperty(oWeapon, ItemPropertyVisualEffect(ITEM_VISUAL_SONIC), RoundsToSeconds(nRounds),
-                                 X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, TRUE);
-           /*
-           IPSafeAddItemProperty(oWeapon, ItemPropertyOnHitProps(IP_CONST_ONHIT_DEAFNESS,IP_CONST_ONHIT_SAVEDC_14,IP_CONST_ONHIT_DURATION_100_PERCENT_3_ROUND),
-                                 RoundsToSeconds(nRounds), X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, TRUE);
-           */
+            IPSafeAddItemProperty(
+                oWeapon,
+                ItemPropertyMassiveCritical(IP_CONST_DAMAGEBONUS_2d6),
+                RoundsToSeconds(nRounds),
+                X2_IP_ADDPROP_POLICY_KEEP_EXISTING, TRUE, TRUE);
+            IPSafeAddItemProperty(
+                oWeapon,
+                ItemPropertyVisualEffect(ITEM_VISUAL_SONIC),
+                RoundsToSeconds(nRounds),
+                X2_IP_ADDPROP_POLICY_REPLACE_EXISTING, FALSE, TRUE);
         }
      }
 }
@@ -372,7 +392,8 @@ void DoMindBlast(int nDC, int nDuration, float fRange)
             bImmune = TRUE;
         }
 
-        if(spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF) && oTarget != OBJECT_SELF && !bImmune )
+        if (spellsIsTarget(oTarget,SPELL_TARGET_STANDARDHOSTILE,OBJECT_SELF)
+            && oTarget != OBJECT_SELF && !bImmune )
         {
             SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, JXGetSpellId()));
             fDelay = GetDistanceBetween(OBJECT_SELF, oTarget)/20;
@@ -411,26 +432,32 @@ void DoMindBlast(int nDC, int nDuration, float fRange)
 
 
 // * Gelatinous Cube Paralyze attack
-int  DoCubeParalyze(object oTarget, object oSource, int nSaveDC = 16)
+int DoCubeParalyze(object oTarget, object oSource, int nSaveDC=16)
 {
-   if (GetIsImmune(oTarget,IMMUNITY_TYPE_PARALYSIS) )
-   {
-        return FALSE;
-   }
-
-    if (FortitudeSave(oTarget,nSaveDC, SAVING_THROW_TYPE_POISON,oSource) == 0)
+    if (GetIsImmune(oTarget, IMMUNITY_TYPE_PARALYSIS))
     {
-      effect ePara =  EffectParalyze(nSaveDC, SAVING_THROW_FORT);
-      effect eDur = EffectVisualEffect(VFX_DUR_PARALYZED);
-      ePara = EffectLinkEffects(eDur,ePara);
-      ePara = EffectLinkEffects(EffectVisualEffect(VFX_DUR_FREEZE_ANIMATION),ePara);
-      JXApplyEffectToObject(DURATION_TYPE_TEMPORARY,ePara,oTarget,RoundsToSeconds(3+d3())); // not 3 d6, thats not fun
-      return TRUE;
+        return FALSE;
+    }
+
+    if (FortitudeSave(oTarget,
+                      nSaveDC,
+                      SAVING_THROW_TYPE_POISON,
+                      oSource) == 0)
+    {
+        effect ePara = EffectParalyze(nSaveDC, SAVING_THROW_T);
+        effect eDur = EffecttVisualEffect(VFX_DUR_PARALYZED);
+        ePara = EffectLinkEffects(eDur,ePara);
+        ePara = EffectLinkEffects(EffectVisualEffect(VFX_DUR_FREEZE_ANIMATION),ePara);
+        JXApplyEffectToObject(DURATION_TYPE_TEMPORARY,
+                              ePara,
+                              oTarget,
+                              RoundsToSeconds(3+d3()));
+        return TRUE;
     }
     else
     {
-     effect eSave = EffectVisualEffect(VFX_IMP_FORTITUDE_SAVING_THROW_USE);
-      JXApplyEffectToObject(DURATION_TYPE_INSTANT,eSave,oTarget);
+        effect eSave = EffectVisualEffect(VFX_IMP_FORTITUDE_SAVING_THROW_USE);
+        JXApplyEffectToObject(DURATION_TYPE_INSTANT,eSave,oTarget);
     }
     return FALSE;
 }
@@ -442,29 +469,29 @@ int  DoCubeParalyze(object oTarget, object oSource, int nSaveDC = 16)
 void EngulfAndDamage(object oTarget, object oSource)
 {
 
-  if (ReflexSave(oTarget, 13 + GetHitDice(oSource) - 4, SAVING_THROW_TYPE_NONE,oSource) == 0)
-  {
+    if (ReflexSave(oTarget, 13 + GetHitDice(oSource) - 4, SAVING_THROW_TYPE_NONE,oSource) == 0)
+    {
 
-      FloatingTextStrRefOnCreature(84610,oTarget); // * Engulfed
-      int nDamage = d6(1);
+        FloatingTextStrRefOnCreature(84610,oTarget); // * Engulfed
+        int nDamage = d6(1);
 
-      effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
-      effect eVis = EffectVisualEffect(VFX_IMP_ACID_S);
-      JXApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget);
-      JXApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
-      if (!GetIsImmune(oTarget,IMMUNITY_TYPE_PARALYSIS) )
-      {
-          if (DoCubeParalyze(oTarget,oSource,16))
-          {
-               FloatingTextStrRefOnCreature(84609,oTarget);
-          }
-       }
+        effect eDamage = EffectDamage(nDamage, DAMAGE_TYPE_ACID);
+        effect eVis = EffectVisualEffect(VFX_IMP_ACID_S);
+        JXApplyEffectToObject(DURATION_TYPE_INSTANT,eDamage,oTarget);
+        JXApplyEffectToObject(DURATION_TYPE_INSTANT,eVis,oTarget);
+        if (!GetIsImmune(oTarget,IMMUNITY_TYPE_PARALYSIS) )
+        {
+            if (DoCubeParalyze(oTarget,oSource,16))
+            {
+                FloatingTextStrRefOnCreature(84609,oTarget);
+            }
+        }
 
-  } else
-  {
-      effect eSave = EffectVisualEffect(VFX_IMP_REFLEX_SAVE_THROW_USE);
-      JXApplyEffectToObject(DURATION_TYPE_INSTANT,eSave,oTarget);
-  }
+    } else
+    {
+        effect eSave = EffectVisualEffect(VFX_IMP_REFLEX_SAVE_THROW_USE);
+        JXApplyEffectToObject(DURATION_TYPE_INSTANT,eSave,oTarget);
+    }
 }
 
 // --------------------------------------------------------------------------------
@@ -508,28 +535,40 @@ int GetEpicSpellSaveDC(object oCaster)
 // will take caster level into account if passed in.
 int GetBestAOEBehavior(int nSpellID, int iCasterLevel=-1)
 {
-        if (nSpellID == SPELL_GREASE)
-        {
-           if (spellsIsFlying(OBJECT_SELF))
-             return X2_SPELL_AOEBEHAVIOR_IGNORE;
-        }
-        if (GetHasSpell(SPELL_GUST_OF_WIND))
-            return X2_SPELL_AOEBEHAVIOR_GUST;
+    if (nSpellID == SPELL_GREASE)
+    {
+        if (spellsIsFlying(OBJECT_SELF))
+        return X2_SPELL_AOEBEHAVIOR_IGNORE;
+    }
+    if (GetHasSpell(SPELL_GUST_OF_WIND))
+    {
+        return X2_SPELL_AOEBEHAVIOR_GUST;
+    }
 
-        if (GetModuleSwitchValue(MODULE_SWITCH_DISABLE_AI_DISPEL_AOE) == 0 )
+    if (GetModuleSwitchValue(MODULE_SWITCH_DISABLE_AI_DISPEL_AOE) == 0 )
+    {
+        if (d100() > GetLocalInt(
+            GetModule(),
+            MODULE_VAR_AI_NO_DISPEL_AOE_CHANCE))
         {
-            if (d100() > GetLocalInt(GetModule(),MODULE_VAR_AI_NO_DISPEL_AOE_CHANCE))
+            if (GetHasSpell(SPELL_LESSER_DISPEL) && iCasterLevel<7)
             {
-                if (GetHasSpell(SPELL_LESSER_DISPEL) && iCasterLevel<7)
-                    return X2_SPELL_AOEBEHAVIOR_DISPEL_L;
-                if (GetHasSpell(SPELL_DISPEL_MAGIC) && iCasterLevel<12)
-                    return X2_SPELL_AOEBEHAVIOR_DISPEL_N;
-                if (GetHasSpell(SPELL_GREATER_DISPELLING) && iCasterLevel<20)
-                    return X2_SPELL_AOEBEHAVIOR_DISPEL_G;
-                if (GetHasSpell(SPELL_MORDENKAINENS_DISJUNCTION))
-                    return X2_SPELL_AOEBEHAVIOR_DISPEL_M;
+                return X2_SPELL_AOEBEHAVIOR_DISPEL_L;
+            }
+            if (GetHasSpell(SPELL_DISPEL_MAGIC) && iCasterLevel<12)
+            {
+                return X2_SPELL_AOEBEHAVIOR_DISPEL_N;
+            }
+            if (GetHasSpell(SPELL_GREATER_DISPELLING) && iCasterLevel<20)
+            {
+                return X2_SPELL_AOEBEHAVIOR_DISPEL_G;
+            }
+            if (GetHasSpell(SPELL_MORDENKAINENS_DISJUNCTION))
+            {
+                return X2_SPELL_AOEBEHAVIOR_DISPEL_M;
             }
         }
+    }
     return X2_SPELL_AOEBEHAVIOR_FLEE;
 }
 

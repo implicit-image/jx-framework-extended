@@ -390,7 +390,7 @@ void RemoveAllFollowers(object oPC, int bRemoveAll = FALSE)
                 SetActionMode(oHench, ACTION_MODE_STEALTH, FALSE);
                 // * Remove invisibility type effects off of henchmen (Nov 7 - BK)
                 RemoveSpellEffects(SPELL_INVISIBILITY, oHench, oHench);
-                RemoveSpellEffects(SPELL_GREATER_INVISIBILITY, oHench, oHench);	// JLR - OEI 07/11/05 -- Name Changed
+                RemoveSpellEffects(SPELL_GREATER_INVISIBILITY, oHench, oHench); // JLR - OEI 07/11/05 -- Name Changed
                 RemoveSpellEffects(SPELL_SANCTUARY, oHench, oHench);
                 RemoveSpellEffects(SPELL_ETHEREALNESS, oHench, oHench);
 

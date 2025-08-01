@@ -16,29 +16,29 @@
 // ChazM 5/26/05
 // ChazM 6/1/05 Changed ObjectGroups to use Globals instead of structs
 // ChazM 6/2/05 added ResetGroup, IsGroupEmpty, and SetObject.
-// ChazM 6/6/05	now includes ginc_actions, added prototypes, moved constants to top,
-//				added RandomDelta(), RandomFloat(), GetNearbyLocation(), GroupAttack(),
-//				GroupPlayAnimation(), GroupActionWait, modified GetMoveToWP()
+// ChazM 6/6/05 now includes ginc_actions, added prototypes, moved constants to top,
+//              added RandomDelta(), RandomFloat(), GetNearbyLocation(), GroupAttack(),
+//              GroupPlayAnimation(), GroupActionWait, modified GetMoveToWP()
 // EPF 6/7/05 Added support for a rectangular formation.
 // ChazM 6/7/05 Added support for additional formation types with variable sets of params.
-//			Added GroupSetBMAFormation(), GroupSetCircleFormation(), GroupSetRectangleFormation(), GroupSetNoise(),
-//			modified GroupMoveToWP(), removed GetFormationLocationByIndex().  Added and modified some of the base funcs.
+//          Added GroupSetBMAFormation(), GroupSetCircleFormation(), GroupSetRectangleFormation(), GroupSetNoise(),
+//          modified GroupMoveToWP(), removed GetFormationLocationByIndex().  Added and modified some of the base funcs.
 // ChazM 6/7/05 Added support for running in formation, added GroupClearAllActions()
 // ChazM 6/8/05 modified FactionToGroup(), GetBMALocation(), GetHuddleLocation(), GroupMoveToWP(), added constants, numerous comments
 // ChazM 6/15/05 added GetPartyGroup(), modified ResetGroup(), added constants, added comments, added prototypes,
-//			modified GroupMoveToWP to work better w/ defualts.  added GroupActionOrientToTag().
+//          modified GroupMoveToWP to work better w/ defualts.  added GroupActionOrientToTag().
 // ChazM 6/16/05 added GroupSetLocalString(), GroupOnDeathBeginConversation(), SetGroupString(), GetGroupString(),
-//			modified AddToGroup()
+//          modified AddToGroup()
 // ChazM 6/18/05 added EncounterToGroup(), modified AddToGroup()
 // ChazM 6/18/05 added GroupSetSpawnInCondition(), modified EncounterToGroup()
 // ChazM 6/20/05 added GroupWander()
 // ChazM 6/21/05 added SpawnCreaturesInGroupAtWP()
 // ChazM 6/27/05 modified ResetGroup(), renamed bunch of "private" functions and all references, modified AddToGroup(), added InsertIntoGroup()
-//				added some "how to use" comments, modified GetPartyGroup()
+//              added some "how to use" comments, modified GetPartyGroup()
 // ChazM 6/28/05 added DeleteGlobalObject(), modified GroupDeleteObjectIndex()
-//  			added GroupActionForceExit(), GroupChangeFaction, GroupChangeToStandardFaction
+//              added GroupActionForceExit(), GroupChangeFaction, GroupChangeToStandardFaction
 // ChazM 7/1/05 added AddNearestWithTagToGroup(), GroupMoveToFormationLocation(), GroupActionMoveToObject(),
-//				modified GroupMoveToWP()
+//              modified GroupMoveToWP()
 // ChazM 7/5/05 added GetFirstValidInGroupFromCurrent(), modified GetNextInGroup() and GetFirstInGroup()
 // BMA 7/07/05 added GroupSetFacingPoint(), modified GroupActionOrientToTag()
 // ChazM 7/11/05 shortened prefixes/postfixes
@@ -50,20 +50,20 @@
 // BMA-OEI 8/25/05 added GroupAddXXX, MOVE_FORCE_WALK, MOVE_FORCE_RUN, GroupSetImmortal/PlotFlag
 // BMA-OEI 8/26/05 added GroupSpawnAtLocation,GroupForceMoveToLocation
 // BDF-OEI 9/2/05 added GroupOnDeathSetLocalInt, GroupOnDeathSetLocalFloat, GroupOnDeathSetLocalString
-// ChazM 9/8/05	added GroupActionForceFollowObject()
+// ChazM 9/8/05 added GroupActionForceFollowObject()
 // ChazM 9/8/05 formatting changes, added GroupAddNearestTag(), GroupDetermineCombatRound(), GroupGoHostile();
-//				modified GroupAddTag(); fixed FactionToGroup(), AddNearestWithTagToGroup(), GroupActionForceFollowObject()
+//              modified GroupAddTag(); fixed FactionToGroup(), AddNearestWithTagToGroup(), GroupActionForceFollowObject()
 // ChazM 9/12/05 added param bOverridePrevGroup to GroupAddMember, GroupAddTag, GroupAddNearestTag, and GroupAddEncounter
-//				added GroupSetLocalObject(), GroupFollowLeader()
+//              added GroupSetLocalObject(), GroupFollowLeader()
 // ChazM 9/13/05 added GroupSurrenderToEnemies()
 // ChazM 9/14/05 added GroupSetLocalInt(), GroupSetLocalFloat(), GroupStartFollowLeader(), GroupStopFollowLeader()
-//				GroupActionMoveAwayFromObject(), GroupSurrenderToEnemies();
-//				modified GroupActionForceFollowObject(); removed GroupFollowLeader()
+//              GroupActionMoveAwayFromObject(), GroupSurrenderToEnemies();
+//              modified GroupActionForceFollowObject(); removed GroupFollowLeader()
 // ChazM 9/15/05 added GroupMoveToObject(), GroupActionCastFakeSpellAtObject(), SendDebugMessage();
-//				changed GroupJumpToObject() to GroupJumpToWP; modified AddToGroup(), FactionToGroup(), EncounterToGroup(), AddNearestWithTagToGroup()
+//              changed GroupJumpToObject() to GroupJumpToWP; modified AddToGroup(), FactionToGroup(), EncounterToGroup(), AddNearestWithTagToGroup()
 // ChazM 9/15/05 added GroupApplyEffectToObject() and GroupRemoveEffectOfType()
 // ChazM 9/29/05 added 3 new includes, removed SendDebugMessage, moved out GetGlobalObject(), SetGlobalObject(), DeleteGlobalObject() to ginc_vars;
-//				RandomDelta(), RandomFloat(), GetNearbyLocation() to ginc_math
+//              RandomDelta(), RandomFloat(), GetNearbyLocation() to ginc_math
 // BMA-OEI 10/26/05 added GroupSetLineFormation(), GetLineLocation(), modified GroupForceMoveToLocation(), GroupSpawnAtLocation(), GroupMoveToFormationLocation()
 // BMA-OEI 11/06/05 added GroupSignalEvent()
 // BMA-OEI 11/21/05 added GroupGetNumValidObjects(), GetIsGroupValid()
@@ -112,61 +112,61 @@
 //-------------------------------------------------
 // Public constants
 //-------------------------------------------------
-const int FORMATION_DEFAULT 			= 0;
-const int FORMATION_BMA 				= 1;
-const int FORMATION_HUDDLE_FACE_IN 		= 2;
-const int FORMATION_HUDDLE_FACE_OUT 	= 3;
+const int FORMATION_DEFAULT             = 0;
+const int FORMATION_BMA                 = 1;
+const int FORMATION_HUDDLE_FACE_IN      = 2;
+const int FORMATION_HUDDLE_FACE_OUT     = 3;
 const int FORMATION_HUDDLE_FACE_FORWARD = 4;
-const int FORMATION_RECTANGLE 			= 5;
-const int FORMATION_NONE 				= 6;
-const int FORMATION_LINE				= 7;
-const int FORMATION_SEMICIRCLE_FACE_OUT	= 8;
-const int FORMATION_SEMICIRCLE_FACE_IN 	= 9;
+const int FORMATION_RECTANGLE           = 5;
+const int FORMATION_NONE                = 6;
+const int FORMATION_LINE                = 7;
+const int FORMATION_SEMICIRCLE_FACE_OUT = 8;
+const int FORMATION_SEMICIRCLE_FACE_IN  = 9;
 
-const int MOVE_WALK 					= 1;
-const int MOVE_RUN 						= 2;
-const int MOVE_JUMP 					= 3;
-const int MOVE_JUMP_INSTANT 			= 4;
-const int MOVE_FORCE_WALK 				= 5;
-const int MOVE_FORCE_RUN 				= 6;
+const int MOVE_WALK                     = 1;
+const int MOVE_RUN                      = 2;
+const int MOVE_JUMP                     = 3;
+const int MOVE_JUMP_INSTANT             = 4;
+const int MOVE_FORCE_WALK               = 5;
+const int MOVE_FORCE_RUN                = 6;
 
-const int GROUP_LEADER_FIRST 			= -1;
-const int GROUP_LEADER_LAST 			= -2;
-const int GROUP_LEADER_EXCLUDE 			= -3;
+const int GROUP_LEADER_FIRST            = -1;
+const int GROUP_LEADER_LAST             = -2;
+const int GROUP_LEADER_EXCLUDE          = -3;
 
-const string PARTY_GROUP_NAME 			= "theParty";
+const string PARTY_GROUP_NAME           = "theParty";
 
 // comment this out as its incompiatbile with utils include
-// const int TYPE_INT 						= 1;
-// const int TYPE_FLOAT 					= 2;
-// const int TYPE_STRING 					= 3;
+// const int TYPE_INT                       = 1;
+// const int TYPE_FLOAT                     = 2;
+// const int TYPE_STRING                    = 3;
 
 // Private constants
-const string GROUP_VAR_NUM_KILLED		= "NumKilled";
-const string OBJ_GROUP_MY_GROUP			= "MyGroup"; // var name stored on objects (so object can identify the group he's in)
-const string OBJ_GROUP_PREFIX 			= "_OG";
-const string OBJ_GROUP_NUM				= "_Num";
-const string OBJ_GROUP_INDEX			= "_Indx";
-const string OBJ_GROUP_FORMATION_TYPE 	= "Fmn";
+const string GROUP_VAR_NUM_KILLED       = "NumKilled";
+const string OBJ_GROUP_MY_GROUP         = "MyGroup"; // var name stored on objects (so object can identify the group he's in)
+const string OBJ_GROUP_PREFIX           = "_OG";
+const string OBJ_GROUP_NUM              = "_Num";
+const string OBJ_GROUP_INDEX            = "_Indx";
+const string OBJ_GROUP_FORMATION_TYPE   = "Fmn";
 const string OBJ_GROUP_FORMATION_RADIUS = "Rad";
-const string OBJ_GROUP_FORMATION_COLS 	= "Col";
+const string OBJ_GROUP_FORMATION_COLS   = "Col";
 const string OBJ_GROUP_FORMATION_SPACING = "Spc";
-const string OBJ_GROUP_NOISE_START 		= "StN";
-const string OBJ_GROUP_NOISE_FACING 	= "FcN";
-const string OBJ_GROUP_NOISE_LOCATION 	= "LcN";
+const string OBJ_GROUP_NOISE_START      = "StN";
+const string OBJ_GROUP_NOISE_FACING     = "FcN";
+const string OBJ_GROUP_NOISE_LOCATION   = "LcN";
 
-const float DEFAULT_SPACING				= 1.8f;
+const float DEFAULT_SPACING             = 1.8f;
 
 
 //-------------------------------------------------
 // Public function Prototypes
 //-------------------------------------------------
 
-void ResetGroup(string sGroupName);	// Reset a group for re-use
-int IsGroupEmpty(string sGroupName);	// used to see if the group already contains creatures in it.
-int GroupGetNumValidObjects(string sGroupName, int bIsDead=FALSE);	// return number of valid creatures in group
-int	GetIsGroupValid(string sGroupName, int bNotDying=FALSE);		// check if group has any valid creatures in it
-string GetGroupName(object oMember);	//Retrieves the group a creature is in
+void ResetGroup(string sGroupName); // Reset a group for re-use
+int IsGroupEmpty(string sGroupName);    // used to see if the group already contains creatures in it.
+int GroupGetNumValidObjects(string sGroupName, int bIsDead=FALSE);  // return number of valid creatures in group
+int GetIsGroupValid(string sGroupName, int bNotDying=FALSE);        // check if group has any valid creatures in it
+string GetGroupName(object oMember);    //Retrieves the group a creature is in
 
 // Return TRUE, if all remaining members are dominated
 int GetIsGroupDominated( string sGroupName );
@@ -174,7 +174,7 @@ int GetIsGroupDominated( string sGroupName );
 // **********************
 // *** Group creation ***
 // **********************
-string GetPartyGroup(object oPC);	// creates group for the party and returns name.
+string GetPartyGroup(object oPC);   // creates group for the party and returns name.
 
 void GroupAddMember(string sGroupName, object oMember, int bOverridePrevGroup=FALSE);
 void GroupAddFaction(string sGroupName, object oFactionMember, int nLeaderPos=GROUP_LEADER_FIRST, int bOverridePrevGroup=FALSE);
@@ -188,20 +188,20 @@ void GroupSpawnAtWaypoint(string sGroupName, string sTemplate, string sWaypoint,
 // ***************************************
 // *** Group Formation and Noise setup ***
 // ***************************************
-void GroupSetNoFormation(string sGroupName);	// single base destination for group
-void GroupSetBMAFormation(string sGroupName, float fSpacing=DEFAULT_SPACING);	// a staggered marching formation
-void GroupSetCircleFormation(string sGroupName, int iFacing=FORMATION_HUDDLE_FACE_IN , float fRadius=5.0f);	// a circle or huddle formation
+void GroupSetNoFormation(string sGroupName);    // single base destination for group
+void GroupSetBMAFormation(string sGroupName, float fSpacing=DEFAULT_SPACING);   // a staggered marching formation
+void GroupSetCircleFormation(string sGroupName, int iFacing=FORMATION_HUDDLE_FACE_IN , float fRadius=5.0f); // a circle or huddle formation
 void GroupSetSemicircleFormation(string sGroupName, int iFacing = FORMATION_SEMICIRCLE_FACE_OUT, float fRadius = 5.f);
 void GroupSetLineFormation(string sGroupName, float fSpacing=DEFAULT_SPACING); // single row formation, leader in middle
-void GroupSetRectangleFormation(string sGroupName, float fSpacing=1.8f, int nColumns=2);	// a rectangular or single line formation
+void GroupSetRectangleFormation(string sGroupName, float fSpacing=1.8f, int nColumns=2);    // a rectangular or single line formation
 
-void GroupSetNoise(string sGroupName, float fStartNoise=0.5f, float fFacingNoise=10.0f, float fLocationNoise=0.5f);	// use to add noise to the group and make them appear less synchronized
+void GroupSetNoise(string sGroupName, float fStartNoise=0.5f, float fFacingNoise=10.0f, float fLocationNoise=0.5f); // use to add noise to the group and make them appear less synchronized
 
 //  Only 1 of the GroupOnDeath functions can be applied per group - a previous GroupOnDeath function will be "overwritten" when a new one is applied.
-void GroupOnDeathBeginConversation(string sGroupName, string sTalkerTag, string sConversation);	// use to have a convo begin after everyone in the group dies
-void GroupOnDeathSetLocalInt( string sGroupName, object oTargetObject, string sVariableName, int nNewValue );	// Used for setting a local integer on a target object upon the death of the specified group
-void GroupOnDeathSetLocalFloat( string sGroupName, object oTargetObject, string sVariableName, float fNewValue );	// Used for setting a local float on a target object upon the death of the specified group
-void GroupOnDeathSetLocalString( string sGroupName, object oTargetObject, string sVariableName, string sNewValue );	// Used for setting a local string on a target object upon the death of the specified group
+void GroupOnDeathBeginConversation(string sGroupName, string sTalkerTag, string sConversation); // use to have a convo begin after everyone in the group dies
+void GroupOnDeathSetLocalInt( string sGroupName, object oTargetObject, string sVariableName, int nNewValue );   // Used for setting a local integer on a target object upon the death of the specified group
+void GroupOnDeathSetLocalFloat( string sGroupName, object oTargetObject, string sVariableName, float fNewValue );   // Used for setting a local float on a target object upon the death of the specified group
+void GroupOnDeathSetLocalString( string sGroupName, object oTargetObject, string sVariableName, string sNewValue ); // Used for setting a local string on a target object upon the death of the specified group
 void GroupOnDeathSetJournalEntry(string sGroup, string sQuestTag, int nEntry, int bAllowOverride = FALSE);
 void GroupOnDeathExecuteCustomScript(string sGroupName, string sScriptName);
 
@@ -210,7 +210,7 @@ void GroupOnDeathExecuteCustomScript(string sGroupName, string sScriptName);
 // *** Group Actions ***
 // *********************
 void GroupForceMoveToLocation(string sGroupName, location lDestination, int bRun=FALSE, float fTimeout=30.0f);
-void GroupMoveToFormationLocation(string sGroupName, location lDestination, int iMoveType=MOVE_WALK);	// locomote a group to a specified location (formation and noise should be set first)
+void GroupMoveToFormationLocation(string sGroupName, location lDestination, int iMoveType=MOVE_WALK);   // locomote a group to a specified location (formation and noise should be set first)
 void GroupMoveToWP(string sGroupName, string sWaypoint, int iMoveType=MOVE_WALK); // locomote a group to a specified waypoint (formation and noise should be set first)
 void GroupMoveToObject(string sGroupName, object oTarget, int iMoveType=MOVE_WALK); // locomote a group to a specified object (formation and noise should be set first)
 void GroupFleeToExit(string sGroupName, string sWaypoint, int iMoveType=MOVE_WALK);
@@ -229,14 +229,14 @@ void GroupSetLocalFloat (string sGroupName, string sVarName, float fValue);
 
 void GroupSetSpawnInCondition(string sGroupName, int nCondition, int bValid=TRUE);
 void GroupWander(string sGroupName, int bValid = TRUE);
-void GroupActionForceExit(string sGroupName, string sWPTag = "WP_EXIT", int bRun=FALSE); 	// forces all in group to go to destination and then destroy self.
-void GroupChangeFaction(string sGroupName, string sTargetFactionMember);	// Changes everyone in group to join faction of given creature
-void GroupChangeToStandardFaction(string sGroupName, int iFaction);		// Changes everyone in group to join one of the standard factions
+void GroupActionForceExit(string sGroupName, string sWPTag = "WP_EXIT", int bRun=FALSE);    // forces all in group to go to destination and then destroy self.
+void GroupChangeFaction(string sGroupName, string sTargetFactionMember);    // Changes everyone in group to join faction of given creature
+void GroupChangeToStandardFaction(string sGroupName, int iFaction);     // Changes everyone in group to join one of the standard factions
 
-void GroupActionMoveToObject(string sGroupName, object oTarget, int bRun=FALSE, float fRange=1.0f);	// does action move to object for all in group (doesn't use formation/noise)
+void GroupActionMoveToObject(string sGroupName, object oTarget, int bRun=FALSE, float fRange=1.0f); // does action move to object for all in group (doesn't use formation/noise)
 void GroupAttackGroup(string sAttackerGroupName, string sAttackedGroupName, int bSetToHostile=TRUE); // have group attak targets in another group
 void GroupDetermineCombatRound(string sGroupName);
-void GroupSetFacingPoint(string sGroupName, vector vPoint);	// assign SetFacingPoint(vPoint) to each member, no delay
+void GroupSetFacingPoint(string sGroupName, vector vPoint); // assign SetFacingPoint(vPoint) to each member, no delay
 void DestroyObjectsInGroup(string sGroupName, float fDelay=0.0f);
 
 void GroupSetImmortal(string sGroupName, int bImmortal);
@@ -306,11 +306,11 @@ location GetLineLocation(location lDestination, int iMemberIndex, float fSpacing
 location GetRectangleLocation(location lDestination, int nMemberIndex, int nColumns, float fSpacing);
 
 // old versions of functions - don't use but kept for compatibility
-int AddToGroup(string sGroupName, object oObject);	// add a new a creature to a group (fails if object is already in another group)
-void FactionToGroup(object oFactionMember, string sGroupName, int iLeaderPos=GROUP_LEADER_FIRST, int bOverridePrevGroup = FALSE);	// add an entire faction to a goup
-void AddNearestWithTagToGroup(string sGroupName, string sTag, int iMax=20);	// adds all in the area w/ tag to a group up to specified max.
-void EncounterToGroup(string sGroupName, int bWander = 2);	// adds all encounter creatures to a group
-void SpawnCreaturesInGroupAtWP(int iNum, string sTemplate, string sGroupName, string sWayPoint="SPAWN_POINT");	// spawns in creatures and adds them to a group
+int AddToGroup(string sGroupName, object oObject);  // add a new a creature to a group (fails if object is already in another group)
+void FactionToGroup(object oFactionMember, string sGroupName, int iLeaderPos=GROUP_LEADER_FIRST, int bOverridePrevGroup = FALSE);   // add an entire faction to a goup
+void AddNearestWithTagToGroup(string sGroupName, string sTag, int iMax=20); // adds all in the area w/ tag to a group up to specified max.
+void EncounterToGroup(string sGroupName, int bWander = 2);  // adds all encounter creatures to a group
+void SpawnCreaturesInGroupAtWP(int iNum, string sTemplate, string sGroupName, string sWayPoint="SPAWN_POINT");  // spawns in creatures and adds them to a group
 
 
 //-------------------------------------------------
@@ -375,7 +375,7 @@ int GroupGetNumValidObjects(string sGroupName, int bIsDead = FALSE)
 
 // Returns true if at least one group member reference is valid
 // If bNotDying is TRUE, only check members that are HP>0
-int	GetIsGroupValid(string sGroupName, int bNotDying = FALSE)
+int GetIsGroupValid(string sGroupName, int bNotDying = FALSE)
 {
         int nPossible = GroupGetNumObjects(sGroupName);
 
@@ -407,7 +407,7 @@ int	GetIsGroupValid(string sGroupName, int bNotDying = FALSE)
 
 //Retrieves the group a creature is in
 //returns the string of the group name, or "" if creature is not in a group
-//		NOTE: may be some problem with creatures who were formerly in a group having the residual variable
+//      NOTE: may be some problem with creatures who were formerly in a group having the residual variable
 string GetGroupName(object oMember)
 {
         return GetLocalString(oMember,OBJ_GROUP_MY_GROUP);
@@ -654,7 +654,7 @@ int InsertIntoGroup(string sGroupName, object oObject, int bOverridePrevGroup = 
 // 5 4 6
 vector GetBMAFormationStartPosition(vector vPosition, int nIndex, float fSpacing, float fFacing)
 {
-        int nCase = nIndex % 5;	// determine starting position if index > 6
+        int nCase = nIndex % 5; // determine starting position if index > 6
 
         if ((nIndex == 0) || (nIndex == 1))
         {
@@ -730,7 +730,7 @@ location GetRectangleLocation(location lDestination, int nMemberIndex, int nColu
         vector vPosition = GetPositionFromLocation(lDestination);
         float fFacing = GetFacingFromLocation(lDestination);
         int nRow, nCol;
-        nMemberIndex -= 1;	//Convert to 0-indexing for the math we're doing below
+        nMemberIndex -= 1;  //Convert to 0-indexing for the math we're doing below
 
         nCol = (nMemberIndex % nColumns);
 
@@ -762,13 +762,13 @@ location GetHuddleLocation(location lDestination, int iMemberIndex, int iNumObje
         //avoid divide-by-0 errors
         if(iNumObjects == 0)
                 iNumObjects = 1;
-        iMemberIndex -= 1;	//Convert to 0-indexing so first in group goes direction of waypoint.
+        iMemberIndex -= 1;  //Convert to 0-indexing so first in group goes direction of waypoint.
 
         float fIncrement;
 
         if(iFaceType == FORMATION_SEMICIRCLE_FACE_OUT || iFaceType == FORMATION_SEMICIRCLE_FACE_IN)
         {
-                if(iNumObjects == 1) iNumObjects == 2;	//hack fix for divide-by-0
+                if(iNumObjects == 1) iNumObjects == 2;  //hack fix for divide-by-0
                 fIncrement = 180.f / IntToFloat(iNumObjects - 1);
         }
         else
@@ -813,7 +813,7 @@ location GetHuddleLocation(location lDestination, int iMemberIndex, int iNumObje
         }
 
     vector vCenter = GetPositionFromLocation(lDestination);
-    vPos = vPos + vCenter;	// move vector to offset
+    vPos = vPos + vCenter;  // move vector to offset
 
     return Location(oArea, vPos, fFacing);
 }
@@ -930,21 +930,21 @@ void GroupAddFaction(string sGroupName, object oFactionMember, int nLeaderPos=GR
 
         object oMember = GetFirstFactionMember(oFactionMember, FALSE);
 
-        if (nLeaderPos == GROUP_LEADER_FIRST)	// add Leader first
+        if (nLeaderPos == GROUP_LEADER_FIRST)   // add Leader first
         {
                 InsertIntoGroup(sGroupName, oLeader, bOverridePrevGroup);
         }
 
         while (GetIsObjectValid(oMember))
         {
-                if (oMember != oLeader)				// skip Leader
+                if (oMember != oLeader)             // skip Leader
                 {
                         InsertIntoGroup(sGroupName, oMember, bOverridePrevGroup);
                 }
                 oMember = GetNextFactionMember(oFactionMember, FALSE);
         }
 
-        if (nLeaderPos == GROUP_LEADER_LAST)	// add Leader last
+        if (nLeaderPos == GROUP_LEADER_LAST)    // add Leader last
         {
                 InsertIntoGroup(sGroupName, oLeader, bOverridePrevGroup);
         }
@@ -981,8 +981,8 @@ void GroupAddNearestTag(string sGroupName, string sTag, object oTarget = OBJECT_
 
 // Add encounter spawned creatures to group sGroupName
 // bWander 0 - no wander
-//			1 - wander
-//			2 - don't set (ude default - currently wander)
+//          1 - wander
+//          2 - don't set (ude default - currently wander)
 void GroupAddEncounter(string sGroupName, int bWander=2, int bOverridePrevGroup=FALSE)
 {
         //SpawnScriptDebugger();
@@ -999,7 +999,7 @@ void GroupAddEncounter(string sGroupName, int bWander=2, int bOverridePrevGroup=
                         //PrettyDebug(GetName(oMember) + " encounter status is : " + IntToString(iIsEncounter));
                         if (GetIsEncounterCreature(oMember))
                         {
-                                InsertIntoGroup(sGroupName, oMember, bOverridePrevGroup);	// adds
+                                InsertIntoGroup(sGroupName, oMember, bOverridePrevGroup);   // adds
                         }
                 }
                 oMember = GetNextObjectInArea();
@@ -1086,8 +1086,8 @@ void FactionToGroup(object oFactionMember, string sGroupName, int iLeaderPos=GRO
 
 // add all encounter creatures in area to specified group
 // bWander 0 - no wander
-//			1 - wander
-//			2 - don't set (ude default - currently wander)
+//          1 - wander
+//          2 - don't set (ude default - currently wander)
 void EncounterToGroup(string sGroupName, int bWander=2)
 {
         OldFunctionMessage("EncounterToGroup", "GroupAddEncounter");
@@ -1147,8 +1147,8 @@ void GroupSetBMAFormation(string sGroupName, float fSpacing=1.8f)
 }
 
 // creates a circle, fRadius out from the waypoint.  First in group will go in direction of waypoints arrow.
-// int iFormation 	- Formation to use
-// float fRadius	- radius for huddles
+// int iFormation   - Formation to use
+// float fRadius    - radius for huddles
 void GroupSetCircleFormation(string sGroupName, int iFacing=FORMATION_HUDDLE_FACE_IN , float fRadius=5.0f)
 {
         SetGroupInt(sGroupName, OBJ_GROUP_FORMATION_TYPE, iFacing);
@@ -1183,9 +1183,9 @@ void GroupSetRectangleFormation(string sGroupName, float fSpacing=1.8f, int nCol
 }
 
 // Sets the noise to be used with formations to make them less synchronized.
-// fStartNoise		- delay in start time for creatures to move
-// fFacingNoise		- max degrees to turn from facing
-// fLocationNoise	- max x and y units to deviate from location
+// fStartNoise      - delay in start time for creatures to move
+// fFacingNoise     - max degrees to turn from facing
+// fLocationNoise   - max x and y units to deviate from location
 void GroupSetNoise(string sGroupName, float fStartNoise=1.0f, float fFacingNoise=10.0f, float fLocationNoise=1.0f)
 {
         SetGroupFloat(sGroupName, OBJ_GROUP_NOISE_START, fStartNoise);
@@ -1355,7 +1355,7 @@ void GroupForceMoveToLocation(string sGroupName, location lDestination, int bRun
 // locomote a group to a specified waypoint (formation and noise should be set first)
 // string sGroupName - name of group to move (created using AddToGroup())
 // string sWayPoint - Tag of the Base waypoint for the formation
-// int iMoveType	- specifies type of locomotion - MOVE_WALK, MOVE_JUMP, etc.
+// int iMoveType    - specifies type of locomotion - MOVE_WALK, MOVE_JUMP, etc.
 void GroupMoveToWP(string sGroupName, string sWayPoint, int iMoveType=MOVE_WALK)
 {
         location lDestination = GetWPLocation(sWayPoint);
@@ -1431,7 +1431,7 @@ void DoMoveType(object oMember, location lThisDest, int iMoveType=MOVE_WALK, flo
 // locomote a group to a specified location (formation and noise should be set first)
 // string sGroupName - name of group to move (created using AddToGroup())
 // location lDestination - Base location for the formation
-// int iMoveType	- specifies type of locomotion - MOVE_WALK, MOVE_JUMP, etc.
+// int iMoveType    - specifies type of locomotion - MOVE_WALK, MOVE_JUMP, etc.
 void GroupMoveToFormationLocation(string sGroupName, location lDestination, int iMoveType=MOVE_WALK)
 {
         object oMember = GetFirstInGroup(sGroupName);
@@ -1445,10 +1445,10 @@ void GroupMoveToFormationLocation(string sGroupName, location lDestination, int 
         float fLocationNoise = GetGroupFloat(sGroupName, OBJ_GROUP_NOISE_LOCATION);
 
         // get formation vars
-        int iFormation 	= GetGroupInt(sGroupName, OBJ_GROUP_FORMATION_TYPE);
+        int iFormation  = GetGroupInt(sGroupName, OBJ_GROUP_FORMATION_TYPE);
         int iNumObjects = GroupGetNumObjects(sGroupName);
-        int iCols		= GetGroupInt(sGroupName, OBJ_GROUP_FORMATION_COLS);
-        float fSpacing 	= GetGroupFloat(sGroupName, OBJ_GROUP_FORMATION_SPACING);
+        int iCols       = GetGroupInt(sGroupName, OBJ_GROUP_FORMATION_COLS);
+        float fSpacing  = GetGroupFloat(sGroupName, OBJ_GROUP_FORMATION_SPACING);
 
         while (GetIsObjectValid(oMember))
         {

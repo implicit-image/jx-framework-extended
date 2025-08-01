@@ -271,11 +271,13 @@ int X2PreSpellCastCode()
        }
    }*/
 
+   int iSpellId = JXGetSpellId();
+
+   // SetLocalInt(JX_SPELL_IS_HOSTILE, IntToString(Get2DAString("spells", "Hostile")))
     // JX ADDED : Items also use the Spellcasting Framework
     object oItem = GetSpellCastItem();
     if (GetIsObjectValid(oItem))
     {
-        int iSpellId =     JXGetSpellId();
         int iMetamagic =   JXGetItemSpellMetaMagicFeat(iSpellId, oItem);
         int iCasterLevel = JXGetItemSpellCasterLevel(iSpellId, oItem);
         int iSaveDC =      JXGetItemSpellSpellSaveDC(iSpellId, oItem);

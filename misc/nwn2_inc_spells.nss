@@ -24,6 +24,7 @@
 #include "nw_i0_spells"
 #include "x0_i0_spells"
 #include "nwn2_inc_metmag" // JLR - OEI 08/24/05 -- Metamagic changes
+#include "jx_inc_magic_effects"
 #include "jx_inc_magic"
 //================================================================
 // Constants

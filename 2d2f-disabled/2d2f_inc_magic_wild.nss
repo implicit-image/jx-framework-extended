@@ -11,12 +11,12 @@ This scrip contains all the functions related to wild magic
 //:: 02/26/08:Shazbotian: changed surge reports to speakstrings so you could see enemy surges, added invis and monster summon surges
 //:: 02/26/08:Shazbotian: added functions to generate enlarge and reduce effects
 //:: 02-26-08:2d2f - Added function to handle spells part of banefull deflector.
-//::			   	- Modified GetRandomCreatureInArea to include caster and initial target if argument is set.
-//::				- Moved wild mage level variation to the end because I'm tired of scrolling past it.
+//::                - Modified GetRandomCreatureInArea to include caster and initial target if argument is set.
+//::                - Moved wild mage level variation to the end because I'm tired of scrolling past it.
 //:: 03/10/08:Shazbotian: added new helper functions for gemspray, hiccuping, and itching surges
 //:: 03/13/08:Shazbotian: added helper function for dizzy surge
 //:: 03-14-08:2d2f - Changed wildMageLevelVariation to use caster level instead of spell level as per TOM.  I guess I misunderstood the TOM all along. opps!
-//:: 				- Made some changes to flyinggem surge function; changed vfx to custom one, changes vfx duration to 1 round for pizzaz, fixed cone shape problem
+//::                - Made some changes to flyinggem surge function; changed vfx to custom one, changes vfx duration to 1 round for pizzaz, fixed cone shape problem
 //:: 03-16-08:2d2f - Changed code to handle baneful deflector
 //:: 03-19-08:2d2f - Modified GetRandomCreatureInArea again be able to select if you want to target the caster and initial target as seperate arguments
 //:: 03-20-08:Shazbotian: added helper function for gate surge, modified monster summons, and added a helper function to make both follow the caster around
@@ -26,18 +26,18 @@ This scrip contains all the functions related to wild magic
 //:: 03-29-08:2d2f - Modified MusicFills air function to not play a clip if music is already playing
 //:: 04-04-08:Shaz: added function to encircle the target with fire walls, and another to open all doors in an area
 //:: 04-04-08:2d2f - Fixed the area of the banefulD function and made sure getrandomcreature function doesn't select dead creatures
-//:: 04-10-08:2d2f - Added the following functions 	- GetRandomInventoryWeaponOrArmor
-//::													- GetItemHasProperties
-//::													- DrainItem
-//::													- EnhanceItem
-//::													- EnhanceAllNearWeapons
-//::													- PrivateChooseRandomItemGlow
-//::													- AllWeaponsGlow
-//::													- AllMagicItemsGlow
+//:: 04-10-08:2d2f - Added the following functions  - GetRandomInventoryWeaponOrArmor
+//::                                                    - GetItemHasProperties
+//::                                                    - DrainItem
+//::                                                    - EnhanceItem
+//::                                                    - EnhanceAllNearWeapons
+//::                                                    - PrivateChooseRandomItemGlow
+//::                                                    - AllWeaponsGlow
+//::                                                    - AllMagicItemsGlow
 //:: 04-14-08:2d2f - Found out that a temporary permanent effect will be removed by resting.
-//::					- Created a function RemoveSupernaturalEffectWithSpellId that will handle this issue by
-//::					- setting a bunk spell id to the effect so it can be removed after a delay.
-//::					- Changed the changeskincolor funtion to use this.
+//::                    - Created a function RemoveSupernaturalEffectWithSpellId that will handle this issue by
+//::                    - setting a bunk spell id to the effect so it can be removed after a delay.
+//::                    - Changed the changeskincolor funtion to use this.
 //:: 04-16-08:2d2f - Added the function AboutFace and shrieker
 //:: 04-18-08:2d2f - Added the function RandomLimb
 //:: 04-20-08:2d2f - Added the following functions PrivateTinyLightning, SmallRainCloud, AOEKnockdown, and ExchangePlaces.
@@ -478,7 +478,7 @@ int GetNumberOfCreaturesInArea(location oCenter, float fRadius)
 
 object GetRandomCreatureInArea(object oCaster, object oInitialTarget, float fRadius, int nCasterValidTarget = FALSE, int nInitialValidTarget = FALSE)
 {
-        object oPC = GetFirstPC();	// for debuggind purposes only
+        object oPC = GetFirstPC();  // for debuggind purposes only
         int iNumberOfTargets;
          // Find the possible number of targets
         if(nCasterValidTarget == FALSE && nInitialValidTarget == FALSE) // (Caster and initial target are not a valid target)
@@ -522,7 +522,7 @@ object GetRandomCreatureInArea(object oCaster, object oInitialTarget, float fRad
                                 && (oRandomTarget != oInitialTarget))
                                 {
                                         iTargetsLoop++;
-                                        if (iTargetsLoop == iRandomTarget)	// Random target found
+                                        if (iTargetsLoop == iRandomTarget)  // Random target found
                                         return oRandomTarget;
                                 }
                         }
@@ -532,7 +532,7 @@ object GetRandomCreatureInArea(object oCaster, object oInitialTarget, float fRad
                                 )
                                 {
                                         iTargetsLoop++;
-                                        if (iTargetsLoop == iRandomTarget)	// Random target found
+                                        if (iTargetsLoop == iRandomTarget)  // Random target found
                                         return oRandomTarget;
                                 }
                         }
@@ -542,14 +542,14 @@ object GetRandomCreatureInArea(object oCaster, object oInitialTarget, float fRad
                                 )
                                 {
                                         iTargetsLoop++;
-                                        if (iTargetsLoop == iRandomTarget)	// Random target found
+                                        if (iTargetsLoop == iRandomTarget)  // Random target found
                                         return oRandomTarget;
                                 }
                         }
                         else // caster and initial target are valid
                         {
                                 iTargetsLoop++;
-                                if (iTargetsLoop == iRandomTarget)	// Random target found
+                                if (iTargetsLoop == iRandomTarget)  // Random target found
                                 return oRandomTarget;
                         }
                 }
@@ -717,8 +717,8 @@ int GetIsEquipable(object oItem)
 
 int GetCountOfEquipableItems(object oCaster, int nMagicalOnly = TRUE)
 {
-        object	oItem ;
-        int 	i=0;
+        object  oItem ;
+        int     i=0;
         int nCount = 0;
 
         while(i<=10)
@@ -761,8 +761,8 @@ int GetCountOfEquipableItems(object oCaster, int nMagicalOnly = TRUE)
 //::///////////////////////////////////////////////
 object GetRandomEquipableItem(object oCaster,int nMagicalOnly = TRUE)
 {
-        object	oItem ;
-        int 	i=0;
+        object  oItem ;
+        int     i=0;
         int nNumItemsInInv = GetCountOfEquipableItems(oCaster,nMagicalOnly);
         int nCount;
         int nRandomItemIndex = Random(nNumItemsInInv);
@@ -881,116 +881,116 @@ string GetSurgeName(int nRand)
 
     if(nRand <= 0)
     {
-        sSurgeName = 	"	Spell Automatically Fails	" ;
+        sSurgeName =    "   Spell Automatically Fails   " ;
     }
     else if (nRand > 100)
     {
-        sSurgeName = 	"	Spell is cast successfully	" ;
+        sSurgeName =    "   Spell is cast successfully  " ;
     }
     else
     {
         switch(nRand)
         {
-            case	1	: sSurgeName = 	"	Wall of Force Appears in front of caster	" ;	break;
-            case	2	: sSurgeName = 	"	Caster smells like a skunk for (caster level) rounds	" ;	break;
-            case	3	: sSurgeName = 	"	Summons various animals	" ;	break;
-            case	4	: sSurgeName = 	"	Caster's clothes itch for 4d6 rounds	" ;	break;
-            case	5	: sSurgeName = 	"	Light on caster	" ;	break;
-            case	6	: sSurgeName = 	"	Spell affects everyone in 60'	" ;	break;
-            case	7	: sSurgeName = 	"	A rainbow appears	" ;	break;
-            case	8	: sSurgeName = 	"	A random creature in the area dies	" ;	break;
-            case	9	: sSurgeName = 	"	Everyone turns around	" ;	break;
-            case	10	: sSurgeName = 	"	Spell explodes in caster's face	" ;	break;
-            case	11	: sSurgeName = 	"	Caster becomes allergic to magic items	" ;	break;
-            case	12	: sSurgeName = 	"	Gold on caster is destroyed	" ;	break;
-            case	13	: sSurgeName = 	"	Caster �reduced�	" ;	break;
-            case	14	: sSurgeName = 	"	Caster falls madly in love with target until dispel magic or remove curse is cast	" ;	break;
-            case	15	: sSurgeName = 	"	Everyone around you is knocked down	" ;	break;
-            case	16	: sSurgeName = 	"	Caster polymorphed into a random form	" ;	break;
-            case	17	: sSurgeName = 	"	Colorful bubbles come out of caster's mouth for one turn	" ;	break;
-            case	18	: sSurgeName = 	"	A herd of cats appear	" ;	break;
-            case	19	: sSurgeName = 	"	Caster surrounded by flames	" ;	break;
-            case	20	: sSurgeName = 	"	Caster's feet enlarge	" ;	break;
-            case	21	: sSurgeName = 	"	Spell targets caster and target	" ;	break;
-            case	22	: sSurgeName = 	"	Caster levitates for 3d6 rounds	" ;	break;
-            case	23	: sSurgeName = 	"	Fear on Caster	" ;	break;
-            case	24	: sSurgeName = 	"	Caster becomes two-dimensional for 3-10 rounds	" ;	break;
-            case	25	: sSurgeName = 	"	Caster gains a phobia of random creature type for 1d4 days	" ;	break;
-            case	26	: sSurgeName = 	"	Spells in effect around caster explode violently	" ;	break;
-            case	27	: sSurgeName = 	"	Silence 15' on caster	" ;	break;
-            case	28	: sSurgeName = 	"	Time Stop, with turns	" ;	break;
-            case	29	: sSurgeName = 	"	Magic is dampened. All creatures int he area recieve spell mantles.	" ;	break;
-            case	30	: sSurgeName = 	"	Fireworks erupt over caster's head	" ;	break;
-            case	31	: sSurgeName = 	"	Spell turns on caster	" ;	break;
-            case	32	: sSurgeName = 	"	Caster becomes invisible	" ;	break;
-            case	33	: sSurgeName = 	"	Color Spray	" ;	break;
-            case	34	: sSurgeName = 	"	Butterflies pour from caster's mouth	" ;	break;
-            case	35	: sSurgeName = 	"	Gold is created on the target	" ;	break;
-            case	36	: sSurgeName = 	"	Gems shoot from caster's fingertips	" ;	break;
-            case	37	: sSurgeName = 	"	Music fills the air	" ;	break;
-            case	38	: sSurgeName = 	"	Create Food and Water	" ;	break;
-            case	39	: sSurgeName = 	"	Caster becomes undead	" ;	break;
-            case	40	: sSurgeName = 	"	One magic item on caster is completely drained	" ;	break;
-            case	41	: sSurgeName = 	"	One normal item on caster becomes magical	" ;	break;
-            case	42	: sSurgeName = 	"	All nearby weapons temporarily enchanted	" ;	break;
-            case	43	: sSurgeName = 	"	Smoke pours from the ears of nearby creatures	" ;	break;
-            case	44	: sSurgeName = 	"	Shimmering Lights	" ;	break;
-            case	45	: sSurgeName = 	"	Everyone within 30' of caster begins to hiccup	" ;	break;
-            case	46	: sSurgeName = 	"	All normal, secret, and magic doors open	" ;	break;
-            case	47	: sSurgeName = 	"	Caster and target exchange places	" ;	break;
-            case	48	: sSurgeName = 	"	Spell chooses random target	" ;	break;
-            case	49	: sSurgeName = 	"	Spell fails but caster is refreshed	" ;	break;
-            case	50	: sSurgeName = 	"	Random allies are summoned	" ;	break;
-            case	51	: sSurgeName = 	"	Weather changes abruptly	" ;	break;
-            case	52	: sSurgeName = 	"	Deafening bang affects all within 60'	" ;	break;
-            case	53	: sSurgeName = 	"	Random spell is cast at random target	" ;	break;
-            case	54	: sSurgeName = 	"	Gate opens and a creature emerges	" ;	break;
-            case	55	: sSurgeName = 	"	Spell functions but shrieks horribly	" ;	break;
-            case	56	: sSurgeName = 	"	Spell effectiveness decreases	" ;	break;
-            case	57	: sSurgeName = 	"	Spell is reversed	" ;	break;
-            case	58	: sSurgeName = 	"	Spell takes on free-willed physical form, casts itself on anything it hits	" ;	break;
-            case	59	: sSurgeName = 	"	All nearby weapons glow for 1d4 rounds	" ;	break;
-            case	60	: sSurgeName = 	"	Spell becomes irresistible	" ;	break;
-            case	61	: sSurgeName = 	"	Spell appears to fail, occurs later	" ;	break;
-            case	62	: sSurgeName = 	"	All nearby magic items begin to glow	" ;	break;
-            case	63	: sSurgeName = 	"	A mysterious, yet strangely familiar, being of unlimited power appears	" ;	break;
-            case	64	: sSurgeName = 	"	Target slowed	" ;	break;
-            case	65	: sSurgeName = 	"	All spells in effect around target explode violently	" ;	break;
-            case	66	: sSurgeName = 	"	Lightning Bolt cast at target	" ;	break;
-            case	67	: sSurgeName = 	"	Target Enlarged	" ;	break;
-            case	68	: sSurgeName = 	"	Darkness on target	" ;	break;
-            case	69	: sSurgeName = 	"	Plant Growth on target	" ;	break;
-            case	70	: sSurgeName = 	"	1d4 clones of target are created for one turn	" ;	break;
-            case	71	: sSurgeName = 	"	Fireball on target	" ;	break;
-            case	72	: sSurgeName = 	"	Target turned to stone	" ;	break;
-            case	73	: sSurgeName = 	"	Spell casts successfully, caster is refreshed	" ;	break;
-            case	74	: sSurgeName = 	"	Everyone within 10' of caster Healed	" ;	break;
-            case	75	: sSurgeName = 	"	Target becomes dizzy for 2d4 rounds	" ;	break;
-            case	76	: sSurgeName = 	"	Target surrounded by flames	" ;	break;
-            case	77	: sSurgeName = 	"	Target levitates for 3d6 rounds	" ;	break;
-            case	78	: sSurgeName = 	"	Target struck blind for one round per caster level	" ;	break;
-            case	79	: sSurgeName = 	"	Charm Monster on target	" ;	break;
-            case	80	: sSurgeName = 	"	Every creature within 60' of target becomes drunk for 4-10 rounds	" ;	break;
-            case	81	: sSurgeName = 	"	Target's feet enlarge	" ;	break;
-            case	82	: sSurgeName = 	"	Rust Monster appears	" ;	break;
-            case	83	: sSurgeName = 	"	Target polymorphs into a random form	" ;	break;
-            case	84	: sSurgeName = 	"	Target falls madly in love with caster until dispel magic or remove curse is cast	" ;	break;
-            case	85	: sSurgeName = 	"	Target changes sex	" ;	break;
-            case	86	: sSurgeName = 	"	Small black raincloud forms over target	" ;	break;
-            case	87	: sSurgeName = 	"	Stinking Cloud on target	" ;	break;
-            case	88	: sSurgeName = 	"	Heavy object falls on target	" ;	break;
-            case	89	: sSurgeName = 	"	Target begins sneezing	" ;	break;
-            case	90	: sSurgeName = 	"	Spell is cast against every creature within 60' of target	" ;	break;
-            case	91	: sSurgeName = 	"	Target's clothes itch for 4d6 rounds	" ;	break;
-            case	92	: sSurgeName = 	"	Target's race randomly changes	" ;	break;
-            case	93	: sSurgeName = 	"	Target becomes Ethereal	" ;	break;
-            case	94	: sSurgeName = 	"	Target Hasted	" ;	break;
-            case	95	: sSurgeName = 	"	All cloth on target crumbles to dust	" ;	break;
-            case	96	: sSurgeName = 	"	Target sprouts leaves	" ;	break;
-            case	97	: sSurgeName = 	"	Target grows a new but useless appendage	" ;	break;
-            case	98	: sSurgeName = 	"	Target's skin changes color	" ;	break;
-            case	99	: sSurgeName = 	"	Spell is cast over and over for five rounds	" ;	break;
-            case	100	: sSurgeName = 	"	Spell's power greatly increased	" ;	break;
+            case    1   : sSurgeName =  "   Wall of Force Appears in front of caster    " ; break;
+            case    2   : sSurgeName =  "   Caster smells like a skunk for (caster level) rounds    " ; break;
+            case    3   : sSurgeName =  "   Summons various animals " ; break;
+            case    4   : sSurgeName =  "   Caster's clothes itch for 4d6 rounds    " ; break;
+            case    5   : sSurgeName =  "   Light on caster " ; break;
+            case    6   : sSurgeName =  "   Spell affects everyone in 60'   " ; break;
+            case    7   : sSurgeName =  "   A rainbow appears   " ; break;
+            case    8   : sSurgeName =  "   A random creature in the area dies  " ; break;
+            case    9   : sSurgeName =  "   Everyone turns around   " ; break;
+            case    10  : sSurgeName =  "   Spell explodes in caster's face " ; break;
+            case    11  : sSurgeName =  "   Caster becomes allergic to magic items  " ; break;
+            case    12  : sSurgeName =  "   Gold on caster is destroyed " ; break;
+            case    13  : sSurgeName =  "   Caster �reduced�    " ; break;
+            case    14  : sSurgeName =  "   Caster falls madly in love with target until dispel magic or remove curse is cast   " ; break;
+            case    15  : sSurgeName =  "   Everyone around you is knocked down " ; break;
+            case    16  : sSurgeName =  "   Caster polymorphed into a random form   " ; break;
+            case    17  : sSurgeName =  "   Colorful bubbles come out of caster's mouth for one turn    " ; break;
+            case    18  : sSurgeName =  "   A herd of cats appear   " ; break;
+            case    19  : sSurgeName =  "   Caster surrounded by flames " ; break;
+            case    20  : sSurgeName =  "   Caster's feet enlarge   " ; break;
+            case    21  : sSurgeName =  "   Spell targets caster and target " ; break;
+            case    22  : sSurgeName =  "   Caster levitates for 3d6 rounds " ; break;
+            case    23  : sSurgeName =  "   Fear on Caster  " ; break;
+            case    24  : sSurgeName =  "   Caster becomes two-dimensional for 3-10 rounds  " ; break;
+            case    25  : sSurgeName =  "   Caster gains a phobia of random creature type for 1d4 days  " ; break;
+            case    26  : sSurgeName =  "   Spells in effect around caster explode violently    " ; break;
+            case    27  : sSurgeName =  "   Silence 15' on caster   " ; break;
+            case    28  : sSurgeName =  "   Time Stop, with turns   " ; break;
+            case    29  : sSurgeName =  "   Magic is dampened. All creatures int he area recieve spell mantles. " ; break;
+            case    30  : sSurgeName =  "   Fireworks erupt over caster's head  " ; break;
+            case    31  : sSurgeName =  "   Spell turns on caster   " ; break;
+            case    32  : sSurgeName =  "   Caster becomes invisible    " ; break;
+            case    33  : sSurgeName =  "   Color Spray " ; break;
+            case    34  : sSurgeName =  "   Butterflies pour from caster's mouth    " ; break;
+            case    35  : sSurgeName =  "   Gold is created on the target   " ; break;
+            case    36  : sSurgeName =  "   Gems shoot from caster's fingertips " ; break;
+            case    37  : sSurgeName =  "   Music fills the air " ; break;
+            case    38  : sSurgeName =  "   Create Food and Water   " ; break;
+            case    39  : sSurgeName =  "   Caster becomes undead   " ; break;
+            case    40  : sSurgeName =  "   One magic item on caster is completely drained  " ; break;
+            case    41  : sSurgeName =  "   One normal item on caster becomes magical   " ; break;
+            case    42  : sSurgeName =  "   All nearby weapons temporarily enchanted    " ; break;
+            case    43  : sSurgeName =  "   Smoke pours from the ears of nearby creatures   " ; break;
+            case    44  : sSurgeName =  "   Shimmering Lights   " ; break;
+            case    45  : sSurgeName =  "   Everyone within 30' of caster begins to hiccup  " ; break;
+            case    46  : sSurgeName =  "   All normal, secret, and magic doors open    " ; break;
+            case    47  : sSurgeName =  "   Caster and target exchange places   " ; break;
+            case    48  : sSurgeName =  "   Spell chooses random target " ; break;
+            case    49  : sSurgeName =  "   Spell fails but caster is refreshed " ; break;
+            case    50  : sSurgeName =  "   Random allies are summoned  " ; break;
+            case    51  : sSurgeName =  "   Weather changes abruptly    " ; break;
+            case    52  : sSurgeName =  "   Deafening bang affects all within 60'   " ; break;
+            case    53  : sSurgeName =  "   Random spell is cast at random target   " ; break;
+            case    54  : sSurgeName =  "   Gate opens and a creature emerges   " ; break;
+            case    55  : sSurgeName =  "   Spell functions but shrieks horribly    " ; break;
+            case    56  : sSurgeName =  "   Spell effectiveness decreases   " ; break;
+            case    57  : sSurgeName =  "   Spell is reversed   " ; break;
+            case    58  : sSurgeName =  "   Spell takes on free-willed physical form, casts itself on anything it hits  " ; break;
+            case    59  : sSurgeName =  "   All nearby weapons glow for 1d4 rounds  " ; break;
+            case    60  : sSurgeName =  "   Spell becomes irresistible  " ; break;
+            case    61  : sSurgeName =  "   Spell appears to fail, occurs later " ; break;
+            case    62  : sSurgeName =  "   All nearby magic items begin to glow    " ; break;
+            case    63  : sSurgeName =  "   A mysterious, yet strangely familiar, being of unlimited power appears  " ; break;
+            case    64  : sSurgeName =  "   Target slowed   " ; break;
+            case    65  : sSurgeName =  "   All spells in effect around target explode violently    " ; break;
+            case    66  : sSurgeName =  "   Lightning Bolt cast at target   " ; break;
+            case    67  : sSurgeName =  "   Target Enlarged " ; break;
+            case    68  : sSurgeName =  "   Darkness on target  " ; break;
+            case    69  : sSurgeName =  "   Plant Growth on target  " ; break;
+            case    70  : sSurgeName =  "   1d4 clones of target are created for one turn   " ; break;
+            case    71  : sSurgeName =  "   Fireball on target  " ; break;
+            case    72  : sSurgeName =  "   Target turned to stone  " ; break;
+            case    73  : sSurgeName =  "   Spell casts successfully, caster is refreshed   " ; break;
+            case    74  : sSurgeName =  "   Everyone within 10' of caster Healed    " ; break;
+            case    75  : sSurgeName =  "   Target becomes dizzy for 2d4 rounds " ; break;
+            case    76  : sSurgeName =  "   Target surrounded by flames " ; break;
+            case    77  : sSurgeName =  "   Target levitates for 3d6 rounds " ; break;
+            case    78  : sSurgeName =  "   Target struck blind for one round per caster level  " ; break;
+            case    79  : sSurgeName =  "   Charm Monster on target " ; break;
+            case    80  : sSurgeName =  "   Every creature within 60' of target becomes drunk for 4-10 rounds   " ; break;
+            case    81  : sSurgeName =  "   Target's feet enlarge   " ; break;
+            case    82  : sSurgeName =  "   Rust Monster appears    " ; break;
+            case    83  : sSurgeName =  "   Target polymorphs into a random form    " ; break;
+            case    84  : sSurgeName =  "   Target falls madly in love with caster until dispel magic or remove curse is cast   " ; break;
+            case    85  : sSurgeName =  "   Target changes sex  " ; break;
+            case    86  : sSurgeName =  "   Small black raincloud forms over target " ; break;
+            case    87  : sSurgeName =  "   Stinking Cloud on target    " ; break;
+            case    88  : sSurgeName =  "   Heavy object falls on target    " ; break;
+            case    89  : sSurgeName =  "   Target begins sneezing  " ; break;
+            case    90  : sSurgeName =  "   Spell is cast against every creature within 60' of target   " ; break;
+            case    91  : sSurgeName =  "   Target's clothes itch for 4d6 rounds    " ; break;
+            case    92  : sSurgeName =  "   Target's race randomly changes  " ; break;
+            case    93  : sSurgeName =  "   Target becomes Ethereal " ; break;
+            case    94  : sSurgeName =  "   Target Hasted   " ; break;
+            case    95  : sSurgeName =  "   All cloth on target crumbles to dust    " ; break;
+            case    96  : sSurgeName =  "   Target sprouts leaves   " ; break;
+            case    97  : sSurgeName =  "   Target grows a new but useless appendage    " ; break;
+            case    98  : sSurgeName =  "   Target's skin changes color " ; break;
+            case    99  : sSurgeName =  "   Spell is cast over and over for five rounds " ; break;
+            case    100 : sSurgeName =  "   Spell's power greatly increased " ; break;
             default : sSurgeName = "Invalid Surge" ; break;
         }
     }
@@ -1056,7 +1056,7 @@ void HandleSurgeSelector(   object oCaster,
 
     SetLocalInt(oCaster,"nHornungsSurgeSelectionMade",1);
 
-    DisplayMessageBox(  oCaster, // oPC   	- The player object of the player to show this message box to
+    DisplayMessageBox(  oCaster, // oPC     - The player object of the player to show this message box to
                         0,// nMessageStrRef- The STRREF for the Message Box message.
                         "<color=gold><b>Hornung's Surge Selector</b></color>\n\n"
                         + "Choose a Wild Surge.\n\n"
@@ -1083,13 +1083,13 @@ void JXWZCastAtRandomTarget(object oCaster, object oTarget, int iSpellId)
         object oPC = GetFirstPC();
         // The spell doesn't change if its range is personal or touch
         int iRangeType = JXGetSpellRangeType(iSpellId);
-//	if ((iRangeType == JX_SPELLRANGE_PERSONAL)
-//	 || (iRangeType == JX_SPELLRANGE_TOUCH)
-//	 || (iRangeType == JX_SPELLRANGE_INVALID))
-//	{
-//		//SendMessageToPCByStrRef(oCaster, 17079479);
-//		return;
-//	}
+//  if ((iRangeType == JX_SPELLRANGE_PERSONAL)
+//   || (iRangeType == JX_SPELLRANGE_TOUCH)
+//   || (iRangeType == JX_SPELLRANGE_INVALID))
+//  {
+//      //SendMessageToPCByStrRef(oCaster, 17079479);
+//      return;
+//  }
         if(iRangeType == JX_SPELLRANGE_INVALID) {
                 return;
         }
@@ -1345,7 +1345,7 @@ void ChangeSkinColor(object oTarget)
         //float fDur = RoundsToSeconds(10);
 
 
-        int	nTempSpellId = SURGE_TEMP_SPELLID_SKIN_COLOR;
+        int nTempSpellId = SURGE_TEMP_SPELLID_SKIN_COLOR;
 
 
 
@@ -1995,7 +1995,7 @@ void ChangeWeather()
 void YouHaveStoppedBreathing(object oCaster)
 {
 
-        int	nTempSpellId = SURGE_TEMP_SPELLID_ZOMBIFIED;
+        int nTempSpellId = SURGE_TEMP_SPELLID_ZOMBIFIED;
 
 
         effect eVis = EffectVisualEffect(VFX_DUR_ZOMBIFIED);
@@ -2104,53 +2104,53 @@ string Phobia(object oCaster, int nSpellId)
         switch(nRand)
         {
 
-                case	0	:	sPhobicName =	"Gold Dwarfs"	; break; //	Gold_Dwarf
-                case	1	:	sPhobicName =	"Druegar"	; break; //	Gray_Dwarf_Duergar
-                case	2	:	sPhobicName =	"Shield Dwarfs"	; break; //	Shield_Dwarf
-                case	3	:	sPhobicName =	"Drow"	; break; //	Drow
-                case	4	:	sPhobicName =	"Moon Elfs"	; break; //	Moon_Elf
-                case	5	:	sPhobicName =	"Sun Elfs"	; break; //	Sun_Elf
-                case	6	:	sPhobicName =	"Wild Elfs"	; break; //	Wild_Elf
-                case	7	:	sPhobicName =	"Wood Elfs"	; break; //	Wood_Elf
-                case	8	:	sPhobicName =	"Svirfneblin"	; break; //	Deep_Gnome_Svirfneblin
-                case	9	:	sPhobicName =	"Rock Gnomes"	; break; //	Rock_Gnome
-                case	10	:	sPhobicName =	"Ghostwise Halflings"	; break; //	Ghostwise_Halfling
-                case	11	:	sPhobicName =	"Lightfoot Halflings"	; break; //	Lightfoot_Halfling
-                case	12	:	sPhobicName =	"Strongheart Halflings"	; break; //	Strongheart_Halfling
-                case	13	:	sPhobicName =	"Aasimar"	; break; //	Aasimar
-                case	14	:	sPhobicName =	"Tieflings"	; break; //	Tiefling
-                case	15	:	sPhobicName =	"Half-Elfs"	; break; //	HalfElf
-                case	16	:	sPhobicName =	"Half-Orcs"	; break; //	HalfOrc
-                case	17	:	sPhobicName =	"Humans"	; break; //	Human
-                case	18	:	sPhobicName =	"Air Genasi"	; break; //	Air_Genasi
-                case	19	:	sPhobicName =	"Earth Genasi"	; break; //	Earth_Genasi
-                case	20	:	sPhobicName =	"Fire Genasi"	; break; //	Fire_Genasi
-                case	21	:	sPhobicName =	"Water Genasi"	; break; //	Water_Genasi
-                case	22	:	sPhobicName =	"Aberrations"	; break; //	Aberration
-                case	23	:	sPhobicName =	"Animals"	; break; //	Animal
-                case	24	:	sPhobicName =	"Beasts"	; break; //	Beast
-                case	25	:	sPhobicName =	"Constructs"	; break; //	Construct
-                case	26	:	sPhobicName =	"Goblinoids"	; break; //	Humanoid_Goblinoid
-                case	27	:	sPhobicName =	"Monsterous Humanoids"	; break; //	Humanoid_Monstrous
-                case	28	:	sPhobicName =	"Orcs"	; break; //	Humanoid_Orc
-                case	29	:	sPhobicName =	"Reptilians"	; break; //	Humanoid_Reptilian
-                case	30	:	sPhobicName =	"Elementals"	; break; //	Elemental
-                case	31	:	sPhobicName =	"Fey"	; break; //	Fey
-                case	32	:	sPhobicName =	"Giants"	; break; //	Giant
-                case	33	:	sPhobicName =	"Outsiders"	; break; //	Outsider
-                case	34	:	sPhobicName =	"Shapechangers"	; break; //	Shapechanger
-                case	35	:	sPhobicName =	"Undead"	; break; //	Undead
-                case	36	:	sPhobicName =	"Vermin"	; break; //	Vermin
-                case	37	:	sPhobicName =	"Oozes"	; break; //	Ooze
-                case	38	:	sPhobicName =	"Dragons"	; break; //	Dragon
-                case	39	:	sPhobicName =	"Magical Beasts"	; break; //	Magical_Beast
-                case	40	:	sPhobicName =	"Incorporeal Creatures"	; break; //	Incorporeal
-                case	41	:	sPhobicName =	"Githyanki"	; break; //	Githyanki
-                case	42	:	sPhobicName =	"Githzerai"	; break; //	Githzerai
-                case	43	:	sPhobicName =	"Half-Drow"	; break; //	HalfDrow
-                case	44	:	sPhobicName =	"Animate Plants"	; break; //	Plant
-                case	45	:	sPhobicName =	"Hagspawn"	; break; //	Hagspawn
-                case	46	:	sPhobicName =	"Half-Celestials"	; break; //	HalfCelestial
+                case    0   :   sPhobicName =   "Gold Dwarfs"   ; break; // Gold_Dwarf
+                case    1   :   sPhobicName =   "Druegar"   ; break; // Gray_Dwarf_Duergar
+                case    2   :   sPhobicName =   "Shield Dwarfs" ; break; // Shield_Dwarf
+                case    3   :   sPhobicName =   "Drow"  ; break; // Drow
+                case    4   :   sPhobicName =   "Moon Elfs" ; break; // Moon_Elf
+                case    5   :   sPhobicName =   "Sun Elfs"  ; break; // Sun_Elf
+                case    6   :   sPhobicName =   "Wild Elfs" ; break; // Wild_Elf
+                case    7   :   sPhobicName =   "Wood Elfs" ; break; // Wood_Elf
+                case    8   :   sPhobicName =   "Svirfneblin"   ; break; // Deep_Gnome_Svirfneblin
+                case    9   :   sPhobicName =   "Rock Gnomes"   ; break; // Rock_Gnome
+                case    10  :   sPhobicName =   "Ghostwise Halflings"   ; break; // Ghostwise_Halfling
+                case    11  :   sPhobicName =   "Lightfoot Halflings"   ; break; // Lightfoot_Halfling
+                case    12  :   sPhobicName =   "Strongheart Halflings" ; break; // Strongheart_Halfling
+                case    13  :   sPhobicName =   "Aasimar"   ; break; // Aasimar
+                case    14  :   sPhobicName =   "Tieflings" ; break; // Tiefling
+                case    15  :   sPhobicName =   "Half-Elfs" ; break; // HalfElf
+                case    16  :   sPhobicName =   "Half-Orcs" ; break; // HalfOrc
+                case    17  :   sPhobicName =   "Humans"    ; break; // Human
+                case    18  :   sPhobicName =   "Air Genasi"    ; break; // Air_Genasi
+                case    19  :   sPhobicName =   "Earth Genasi"  ; break; // Earth_Genasi
+                case    20  :   sPhobicName =   "Fire Genasi"   ; break; // Fire_Genasi
+                case    21  :   sPhobicName =   "Water Genasi"  ; break; // Water_Genasi
+                case    22  :   sPhobicName =   "Aberrations"   ; break; // Aberration
+                case    23  :   sPhobicName =   "Animals"   ; break; // Animal
+                case    24  :   sPhobicName =   "Beasts"    ; break; // Beast
+                case    25  :   sPhobicName =   "Constructs"    ; break; // Construct
+                case    26  :   sPhobicName =   "Goblinoids"    ; break; // Humanoid_Goblinoid
+                case    27  :   sPhobicName =   "Monsterous Humanoids"  ; break; // Humanoid_Monstrous
+                case    28  :   sPhobicName =   "Orcs"  ; break; // Humanoid_Orc
+                case    29  :   sPhobicName =   "Reptilians"    ; break; // Humanoid_Reptilian
+                case    30  :   sPhobicName =   "Elementals"    ; break; // Elemental
+                case    31  :   sPhobicName =   "Fey"   ; break; // Fey
+                case    32  :   sPhobicName =   "Giants"    ; break; // Giant
+                case    33  :   sPhobicName =   "Outsiders" ; break; // Outsider
+                case    34  :   sPhobicName =   "Shapechangers" ; break; // Shapechanger
+                case    35  :   sPhobicName =   "Undead"    ; break; // Undead
+                case    36  :   sPhobicName =   "Vermin"    ; break; // Vermin
+                case    37  :   sPhobicName =   "Oozes" ; break; // Ooze
+                case    38  :   sPhobicName =   "Dragons"   ; break; // Dragon
+                case    39  :   sPhobicName =   "Magical Beasts"    ; break; // Magical_Beast
+                case    40  :   sPhobicName =   "Incorporeal Creatures" ; break; // Incorporeal
+                case    41  :   sPhobicName =   "Githyanki" ; break; // Githyanki
+                case    42  :   sPhobicName =   "Githzerai" ; break; // Githzerai
+                case    43  :   sPhobicName =   "Half-Drow" ; break; // HalfDrow
+                case    44  :   sPhobicName =   "Animate Plants"    ; break; // Plant
+                case    45  :   sPhobicName =   "Hagspawn"  ; break; // Hagspawn
+                case    46  :   sPhobicName =   "Half-Celestials"   ; break; // HalfCelestial
 
         }
 
@@ -2342,7 +2342,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
 
         switch(nSubRace)
         {
-            case	0	:		//	Gold_Dwarf
+            case    0   :       //  Gold_Dwarf
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Dwarf_Gold_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2352,7 +2352,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	1	:		//	Gray_Dwarf_Duergar
+            case    1   :       //  Gray_Dwarf_Duergar
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Dwarf_Duergar_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2362,7 +2362,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	2	:		//	Shield_Dwarf
+            case    2   :       //  Shield_Dwarf
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Dwarf_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2372,7 +2372,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	3	:		//	Drow
+            case    3   :       //  Drow
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Elf_Drow_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2382,7 +2382,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	4	:		//	Moon_Elf
+            case    4   :       //  Moon_Elf
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Elf_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2392,7 +2392,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	5	:		//	Sun_Elf
+            case    5   :       //  Sun_Elf
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Elf_Sun_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2402,7 +2402,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	6	:		//	Wild_Elf
+            case    6   :       //  Wild_Elf
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Elf_Wild_NX1_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2412,7 +2412,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	7	:		//	Wood_Elf
+            case    7   :       //  Wood_Elf
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Elf_Wood_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2422,7 +2422,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	8	:		//	Deep_Gnome_Svirfneblin
+            case    8   :       //  Deep_Gnome_Svirfneblin
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Gnome_Svirfneblin_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2432,7 +2432,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	9	:		//	Rock_Gnome
+            case    9   :       //  Rock_Gnome
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Gnome_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2442,7 +2442,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	11	:		//	Lightfoot_Halfling
+            case    11  :       //  Lightfoot_Halfling
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Halfling_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2452,7 +2452,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	12	:		//	Strongheart_Halfling
+            case    12  :       //  Strongheart_Halfling
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Halfling_Strongheart_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2462,7 +2462,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	13	:		//	Aasimar
+            case    13  :       //  Aasimar
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Assimar_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2472,7 +2472,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	14	:		//	Tiefling
+            case    14  :       //  Tiefling
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Tiefling_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2482,7 +2482,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	15	:		//	HalfElf
+            case    15  :       //  HalfElf
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Half_Elf_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2492,7 +2492,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	16	:		//	HalfOrc
+            case    16  :       //  HalfOrc
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Half_Orc_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2502,7 +2502,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	17	:		//	Human
+            case    17  :       //  Human
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Human_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2512,7 +2512,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	18	:		//	Air_Genasi
+            case    18  :       //  Air_Genasi
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Air_Genasi_NX1_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2522,7 +2522,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	19	:		//	Earth_Genasi
+            case    19  :       //  Earth_Genasi
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Earth_Genasi_NX1_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2532,7 +2532,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	20	:		//	Fire_Genasi
+            case    20  :       //  Fire_Genasi
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Fire_Genasi_NX1_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2542,7 +2542,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	21	:		//	Water_Genasi
+            case    21  :       //  Water_Genasi
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Water_Genasi_NX1_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2552,7 +2552,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-            case	41	:		//	Githyanki
+            case    41  :       //  Githyanki
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Githyanki_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2562,7 +2562,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-           case	43	:		//	HalfDrow
+           case 43  :       //  HalfDrow
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Half_Drow_NX1_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2572,7 +2572,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-           case	46	:		//	HalfCelestial
+           case 46  :       //  HalfCelestial
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Assimar_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2582,7 +2582,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-           case	47	:		//	YuantiPureblood
+           case 47  :       //  YuantiPureblood
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_YuantiPureblood_NX2_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2592,7 +2592,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-           case	48	:		//	GrayOrc
+           case 48  :       //  GrayOrc
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_GreyOrc_NX2_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2602,7 +2602,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-           case	67	:		//	StarElf
+           case 67  :       //  StarElf
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Elf_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2612,7 +2612,7 @@ int SexChange(object oTarget, int nKeepGender = FALSE)
                 }
                 SetLocalInt(oTarget,"nSexChanged",1);
                 return 1;
-           case	68	:		//	PaintedElf
+           case 68  :       //  PaintedElf
                 if(nGender == 0){
                     SetCreatureAppearanceType(oTarget,App_Elf_Wood_female);
                     SetLocalInt(oTarget,"nFakeGender",1);
@@ -2646,56 +2646,56 @@ void RemoveRacialAbilities(object oTarget, int nSubRace)
 
         switch(nSubRace)
         {
-            case	0	:		//	Gold_Dwarf
+            case    0   :       //  Gold_Dwarf
                 eStat1 = EffectAbilityDecrease(ABILITY_CONSTITUTION,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	228	);
-                FeatRemove(	oTarget,	227 );
-                FeatRemove(	oTarget,	229 );
-                FeatRemove(	oTarget,	230 );
-                FeatRemove(	oTarget,	1072 );
-                FeatRemove(	oTarget,	233 );
-                FeatRemove(	oTarget,	234 );
-                FeatRemove(	oTarget,	1770 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    227 );
+                FeatRemove( oTarget,    229 );
+                FeatRemove( oTarget,    230 );
+                FeatRemove( oTarget,    1072 );
+                FeatRemove( oTarget,    233 );
+                FeatRemove( oTarget,    234 );
+                FeatRemove( oTarget,    1770 );
                 break;
-            case	1	:		//	Gray_Dwarf_Duergar
+            case    1   :       //  Gray_Dwarf_Duergar
                 eStat1 = EffectAbilityDecrease(ABILITY_CONSTITUTION,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_CHARISMA,4);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	228 );
-                FeatRemove(	oTarget,	227 );
-                FeatRemove(	oTarget,	230 );
-                FeatRemove(	oTarget,	231 );
-                FeatRemove(	oTarget,	232 );
-                FeatRemove(	oTarget,	233 );
-                FeatRemove(	oTarget,	234 );
-                FeatRemove(	oTarget,	1753 );
-                FeatRemove(	oTarget,	1748 );
-                FeatRemove(	oTarget,	1751 );
-                FeatRemove(	oTarget,	244 );
-                FeatRemove(	oTarget,	246 );
-                FeatRemove(	oTarget,	1073 );
-                FeatRemove(	oTarget,	1074 );
-                FeatRemove(	oTarget,	1752 );
-                FeatRemove(	oTarget,	1768 );
-                FeatRemove(	oTarget,	1770 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    227 );
+                FeatRemove( oTarget,    230 );
+                FeatRemove( oTarget,    231 );
+                FeatRemove( oTarget,    232 );
+                FeatRemove( oTarget,    233 );
+                FeatRemove( oTarget,    234 );
+                FeatRemove( oTarget,    1753 );
+                FeatRemove( oTarget,    1748 );
+                FeatRemove( oTarget,    1751 );
+                FeatRemove( oTarget,    244 );
+                FeatRemove( oTarget,    246 );
+                FeatRemove( oTarget,    1073 );
+                FeatRemove( oTarget,    1074 );
+                FeatRemove( oTarget,    1752 );
+                FeatRemove( oTarget,    1768 );
+                FeatRemove( oTarget,    1770 );
                 break;
-            case	2	:		//	Shield_Dwarf
+            case    2   :       //  Shield_Dwarf
                 eStat1 = EffectAbilityDecrease(ABILITY_CONSTITUTION,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_CHARISMA,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	228 );
-                FeatRemove(	oTarget,	227 );
-                FeatRemove(	oTarget,	229 );
-                FeatRemove(	oTarget,	230 );
-                FeatRemove(	oTarget,	231 );
-                FeatRemove(	oTarget,	232 );
-                FeatRemove(	oTarget,	233 );
-                FeatRemove(	oTarget,	234 );
-                FeatRemove(	oTarget,	1770 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    227 );
+                FeatRemove( oTarget,    229 );
+                FeatRemove( oTarget,    230 );
+                FeatRemove( oTarget,    231 );
+                FeatRemove( oTarget,    232 );
+                FeatRemove( oTarget,    233 );
+                FeatRemove( oTarget,    234 );
+                FeatRemove( oTarget,    1770 );
                 break;
-            case	3	:		//	Drow
+            case    3   :       //  Drow
                 eStat1 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_CONSTITUTION,2);
                 eStat3 = EffectAbilityDecrease(ABILITY_INTELLIGENCE,2);
@@ -2703,60 +2703,60 @@ void RemoveRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatRemove(	oTarget,		235 );
-                FeatRemove(	oTarget,		236 );
-                FeatRemove(	oTarget,		256 );
-                FeatRemove(	oTarget,		237 );
-                FeatRemove(	oTarget,		238 );
-                FeatRemove(	oTarget,		239 );
-                FeatRemove(	oTarget,		240 );
-                FeatRemove(	oTarget,		228 );
-                FeatRemove(	oTarget,		1075 );
-                                FeatRemove(	oTarget,		1076 );
-                FeatRemove(	oTarget,		1749 );
-                FeatRemove(	oTarget,		3202 );
-                FeatRemove(	oTarget,		1767 );
+                FeatRemove( oTarget,        235 );
+                FeatRemove( oTarget,        236 );
+                FeatRemove( oTarget,        256 );
+                FeatRemove( oTarget,        237 );
+                FeatRemove( oTarget,        238 );
+                FeatRemove( oTarget,        239 );
+                FeatRemove( oTarget,        240 );
+                FeatRemove( oTarget,        228 );
+                FeatRemove( oTarget,        1075 );
+                                FeatRemove( oTarget,        1076 );
+                FeatRemove( oTarget,        1749 );
+                FeatRemove( oTarget,        3202 );
+                FeatRemove( oTarget,        1767 );
                  break;
-            case	4	:		//	Moon_Elf
+            case    4   :       //  Moon_Elf
                 eStat1 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_CONSTITUTION,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	235 );
-                FeatRemove(	oTarget,	236 );
-                FeatRemove(	oTarget,	256 );
-                FeatRemove(	oTarget,	237 );
-                FeatRemove(	oTarget,	238 );
-                FeatRemove(	oTarget,	239 );
-                FeatRemove(	oTarget,	240 );
-                FeatRemove(	oTarget,	354 );
+                FeatRemove( oTarget,    235 );
+                FeatRemove( oTarget,    236 );
+                FeatRemove( oTarget,    256 );
+                FeatRemove( oTarget,    237 );
+                FeatRemove( oTarget,    238 );
+                FeatRemove( oTarget,    239 );
+                FeatRemove( oTarget,    240 );
+                FeatRemove( oTarget,    354 );
                 break;
-            case	5	:		//	Sun_Elf
+            case    5   :       //  Sun_Elf
                 eStat1 = EffectAbilityDecrease(ABILITY_INTELLIGENCE,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_CONSTITUTION,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	235 );
-                FeatRemove(	oTarget,	236 );
-                FeatRemove(	oTarget,	256 );
-                FeatRemove(	oTarget,	237 );
-                FeatRemove(	oTarget,	238 );
-                FeatRemove(	oTarget,	239 );
-                FeatRemove(	oTarget,	240 );
-                FeatRemove(	oTarget,	354 );
+                FeatRemove( oTarget,    235 );
+                FeatRemove( oTarget,    236 );
+                FeatRemove( oTarget,    256 );
+                FeatRemove( oTarget,    237 );
+                FeatRemove( oTarget,    238 );
+                FeatRemove( oTarget,    239 );
+                FeatRemove( oTarget,    240 );
+                FeatRemove( oTarget,    354 );
                 break;
-            case	6	:		//	Wild_Elf
+            case    6   :       //  Wild_Elf
                 eStat1 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_INTELLIGENCE,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	235 );
-                FeatRemove(	oTarget,	236 );
-                FeatRemove(	oTarget,	256 );
-                FeatRemove(	oTarget,	237 );
-                FeatRemove(	oTarget,	238 );
-                FeatRemove(	oTarget,	239 );
-                FeatRemove(	oTarget,	240 );
-                FeatRemove(	oTarget,	354 );
+                FeatRemove( oTarget,    235 );
+                FeatRemove( oTarget,    236 );
+                FeatRemove( oTarget,    256 );
+                FeatRemove( oTarget,    237 );
+                FeatRemove( oTarget,    238 );
+                FeatRemove( oTarget,    239 );
+                FeatRemove( oTarget,    240 );
+                FeatRemove( oTarget,    354 );
                 break;
-            case	7	:		//	Wood_Elf
+            case    7   :       //  Wood_Elf
                 eStat1 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_CONSTITUTION,2);
                 eStat3 = EffectAbilityDecrease(ABILITY_STRENGTH,2);
@@ -2764,16 +2764,16 @@ void RemoveRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatRemove(	oTarget,	235 );
-                FeatRemove(	oTarget,	236 );
-                FeatRemove(	oTarget,	256 );
-                FeatRemove(	oTarget,	237 );
-                FeatRemove(	oTarget,	238 );
-                FeatRemove(	oTarget,	239 );
-                FeatRemove(	oTarget,	240 );
-                FeatRemove(	oTarget,	354 );
+                FeatRemove( oTarget,    235 );
+                FeatRemove( oTarget,    236 );
+                FeatRemove( oTarget,    256 );
+                FeatRemove( oTarget,    237 );
+                FeatRemove( oTarget,    238 );
+                FeatRemove( oTarget,    239 );
+                FeatRemove( oTarget,    240 );
+                FeatRemove( oTarget,    354 );
                 break;
-            case	8	:		//	Deep_Gnome_Svirfneblin
+            case    8   :       //  Deep_Gnome_Svirfneblin
                 eStat1 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_WISDOM,2);
                 eStat3 = EffectAbilityIncrease(ABILITY_STRENGTH,2);
@@ -2781,109 +2781,109 @@ void RemoveRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatRemove(	oTarget,	1795 );
-                FeatRemove(	oTarget,	243 );
-                FeatRemove(	oTarget,	237 );
-                FeatRemove(	oTarget,	242 );
-                FeatRemove(	oTarget,	232 );
-                FeatRemove(	oTarget,	228 );
-                FeatRemove(	oTarget,	375 );
-                FeatRemove(	oTarget,	227 );
-                FeatRemove(	oTarget,	1078 );
-                FeatRemove(	oTarget,	1079 );
-                FeatRemove(	oTarget,	1082 );
-                FeatRemove(	oTarget,	1083 );
-                FeatRemove(	oTarget,	1756 );
-                FeatRemove(	oTarget,	1757 );
-                FeatRemove(	oTarget,	1754 );
-                FeatRemove(	oTarget,	1087 );
-                FeatRemove(	oTarget,	1755 );
+                FeatRemove( oTarget,    1795 );
+                FeatRemove( oTarget,    243 );
+                FeatRemove( oTarget,    237 );
+                FeatRemove( oTarget,    242 );
+                FeatRemove( oTarget,    232 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    375 );
+                FeatRemove( oTarget,    227 );
+                FeatRemove( oTarget,    1078 );
+                FeatRemove( oTarget,    1079 );
+                FeatRemove( oTarget,    1082 );
+                FeatRemove( oTarget,    1083 );
+                FeatRemove( oTarget,    1756 );
+                FeatRemove( oTarget,    1757 );
+                FeatRemove( oTarget,    1754 );
+                FeatRemove( oTarget,    1087 );
+                FeatRemove( oTarget,    1755 );
                 break;
-            case	9	:		//	Rock_Gnome
+            case    9   :       //  Rock_Gnome
                 eStat1 = EffectAbilityDecrease(ABILITY_CONSTITUTION,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_STRENGTH,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	1795 );
-                FeatRemove(	oTarget,	243 );
-                FeatRemove(	oTarget,	242 );
-                FeatRemove(	oTarget,	241 );
-                FeatRemove(	oTarget,	232 );
-                FeatRemove(	oTarget,	233 );
-                FeatRemove(	oTarget,	237 );
-                FeatRemove(	oTarget,	354 );
-                FeatRemove(	oTarget,	375 );
+                FeatRemove( oTarget,    1795 );
+                FeatRemove( oTarget,    243 );
+                FeatRemove( oTarget,    242 );
+                FeatRemove( oTarget,    241 );
+                FeatRemove( oTarget,    232 );
+                FeatRemove( oTarget,    233 );
+                FeatRemove( oTarget,    237 );
+                FeatRemove( oTarget,    354 );
+                FeatRemove( oTarget,    375 );
                  break;
-            case	11	:		//	Lightfoot_Halfling
+            case    11  :       //  Lightfoot_Halfling
                 eStat1 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_STRENGTH,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	247 );
-                FeatRemove(	oTarget,	237 );
-                FeatRemove(	oTarget,	248 );
-                FeatRemove(	oTarget,	249 );
-                FeatRemove(	oTarget,	250 );
-                FeatRemove(	oTarget,	375 );
+                FeatRemove( oTarget,    247 );
+                FeatRemove( oTarget,    237 );
+                FeatRemove( oTarget,    248 );
+                FeatRemove( oTarget,    249 );
+                FeatRemove( oTarget,    250 );
+                FeatRemove( oTarget,    375 );
                 break;
-            case	12	:		//	Strongheart_Halfling
+            case    12  :       //  Strongheart_Halfling
                 eStat1 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_STRENGTH,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	247 );
-                FeatRemove(	oTarget,	237 );
-                FeatRemove(	oTarget,	249 );
-                FeatRemove(	oTarget,	250 );
-                FeatRemove(	oTarget,	375 );
-                FeatRemove(	oTarget,	258 );
+                FeatRemove( oTarget,    247 );
+                FeatRemove( oTarget,    237 );
+                FeatRemove( oTarget,    249 );
+                FeatRemove( oTarget,    250 );
+                FeatRemove( oTarget,    375 );
+                FeatRemove( oTarget,    258 );
                 break;
-            case	13	:		//	Aasimar
+            case    13  :       //  Aasimar
                 eStat1 = EffectAbilityDecrease(ABILITY_CHARISMA,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_WISDOM,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	228 );
-                FeatRemove(	oTarget,	237 );
-                FeatRemove(	oTarget,	239 );
-                FeatRemove(	oTarget,	1085 );
-                FeatRemove(	oTarget,	1086 );
-                FeatRemove(	oTarget,	427 );
-                FeatRemove(	oTarget,	430 );
-                FeatRemove(	oTarget,	428 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    237 );
+                FeatRemove( oTarget,    239 );
+                FeatRemove( oTarget,    1085 );
+                FeatRemove( oTarget,    1086 );
+                FeatRemove( oTarget,    427 );
+                FeatRemove( oTarget,    430 );
+                FeatRemove( oTarget,    428 );
                 break;
-            case	14	:		//	Tiefling
+            case    14  :       //  Tiefling
                 eStat1 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_INTELLIGENCE,2);
                 eStat3 = EffectAbilityIncrease(ABILITY_CHARISMA,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
-                FeatRemove(	oTarget,	228 );
-                FeatRemove(	oTarget,	1087 );
-                FeatRemove(	oTarget,	1088 );
-                FeatRemove(	oTarget,	1089 );
-                FeatRemove(	oTarget,	1097 );
-                FeatRemove(	oTarget,	429 );
-                FeatRemove(	oTarget,	427 );
-                FeatRemove(	oTarget,	430 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    1087 );
+                FeatRemove( oTarget,    1088 );
+                FeatRemove( oTarget,    1089 );
+                FeatRemove( oTarget,    1097 );
+                FeatRemove( oTarget,    429 );
+                FeatRemove( oTarget,    427 );
+                FeatRemove( oTarget,    430 );
                 break;
-            case	15	:		//	HalfElf
-                FeatRemove(	oTarget,	235 );
-                FeatRemove(	oTarget,	236 );
-                FeatRemove(	oTarget,	244 );
-                FeatRemove(	oTarget,	245 );
-                FeatRemove(	oTarget,	246 );
-                FeatRemove(	oTarget,	354 );
-                FeatRemove(	oTarget,	1096 );
-                FeatRemove(	oTarget,	1097 );
+            case    15  :       //  HalfElf
+                FeatRemove( oTarget,    235 );
+                FeatRemove( oTarget,    236 );
+                FeatRemove( oTarget,    244 );
+                FeatRemove( oTarget,    245 );
+                FeatRemove( oTarget,    246 );
+                FeatRemove( oTarget,    354 );
+                FeatRemove( oTarget,    1096 );
+                FeatRemove( oTarget,    1097 );
                 break;
-            case	16	:		//	HalfOrc
+            case    16  :       //  HalfOrc
                 eStat1 = EffectAbilityDecrease(ABILITY_STRENGTH,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_INTELLIGENCE,2);
                 eStat3 = EffectAbilityIncrease(ABILITY_CHARISMA,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
-                FeatRemove(	oTarget,	228 );
-            case	17	:		//	Human
-                FeatRemove(	oTarget,	258 );
-                FeatRemove(	oTarget,	1773 );
-            case	18	:		//	Air_Genasi
+                FeatRemove( oTarget,    228 );
+            case    17  :       //  Human
+                FeatRemove( oTarget,    258 );
+                FeatRemove( oTarget,    1773 );
+            case    18  :       //  Air_Genasi
                 eStat1 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_INTELLIGENCE,2);
                 eStat3 = EffectAbilityIncrease(ABILITY_WISDOM,2);
@@ -2891,11 +2891,11 @@ void RemoveRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatRemove(	oTarget,	228 );
-                FeatRemove(	oTarget,	1868 );
-                FeatRemove(	oTarget,	1872 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    1868 );
+                FeatRemove( oTarget,    1872 );
                 break;
-            case	19	:		//	Earth_Genasi
+            case    19  :       //  Earth_Genasi
                 eStat1 = EffectAbilityDecrease(ABILITY_STRENGTH,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_CONSTITUTION,2);
                 eStat3 = EffectAbilityIncrease(ABILITY_WISDOM,2);
@@ -2903,37 +2903,37 @@ void RemoveRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatRemove(	oTarget,	228 );
-                FeatRemove(	oTarget,	1869 );
-                FeatRemove(	oTarget,	1873 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    1869 );
+                FeatRemove( oTarget,    1873 );
                 break;
-            case	20	:		//	Fire_Genasi
+            case    20  :       //  Fire_Genasi
                 eStat1 = EffectAbilityDecrease(ABILITY_INTELLIGENCE,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_CHARISMA,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	228 );
-                FeatRemove(	oTarget,	1870 );
-                FeatRemove(	oTarget,	1874 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    1870 );
+                FeatRemove( oTarget,    1874 );
                 break;
-            case	21	:		//	Water_Genasi
+            case    21  :       //  Water_Genasi
                 eStat1 = EffectAbilityDecrease(ABILITY_CONSTITUTION,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_CHARISMA,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	228 );
-                FeatRemove(	oTarget,	1871 );
-                FeatRemove(	oTarget,	1875 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    1871 );
+                FeatRemove( oTarget,    1875 );
                 break;
-            case	43	:		//	HalfDrow
-                FeatRemove(	oTarget,	235 );
-                FeatRemove(	oTarget,	236 );
-                FeatRemove(	oTarget,	244 );
-                FeatRemove(	oTarget,	245 );
-                FeatRemove(	oTarget,	246 );
-                FeatRemove(	oTarget,	354 );
-                FeatRemove(	oTarget,	1096 );
-                FeatRemove(	oTarget,	1097 );
+            case    43  :       //  HalfDrow
+                FeatRemove( oTarget,    235 );
+                FeatRemove( oTarget,    236 );
+                FeatRemove( oTarget,    244 );
+                FeatRemove( oTarget,    245 );
+                FeatRemove( oTarget,    246 );
+                FeatRemove( oTarget,    354 );
+                FeatRemove( oTarget,    1096 );
+                FeatRemove( oTarget,    1097 );
                 break;
-            case	46	:		//	HalfCelestial
+            case    46  :       //  HalfCelestial
                 eStat1 = EffectAbilityDecrease(ABILITY_STRENGTH,4);
                 eStat2 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat3 = EffectAbilityDecrease(ABILITY_INTELLIGENCE,2);
@@ -2945,40 +2945,40 @@ void RemoveRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eLink,eStat4);
                                 eLink = EffectLinkEffects(eLink,eStat5);
                                 eLink = EffectLinkEffects(eLink,eStat6);
-                FeatRemove(	oTarget,	228	);
-                FeatRemove(	oTarget,	301 );
-                FeatRemove(	oTarget,	2112 );
-                FeatRemove(	oTarget,	2113 );
-                FeatRemove(	oTarget,	2114 );
-                FeatRemove(	oTarget,	2115 );
-                FeatRemove(	oTarget,	2116 );
-                FeatRemove(	oTarget,	2117 );
-                                FeatRemove(	oTarget,	2118 );
-                                FeatRemove(	oTarget,	2119 );
-                                FeatRemove(	oTarget,	2120 );
-                                FeatRemove(	oTarget,	2121 );
-                                FeatRemove(	oTarget,	2122 );
-                                FeatRemove(	oTarget,	2123 );
-                                FeatRemove(	oTarget,	2124 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    301 );
+                FeatRemove( oTarget,    2112 );
+                FeatRemove( oTarget,    2113 );
+                FeatRemove( oTarget,    2114 );
+                FeatRemove( oTarget,    2115 );
+                FeatRemove( oTarget,    2116 );
+                FeatRemove( oTarget,    2117 );
+                                FeatRemove( oTarget,    2118 );
+                                FeatRemove( oTarget,    2119 );
+                                FeatRemove( oTarget,    2120 );
+                                FeatRemove( oTarget,    2121 );
+                                FeatRemove( oTarget,    2122 );
+                                FeatRemove( oTarget,    2123 );
+                                FeatRemove( oTarget,    2124 );
                 break;
-            case	47	:		//	YuantiPureblood
+            case    47  :       //  YuantiPureblood
                 eStat1 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_CHARISMA,2);
                 eStat3 = EffectAbilityDecrease(ABILITY_INTELLIGENCE,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
-                FeatRemove(	oTarget,	228	);
-                FeatRemove(	oTarget,	2112 );
-                FeatRemove(	oTarget,	2171 );
-                FeatRemove(	oTarget,	2172 );
-                FeatRemove(	oTarget,	2173 );
-                FeatRemove(	oTarget,	2174 );
-                FeatRemove(	oTarget,	2175 );
-                FeatRemove(	oTarget,	2176 );
-                FeatRemove(	oTarget,	0 );
-                FeatRemove(	oTarget,	408 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    2112 );
+                FeatRemove( oTarget,    2171 );
+                FeatRemove( oTarget,    2172 );
+                FeatRemove( oTarget,    2173 );
+                FeatRemove( oTarget,    2174 );
+                FeatRemove( oTarget,    2175 );
+                FeatRemove( oTarget,    2176 );
+                FeatRemove( oTarget,    0 );
+                FeatRemove( oTarget,    408 );
                 break;
-            case	48	:		//	GrayOrc
+            case    48  :       //  GrayOrc
                 eStat1 = EffectAbilityDecrease(ABILITY_STRENGTH,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_WISDOM,2);
                 eStat3 = EffectAbilityIncrease(ABILITY_INTELLIGENCE,2);
@@ -2986,38 +2986,38 @@ void RemoveRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatRemove(	oTarget,	228	);
-                FeatRemove(	oTarget,	1767 );
-                FeatRemove(	oTarget,	2177 );
-                FeatRemove(	oTarget,	2178 );
-                FeatRemove(	oTarget,	1116 );
-                FeatRemove(	oTarget,	2248 );
+                FeatRemove( oTarget,    228 );
+                FeatRemove( oTarget,    1767 );
+                FeatRemove( oTarget,    2177 );
+                FeatRemove( oTarget,    2178 );
+                FeatRemove( oTarget,    1116 );
+                FeatRemove( oTarget,    2248 );
                 break;
-            case	67	:		//	Star_Elf
+            case    67  :       //  Star_Elf
                 eStat1 = EffectAbilityDecrease(ABILITY_CHARISMA,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_CONSTITUTION,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	235 );
-                FeatRemove(	oTarget,	236 );
-                FeatRemove(	oTarget,	256 );
-                FeatRemove(	oTarget,	237 );
-                FeatRemove(	oTarget,	238 );
-                FeatRemove(	oTarget,	239 );
-                FeatRemove(	oTarget,	240 );
-                FeatRemove(	oTarget,	354 );
+                FeatRemove( oTarget,    235 );
+                FeatRemove( oTarget,    236 );
+                FeatRemove( oTarget,    256 );
+                FeatRemove( oTarget,    237 );
+                FeatRemove( oTarget,    238 );
+                FeatRemove( oTarget,    239 );
+                FeatRemove( oTarget,    240 );
+                FeatRemove( oTarget,    354 );
                 break;
-            case	68	:		//	Painted_Elf
+            case    68  :       //  Painted_Elf
                 eStat1 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_INTELLIGENCE,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatRemove(	oTarget,	235 );
-                FeatRemove(	oTarget,	236 );
-                FeatRemove(	oTarget,	256 );
-                FeatRemove(	oTarget,	237 );
-                FeatRemove(	oTarget,	238 );
-                FeatRemove(	oTarget,	239 );
-                FeatRemove(	oTarget,	240 );
-                FeatRemove(	oTarget,	354 );
+                FeatRemove( oTarget,    235 );
+                FeatRemove( oTarget,    236 );
+                FeatRemove( oTarget,    256 );
+                FeatRemove( oTarget,    237 );
+                FeatRemove( oTarget,    238 );
+                FeatRemove( oTarget,    239 );
+                FeatRemove( oTarget,    240 );
+                FeatRemove( oTarget,    354 );
                 break;
             default : return;
         }
@@ -3050,56 +3050,56 @@ void AddRacialAbilities(object oTarget, int nSubRace)
 
         switch(nSubRace)
         {
-            case	0	:		//	Gold_Dwarf
+            case    0   :       //  Gold_Dwarf
                 eStat1 = EffectAbilityIncrease(ABILITY_CONSTITUTION,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_DEXTERITY,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	227	,	FALSE);
-                FeatAdd(	oTarget,	229	,	FALSE);
-                FeatAdd(	oTarget,	230	,	FALSE);
-                FeatAdd(	oTarget,	1072	,	FALSE);
-                FeatAdd(	oTarget,	233	,	FALSE);
-                FeatAdd(	oTarget,	234	,	FALSE);
-                FeatAdd(	oTarget,	1770	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    227 ,   FALSE);
+                FeatAdd(    oTarget,    229 ,   FALSE);
+                FeatAdd(    oTarget,    230 ,   FALSE);
+                FeatAdd(    oTarget,    1072    ,   FALSE);
+                FeatAdd(    oTarget,    233 ,   FALSE);
+                FeatAdd(    oTarget,    234 ,   FALSE);
+                FeatAdd(    oTarget,    1770    ,   FALSE);
                 break;
-            case	1	:		//	Gray_Dwarf_Duergar
+            case    1   :       //  Gray_Dwarf_Duergar
                 eStat1 = EffectAbilityIncrease(ABILITY_CONSTITUTION,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_CHARISMA,4);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	227	,	FALSE);
-                FeatAdd(	oTarget,	230	,	FALSE);
-                FeatAdd(	oTarget,	231	,	FALSE);
-                FeatAdd(	oTarget,	232	,	FALSE);
-                FeatAdd(	oTarget,	233	,	FALSE);
-                FeatAdd(	oTarget,	234	,	FALSE);
-                FeatAdd(	oTarget,	1753	,	FALSE);
-                FeatAdd(	oTarget,	1748	,	FALSE);
-                FeatAdd(	oTarget,	1751	,	FALSE);
-                FeatAdd(	oTarget,	244	,	FALSE);
-                FeatAdd(	oTarget,	246	,	FALSE);
-                FeatAdd(	oTarget,	1073	,	FALSE);
-                FeatAdd(	oTarget,	1074	,	FALSE);
-                FeatAdd(	oTarget,	1752	,	FALSE);
-                FeatAdd(	oTarget,	1768	,	FALSE);
-                FeatAdd(	oTarget,	1770	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    227 ,   FALSE);
+                FeatAdd(    oTarget,    230 ,   FALSE);
+                FeatAdd(    oTarget,    231 ,   FALSE);
+                FeatAdd(    oTarget,    232 ,   FALSE);
+                FeatAdd(    oTarget,    233 ,   FALSE);
+                FeatAdd(    oTarget,    234 ,   FALSE);
+                FeatAdd(    oTarget,    1753    ,   FALSE);
+                FeatAdd(    oTarget,    1748    ,   FALSE);
+                FeatAdd(    oTarget,    1751    ,   FALSE);
+                FeatAdd(    oTarget,    244 ,   FALSE);
+                FeatAdd(    oTarget,    246 ,   FALSE);
+                FeatAdd(    oTarget,    1073    ,   FALSE);
+                FeatAdd(    oTarget,    1074    ,   FALSE);
+                FeatAdd(    oTarget,    1752    ,   FALSE);
+                FeatAdd(    oTarget,    1768    ,   FALSE);
+                FeatAdd(    oTarget,    1770    ,   FALSE);
                 break;
-            case	2	:		//	Shield_Dwarf
+            case    2   :       //  Shield_Dwarf
                 eStat1 = EffectAbilityIncrease(ABILITY_CONSTITUTION,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_CHARISMA,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	227	,	FALSE);
-                FeatAdd(	oTarget,	229	,	FALSE);
-                FeatAdd(	oTarget,	230	,	FALSE);
-                FeatAdd(	oTarget,	231	,	FALSE);
-                FeatAdd(	oTarget,	232	,	FALSE);
-                FeatAdd(	oTarget,	233	,	FALSE);
-                FeatAdd(	oTarget,	234	,	FALSE);
-                FeatAdd(	oTarget,	1770	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    227 ,   FALSE);
+                FeatAdd(    oTarget,    229 ,   FALSE);
+                FeatAdd(    oTarget,    230 ,   FALSE);
+                FeatAdd(    oTarget,    231 ,   FALSE);
+                FeatAdd(    oTarget,    232 ,   FALSE);
+                FeatAdd(    oTarget,    233 ,   FALSE);
+                FeatAdd(    oTarget,    234 ,   FALSE);
+                FeatAdd(    oTarget,    1770    ,   FALSE);
                 break;
-            case	3	:		//	Drow
+            case    3   :       //  Drow
                 eStat1 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_CONSTITUTION,2);
                 eStat3 = EffectAbilityIncrease(ABILITY_INTELLIGENCE,2);
@@ -3107,60 +3107,60 @@ void AddRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatAdd(	oTarget,		235	,	FALSE);
-                FeatAdd(	oTarget,		236	,	FALSE);
-                FeatAdd(	oTarget,		256	,	FALSE);
-                FeatAdd(	oTarget,		237	,	FALSE);
-                FeatAdd(	oTarget,		238	,	FALSE);
-                FeatAdd(	oTarget,		239	,	FALSE);
-                FeatAdd(	oTarget,		240	,	FALSE);
-                FeatAdd(	oTarget,		228	,	FALSE);
-                FeatAdd(	oTarget,		1075	,	FALSE);
-                FeatAdd(	oTarget,		1076	,	FALSE);
-                FeatAdd(	oTarget,		1749	,	FALSE);
-                FeatAdd(	oTarget,		3502	,	FALSE);
-                FeatAdd(	oTarget,		1767	,	FALSE);
+                FeatAdd(    oTarget,        235 ,   FALSE);
+                FeatAdd(    oTarget,        236 ,   FALSE);
+                FeatAdd(    oTarget,        256 ,   FALSE);
+                FeatAdd(    oTarget,        237 ,   FALSE);
+                FeatAdd(    oTarget,        238 ,   FALSE);
+                FeatAdd(    oTarget,        239 ,   FALSE);
+                FeatAdd(    oTarget,        240 ,   FALSE);
+                FeatAdd(    oTarget,        228 ,   FALSE);
+                FeatAdd(    oTarget,        1075    ,   FALSE);
+                FeatAdd(    oTarget,        1076    ,   FALSE);
+                FeatAdd(    oTarget,        1749    ,   FALSE);
+                FeatAdd(    oTarget,        3502    ,   FALSE);
+                FeatAdd(    oTarget,        1767    ,   FALSE);
                  break;
-            case	4	:		//	Moon_Elf
+            case    4   :       //  Moon_Elf
                 eStat1 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_CONSTITUTION,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	235	,	FALSE);
-                FeatAdd(	oTarget,	236	,	FALSE);
-                FeatAdd(	oTarget,	256	,	FALSE);
-                FeatAdd(	oTarget,	237	,	FALSE);
-                FeatAdd(	oTarget,	238	,	FALSE);
-                FeatAdd(	oTarget,	239	,	FALSE);
-                FeatAdd(	oTarget,	240	,	FALSE);
-                FeatAdd(	oTarget,	354	,	FALSE);
+                FeatAdd(    oTarget,    235 ,   FALSE);
+                FeatAdd(    oTarget,    236 ,   FALSE);
+                FeatAdd(    oTarget,    256 ,   FALSE);
+                FeatAdd(    oTarget,    237 ,   FALSE);
+                FeatAdd(    oTarget,    238 ,   FALSE);
+                FeatAdd(    oTarget,    239 ,   FALSE);
+                FeatAdd(    oTarget,    240 ,   FALSE);
+                FeatAdd(    oTarget,    354 ,   FALSE);
                 break;
-            case	5	:		//	Sun_Elf
+            case    5   :       //  Sun_Elf
                 eStat1 = EffectAbilityIncrease(ABILITY_INTELLIGENCE,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_CONSTITUTION,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	235	,	FALSE);
-                FeatAdd(	oTarget,	236	,	FALSE);
-                FeatAdd(	oTarget,	256	,	FALSE);
-                FeatAdd(	oTarget,	237	,	FALSE);
-                FeatAdd(	oTarget,	238	,	FALSE);
-                FeatAdd(	oTarget,	239	,	FALSE);
-                FeatAdd(	oTarget,	240	,	FALSE);
-                FeatAdd(	oTarget,	354	,	FALSE);
+                FeatAdd(    oTarget,    235 ,   FALSE);
+                FeatAdd(    oTarget,    236 ,   FALSE);
+                FeatAdd(    oTarget,    256 ,   FALSE);
+                FeatAdd(    oTarget,    237 ,   FALSE);
+                FeatAdd(    oTarget,    238 ,   FALSE);
+                FeatAdd(    oTarget,    239 ,   FALSE);
+                FeatAdd(    oTarget,    240 ,   FALSE);
+                FeatAdd(    oTarget,    354 ,   FALSE);
                 break;
-            case	6	:		//	Wild_Elf
+            case    6   :       //  Wild_Elf
                 eStat1 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_INTELLIGENCE,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	235	,	FALSE);
-                FeatAdd(	oTarget,	236	,	FALSE);
-                FeatAdd(	oTarget,	256	,	FALSE);
-                FeatAdd(	oTarget,	237	,	FALSE);
-                FeatAdd(	oTarget,	238	,	FALSE);
-                FeatAdd(	oTarget,	239	,	FALSE);
-                FeatAdd(	oTarget,	240	,	FALSE);
-                FeatAdd(	oTarget,	354	,	FALSE);
+                FeatAdd(    oTarget,    235 ,   FALSE);
+                FeatAdd(    oTarget,    236 ,   FALSE);
+                FeatAdd(    oTarget,    256 ,   FALSE);
+                FeatAdd(    oTarget,    237 ,   FALSE);
+                FeatAdd(    oTarget,    238 ,   FALSE);
+                FeatAdd(    oTarget,    239 ,   FALSE);
+                FeatAdd(    oTarget,    240 ,   FALSE);
+                FeatAdd(    oTarget,    354 ,   FALSE);
                 break;
-            case	7	:		//	Wood_Elf
+            case    7   :       //  Wood_Elf
                 eStat1 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_CONSTITUTION,2);
                 eStat3 = EffectAbilityIncrease(ABILITY_STRENGTH,2);
@@ -3168,16 +3168,16 @@ void AddRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatAdd(	oTarget,	235	,	FALSE);
-                FeatAdd(	oTarget,	236	,	FALSE);
-                FeatAdd(	oTarget,	256	,	FALSE);
-                FeatAdd(	oTarget,	237	,	FALSE);
-                FeatAdd(	oTarget,	238	,	FALSE);
-                FeatAdd(	oTarget,	239	,	FALSE);
-                FeatAdd(	oTarget,	240	,	FALSE);
-                FeatAdd(	oTarget,	354	,	FALSE);
+                FeatAdd(    oTarget,    235 ,   FALSE);
+                FeatAdd(    oTarget,    236 ,   FALSE);
+                FeatAdd(    oTarget,    256 ,   FALSE);
+                FeatAdd(    oTarget,    237 ,   FALSE);
+                FeatAdd(    oTarget,    238 ,   FALSE);
+                FeatAdd(    oTarget,    239 ,   FALSE);
+                FeatAdd(    oTarget,    240 ,   FALSE);
+                FeatAdd(    oTarget,    354 ,   FALSE);
                 break;
-            case	8	:		//	Deep_Gnome_Svirfneblin
+            case    8   :       //  Deep_Gnome_Svirfneblin
                 eStat1 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_WISDOM,2);
                 eStat3 = EffectAbilityDecrease(ABILITY_STRENGTH,2);
@@ -3185,109 +3185,109 @@ void AddRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatAdd(	oTarget,	1795	,	FALSE);
-                FeatAdd(	oTarget,	243	,	FALSE);
-                FeatAdd(	oTarget,	237	,	FALSE);
-                FeatAdd(	oTarget,	242	,	FALSE);
-                FeatAdd(	oTarget,	232	,	FALSE);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	375	,	FALSE);
-                FeatAdd(	oTarget,	227	,	FALSE);
-                FeatAdd(	oTarget,	1078	,	FALSE);
-                FeatAdd(	oTarget,	1079	,	FALSE);
-                FeatAdd(	oTarget,	1082	,	FALSE);
-                FeatAdd(	oTarget,	1083	,	FALSE);
-                FeatAdd(	oTarget,	1756	,	FALSE);
-                FeatAdd(	oTarget,	1757	,	FALSE);
-                FeatAdd(	oTarget,	1754	,	FALSE);
-                FeatAdd(	oTarget,	1087	,	FALSE);
-                FeatAdd(	oTarget,	1755	,	FALSE);
+                FeatAdd(    oTarget,    1795    ,   FALSE);
+                FeatAdd(    oTarget,    243 ,   FALSE);
+                FeatAdd(    oTarget,    237 ,   FALSE);
+                FeatAdd(    oTarget,    242 ,   FALSE);
+                FeatAdd(    oTarget,    232 ,   FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    375 ,   FALSE);
+                FeatAdd(    oTarget,    227 ,   FALSE);
+                FeatAdd(    oTarget,    1078    ,   FALSE);
+                FeatAdd(    oTarget,    1079    ,   FALSE);
+                FeatAdd(    oTarget,    1082    ,   FALSE);
+                FeatAdd(    oTarget,    1083    ,   FALSE);
+                FeatAdd(    oTarget,    1756    ,   FALSE);
+                FeatAdd(    oTarget,    1757    ,   FALSE);
+                FeatAdd(    oTarget,    1754    ,   FALSE);
+                FeatAdd(    oTarget,    1087    ,   FALSE);
+                FeatAdd(    oTarget,    1755    ,   FALSE);
                 break;
-            case	9	:		//	Rock_Gnome
+            case    9   :       //  Rock_Gnome
                 eStat1 = EffectAbilityIncrease(ABILITY_CONSTITUTION,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_STRENGTH,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	1795	,	FALSE);
-                FeatAdd(	oTarget,	243	,	FALSE);
-                FeatAdd(	oTarget,	242	,	FALSE);
-                FeatAdd(	oTarget,	241	,	FALSE);
-                FeatAdd(	oTarget,	232	,	FALSE);
-                FeatAdd(	oTarget,	233	,	FALSE);
-                FeatAdd(	oTarget,	237	,	FALSE);
-                FeatAdd(	oTarget,	354	,	FALSE);
-                FeatAdd(	oTarget,	375	,	FALSE);
+                FeatAdd(    oTarget,    1795    ,   FALSE);
+                FeatAdd(    oTarget,    243 ,   FALSE);
+                FeatAdd(    oTarget,    242 ,   FALSE);
+                FeatAdd(    oTarget,    241 ,   FALSE);
+                FeatAdd(    oTarget,    232 ,   FALSE);
+                FeatAdd(    oTarget,    233 ,   FALSE);
+                FeatAdd(    oTarget,    237 ,   FALSE);
+                FeatAdd(    oTarget,    354 ,   FALSE);
+                FeatAdd(    oTarget,    375 ,   FALSE);
                  break;
-            case	11	:		//	Lightfoot_Halfling
+            case    11  :       //  Lightfoot_Halfling
                 eStat1 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_STRENGTH,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	247	,	FALSE);
-                FeatAdd(	oTarget,	237	,	FALSE);
-                FeatAdd(	oTarget,	248	,	FALSE);
-                FeatAdd(	oTarget,	249	,	FALSE);
-                FeatAdd(	oTarget,	250	,	FALSE);
-                FeatAdd(	oTarget,	375	,	FALSE);
+                FeatAdd(    oTarget,    247 ,   FALSE);
+                FeatAdd(    oTarget,    237 ,   FALSE);
+                FeatAdd(    oTarget,    248 ,   FALSE);
+                FeatAdd(    oTarget,    249 ,   FALSE);
+                FeatAdd(    oTarget,    250 ,   FALSE);
+                FeatAdd(    oTarget,    375 ,   FALSE);
                 break;
-            case	12	:		//	Strongheart_Halfling
+            case    12  :       //  Strongheart_Halfling
                 eStat1 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_STRENGTH,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	247	,	FALSE);
-                FeatAdd(	oTarget,	237	,	FALSE);
-                FeatAdd(	oTarget,	249	,	FALSE);
-                FeatAdd(	oTarget,	250	,	FALSE);
-                FeatAdd(	oTarget,	375	,	FALSE);
-                FeatAdd(	oTarget,	258	,	FALSE);
+                FeatAdd(    oTarget,    247 ,   FALSE);
+                FeatAdd(    oTarget,    237 ,   FALSE);
+                FeatAdd(    oTarget,    249 ,   FALSE);
+                FeatAdd(    oTarget,    250 ,   FALSE);
+                FeatAdd(    oTarget,    375 ,   FALSE);
+                FeatAdd(    oTarget,    258 ,   FALSE);
                 break;
-            case	13	:		//	Aasimar
+            case    13  :       //  Aasimar
                 eStat1 = EffectAbilityIncrease(ABILITY_CHARISMA,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_WISDOM,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	237	,	FALSE);
-                FeatAdd(	oTarget,	239	,	FALSE);
-                FeatAdd(	oTarget,	1085	,	FALSE);
-                FeatAdd(	oTarget,	1086	,	FALSE);
-                FeatAdd(	oTarget,	427	,	FALSE);
-                FeatAdd(	oTarget,	430	,	FALSE);
-                FeatAdd(	oTarget,	428	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    237 ,   FALSE);
+                FeatAdd(    oTarget,    239 ,   FALSE);
+                FeatAdd(    oTarget,    1085    ,   FALSE);
+                FeatAdd(    oTarget,    1086    ,   FALSE);
+                FeatAdd(    oTarget,    427 ,   FALSE);
+                FeatAdd(    oTarget,    430 ,   FALSE);
+                FeatAdd(    oTarget,    428 ,   FALSE);
                 break;
-            case	14	:		//	Tiefling
+            case    14  :       //  Tiefling
                 eStat1 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_INTELLIGENCE,2);
                 eStat3 = EffectAbilityDecrease(ABILITY_CHARISMA,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	1087	,	FALSE);
-                FeatAdd(	oTarget,	1088	,	FALSE);
-                FeatAdd(	oTarget,	1089	,	FALSE);
-                FeatAdd(	oTarget,	1097	,	FALSE);
-                FeatAdd(	oTarget,	429	,	FALSE);
-                FeatAdd(	oTarget,	427	,	FALSE);
-                FeatAdd(	oTarget,	430	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    1087    ,   FALSE);
+                FeatAdd(    oTarget,    1088    ,   FALSE);
+                FeatAdd(    oTarget,    1089    ,   FALSE);
+                FeatAdd(    oTarget,    1097    ,   FALSE);
+                FeatAdd(    oTarget,    429 ,   FALSE);
+                FeatAdd(    oTarget,    427 ,   FALSE);
+                FeatAdd(    oTarget,    430 ,   FALSE);
                 break;
-            case	15	:		//	HalfElf
-                FeatAdd(	oTarget,	235	,	FALSE);
-                FeatAdd(	oTarget,	236	,	FALSE);
-                FeatAdd(	oTarget,	244	,	FALSE);
-                FeatAdd(	oTarget,	245	,	FALSE);
-                FeatAdd(	oTarget,	246	,	FALSE);
-                FeatAdd(	oTarget,	354	,	FALSE);
-                FeatAdd(	oTarget,	1096	,	FALSE);
-                FeatAdd(	oTarget,	1097	,	FALSE);
+            case    15  :       //  HalfElf
+                FeatAdd(    oTarget,    235 ,   FALSE);
+                FeatAdd(    oTarget,    236 ,   FALSE);
+                FeatAdd(    oTarget,    244 ,   FALSE);
+                FeatAdd(    oTarget,    245 ,   FALSE);
+                FeatAdd(    oTarget,    246 ,   FALSE);
+                FeatAdd(    oTarget,    354 ,   FALSE);
+                FeatAdd(    oTarget,    1096    ,   FALSE);
+                FeatAdd(    oTarget,    1097    ,   FALSE);
                 break;
-            case	16	:		//	HalfOrc
+            case    16  :       //  HalfOrc
                 eStat1 = EffectAbilityIncrease(ABILITY_STRENGTH,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_INTELLIGENCE,2);
                 eStat3 = EffectAbilityDecrease(ABILITY_CHARISMA,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
-                FeatAdd(	oTarget,	228	,	FALSE);
-            case	17	:		//	Human
-                FeatAdd(	oTarget,	258	,	FALSE);
-                FeatAdd(	oTarget,	1773	,	FALSE);
-            case	18	:		//	Air_Genasi
+                FeatAdd(    oTarget,    228 ,   FALSE);
+            case    17  :       //  Human
+                FeatAdd(    oTarget,    258 ,   FALSE);
+                FeatAdd(    oTarget,    1773    ,   FALSE);
+            case    18  :       //  Air_Genasi
                 eStat1 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_INTELLIGENCE,2);
                 eStat3 = EffectAbilityDecrease(ABILITY_WISDOM,2);
@@ -3295,11 +3295,11 @@ void AddRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	1868	,	FALSE);
-                FeatAdd(	oTarget,	1872	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    1868    ,   FALSE);
+                FeatAdd(    oTarget,    1872    ,   FALSE);
                 break;
-            case	19	:		//	Earth_Genasi
+            case    19  :       //  Earth_Genasi
                 eStat1 = EffectAbilityIncrease(ABILITY_STRENGTH,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_CONSTITUTION,2);
                 eStat3 = EffectAbilityDecrease(ABILITY_WISDOM,2);
@@ -3307,37 +3307,37 @@ void AddRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	1869	,	FALSE);
-                FeatAdd(	oTarget,	1873	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    1869    ,   FALSE);
+                FeatAdd(    oTarget,    1873    ,   FALSE);
                 break;
-            case	20	:		//	Fire_Genasi
+            case    20  :       //  Fire_Genasi
                 eStat1 = EffectAbilityIncrease(ABILITY_INTELLIGENCE,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_CHARISMA,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	1870	,	FALSE);
-                FeatAdd(	oTarget,	1874	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    1870    ,   FALSE);
+                FeatAdd(    oTarget,    1874    ,   FALSE);
                 break;
-            case	21	:		//	Water_Genasi
+            case    21  :       //  Water_Genasi
                 eStat1 = EffectAbilityIncrease(ABILITY_CONSTITUTION,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_CHARISMA,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	1871	,	FALSE);
-                FeatAdd(	oTarget,	1875	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    1871    ,   FALSE);
+                FeatAdd(    oTarget,    1875    ,   FALSE);
                 break;
-            case	43	:		//	HalfDrow
-                FeatAdd(	oTarget,	235	,	FALSE);
-                FeatAdd(	oTarget,	236	,	FALSE);
-                FeatAdd(	oTarget,	244	,	FALSE);
-                FeatAdd(	oTarget,	245	,	FALSE);
-                FeatAdd(	oTarget,	246	,	FALSE);
-                FeatAdd(	oTarget,	354	,	FALSE);
-                FeatAdd(	oTarget,	1096	,	FALSE);
-                FeatAdd(	oTarget,	1097	,	FALSE);
+            case    43  :       //  HalfDrow
+                FeatAdd(    oTarget,    235 ,   FALSE);
+                FeatAdd(    oTarget,    236 ,   FALSE);
+                FeatAdd(    oTarget,    244 ,   FALSE);
+                FeatAdd(    oTarget,    245 ,   FALSE);
+                FeatAdd(    oTarget,    246 ,   FALSE);
+                FeatAdd(    oTarget,    354 ,   FALSE);
+                FeatAdd(    oTarget,    1096    ,   FALSE);
+                FeatAdd(    oTarget,    1097    ,   FALSE);
                 break;
-            case	46	:		//	HalfCelestial
+            case    46  :       //  HalfCelestial
                 eStat1 = EffectAbilityIncrease(ABILITY_STRENGTH,4);
                 eStat2 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat3 = EffectAbilityIncrease(ABILITY_INTELLIGENCE,2);
@@ -3349,40 +3349,40 @@ void AddRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eLink,eStat4);
                                 eLink = EffectLinkEffects(eLink,eStat5);
                                 eLink = EffectLinkEffects(eLink,eStat6);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	301	,	FALSE);
-                FeatAdd(	oTarget,	2112	,	FALSE);
-                FeatAdd(	oTarget,	2113	,	FALSE);
-                FeatAdd(	oTarget,	2114	,	FALSE);
-                FeatAdd(	oTarget,	2115	,	FALSE);
-                FeatAdd(	oTarget,	2116	,	FALSE);
-                FeatAdd(	oTarget,	2117	,	FALSE);
-                                FeatAdd(	oTarget,	2118	,	FALSE);
-                                FeatAdd(	oTarget,	2119	,	FALSE);
-                                FeatAdd(	oTarget,	2120	,	FALSE);
-                                FeatAdd(	oTarget,	2121	,	FALSE);
-                                FeatAdd(	oTarget,	2122	,	FALSE);
-                                FeatAdd(	oTarget,	2123	,	FALSE);
-                                FeatAdd(	oTarget,	2124	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    301 ,   FALSE);
+                FeatAdd(    oTarget,    2112    ,   FALSE);
+                FeatAdd(    oTarget,    2113    ,   FALSE);
+                FeatAdd(    oTarget,    2114    ,   FALSE);
+                FeatAdd(    oTarget,    2115    ,   FALSE);
+                FeatAdd(    oTarget,    2116    ,   FALSE);
+                FeatAdd(    oTarget,    2117    ,   FALSE);
+                                FeatAdd(    oTarget,    2118    ,   FALSE);
+                                FeatAdd(    oTarget,    2119    ,   FALSE);
+                                FeatAdd(    oTarget,    2120    ,   FALSE);
+                                FeatAdd(    oTarget,    2121    ,   FALSE);
+                                FeatAdd(    oTarget,    2122    ,   FALSE);
+                                FeatAdd(    oTarget,    2123    ,   FALSE);
+                                FeatAdd(    oTarget,    2124    ,   FALSE);
                 break;
-            case	47	:		//	YuantiPureblood
+            case    47  :       //  YuantiPureblood
                 eStat1 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_CHARISMA,2);
                 eStat3 = EffectAbilityIncrease(ABILITY_INTELLIGENCE,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	2112	,	FALSE);
-                FeatAdd(	oTarget,	2171	,	FALSE);
-                FeatAdd(	oTarget,	2172	,	FALSE);
-                FeatAdd(	oTarget,	2173	,	FALSE);
-                FeatAdd(	oTarget,	2174	,	FALSE);
-                FeatAdd(	oTarget,	2175	,	FALSE);
-                FeatAdd(	oTarget,	2176	,	FALSE);
-                FeatAdd(	oTarget,	0	,	FALSE);
-                FeatAdd(	oTarget,	408	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    2112    ,   FALSE);
+                FeatAdd(    oTarget,    2171    ,   FALSE);
+                FeatAdd(    oTarget,    2172    ,   FALSE);
+                FeatAdd(    oTarget,    2173    ,   FALSE);
+                FeatAdd(    oTarget,    2174    ,   FALSE);
+                FeatAdd(    oTarget,    2175    ,   FALSE);
+                FeatAdd(    oTarget,    2176    ,   FALSE);
+                FeatAdd(    oTarget,    0   ,   FALSE);
+                FeatAdd(    oTarget,    408 ,   FALSE);
                 break;
-            case	48	:		//	GrayOrc
+            case    48  :       //  GrayOrc
                 eStat1 = EffectAbilityIncrease(ABILITY_STRENGTH,2);
                 eStat2 = EffectAbilityIncrease(ABILITY_WISDOM,2);
                 eStat3 = EffectAbilityDecrease(ABILITY_INTELLIGENCE,2);
@@ -3390,38 +3390,38 @@ void AddRacialAbilities(object oTarget, int nSubRace)
                 eLink = EffectLinkEffects(eStat1,eStat2);
                 eLink = EffectLinkEffects(eLink,eStat3);
                 eLink = EffectLinkEffects(eLink,eStat4);
-                FeatAdd(	oTarget,	228	,	FALSE);
-                FeatAdd(	oTarget,	1767	,	FALSE);
-                FeatAdd(	oTarget,	2177	,	FALSE);
-                FeatAdd(	oTarget,	2178	,	FALSE);
-                FeatAdd(	oTarget,	1116	,	FALSE);
-                FeatAdd(	oTarget,	2248	,	FALSE);
+                FeatAdd(    oTarget,    228 ,   FALSE);
+                FeatAdd(    oTarget,    1767    ,   FALSE);
+                FeatAdd(    oTarget,    2177    ,   FALSE);
+                FeatAdd(    oTarget,    2178    ,   FALSE);
+                FeatAdd(    oTarget,    1116    ,   FALSE);
+                FeatAdd(    oTarget,    2248    ,   FALSE);
                 break;
-            case	67	:		//	Star_Elf
+            case    67  :       //  Star_Elf
                 eStat1 = EffectAbilityIncrease(ABILITY_CHARISMA,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_CONSTITUTION,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	235	,	FALSE);
-                FeatAdd(	oTarget,	236	,	FALSE);
-                FeatAdd(	oTarget,	256	,	FALSE);
-                FeatAdd(	oTarget,	237	,	FALSE);
-                FeatAdd(	oTarget,	238	,	FALSE);
-                FeatAdd(	oTarget,	239	,	FALSE);
-                FeatAdd(	oTarget,	240	,	FALSE);
-                FeatAdd(	oTarget,	354	,	FALSE);
+                FeatAdd(    oTarget,    235 ,   FALSE);
+                FeatAdd(    oTarget,    236 ,   FALSE);
+                FeatAdd(    oTarget,    256 ,   FALSE);
+                FeatAdd(    oTarget,    237 ,   FALSE);
+                FeatAdd(    oTarget,    238 ,   FALSE);
+                FeatAdd(    oTarget,    239 ,   FALSE);
+                FeatAdd(    oTarget,    240 ,   FALSE);
+                FeatAdd(    oTarget,    354 ,   FALSE);
                 break;
-            case	68	:		//	Painted_Elf
+            case    68  :       //  Painted_Elf
                 eStat1 = EffectAbilityIncrease(ABILITY_DEXTERITY,2);
                 eStat2 = EffectAbilityDecrease(ABILITY_INTELLIGENCE,2);
                 eLink = EffectLinkEffects(eStat1,eStat2);
-                FeatAdd(	oTarget,	235	,	FALSE);
-                FeatAdd(	oTarget,	236	,	FALSE);
-                FeatAdd(	oTarget,	256	,	FALSE);
-                FeatAdd(	oTarget,	237	,	FALSE);
-                FeatAdd(	oTarget,	238	,	FALSE);
-                FeatAdd(	oTarget,	239	,	FALSE);
-                FeatAdd(	oTarget,	240	,	FALSE);
-                FeatAdd(	oTarget,	354	,	FALSE);
+                FeatAdd(    oTarget,    235 ,   FALSE);
+                FeatAdd(    oTarget,    236 ,   FALSE);
+                FeatAdd(    oTarget,    256 ,   FALSE);
+                FeatAdd(    oTarget,    237 ,   FALSE);
+                FeatAdd(    oTarget,    238 ,   FALSE);
+                FeatAdd(    oTarget,    239 ,   FALSE);
+                FeatAdd(    oTarget,    240 ,   FALSE);
+                FeatAdd(    oTarget,    354 ,   FALSE);
                 break;
             default : return;
         }
@@ -3478,7 +3478,7 @@ int RaceChange(object oTarget)
 
         switch(nRand)
             {
-                case	0	:		//	Gold_Dwarf
+                case    0   :       //  Gold_Dwarf
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Dwarf_Gold_male);
                     }else{
@@ -3489,7 +3489,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,0);
                     return 1;
-                case	1	:		//	Gray_Dwarf_Duergar
+                case    1   :       //  Gray_Dwarf_Duergar
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Dwarf_Duergar_male);
                     }else{
@@ -3500,7 +3500,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,1);
                     return 1;
-                case	2	:		//	Shield_Dwarf
+                case    2   :       //  Shield_Dwarf
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Dwarf_male);
                     }else{
@@ -3511,7 +3511,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,2);
                     return 1;
-                case	3	:		//	Drow
+                case    3   :       //  Drow
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Elf_Drow_male);
                     }else{
@@ -3522,7 +3522,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,3);
                     return 1;
-                case	4	:		//	Moon_Elf
+                case    4   :       //  Moon_Elf
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Elf_male);
                     }else{
@@ -3533,7 +3533,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,4);
                     return 1;
-                case	5	:		//	Sun_Elf
+                case    5   :       //  Sun_Elf
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Elf_Sun_male);
                     }else{
@@ -3544,7 +3544,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,5);
                     return 1;
-                case	6	:		//	Wild_Elf
+                case    6   :       //  Wild_Elf
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Elf_Wild_NX1_male);
                     }else{
@@ -3555,7 +3555,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,6);
                     return 1;
-                case	7	:		//	Wood_Elf
+                case    7   :       //  Wood_Elf
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Elf_Wood_male);
                     }else{
@@ -3566,7 +3566,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,7);
                     return 1;
-                case	8	:		//	Deep_Gnome_Svirfneblin
+                case    8   :       //  Deep_Gnome_Svirfneblin
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Gnome_Svirfneblin_male);
                     }else{
@@ -3577,7 +3577,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,8);
                     return 1;
-                case	9	:		//	Rock_Gnome
+                case    9   :       //  Rock_Gnome
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Gnome_male);
                     }else{
@@ -3588,7 +3588,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,9);
                     return 1;
-                case	10	:		//	Lightfoot_Halfling
+                case    10  :       //  Lightfoot_Halfling
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Halfling_male);
                     }else{
@@ -3599,7 +3599,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,11);
                     return 1;
-                case	11	:		//	Strongheart_Halfling
+                case    11  :       //  Strongheart_Halfling
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Halfling_Strongheart_male);
                     }else{
@@ -3610,7 +3610,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,12);
                     return 1;
-                case	12	:		//	Aasimar
+                case    12  :       //  Aasimar
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Assimar_male);
                     }else{
@@ -3621,7 +3621,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,13);
                     return 1;
-                case	13	:		//	Tiefling
+                case    13  :       //  Tiefling
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Tiefling_male);
                     }else{
@@ -3632,7 +3632,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,14);
                     return 1;
-                case	14	:		//	HalfElf
+                case    14  :       //  HalfElf
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Half_Elf_male);
                     }else{
@@ -3643,7 +3643,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,15);
                     return 1;
-                case	15	:		//	HalfOrc
+                case    15  :       //  HalfOrc
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Half_Orc_male);
                     }else{
@@ -3654,7 +3654,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,16);
                     return 1;
-                case	16	:		//	Human
+                case    16  :       //  Human
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Human_male);
                     }else{
@@ -3665,7 +3665,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,17);
                     return 1;
-                case	17	:		//	Air_Genasi
+                case    17  :       //  Air_Genasi
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Air_Genasi_NX1_male);
                     }else{
@@ -3676,7 +3676,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,18);
                     return 1;
-                case	18	:		//	Earth_Genasi
+                case    18  :       //  Earth_Genasi
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Earth_Genasi_NX1_male);
                     }else{
@@ -3687,7 +3687,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,19);
                     return 1;
-                case	19	:		//	Fire_Genasi
+                case    19  :       //  Fire_Genasi
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Fire_Genasi_NX1_male);
                     }else{
@@ -3698,7 +3698,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,20);
                     return 1;
-                case	20	:		//	Water_Genasi
+                case    20  :       //  Water_Genasi
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Water_Genasi_NX1_male);
                     }else{
@@ -3709,7 +3709,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,21);
                     return 1;
-                case	21	:		//	HalfDrow
+                case    21  :       //  HalfDrow
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Half_Drow_NX1_male);
                     }else{
@@ -3720,7 +3720,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,43);
                     return 1;
-                case	22	:		//	HalfCelestial
+                case    22  :       //  HalfCelestial
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Assimar_male);
                     }else{
@@ -3731,7 +3731,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,46);
                     return 1;
-                case	23	:		//	YuantiPureblood
+                case    23  :       //  YuantiPureblood
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_YuantiPureblood_NX2_male);
                     }else{
@@ -3742,7 +3742,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,47);
                     return 1;
-                case	24	:		//	GrayOrc
+                case    24  :       //  GrayOrc
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_GreyOrc_NX2_male);
                     }else{
@@ -3753,7 +3753,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,48);
                     return 1;
-                case	25	:		//	StarElf
+                case    25  :       //  StarElf
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Elf_male);
                     }else{
@@ -3764,7 +3764,7 @@ int RaceChange(object oTarget)
                     RemoveRacialAbilities(oTarget,nCurrentSubRace);
                     AddRacialAbilities(oTarget,67);
                     return 1;
-                case	26	:		//	PaintedElf
+                case    26  :       //  PaintedElf
                     if(nGender == 0){
                         SetCreatureAppearanceType(oTarget,App_Elf_Wood_male);
                     }else{
@@ -3935,7 +3935,7 @@ void ShazDestroyAllClothOnTarget(object oTarget)
                 sItemTag = GetTag(oItem);
                 sItemName = GetName(oItem);
                 // these checks should get all the armor
-                if ((FindSubString(sItemTag, "CLOTH") >=0) || (FindSubString(sItemTag, "cloth") >=0) || (FindSubString(sItemTag, "pca_dragon") >= 0) || (FindSubString(sItemTag, "pca_duelist") >= 0)  || (FindSubString(sItemTag, "pca_sacredfist") >= 0))	{
+                if ((FindSubString(sItemTag, "CLOTH") >=0) || (FindSubString(sItemTag, "cloth") >=0) || (FindSubString(sItemTag, "pca_dragon") >= 0) || (FindSubString(sItemTag, "pca_duelist") >= 0)  || (FindSubString(sItemTag, "pca_sacredfist") >= 0)) {
                         DestroyObject(oItem);
                         iItemDestroyed= 1;
                 } else if((FindSubString(sItemName, "Padded") >=0) || (FindSubString(sItemName, "Gloves") >=0)) {
@@ -3961,7 +3961,7 @@ void ShazDestroyAllClothOnTarget(object oTarget)
         sItemTag = GetTag(oItem);
         sItemName = GetName(oItem);
         // Check the tag on the current item
-        if ((FindSubString(sItemTag, "CLOTH") >=0) || (FindSubString(sItemTag, "cloth") >=0) || (FindSubString(sItemTag, "pca_dragon") >= 0) || (FindSubString(sItemTag, "pca_duelist") >= 0))	{
+        if ((FindSubString(sItemTag, "CLOTH") >=0) || (FindSubString(sItemTag, "cloth") >=0) || (FindSubString(sItemTag, "pca_dragon") >= 0) || (FindSubString(sItemTag, "pca_duelist") >= 0))  {
                 DestroyObject(oItem);
                 iItemDestroyed = 1;
         } else if((FindSubString(sItemName, "Padded") >=0)) {
@@ -3982,11 +3982,11 @@ void ShazDestroyAllClothOnTarget(object oTarget)
                 object oNewRags = CreateItemOnObject("cloth110", oTarget, 1,"",0);
                 if(GetIsObjectValid(oItem)) {
                         AssignCommand(oTarget, forceEquip(oTarget, oNewRags, INVENTORY_SLOT_CHEST));
-//			AssignCommand(oTarget, ClearAllActions());
-//			AssignCommand(oTarget, ActionEquipItem(oNewRags, INVENTORY_SLOT_CHEST));
-//			DelayCommand(0.5f, oTarget, forceEquip(oTarget, oNewRags, INVENTORY_SLOT_CHEST));
-//			DelayCommand(1.0f, oTarget, forceEquip(oTarget, oNewRags, INVENTORY_SLOT_CHEST));
-//			DelayCommand(1.5f, oTarget, forceEquip(oTarget, oNewRags, INVENTORY_SLOT_CHEST));
+//          AssignCommand(oTarget, ClearAllActions());
+//          AssignCommand(oTarget, ActionEquipItem(oNewRags, INVENTORY_SLOT_CHEST));
+//          DelayCommand(0.5f, oTarget, forceEquip(oTarget, oNewRags, INVENTORY_SLOT_CHEST));
+//          DelayCommand(1.0f, oTarget, forceEquip(oTarget, oNewRags, INVENTORY_SLOT_CHEST));
+//          DelayCommand(1.5f, oTarget, forceEquip(oTarget, oNewRags, INVENTORY_SLOT_CHEST));
                 }
         }
 
@@ -4125,14 +4125,14 @@ void ShazDoExplosion(location lLocation, int iDamageType, int iStrength=1)
 
                                 int nSpellLvl = GetSpellLevel(JXGetSpellId());
                                 if (GetHasSpellEffect(FEAT_LYRIC_THAUM_SONIC_MIGHT, OBJECT_SELF))
-                                {	iDamage += d6(nSpellLvl); }
+                                {   iDamage += d6(nSpellLvl); }
 
                                 if (GetHasFeat(FEAT_FROSTMAGE_PIERCING_COLD, OBJECT_SELF))
                                 {
                                         if (iDamageType == DAMAGE_TYPE_COLD)
-                                        {	iDamageType = DAMAGE_TYPE_MAGICAL;	}
+                                        {   iDamageType = DAMAGE_TYPE_MAGICAL;  }
                                         if (iSaveType == SAVING_THROW_TYPE_COLD)
-                                        {	iSaveType = SAVING_THROW_TYPE_SPELL;	}
+                                        {   iSaveType = SAVING_THROW_TYPE_SPELL;    }
                                 }
 
                                 //Adjust the damage based on the Reflex Save, Evasion and Improved Evasion.
@@ -4180,18 +4180,18 @@ void ShazDoFlyingGems(object oCaster, location lTarget)
             // Create the gems on the target
             string sResRef = "nw_it_gem0";
             nRand = Random(20);
-            if (nRand < 3) {	// 0-2
+            if (nRand < 3) {    // 0-2
                 sResRef += "10"; // topaz, a nice windfall
-            } else if (nRand < 7) {	//4-6
-                sResRef += "06";	// ruby
-                        } else if (nRand < 12) {	// 8-11
-                                sResRef += "11";	// garnet
+            } else if (nRand < 7) { //4-6
+                sResRef += "06";    // ruby
+                        } else if (nRand < 12) {    // 8-11
+                                sResRef += "11";    // garnet
             } else if (nRand < 14) { //12-13
-                sResRef += "05";	// diamond
-                        } else if (nRand < 18) {	// 14-17
-                                sResRef += "03";	// Amethyst
-            } else {	// 18-20
-                sResRef += "08";	// sapphire
+                sResRef += "05";    // diamond
+                        } else if (nRand < 18) {    // 14-17
+                                sResRef += "03";    // Amethyst
+            } else {    // 18-20
+                sResRef += "08";    // sapphire
             }
             //object oGem = CreateItemOnObject(sResRef,oTarget);
                         fRandom = Random(20) / 10.0f;
@@ -4238,18 +4238,18 @@ void ShazDoFlyingGems(object oCaster, location lTarget)
                 // Create the gems on the target
                 string sResRef = "nw_it_gem0";
                 nRand = Random(20);
-                        if (nRand < 3) {	// 0-2
+                        if (nRand < 3) {    // 0-2
                             sResRef += "10"; // topaz, a nice windfall
-                        } else if (nRand < 7) {	//4-6
-                            sResRef += "06";	// ruby
-                        } else if (nRand < 12) {	// 8-11
-                                sResRef += "11";	// garnet
+                        } else if (nRand < 7) { //4-6
+                            sResRef += "06";    // ruby
+                        } else if (nRand < 12) {    // 8-11
+                                sResRef += "11";    // garnet
                         } else if (nRand < 14) { //12-13
-                            sResRef += "05";	// diamond
-                        } else if (nRand < 18) {	// 14-17
-                                sResRef += "03";	// Amethyst
-                        } else {	// 18-20
-                            sResRef += "08";	// sapphire
+                            sResRef += "05";    // diamond
+                        } else if (nRand < 18) {    // 14-17
+                                sResRef += "03";    // Amethyst
+                        } else {    // 18-20
+                            sResRef += "08";    // sapphire
                         }
                         fRandom = Random(20) / 4.0f;
                         fRandomDelay = IntToFloat(Random(6));
@@ -4399,7 +4399,7 @@ void ShazDoLevitation()
                                                         effect eMiss = EffectMissChance(iMissChance, MISS_CHANCE_TYPE_VS_MELEE);
                                                         JXApplyEffectToObject(DURATION_TYPE_TEMPORARY, eMiss, oCreature, 7.0f);
                                                         iNumAffectedCreatures++;
-                                                }	// end else not flying
+                                                }   // end else not flying
 
                                         } // else not enemy or has ranged weapon
                                 } // else is a medium (or smaller) creature too far away
@@ -4632,7 +4632,7 @@ effect ShazEffectEnlarge()
     effect eDex = EffectAbilityDecrease(ABILITY_DEXTERITY, 2);
     effect eAtk = EffectAttackDecrease(1, ATTACK_BONUS_MISC);
     effect eAC = EffectACDecrease(1, AC_DODGE_BONUS);
-    effect eDmg = EffectDamageIncrease(3, DAMAGE_TYPE_MAGICAL);	// Should be Melee-only!
+    effect eDmg = EffectDamageIncrease(3, DAMAGE_TYPE_MAGICAL); // Should be Melee-only!
     effect eScale = EffectSetScale(1.5);
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
     effect eLink = EffectLinkEffects(eStr, eDex);
@@ -4651,9 +4651,9 @@ effect ShazEffectEnlarge()
 // this Effect is slightly more likely to turn the target into an animal
 effect ShazEffectRandomPolymorph(object oTarget)
 {
-        effect	ePoly;
-        int 	iPolyRand = Random(39);
-        int		iPolyIndex;
+        effect  ePoly;
+        int     iPolyRand = Random(39);
+        int     iPolyIndex;
 
         switch(iPolyRand) {
                 case 0:
@@ -4765,15 +4765,15 @@ effect ShazEffectRandomPolymorph(object oTarget)
         }
 
         // Shaz: there are several things about the implementation of this effect I really don't like.
-        //	#1: the natural armor is simply added to the creatures previous armor. Unacceptable! A red dragon changed into a boar would *increase* its AC!!!
-        effect	eAC = EffectACDecrease(GetAC(oTarget) - 10);
-        //	#2: the players handbook states that being changed into an unfamiliar form makes the victim suffer penalties in "stressful situations" we'll just make those permanent ;-)
-        effect	eAttack = EffectAttackDecrease(2);
-        effect	eSkill = EffectSkillDecrease(SKILL_ALL_SKILLS, 2);
-        effect	eSaves = EffectSavingThrowDecrease(SAVING_THROW_ALL, 2, SAVING_THROW_TYPE_ALL);
-        //effect	eDamage = EffectDamageDecrease(2);	// this one is my own doing; player's handbook doesn't say anything about it
-        effect	eLink;
-        effect	eLarge = EffectSetScale(1.5f);
+        //  #1: the natural armor is simply added to the creatures previous armor. Unacceptable! A red dragon changed into a boar would *increase* its AC!!!
+        effect  eAC = EffectACDecrease(GetAC(oTarget) - 10);
+        //  #2: the players handbook states that being changed into an unfamiliar form makes the victim suffer penalties in "stressful situations" we'll just make those permanent ;-)
+        effect  eAttack = EffectAttackDecrease(2);
+        effect  eSkill = EffectSkillDecrease(SKILL_ALL_SKILLS, 2);
+        effect  eSaves = EffectSavingThrowDecrease(SAVING_THROW_ALL, 2, SAVING_THROW_TYPE_ALL);
+        //effect    eDamage = EffectDamageDecrease(2);  // this one is my own doing; player's handbook doesn't say anything about it
+        effect  eLink;
+        effect  eLarge = EffectSetScale(1.5f);
         int nArcaneShapesCanCast = GetLocalInt(GetModule(), "ArcaneShapesCanCast");
 
         ePoly = EffectPolymorph(iPolyIndex, TRUE, nArcaneShapesCanCast);
@@ -4801,7 +4801,7 @@ effect ShazEffectReduce()
     effect eDex = EffectAbilityIncrease(ABILITY_DEXTERITY, 2);
     effect eAtk = EffectAttackIncrease(1, ATTACK_BONUS_MISC);
     effect eAC = EffectACIncrease(1, AC_DODGE_BONUS);
-    effect eDmg = EffectDamageDecrease(3, DAMAGE_TYPE_MAGICAL);	// Should be Melee-only!
+    effect eDmg = EffectDamageDecrease(3, DAMAGE_TYPE_MAGICAL); // Should be Melee-only!
     effect eScale = EffectSetScale(0.5);
     effect eDur = EffectVisualEffect(VFX_DUR_CESSATE_POSITIVE);
     effect eLink = EffectLinkEffects(eStr, eDex);
@@ -4944,13 +4944,13 @@ void ShazFallInLove(object oLover, object oLoveTarget)
         SetLocalObject(oLover, "ShazLoved", oLoveTarget);
         SetLocalObject(oLoveTarget, "ShazLover", oLover);
         // we must replace the love-target's "on attacked" and "on spell cast at" scripts so we can inform the lovesick the object of their affection has been attacked
-//	string sLoveOnAttackOriginalScript = GetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_MELEE_ATTACKED);
-//	SetLocalString(oLoveTarget, "ShazLoveOnAttackOriginalScript", sLoveOnAttackOriginalScript);
-//	SetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_MELEE_ATTACKED, "shaz_onattacked_love");
+//  string sLoveOnAttackOriginalScript = GetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_MELEE_ATTACKED);
+//  SetLocalString(oLoveTarget, "ShazLoveOnAttackOriginalScript", sLoveOnAttackOriginalScript);
+//  SetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_MELEE_ATTACKED, "shaz_onattacked_love");
         // replace "spell cast at"
-//	string sLoveOnSpellAtOriginalScript = GetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_SPELLCASTAT);
-//	SetLocalString(oLoveTarget, "ShazLoveOnSpellAtOriginalScript", sLoveOnAttackOriginalScript);
-//	SetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_SPELLCASTAT, "shaz_onspellat_love");
+//  string sLoveOnSpellAtOriginalScript = GetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_SPELLCASTAT);
+//  SetLocalString(oLoveTarget, "ShazLoveOnSpellAtOriginalScript", sLoveOnAttackOriginalScript);
+//  SetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_SPELLCASTAT, "shaz_onspellat_love");
         // replace "spell cast at", so that the target creature won't attack the lover unless he's the last one around
         string sLoveOnHeartOriginalScript = GetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_HEARTBEAT);
         SetLocalString(oLoveTarget, "ShazLoveOnHeartOriginalScript", sLoveOnHeartOriginalScript);
@@ -4972,8 +4972,8 @@ void ShazFallInLove(object oLover, object oLoveTarget)
         // technically the love never ends - until a remove curse(caster love) or a dispel magic(target love)
         //DelayCommand(60.0f, SendMessageToPC(oLoveTarget, "Restoring " + GetName(oLover) + " scripts"));
         //DelayCommand(60.0f, SafeRestoreEventHandlers(oLover));
-//	DelayCommand(60.0f, SetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_MELEE_ATTACKED, sLoveOnAttackOriginalScript));
-//	DelayCommand(60.0f, SetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_SPELLCASTAT, sLoveOnSpellAtOriginalScript));
+//  DelayCommand(60.0f, SetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_MELEE_ATTACKED, sLoveOnAttackOriginalScript));
+//  DelayCommand(60.0f, SetEventHandler(oLoveTarget, CREATURE_SCRIPT_ON_SPELLCASTAT, sLoveOnSpellAtOriginalScript));
         //SafeRestoreEventHandlers(
 }
 
@@ -4987,7 +4987,7 @@ void ShazFollowObject(object oTarget)
                         AssignCommand(OBJECT_SELF, ActionMoveToObject(oTarget, FALSE, 5.0f));
                 } else {
                         // I had a couple times where a summoned dude would just stand there while something wailed on me. maybe this will get them to fight...
-                        AssignCommand(OBJECT_SELF, DetermineCombatRound());	// I realize this is going to be done instantly; oh well
+                        AssignCommand(OBJECT_SELF, DetermineCombatRound()); // I realize this is going to be done instantly; oh well
                 }
         }
         // either way, qeueu this up to get executed again in a few seconds
@@ -5018,7 +5018,7 @@ void ShazFollowObjectAnnoying(object oTarget, float fDistance)
                                 PlayVoiceChat(VOICE_CHAT_SELECTED);
                         }
                         // I had a couple times where a summoned dude would just stand there while something wailed on me. maybe this will get them to fight...
-                        AssignCommand(OBJECT_SELF, DetermineCombatRound());	// I realize this is going to be done instantly; oh well
+                        AssignCommand(OBJECT_SELF, DetermineCombatRound()); // I realize this is going to be done instantly; oh well
                 }
         }
         // either way, qeueu this up to get executed again in a few seconds
@@ -5037,21 +5037,21 @@ void ShazGateRandomOutsider(int iLevel, location lLocation)
 
         if(TRUE){//d100() >= 25) {
                 // a creature appears!
-                effect eAppearVis;	// appropriate visual for the given plane summon
+                effect eAppearVis;  // appropriate visual for the given plane summon
                 string sCreatureName;
                 // can't delay as we wouldn't have a pointer to the creature. could make a helper function, but im too lazy
-                //float fGateDelay = IntToFloat(d4());	// delay a few seconds from the gate VFX
+                //float fGateDelay = IntToFloat(d4());  // delay a few seconds from the gate VFX
                 // first we choose a randome plane, then we'll pick a monster from that plane based on the caster's level
                 int iPlane = Random(8);
                 int iCreatureLevel = iLevel + d10() - 5;
-                int iDuration = 6 + Random(9);	// how long the creature sticks around: 6-14 rounds
+                int iDuration = 6 + Random(9);  // how long the creature sticks around: 6-14 rounds
                 // number of rounds before the creature goes hostile on the player.
                 //   anything over 14 is means the creature never turns, since they won't stick around that long
                 int iSafeRounds = 15;
                 int nElemental;
                 switch(iPlane) {
-                        case 0:		// fire
-                                iSafeRounds = 6 + Random(5);	// safe for 6-10 rounds - they might not even attack you at all
+                        case 0:     // fire
+                                iSafeRounds = 6 + Random(5);    // safe for 6-10 rounds - they might not even attack you at all
                                 eAppearVis = EffectVisualEffect(VFX_HIT_AOE_FIRE);
                                 if(iCreatureLevel <= 5) { // 1-5
                                         // mephit
@@ -5062,18 +5062,18 @@ void ShazGateRandomOutsider(int iLevel, location lLocation)
                                 } else if(iCreatureLevel <= 15) { // 11-15
                                         // huge elemental
                                         sCreatureName = "c_elmfirehuge";
-                                } else if(iCreatureLevel <= 24) {	// 16-24
+                                } else if(iCreatureLevel <= 24) {   // 16-24
                                         // greater elemental
                                         sCreatureName = "c_elmfiregreater";
-                                } else {							// 25-40
+                                } else {                            // 25-40
                                         // elder elemental
                                         sCreatureName = "c_elmfireelder";
                                 }
                                 nElemental = 1;
                                 break;
-                        case 1:		// water
+                        case 1:     // water
                                 eAppearVis = EffectVisualEffect(VFX_HIT_AOE_MAGIC);
-                                iSafeRounds = 6 + Random(5);	// safe for 6-10 rounds - they might not even attack you at all
+                                iSafeRounds = 6 + Random(5);    // safe for 6-10 rounds - they might not even attack you at all
                                 if(iCreatureLevel <= 5) { // 1-5
                                         // elemental (normal)
                                         sCreatureName = "c_elmwater";
@@ -5083,17 +5083,17 @@ void ShazGateRandomOutsider(int iLevel, location lLocation)
                                 } else if(iCreatureLevel <= 15) { // 11-15
                                         // huge elemental
                                         sCreatureName = "c_elmwaterhuge";
-                                } else if(iCreatureLevel <= 24) {	// 16-24
+                                } else if(iCreatureLevel <= 24) {   // 16-24
                                         // greater elemental
                                         sCreatureName = "c_elmwatergreater";
-                                } else {							// 25-40
+                                } else {                            // 25-40
                                         // elder elemental
                                         sCreatureName = "c_elmwaterelder";
                                 }
                                 nElemental = 1;
                                 break;
-                        case 2:		// earth
-                                iSafeRounds = 6 + Random(5);	// safe for 6-10 rounds - they might not even attack you at all
+                        case 2:     // earth
+                                iSafeRounds = 6 + Random(5);    // safe for 6-10 rounds - they might not even attack you at all
                                 eAppearVis = EffectVisualEffect(VFX_SPELL_HIT_EARTHQUAKE);
                                 if(iCreatureLevel <= 10) { // 1-10
                                         // normal elemental
@@ -5101,17 +5101,17 @@ void ShazGateRandomOutsider(int iLevel, location lLocation)
                                 } else if(iCreatureLevel <= 15) { // 11-15
                                         // huge elemental
                                         sCreatureName = "c_elmearthhuge";
-                                } else if(iCreatureLevel <= 24) {	// 16-24
+                                } else if(iCreatureLevel <= 24) {   // 16-24
                                         // greater elemental
                                         sCreatureName = "c_elmearthgreater";
-                                } else {							// 25-40
+                                } else {                            // 25-40
                                         // elder elemental
                                         sCreatureName = "c_elmearthelder";
                                 }
                                 nElemental = 1;
                                 break;
-                        case 3:		// air
-                                iSafeRounds = 6 + Random(5);	// safe for 6-10 rounds - they might not even attack you at all
+                        case 3:     // air
+                                iSafeRounds = 6 + Random(5);    // safe for 6-10 rounds - they might not even attack you at all
                                 eAppearVis = EffectVisualEffect(VFX_HIT_AOE_LIGHTNING);
                                 if(iCreatureLevel <= 5) { // 1-5
                                         // mephit
@@ -5122,16 +5122,16 @@ void ShazGateRandomOutsider(int iLevel, location lLocation)
                                 } else if(iCreatureLevel <= 15) { // 11-15
                                         // huge elemental
                                         sCreatureName = "c_elmairhuge";
-                                } else if(iCreatureLevel <= 24) {	// 16-24
+                                } else if(iCreatureLevel <= 24) {   // 16-24
                                         // greater elemental
                                         sCreatureName = "c_elmairgreater";
-                                } else {							// 25-40
+                                } else {                            // 25-40
                                         // elder elemental
                                         sCreatureName = "c_elmairelder";
                                 }
                                 nElemental = 1;
                                 break;
-                        case 4:		// celestial
+                        case 4:     // celestial
                                 eAppearVis = EffectVisualEffect(VFX_HIT_AOE_HOLY);
                                 if(iCreatureLevel <= 4) { // 1-4
                                         // wolf
@@ -5142,17 +5142,17 @@ void ShazGateRandomOutsider(int iLevel, location lLocation)
                                 } else if(iCreatureLevel <= 11) { // 8-11
                                         // dire bear
                                         sCreatureName = "c_celestialdbear";
-                                } else if(iCreatureLevel <= 20) {	// 12-20
+                                } else if(iCreatureLevel <= 20) {   // 12-20
                                         // planetaar
                                         sCreatureName = "c_planetar";
-                                } else {							// 21-40
+                                } else {                            // 21-40
                                         // solar
                                         sCreatureName = "c_solar";
                                 }
                                 break;
-                        case 5:		// abyss
+                        case 5:     // abyss
                                 eAppearVis = EffectVisualEffect(VFX_INVOCATION_BRIMSTONE_DOOM);
-                                iSafeRounds = 2 + Random(7);	// safe for 2-8 rounds - they are very likely to attack you
+                                iSafeRounds = 2 + Random(7);    // safe for 2-8 rounds - they are very likely to attack you
                                 if(iCreatureLevel <= 4) { // 1-4
                                         // hellhound
                                         sCreatureName = "c_doghell";
@@ -5162,17 +5162,17 @@ void ShazGateRandomOutsider(int iLevel, location lLocation)
                                 } else if(iCreatureLevel <= 14) { // 13-14
                                         // night hag
                                         sCreatureName = "c_night_hag";
-                                } else if(iCreatureLevel <= 18) {	// 15-18
+                                } else if(iCreatureLevel <= 18) {   // 15-18
                                         // hezrou
                                         sCreatureName = "c_hezrou";
-                                } else {							// 19-40
+                                } else {                            // 19-40
                                         // balor
                                         sCreatureName = "c_balor";
                                 }
                                 break;
-                        case 6:		// hells
+                        case 6:     // hells
                                 eAppearVis = EffectVisualEffect(VFX_INVOCATION_UTTERDARK_DOOM);
-                                iSafeRounds = 2 + Random(7);	// safe for 2-8 rounds - they are very likely to attack you
+                                iSafeRounds = 2 + Random(7);    // safe for 2-8 rounds - they are very likely to attack you
                                 if(iCreatureLevel <= 3) { // 1-3
                                         // imp
                                         sCreatureName = "c_imp";
@@ -5182,17 +5182,17 @@ void ShazGateRandomOutsider(int iLevel, location lLocation)
                                 } else if(iCreatureLevel <= 12) { // 6-12
                                         // erynis
                                         sCreatureName = "c_erinyes";
-                                } else if(iCreatureLevel <= 17) {	// 13-17
+                                } else if(iCreatureLevel <= 17) {   // 13-17
                                         // horned dem
                                         sCreatureName = "c_devilhorn";
-                                } else {							// 18-40
+                                } else {                            // 18-40
                                         // pit demon
                                         sCreatureName = "c_fiend";
                                 }
                                 break;
-                        case 7:		// shadow
+                        case 7:     // shadow
                                 eAppearVis = EffectVisualEffect(VFX_HIT_AOE_EVIL);
-                                iSafeRounds = 2 + Random(7);	// safe for 2-8 rounds - they are very likely to attack you
+                                iSafeRounds = 2 + Random(7);    // safe for 2-8 rounds - they are very likely to attack you
                                 if(iCreatureLevel <= 5) { // 1-5
                                         // shadow
                                         sCreatureName = "c_shadow";
@@ -5202,7 +5202,7 @@ void ShazGateRandomOutsider(int iLevel, location lLocation)
                                 } else if(iCreatureLevel <= 17) { // 10-17
                                         // greater shadow
                                         sCreatureName = "c_greater_shadow";
-                                } else {							// 18-40
+                                } else {                            // 18-40
                                         // nightwalker
                                         sCreatureName = "c_night";
                                 }
@@ -5237,8 +5237,8 @@ void ShazGateRandomOutsider(int iLevel, location lLocation)
 //:: gets a completely random spell id; could be cleric, mage, whatever, but it should be valid
 int ShazGetAnyRandomValidSpellID()
 {
-        object oPC = GetFirstPC();	// for debugging purposes
-        int	iRandom;
+        object oPC = GetFirstPC();  // for debugging purposes
+        int iRandom;
 
         // by my calculations, there are 504 possible valid spells
         iRandom = Random(504);
@@ -5302,7 +5302,7 @@ int ShazGetAnyRandomValidSpellID()
                 SendMessageToPC(oPC, "ERROR! Random Spell index too high!!!");
         }
 
-//	SendMessageToPC(oPC, "Random Spell ID after skipping invalid groups: " + IntToString(iRandom));
+//  SendMessageToPC(oPC, "Random Spell ID after skipping invalid groups: " + IntToString(iRandom));
 
         // ok now we have a spell id, but it might still not be okay...
         if((StringToInt(Get2DAString("spells", "REMOVED", iRandom)) == 1) ||
@@ -5318,8 +5318,8 @@ int ShazGetAnyRandomValidSpellID()
 //:: gets the first magic item oCreature has equipped
 object ShazGetFirstEquippedMagicItem(object oCreature)
 {
-        object	oItem;
-        int 	i=0;
+        object  oItem;
+        int     i=0;
 
         while(i<=10) {
                 oItem = GetItemInSlot(i, oCreature);
@@ -5378,7 +5378,7 @@ int ShazGetReversedSpellID(int iSpellID)
                 case 1009: //pword weak
                         iReturnID = SPELL_BULLS_STRENGTH;
                         break;
-                case SPELL_SLEEP:	// i just made this one up, it sounded good ;-)
+                case SPELL_SLEEP:   // i just made this one up, it sounded good ;-)
                 case SPELL_DEEP_SLUMBER:
                 case SPELL_HISS_OF_SLEEP:
                         iReturnID = SPELL_RAGE;
@@ -5592,35 +5592,35 @@ int ShazGetReversedSpellID(int iSpellID)
                 case SPELL_ENLARGE_PERSON:
                         iReturnID = SPELL_REDUCE_PERSON;
                         break;
-                case 1197:	 //lesser cold orb
+                case 1197:   //lesser cold orb
                 case 1822:
                         iReturnID = 1199;
                         break;
-                case 1199:	 //lesser fire orb
+                case 1199:   //lesser fire orb
                 case 1823:
                         iReturnID = 1197;
                         break;
-                case 1198:	 //lesser elec orb
+                case 1198:   //lesser elec orb
                 case 1824:
                         iReturnID = 1203;
                         break;
-                case 1203:	 //lesser acid orb
+                case 1203:   //lesser acid orb
                 case 1860:
                         iReturnID = 1198;
                         break;
-                case 1206:	 //cold orb
+                case 1206:   //cold orb
                 case 1825:
                         iReturnID = 1208;
                         break;
-                case 1208:	 //fire orb
+                case 1208:   //fire orb
                 case 1826:
                         iReturnID = 1206;
                         break;
-                case 1207:	 //elec orb
+                case 1207:   //elec orb
                 case 1827:
                         iReturnID = 1205;
                         break;
-                case 1205:	 //acid orb
+                case 1205:   //acid orb
                 case 1859:
                         iReturnID = 1207;
                         break;
@@ -5721,13 +5721,13 @@ int ShazGetReversedSpellID(int iSpellID)
 
 //::Shaz: Wrote this because doubling the caster level often doesn't do anything,
 //::      because usually the level is capped at 10 or so, depending on the spell.
-//::		so, here we just turn on empower, to at least make the spell stronger
-//::		than normal if you happen to be over the cap. This still doesn't do the +200% required by the ToM
-//::		in the future, we could try: cast the spell twice; modify all spells in the game to do double damage/ect
+//::        so, here we just turn on empower, to at least make the spell stronger
+//::        than normal if you happen to be over the cap. This still doesn't do the +200% required by the ToM
+//::        in the future, we could try: cast the spell twice; modify all spells in the game to do double damage/ect
 void ShazIncreaseSpellStrength(object oCaster)
 {
         int nCasterLvl = JXGetCasterLevel(oCaster);
-        nCasterLvl = nCasterLvl + (nCasterLvl / 2);	// to try and reach 200% effectiveness, we will inrease the level by this, in case you aren't at the cap
+        nCasterLvl = nCasterLvl + (nCasterLvl / 2); // to try and reach 200% effectiveness, we will inrease the level by this, in case you aren't at the cap
         JXSetCasterLevel(nCasterLvl);
         SendMessageToPC(oCaster, "Your caster level increases to " + IntToString(nCasterLvl));
         JXSetMetaMagicFeat(METAMAGIC_EMPOWER);
@@ -5783,8 +5783,8 @@ int ShazIsSummoningSpell(int iSpellID)
 {
         switch(iSpellID) {
                 case 2:
-                case 29:	// crt grt und
-                case 30:	// crt und
+                case 29:    // crt grt und
+                case 30:    // crt und
                 case 63:
                 case 69:
                 case 96:
@@ -5945,7 +5945,7 @@ void ShazSummonRandomCreaturesAtLocation(location lLocation)
         int iDuration =  iCasterLvl + 3;
         int iRand;
         effect eSummon;
-        effect eTotalSummon;	// all summons linked together
+        effect eTotalSummon;    // all summons linked together
         int bFirstSummon = TRUE;
         string sSummonName="";
 
@@ -5967,7 +5967,7 @@ void ShazSummonRandomCreaturesAtLocation(location lLocation)
                                 eSummon = EffectSummonCreature("c_rabbit", VFX_HIT_SPELL_SUMMON_CREATURE);
                                 iHDRemaining -= 1;
                                 break;
-                        case 2:	// wolf
+                        case 2: // wolf
                                 sSummonName = "c_dogwolf";
                                 eSummon = EffectSummonCreature("c_dogwolf", VFX_HIT_SPELL_SUMMON_CREATURE);
 
@@ -5987,7 +5987,7 @@ void ShazSummonRandomCreaturesAtLocation(location lLocation)
                         case 5:
                                 sSummonName = "c_impice";
                                 eSummon = EffectSummonCreature("c_impice", VFX_HIT_SPELL_SUMMON_CREATURE);
-                                iHDRemaining -= 4;	// should be 3, but their stronger than that (spell effects)
+                                iHDRemaining -= 4;  // should be 3, but their stronger than that (spell effects)
                                 break;
                         case 6:
                                 sSummonName = "c_rat";
@@ -6058,7 +6058,7 @@ void ShazSummonRandomCreaturesAtLocation(location lLocation)
                         case 19:
                                 sSummonName = "c_wyvern";
                                 eSummon = EffectSummonCreature("c_wyvern", VFX_HIT_SPELL_SUMMON_CREATURE);
-                                iHDRemaining -= 11;	// should be 7, but wyverns are really quite strong
+                                iHDRemaining -= 11; // should be 7, but wyverns are really quite strong
                                 break;
                         case 20:
                                 sSummonName = "c_beardire";
@@ -6104,7 +6104,7 @@ void ShazSummonRandomCreaturesAtLocation(location lLocation)
                 }
 
                 if (GetHasFeat(FEAT_ASHBOUND, OBJECT_SELF))
-                {	iDuration *= 2;	}
+                {   iDuration *= 2; }
 
                 //ChangeFaction(oNewSpawn, OBJECT_SELF);
                 ChangeToStandardFaction(oNewSpawn, STANDARD_FACTION_DEFENDER);
@@ -6150,7 +6150,7 @@ void ShazSummonSpellElemental(location lLocation, int iSpellID)
 
         DelayCommand(6.0f, BuffSummons(OBJECT_SELF, 1, 0));
         // make it an enemy of even the badguys
-//	ChangeToStandardFaction(oNewSpawn, STANDARD_FACTION_MERCHANT);
+//  ChangeToStandardFaction(oNewSpawn, STANDARD_FACTION_MERCHANT);
         //SetStandardFactionReputation(STANDARD_FACTION_HOSTILE, 0, oNewSpawn);
         //SetStandardFactionReputation(STANDARD_FACTION_MERCHANT, 0, oNewSpawn);
         //SetStandardFactionReputation(STANDARD_FACTION_COMMONER, 0, oNewSpawn);
@@ -6189,7 +6189,7 @@ void ShazTimeStopTurn(object oTarget, float fTimeLeftAfterTurn)
         // then, delay command the application of a new paralyze lasting fTimeLeft (unless timeleft is 0)
         if(fTimeLeftAfterTurn > 0.0f) {
                 effect eParalyze = EffectCutsceneParalyze();
-                effect eIcon = EffectEffectIcon(16);	// paralyze icon -im not sure if these are #define'd anywhere...?
+                effect eIcon = EffectEffectIcon(16);    // paralyze icon -im not sure if these are #define'd anywhere...?
                 effect eAnim = EffectVisualEffect(VFX_DUR_FREEZE_ANIMATION);
                 effect eLink = EffectLinkEffects(eParalyze, eIcon);
                 eLink =EffectLinkEffects(eLink, eAnim);
@@ -6202,7 +6202,7 @@ void ShazTimeStopTurn(object oTarget, float fTimeLeftAfterTurn)
 //:: 1 turn (1 minute) with a new creature getting freed up to move each round
 void ShazTimeStopWithTurns(location lLocation, object oIgnoreCreature = OBJECT_INVALID)
 {
-        object oCreature0;	//wweeeee make-shift arrays ftw!
+        object oCreature0;  //wweeeee make-shift arrays ftw!
         object oCreature1;
         object oCreature2;
         object oCreature3;
@@ -6219,7 +6219,7 @@ void ShazTimeStopWithTurns(location lLocation, object oIgnoreCreature = OBJECT_I
         object oCreature14;
         int iNumCreatures=0; // we'll cap this at ten, because only ten get turns
         effect eParalyze = EffectCutsceneParalyze();
-        effect eIcon = EffectEffectIcon(16);	// paralyze icon -im not sure if these are #define'd anywhere...?
+        effect eIcon = EffectEffectIcon(16);    // paralyze icon -im not sure if these are #define'd anywhere...?
         effect eAnim = EffectVisualEffect(VFX_DUR_FREEZE_ANIMATION);
         effect eLink = EffectLinkEffects(eParalyze, eIcon);
         eLink =EffectLinkEffects(eLink, eAnim);

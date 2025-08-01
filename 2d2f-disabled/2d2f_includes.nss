@@ -32,7 +32,7 @@ const int SPELL_WITHERING_STRIKE = 3613;
 const int SPELL_ILLUMINATING_STRIKE = 3614;
 const int SPELL_STITCHING_OF_RECLAMATION = 3615;
 const int SPELL_ARCANE_STRIKE = 3616;
- 
+
 const int FEAT_STILL_TOUCH = 5500;
 const int FEAT_REST_IN_PEACE = 5501;
 const int FEAT_EYE_GOUGE = 5502;
@@ -110,7 +110,7 @@ const int SPELL_SURGE_SELECTOR = 3666; // placeholder for now
 //const int FEAT_GIFT_OF_INSPIRATION_6 = 3672;
 //const int FEAT_GIFT_OF_INSPIRATION_7 = 3673;
 //const int FEAT_GIFT_OF_INSPIRATION_8 = 3674;
-const int SPELL_WALL_OF_FORCE = 3675;	// SHAZ: I put this here! Its not really wild magic either.. :(
+const int SPELL_WALL_OF_FORCE = 3675;   // SHAZ: I put this here! Its not really wild magic either.. :(
 const int SPELL_ORGANIC_UNWOUNDING = 3676;
 const int SPELL_ORGANIC_UNWOUNDING_FRIENDLY = 3677;
 const int SPELL_ORGANIC_UNWOUNDING_HOSTILE = 3678;
@@ -217,7 +217,7 @@ const int VFX_DUR_AOE_KNOCKDOWN = 1566;
 const int VFX_DUR_SA_RAINBOW_MED = 1567;
 const int VFX_DUR_CLOUD_COVER = 1568;
 const int VFX_DUR_SNOWFALL = 1569;
-const int VFX_DUR_WILD_STORM = 1570; 
+const int VFX_DUR_WILD_STORM = 1570;
 const int VFX_BEAM_WILD_STORM = 1571;
 const int VFX_DUR_FIREWORKS = 1572;
 const int VFX_DUR_FIREWORKS_BOOM_1 = 1573;
@@ -233,7 +233,7 @@ const int EFFECT_ICON_CHAOS_SHIELD = 150;
 const int EFFECT_ICON_SPELL_SHAPE = 151;
 const int EFFECT_ICON_LUCKY_STREAK = 152;
 const int EFFECT_ICON_FIASCO = 153;
-const int EFFECT_ICON_SURGE_SELECTOR = 154; 
+const int EFFECT_ICON_SURGE_SELECTOR = 154;
 
 const int IP_BANEFULL_D_ONHIT = 170;
 const int IP_SPELL_ELEMENTAL_ONHIT = 171;
