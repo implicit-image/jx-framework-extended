@@ -1,7 +1,17 @@
 #include "jx_inc_magic_class"
 // include content-dependent implementation
-#include "jx_class_info_interface"
 
+int JXGetIsMainArcaneClass(int iClass);
+
+int JXGetIsMainDivineClass(int iClass);
+
+int JXGetComputedCLFromClass(int iClass, int iClassLevel);
+
+int JXGetImprovedArcaneCLFromClasses(object oCreature, int iClass);
+
+int JXGetImprovedDivineCLFromClasses(object oCreature, int iClass);
+
+int JXGetCLBonusFromPractisedSpellcaster(object oCaster, int iCastingClass, int iCastingLevels);
 
 // Get the main caster class, depending on the spell type
 // - oCreature Creature from which to get the main caster class
@@ -23,9 +33,9 @@ int JXImplGetMainCasterClass(object oCreature = OBJECT_SELF, int iSpellType = JX
 
         // Case Arcane class
         if (((iSpellType == JX_SPELLTYPE_ARCANE) || (iSpellType == JX_SPELLTYPE_BOTH))
-         && (JXImplGetIsMainArcaneClass(iClass)))
+         && (JXGetIsMainArcaneClass(iClass)))
         {
-            iCasterLevel = JXImplGetComputedCLFromClass(iClass, iClassLevel);
+            iCasterLevel = JXGetComputedCLFromClass(iClass, iClassLevel);
             if ((iCasterLevel > iBestCasterLevel) || (iBestCasterLevel == CLASS_TYPE_INVALID))
             {
                 iBestClass = iClass;
@@ -35,9 +45,9 @@ int JXImplGetMainCasterClass(object oCreature = OBJECT_SELF, int iSpellType = JX
 
         // Case Divine class
         if (((iSpellType == JX_SPELLTYPE_DIVINE) || (iSpellType == JX_SPELLTYPE_BOTH))
-         && (JXImplGetIsMainDivineClass(iClass)))
+         && (JXGetIsMainDivineClass(iClass)))
         {
-            iCasterLevel = JXImplGetComputedCLFromClass(iClass, iClassLevel);
+            iCasterLevel = JXGetComputedCLFromClass(iClass, iClassLevel);
             if ((iCasterLevel > iBestCasterLevel) || (iBestCasterLevel == CLASS_TYPE_INVALID))
             {
                 iBestClass = iClass;
@@ -62,16 +72,16 @@ int JXImplGetCreatureArcaneCasterLevel(object oCreature = OBJECT_SELF, int iClas
         iClass = iMainClass;
 
     // Test if the specified class is an arcane class
-    if (!JXImplGetIsMainArcaneClass(iClass))
+    if (!JXGetIsMainArcaneClass(iClass))
         return 0;
 
     // Compute the arcane caster level for the main caster class
-    int iCasterLevel = JXImplGetComputedCLFromClass(iClass, GetLevelByClass(iClass, oCreature));
+    int iCasterLevel = JXGetComputedCLFromClass(iClass, GetLevelByClass(iClass, oCreature));
     // Add the arcane caster level from other classes
     if (iClass == iMainClass)
-        iCasterLevel += JXImplGetImprovedArcaneCLFromClasses(oCreature, iClass);
+        iCasterLevel += JXGetImprovedArcaneCLFromClasses(oCreature, iClass);
     // Add the caster level due to the Practised Spellcaster feature
-    iCasterLevel += JXImplGetCLBonusFromPractisedSpellcaster(oCreature, iClass, iCasterLevel);
+    iCasterLevel += JXGetCLBonusFromPractisedSpellcaster(oCreature, iClass, iCasterLevel);
 
     return iCasterLevel;
 }
@@ -89,16 +99,16 @@ int JXImplGetCreatureDivineCasterLevel(object oCreature = OBJECT_SELF, int iClas
         iClass = iMainClass;
 
     // Test if the specified class is a divine class
-    if (!JXImplGetIsMainDivineClass(iClass))
+    if (!JXGetIsMainDivineClass(iClass))
         return 0;
 
     // Compute the divine caster level for the main caster class
-    int iCasterLevel = JXImplGetComputedCLFromClass(iClass, GetLevelByClass(iClass, oCreature));
+    int iCasterLevel = JXGetComputedCLFromClass(iClass, GetLevelByClass(iClass, oCreature));
     // Add the divine caster level from other classes
     if (iClass == iMainClass)
-        iCasterLevel += JXImplGetImprovedDivineCLFromClasses(oCreature, iClass);
+        iCasterLevel += JXGetImprovedDivineCLFromClasses(oCreature, iClass);
     // Add the caster level due to the Practised Spellcaster feature
-    iCasterLevel += JXImplGetCLBonusFromPractisedSpellcaster(oCreature, iClass, iCasterLevel);
+    iCasterLevel += JXGetCLBonusFromPractisedSpellcaster(oCreature, iClass, iCasterLevel);
 
     return iCasterLevel;
 }
@@ -118,17 +128,17 @@ int JXImplGetCreatureCasterLevel(object oCreature = OBJECT_SELF, int iClass = CL
     // Test if the specified class is an arcane or a divine class
     else
     {
-        if (!JXImplGetIsMainArcaneClass(iClass)
-         && !JXImplGetIsMainDivineClass(iClass))
+        if (!JXGetIsMainArcaneClass(iClass)
+         && !JXGetIsMainDivineClass(iClass))
             return 0;
     }
 
     // Compute the arcane caster level for an arcane class
-    if (JXImplGetIsMainArcaneClass(iClass))
+    if (JXGetIsMainArcaneClass(iClass))
         return JXGetCreatureArcaneCasterLevel(oCreature, iClass);
 
     // Compute the divine caster level for a divine class
-    if (JXImplGetIsMainDivineClass(iClass))
+    if (JXGetIsMainDivineClass(iClass))
         return JXGetCreatureDivineCasterLevel(oCreature, iClass);
 
     return 0;
@@ -148,7 +158,7 @@ int JXImplGetCreatureCasterLevelForSpell(int iSpellId, object oCreature = OBJECT
 
     // Get the best creature's class able to cast the spell
     if (iClass == CLASS_TYPE_INVALID)
-        iClass = JXImplGetClassForSpell(iSpellId, oCreature);
+        iClass = JXGetClassForSpell(iSpellId, oCreature);
 
     // Still no caster class found ? Then no caster level...
     if (iClass == CLASS_TYPE_INVALID) return 0;
@@ -159,3 +169,67 @@ int JXImplGetCreatureCasterLevelForSpell(int iSpellId, object oCreature = OBJECT
     return iCasterLevel;
 }
 
+int JXGetIsMainArcaneClass(int iClass)
+{
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iClass);
+
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IS_MAIN_ARCANE_CLASS, paramList);
+
+    return JXScriptGetResponseInt();
+}
+
+int JXGetIsMainDivineClass(int iClass)
+{
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iClass);
+
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IS_MAIN_DIVINE_CLASS, paramList);
+
+    return JXScriptGetResponseInt();
+}
+
+int JXGetComputedCLFromClass(int iClass, int iClassLevel)
+{
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iClass);
+    paramList = JXScriptAddParameterInt(paramList, iClassLevel);
+
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_COMPUTED_CL_FROM_CLASS, paramList);
+
+    return JXScriptGetResponseInt();
+}
+
+int JXGetImprovedArcaneCLFromClasses(object oCreature, int iClass)
+{
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCreature);
+    paramList = JXScriptAddParameterInt(paramList, iClass);
+
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IMPROVED_ARCANE_CL_FROM_CLASSES, paramList);
+
+    return JXScriptGetResponseInt();
+}
+
+int JXGetImprovedDivineCLFromClasses(object oCreature, int iClass)
+{
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCreature);
+    paramList = JXScriptAddParameterInt(paramList, iClass);
+
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IMPROVED_DIVINE_CL_FROM_CLASSES, paramList);
+
+    return JXScriptGetResponseInt();
+}
+
+int JXGetCLBonusFromPractisedSpellcaster(object oCaster, int iCastingClass, int iCastingLevels)
+{
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCaster);
+    paramList = JXScriptAddParameterInt(paramList, iCastingClass);
+    paramList = JXScriptAddParameterInt(paramList, iCastingLevels);
+
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_PRACTISED_SPELLCASTER_BONUS, paramList);
+
+    return JXScriptGetResponseInt();
+}

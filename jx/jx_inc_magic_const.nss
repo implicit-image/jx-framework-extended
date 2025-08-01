@@ -123,6 +123,14 @@ const int JX_SPELLTYPE_BOTH         = 3;
 
 // Script fork constants
 const string JX_SPFMWK_FORKSCRIPT = "jx_spfmwk_fork";
+const string JX_EFFECT_FORKSCRIPT = "jx_effect_fork";
+const string JX_EFFECT_TRIGGER_FORKSCRIPT = "jx_ef_trg_fork";
+const string JX_EFFECT_PARAM_MOD_INT_FORKSCRIPT = "jx_ef_pmi_fork";
+const string JX_EFFECT_PARAM_MOD_FLOAT_FORKSCRIPT = "jx_ef_pmf_fork";
+const string JX_EFFECT_PARAM_MOD_STRING_FORKSCRIPT = "jx_ef_pms_fork";
+const string JX_EFFECT_PARAM_MOD_OBJECT_FORKSCRIPT = "jx_ef_pmo_fork";
+const string JX_EFFECT_ON_APPLY_FORKSCRIPT = "jx_ef_oa_fork";
+
 //        jx_inc_magic_info
 const int JX_FORK_SPELLRANGEDTOUCHATTACK =      1;
 const int JX_FORK_SPELLMAGICAL =                2;
@@ -155,14 +163,33 @@ const int JX_FORK_EVENTSPELLCONJURED =          24;
 const int JX_FORK_EVENTSPELLCAST =              25;
 const int JX_FORK_EVENTSPELLFINISHED =          26;
 // customizable saving throw function
-const int JX_FORK_SAVINGTHROW         = 27;
+const int JX_FORK_SAVING_THROW         = 27;
 // effect trigger activation
 const int JX_FORK_EFFECT_TRIGGER = 28;
 const int JX_FORK_EFFECT_APPLY_STATUS = 29;
+// effect param mod
+const int JX_FORK_EFFECT_PARAM_MOD_INT = 30;
+const int JX_FORK_EFFECT_PARAM_MOD_FLOAT = 31;
+const int JX_FORK_EFFECT_PARAM_MOD_STRING = 32;
+const int JX_FORK_EFFECT_PARAM_MOD_OBJECT = 33;
+const int JX_FORK_EFFECT_ON_APPLY_CODE = 34;
+const int JX_FORK_IS_MAIN_ARCANE_CLASS = 35;
+const int JX_FORK_CLASS_FOR_SPELL = 36;
+const int JX_FORK_SPELL_DC_BONUS_FROM_SPELL = 37;
+const int JX_FORK_COMPUTED_CL_FROM_CLASS = 38;
+const int JX_FORK_IMPROVED_ARCANE_CL_FROM_CLASSES = 39;
+const int JX_FORK_IMPROVED_DIVINE_CL_FROM_CLASSES = 40;
+const int JX_FORK_IS_MAIN_DIVINE_CLASS = 41;
+const int JX_FORK_PRACTISED_SPELLCASTER_BONUS = 42;
+const int JX_FORK_ELDRITCH_BLAST_LEVEL_BONUS = 43;
+const int JX_FORK_ELDRITCH_BLAST_ON_HIT_CODE = 44;
+
 
 const string MODULE_VAR_JX_USER_POSTCAST = "JX_POST_SPELLSCRIPT";
 
 const string MODULE_VAR_JX_USER_ON_APPLY_SPELL_EFFECT = "JX_ON_APPLY_SPELL";
+
+const string MODULE_VAR_JX_USER_ON_SPELL_HIT = "JX_ON_SPELL_HIT";
 
 //Event handler backup arrays
 
@@ -170,6 +197,14 @@ const string MODULE_VAR_JX_USER_ON_APPLY_SPELL_EFFECT = "JX_ON_APPLY_SPELL";
 
 
 const string VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT = "JX_ON_APPLY_SPELL_EFFECT_RESULT";
+
+const string JX_ON_APPLY_SPELL_ID = "JX_ON_APPLY_ID";
+const string JX_ON_APPLY_TARGET = "JX_ON_APPLY_TARGET";
+const string JX_ON_APPLY_CASTER = "JX_ON_APPLY_CASTER";
+const string JX_ON_APPLY_DONE = "JX_ON_APPLY_DONE";
+
+
+const string JX_ON_SPELL_HIT_DONE = "JX_ON_SPELL_HIT_DONE";
 
 
 // separators for saving effects
@@ -181,30 +216,6 @@ const string JX_INFO_SEP = "_";
 const string JX_MAP_SEP = ";";
 
 //=============================== EFFECT OVERRIDES ======================================
-
-
-// JXSetEffectModifierInt(EFFECT_TYPE,
-//                        PROPERTY_TO_MODIFY,
-//                        TYPE_OF_MODIFICATION,
-//                        VALUE,
-//                        REQUIRED_PREVIOUS_VALUE)
-//
-// idk how to implement these atm; they require functions as args
-// - const int JX_EFFECT_DISPEL_ALL = 200;
-// - const int JX_EFFECT_DISPEL_BEST = 201;
-// - const int JX_EFFECT_ON_DISPEL = 202;
-
-// const string JX_OVERRIDE_EFFECT_BONUS_LINK = "JX_OVR_BONUS_LINK_ARR";
-const string JX_EFFECT_BONUS_LINK_ARRAY = "JX_OVR_BONUS_LINK_ARR";
-const string JX_EFFECT_MOD_INFO_ARRAY = "JX_EFFECT_MOD_INFO";
-
-// helper local vars
-const string JX_EFFECT_NUM_OF_LINKS = "JX_EFFECT_LINK_NUMBER";
-const int JX_EFFECT_MAX_LINK_COUNT = 10;
-const int JX_EFFECT_MAX_LINK_SIZE = 10;
-
-
-
 
 // effect override types
 // param override types take as their parameters values of types corresponding to effect
@@ -322,7 +333,7 @@ const int JX_EFFECT_AC_DECREASE = 45;
 const int JX_EFFECT_MOVEMENT_SPEED_DECREASE = 46;
 const int JX_EFFECT_SAVING_THROW_DECREASE = 47;
 const int JX_EFFECT_SKILL_DECREASE = 48;
-const int JX_EFFECT_SPELL_RESISTANCE_DECCREASE = 49;
+const int JX_EFFECT_SPELL_RESISTANCE_DECREASE = 49;
 const int JX_EFFECT_INVISIBILITY = 50;
 const int JX_EFFECT_CONCEALMENT = 51;
 const int JX_EFFECT_DARKNESS = 52;
@@ -371,14 +382,41 @@ const int JX_EFFECT_DAMAGE_REDUCTION_NEGATED = 94;
 const int JX_EFFECT_CONCEALMENT_NEGATED = 95;
 const int JX_EFFECT_INSANE = 96;
 const int JX_EFFECT_SUMMON_COPY = 97;
+const int JX_EFFECT_DISAPPEAR_APPEAR = 98;
+const int JX_EFFECT_DISAPPEAR = 99;
+const int JX_EFFECT_APPEAR = 100;
 // simulated effects
-const int JX_EFFECT_SHAKEN = 98;
+const int JX_EFFECT_SHAKEN = 101;
 
 
-const int JX_EFFECT_MAX_ID = 99;
+// const int JX_EFFECT_MAX_ID = 101;
 
 
 //========================== Effect statuses ===========
 
-const string JX_EFFECT_STATUS_WET = "JX_S_WET";
-const string JX_EFFECT_STATUS_FROZEN = "JX_S_FROZEN";
+const string JX_EFFECT_STATUS_WET = "JX_ST_WET";
+const string JX_EFFECT_STATUS_FROZEN = "JX_ST_FROZEN";
+
+//================ from jx_inc_magic ============================
+
+// const string JX_IGNORE_DEADMAGICZONE    = "JX_IGNORE_DEADMAGICZONE";
+// const string JX_METAMAGIC_BYPASS_STD    = "JX_METAMAGIC_BYPASS_STD";
+// const string JX_METAMAGIC               = "JX_METAMAGIC";
+// const string JX_SPELL_DC_OVERRIDE       = "JX_SPELL_DC_OVERRIDE";
+// const string JX_CASTER_LEVEL_OVERRIDE   = "JX_CASTER_LEVEL_OVERRIDE";
+// const string JX_SPELL_ID                = "JX_SPELL_ID";
+// const string JX_SPELL_TARGET_LOCATION   = "JX_SPELL_TARGET_LOCATION";
+// const string JX_SPELL_TARGET_OBJECT         = "JX_SPELL_TARGET_OBJECT";
+//
+// // Area of effect constants
+// const string JX_AOE_CASTER_TMP_LOCATION = "jxwp_loc_temp";
+// const string JX_AOE_CASTER_TAG          = "c_attachspellnode";
+// const string JX_AOE_REAL_CREATOR        = "JX_AOE_REAL_CREATOR";
+//
+// // Spell constants
+// const string JX_REAL_CREATOR = "JX_REAL_CREATOR";
+// const string JX_CAST_SPELLS_INFO = "JX_CAST_SPELLS_INFO";
+//
+// // Spell Turning constants
+// const string JX_SPELLTURN_ACTIVE = "JX_SPELLTURN_ACTIVE";
+// const string JX_SP_SPELLTURN_LVLS = "JX_SP_SPELLTURN_LVLS";

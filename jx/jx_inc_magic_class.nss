@@ -48,9 +48,6 @@ int JXGetCreatureSpellSaveDC(int iSpellId, object oCreature = OBJECT_SELF, int i
 
 
 
-
-
-
 //========================================== Caster Class Search ==========================================//
 
 // Get the main caster class, depending on the spell type
@@ -69,6 +66,16 @@ int JXGetMainCasterClass(object oCreature = OBJECT_SELF, int iSpellType = JX_SPE
 }
 
 
+int JXGetClassForSpell(int iSpellId, object oCreature = OBJECT_SELF)
+{
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    paramList = JXScriptAddParameterObject(paramList, oCreature);
+
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_CLASS_FOR_SPELL, paramList);
+
+    return JXScriptGetResponseInt();
+}
 
 
 //========================================== Class-related Caster Level ==========================================//

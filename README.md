@@ -10,8 +10,7 @@ The impl directory contains the implementation for my Progression Overhaul Mod (
 
 
 ### Hooks
-This framework implements a system for running scripts onhttps://b.thumbs.redditmedia.com/Urrt5GSx7Fy-hW0HzDUA-ZCsgsCfozgHR-VuJzG8hHY.png
-
+This framework implements a system for running scripts on
 
 ### Effect modifier API
 

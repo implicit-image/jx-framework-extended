@@ -81,10 +81,11 @@
 #include "jx_inc_magic_class"
 #include "jx_inc_action"
 #include "jx_inc_magic_effects"
-#include "utils"
+#include "jx_inc_magic_wild"
 
+#include "utils"
 // to silence errors
-#include "2d2f_includes"
+// #include "2d2f_includes"
 //**************************************//
 //                                      //
 //              Interface               //
@@ -98,108 +99,6 @@ struct jx_magic_aura
     int strength;
     int school;
 };
-
-
-//========================================== Cast Spell ==========================================//
-
-// Cast a spell from an object at another location
-// - oCaster Caster of the spell
-// - lTo Target location of the spell
-// - iSpellId SPELL_* constant
-// - iMetamagic METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iDC Difficulty check for the spell
-// - bIgnoreDeadZone Ignore dead/wild magic effects
-void JXCastSpellFromObjectAtLocation(object oCaster,
-                                     location lTo,
-                                     int iSpellId,
-                                     int iMetamagic = 0,
-                                     int iCasterLevel = 0,
-                                     int iDC = 0,
-                                     int bIgnoreDeadZone = FALSE);
-
-// Cast a spell from an object at another object
-// - oCaster Caster of the spell
-// - oTarget Target creature/placeable of the spell
-// - iSpellId SPELL_* constant
-// - iMetamagic METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iDC Difficulty check for the spell
-// - bIgnoreDeadZone Ignore dead/wild magic effects
-void JXCastSpellFromObjectAtObject(object oCaster,
-                                   object oTarget,
-                                   int iSpellId,
-                                   int iMetamagic = 0,
-                                   int iCasterLevel = 0,
-                                   int iDC = 0,
-                                   int bIgnoreDeadZone = FALSE);
-
-// Cast a spell from a location at another location
-// - lFrom Origin location of the spell
-// - lTo Target location of the spell
-// - iSpellId SPELL_* constant
-// - iMetamagic METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iDC Difficulty check for the spell
-// - bIgnoreDeadZone Ignore dead/wild magic effects
-// - oSpellCreator To specify a creature as the spell creator
-void JXCastSpellFromLocationAtLocation(location lFrom,
-                                       location lTo,
-                                       int iSpellId,
-                                       int iMetamagic = 0,
-                                       int iCasterLevel = 0,
-                                       int iDC = 0,
-                                       int bIgnoreDeadZone = FALSE,
-                                       object oSpellCreator = OBJECT_INVALID);
-
-// Cast a spell from a location at an object
-// - lFrom Origin location of the spell
-// - oTarget Target creature/placeable of the spell
-// - iSpellId SPELL_* constant
-// - iMetamagic METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iDC Difficulty check for the spell
-// - bIgnoreDeadZone Ignore dead/wild magic effects
-// - oSpellCreator To specify a creature as the spell creator
-void JXCastSpellFromLocationAtObject(location lFrom,
-                                     object oTarget,
-                                     int iSpellId,
-                                     int iMetamagic = 0,
-                                     int iCasterLevel = 0,
-                                     int iDC = 0,
-                                     int bIgnoreDeadZone = FALSE,
-                                     object oSpellCreator = OBJECT_INVALID);
-
-// Make a creature cast a spell at a location by performing an action
-// - lTarget Target location of the spell
-// - iSpellId SPELL_* constant
-// - iMetaMagicFeat METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iSpellSaveDC Difficulty check for the spell
-// - iClass Class used to cast the spell
-void JXActionCastSpellAtLocation(location lTarget,
-                                 int iSpellId,
-                                 int iMetaMagicFeat = 0,
-                                 int iCasterLevel = 0,
-                                 int iSpellSaveDC = 0,
-                                 int iClass = CLASS_TYPE_INVALID);
-
-// Make a creature cast a spell at an object by performing an action
-// - oTarget Target creature/placeable of the spell
-// - iSpellId SPELL_* constant
-// - iMetaMagicFeat METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iSpellSaveDC Difficulty check for the spell
-// - iClass Class used to cast the spell
-void JXActionCastSpellAtObject(object oTarget,
-                               int iSpellId,
-                               int iMetaMagicFeat = 0,
-                               int iCasterLevel = 0,
-                               int iSpellSaveDC = 0,
-                               int iClass = CLASS_TYPE_INVALID);
-
-
-//========================================== Spell Alteration ==========================================//
 
 // Get the metamagic value (METAMAGIC_*) of the current spell cast by the specified caster.
 // It gets the metamagic value returned by the GetMetaMagicFeat(), or the value previously
@@ -304,7 +203,104 @@ void JXSetSpellTargetObject(object oTarget, object oCaster = OBJECT_SELF);
 // * Returns the spell target object
 object JXGetSpellTargetObject(object oCaster = OBJECT_SELF);
 
-int JXSavingThrow(int iSavingThrow, object oTarget, int iDC, int iSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus=OBJECT_SELF, float fDelay=0.0f);
+
+//========================================== Cast Spell ==========================================//
+
+// Cast a spell from an object at another location
+// - oCaster Caster of the spell
+// - lTo Target location of the spell
+// - iSpellId SPELL_* constant
+// - iMetamagic METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iDC Difficulty check for the spell
+// - bIgnoreDeadZone Ignore dead/wild magic effects
+void JXCastSpellFromObjectAtLocation(object oCaster,
+                                     location lTo,
+                                     int iSpellId,
+                                     int iMetamagic = 0,
+                                     int iCasterLevel = 0,
+                                     int iDC = 0,
+                                     int bIgnoreDeadZone = FALSE);
+
+// Cast a spell from an object at another object
+// - oCaster Caster of the spell
+// - oTarget Target creature/placeable of the spell
+// - iSpellId SPELL_* constant
+// - iMetamagic METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iDC Difficulty check for the spell
+// - bIgnoreDeadZone Ignore dead/wild magic effects
+void JXCastSpellFromObjectAtObject(object oCaster,
+                                   object oTarget,
+                                   int iSpellId,
+                                   int iMetamagic = 0,
+                                   int iCasterLevel = 0,
+                                   int iDC = 0,
+                                   int bIgnoreDeadZone = FALSE);
+
+// Cast a spell from a location at another location
+// - lFrom Origin location of the spell
+// - lTo Target location of the spell
+// - iSpellId SPELL_* constant
+// - iMetamagic METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iDC Difficulty check for the spell
+// - bIgnoreDeadZone Ignore dead/wild magic effects
+// - oSpellCreator To specify a creature as the spell creator
+void JXCastSpellFromLocationAtLocation(location lFrom,
+                                       location lTo,
+                                       int iSpellId,
+                                       int iMetamagic = 0,
+                                       int iCasterLevel = 0,
+                                       int iDC = 0,
+                                       int bIgnoreDeadZone = FALSE,
+                                       object oSpellCreator = OBJECT_INVALID);
+
+// Cast a spell from a location at an object
+// - lFrom Origin location of the spell
+// - oTarget Target creature/placeable of the spell
+// - iSpellId SPELL_* constant
+// - iMetamagic METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iDC Difficulty check for the spell
+// - bIgnoreDeadZone Ignore dead/wild magic effects
+// - oSpellCreator To specify a creature as the spell creator
+void JXCastSpellFromLocationAtObject(location lFrom,
+                                     object oTarget,
+                                     int iSpellId,
+                                     int iMetamagic = 0,
+                                     int iCasterLevel = 0,
+                                     int iDC = 0,
+                                     int bIgnoreDeadZone = FALSE,
+                                     object oSpellCreator = OBJECT_INVALID);
+
+// Make a creature cast a spell at a location by performing an action
+// - lTarget Target location of the spell
+// - iSpellId SPELL_* constant
+// - iMetaMagicFeat METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iSpellSaveDC Difficulty check for the spell
+// - iClass Class used to cast the spell
+void JXActionCastSpellAtLocation(location lTarget,
+                                 int iSpellId,
+                                 int iMetaMagicFeat = 0,
+                                 int iCasterLevel = 0,
+                                 int iSpellSaveDC = 0,
+                                 int iClass = CLASS_TYPE_INVALID);
+
+// Make a creature cast a spell at an object by performing an action
+// - oTarget Target creature/placeable of the spell
+// - iSpellId SPELL_* constant
+// - iMetaMagicFeat METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iSpellSaveDC Difficulty check for the spell
+// - iClass Class used to cast the spell
+void JXActionCastSpellAtObject(object oTarget,
+                               int iSpellId,
+                               int iMetaMagicFeat = 0,
+                               int iCasterLevel = 0,
+                               int iSpellSaveDC = 0,
+                               int iClass = CLASS_TYPE_INVALID);
 
 //========================================== Spell Effects ==========================================//
 
@@ -320,7 +316,7 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - eEffect Effect to apply to the object
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
-void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f);
+void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iRunOnApply=TRUE);
 
 // Create an area of effect for the current spell and apply it at the specified location.
 // Areas of effect created by this way have the following properties :
@@ -439,21 +435,10 @@ struct jx_magic_aura JXGetMagicalAura(object oSource, int bHiddenItemProps = FAL
 string JXGetMagicalAuraStrengthName(int iAuraStrength);
 
 
-//========================================== Dead/Wild Magic ==========================================//
-
-// Make the next/current spell ignore dead/wild magic effects
-// - oCaster Caster that must ignore dead/wild magic effects
-void JXSetIgnoreDeadZone(object oCaster);
-
-// Get if a cast spell must ignore dead/wild magic effects
-// - oCaster Caster that could ignore dead/wild magic effects
-int JXGetIgnoreDeadZone(object oCaster);
-
-
 
 //========================================== On Apply Spell Effect Hook ==========================================//
 
-int JXOnApplySpellEffectCode(object oCaster, object oTarget);
+int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect);
 
 // Run user defined on_apply_spell_effect script
 int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget);
@@ -473,15 +458,9 @@ void JXPostSpellCastCode();
 
 
 
+//========================================= Saving Throw ===========================================
 
-
-
-
-
-
-
-
-
+int JXSavingThrow(int iResult, int iSavingThrow, object oTarget, int iDC, int iSaveType, object oSaveVersus, float fDelay);
 
 
 //**************************************//
@@ -491,14 +470,8 @@ void JXPostSpellCastCode();
 //**************************************//
 
 
-// Constants that dictate ResistSpell results
-const int SPELL_RESIST_FAIL = 0;
-const int SPELL_RESIST_PASS = 1;
-const int SPELL_RESIST_GLOBE = 2;
-const int SPELL_RESIST_MANTLE = 3;
 
 // Spell properties override constants
-const string JX_IGNORE_DEADMAGICZONE    = "JX_IGNORE_DEADMAGICZONE";
 const string JX_METAMAGIC_BYPASS_STD    = "JX_METAMAGIC_BYPASS_STD";
 const string JX_METAMAGIC               = "JX_METAMAGIC";
 const string JX_SPELL_DC_OVERRIDE       = "JX_SPELL_DC_OVERRIDE";
@@ -521,356 +494,11 @@ const string JX_SPELLTURN_ACTIVE = "JX_SPELLTURN_ACTIVE";
 const string JX_SP_SPELLTURN_LVLS = "JX_SP_SPELLTURN_LVLS";
 
 
-//========================================== Cast Spell ==========================================//
-
-// Cast a spell from a location at another location
-// - lFrom Origin location of the spell
-// - lTo Target location of the spell
-// - iSpellId SPELL_* constant
-// - iMetamagic METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iDC Difficulty check for the spell
-// - bIgnoreDeadZone Ignore dead/wild magic effects
-// - oSpellCreator To specify a creature as the spell creator
-void JXCastSpellFromLocationAtLocation(location lFrom,
-                                       location lTo,
-                                       int iSpellId,
-                                       int iMetamagic = 0,
-                                       int iCasterLevel = 0,
-                                       int iDC = 0,
-                                       int bIgnoreDeadZone = FALSE,
-                                       object oSpellCreator = OBJECT_INVALID)
-{
-    // Create an invisible placeable and set its name
-    object oCaster = CreateObject(OBJECT_TYPE_PLACEABLE, "plc_ipoint ", lFrom, FALSE, "jx_ipoint_caster");
-    if (GetIsObjectValid(oSpellCreator))
-    {
-        SetFirstName(oCaster, GetName(oSpellCreator));
-        // Save the real creator on the placeable
-        SetLocalObject(oCaster, JX_REAL_CREATOR, oSpellCreator);
-    }
-    else
-        SetFirstName(oCaster, GetStringByStrRef(50963));
-
-
-    // Cast the spell
-    JXCastSpellFromObjectAtLocation(oCaster, lTo, iSpellId, iMetamagic, iCasterLevel, iDC, bIgnoreDeadZone);
-
-    // Delete the object in 24 hours
-    DestroyObject(oCaster, HoursToSeconds(24));
-}
-
-// Cast a spell from a location at an object
-// - lFrom Origin location of the spell
-// - oTarget Target creature/placeable of the spell
-// - iSpellId SPELL_* constant
-// - iMetamagic METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iDC Difficulty check for the spell
-// - bIgnoreDeadZone Ignore dead/wild magic effects
-// - oSpellCreator To specify a creature as the spell creator
-void JXCastSpellFromLocationAtObject(location lFrom,
-                                     object oTarget,
-                                     int iSpellId,
-                                     int iMetamagic = 0,
-                                     int iCasterLevel = 0,
-                                     int iDC = 0,
-                                     int bIgnoreDeadZone = FALSE,
-                                     object oSpellCreator = OBJECT_INVALID)
-{
-    // Create an invisible placeable and set its name
-    object oCaster = CreateObject(OBJECT_TYPE_PLACEABLE, "plc_ipoint ", lFrom, FALSE, "jx_ipoint_caster");
-    if (GetIsObjectValid(oSpellCreator))
-    {
-        SetFirstName(oCaster, GetName(oSpellCreator));
-        // Save the real creator on the placeable
-        SetLocalObject(oCaster, JX_REAL_CREATOR, oSpellCreator);
-    }
-    else
-        SetFirstName(oCaster, GetStringByStrRef(50963));
-
-    // Cast the spell
-    JXCastSpellFromObjectAtObject(oCaster, oTarget, iSpellId, iMetamagic, iCasterLevel, iDC, bIgnoreDeadZone);
-
-    // Delete the object in 24 hours
-    DestroyObject(oCaster, HoursToSeconds(24));
-}
-
-// Cast a spell from an object at another location
-// - oCaster Caster of the spell
-// - lTo Target location of the spell
-// - iSpellId SPELL_* constant
-// - iMetamagic METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iDC Difficulty check for the spell
-// - bIgnoreDeadZone Ignore dead/wild magic effects
-void JXCastSpellFromObjectAtLocation(object oCaster,
-                                     location lTo,
-                                     int iSpellId,
-                                     int iMetamagic = 0,
-                                     int iCasterLevel = 0,
-                                     int iDC = 0,
-                                     int bIgnoreDeadZone = FALSE)
-{
-    if (bIgnoreDeadZone)
-        JXSetIgnoreDeadZone(oCaster);
-
-    if (iCasterLevel > 0)
-        JXSetCasterLevel(iCasterLevel, oCaster);
-    if (iMetamagic > 0)
-        JXSetMetaMagicFeat(iMetamagic, oCaster);
-    if (iDC > 0)
-        JXSetSpellSaveDC(iDC, oCaster);
-
-    AssignCommand(oCaster,
-        ActionCastSpellAtLocation(iSpellId,
-                                  lTo,
-                                  iMetamagic,
-                                  TRUE,
-                                  PROJECTILE_PATH_TYPE_DEFAULT,
-                                  TRUE));
-}
-
-// Cast a spell from an object at another object
-// - oCaster Caster of the spell
-// - oTarget Target creature/placeable of the spell
-// - iSpellId SPELL_* constant
-// - iMetamagic METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iDC Difficulty check for the spell
-// - bIgnoreDeadZone Ignore dead/wild magic effects
-void JXCastSpellFromObjectAtObject(object oCaster,
-                                   object oTarget,
-                                   int iSpellId,
-                                   int iMetamagic = 0,
-                                   int iCasterLevel = 0,
-                                   int iDC = 0,
-                                   int bIgnoreDeadZone = FALSE)
-{
-    if (bIgnoreDeadZone)
-        JXSetIgnoreDeadZone(oCaster);
-
-    if (iCasterLevel > 0)
-        JXSetCasterLevel(iCasterLevel, oCaster);
-    if (iMetamagic > 0)
-        JXSetMetaMagicFeat(iMetamagic, oCaster);
-    if (iDC > 0)
-        JXSetSpellSaveDC(iDC, oCaster);
-
-    AssignCommand(oCaster,
-        ActionCastSpellAtObject(iSpellId,
-                                oTarget,
-                                iMetamagic,
-                                TRUE,
-                                0,
-                                PROJECTILE_PATH_TYPE_DEFAULT,
-                                TRUE));
-}
-
-// Private function - used by JXPrivateStartActionCastSpell() - Check Armor Spell Failure
-void JXPrivateFireActionCastSpellConjured(object oCaster, struct jx_action_castspell actionCastSpell)
-{
-    // Fire the conjuration animation started event
-    if (!JXEventActionCastSpellConjured(oCaster,
-                                        actionCastSpell.iSpellId,
-                                        actionCastSpell.oTarget,
-                                        GetIsObjectValid(actionCastSpell.oTarget) ?
-                                         GetLocation(actionCastSpell.oTarget) :
-                                         actionCastSpell.lTarget,
-                                        actionCastSpell.iCasterLevel,
-                                        actionCastSpell.iMetaMagicFeat,
-                                        actionCastSpell.iSpellSaveDC,
-                                        actionCastSpell.iClass))
-    {
-        ClearAllActions();
-        JXClearActionQueue();
-    }
-}
-
-// Private function - used by JXActionCastSpellAtObject() and JXActionCastSpellAtLocation()
-void JXPrivateStartActionCastSpell(int iActionId, int bIsMoving = FALSE, int bActionStarted = FALSE)
-{
-    object oCaster = OBJECT_SELF;
-
-    // Get the current action
-    int iCurrentAction = GetCurrentAction();
-    // The current action may be invalid because all actions have just been cleared
-    if (iCurrentAction == ACTION_INVALID)
-    {
-        JXClearActionQueue();
-        return;
-    }
-    // The action queue may be cleared if a PC is performing a move action
-    if ((GetIsPC(oCaster)) && (iCurrentAction == ACTION_MOVETOPOINT))
-    {
-        // The creature was moving before the spell cast action was added to the queue
-        if (bIsMoving)
-        {
-            DelayCommand(0.1, JXPrivateStartActionCastSpell(iActionId, TRUE));
-            return;
-        }
-        // The creature has moved since the spell cast action was added to the queue
-        else
-        {
-            JXClearActionQueue();
-            return;
-        }
-    }
-
-    // Wait until the previous action is done
-    struct jx_action_castspell actionCastSpell = JXGetActionCastSpellFromQueue(1);
-    int iCurrentActionId = actionCastSpell.iActionId;
-    if ((iCurrentAction != ACTION_CASTSPELL) || (iCurrentActionId != iActionId))
-    {
-        DelayCommand(0.1, JXPrivateStartActionCastSpell(iActionId));
-        return;
-    }
-
-    if (!bActionStarted)
-        // Fire the spellcasting action started event
-        if (!JXEventActionCastSpellStarted(oCaster,
-                                           actionCastSpell.iSpellId,
-                                           actionCastSpell.oTarget,
-                                           GetIsObjectValid(actionCastSpell.oTarget) ?
-                                            GetLocation(actionCastSpell.oTarget) :
-                                            actionCastSpell.lTarget,
-                                           actionCastSpell.iCasterLevel,
-                                           actionCastSpell.iMetaMagicFeat,
-                                           actionCastSpell.iSpellSaveDC,
-                                           actionCastSpell.iClass))
-        {
-            ClearAllActions();
-            JXClearActionQueue();
-            return;
-        }
-
-    // Wait if the caster near his target is moving to cast the spell
-    location lLastCasterLocation = GetLocalLocation(oCaster, "JX_CASTER_LAST_LOCATION");
-    location lCurrentCasterLocation = GetLocation(oCaster);
-    if (lCurrentCasterLocation != lLastCasterLocation)
-    {
-        SetLocalLocation(oCaster, "JX_CASTER_LAST_LOCATION", lCurrentCasterLocation);
-        DelayCommand(0.1, JXPrivateStartActionCastSpell(iActionId, FALSE, TRUE));
-        return;
-    }
-    DeleteLocalLocation(oCaster, "JX_CASTER_LAST_LOCATION");
-
-    // Fire the conjuration animation started event
-    if (!JXEventActionCastSpellConjuring(oCaster,
-                                         actionCastSpell.iSpellId,
-                                         actionCastSpell.oTarget,
-                                         GetIsObjectValid(actionCastSpell.oTarget) ?
-                                          GetLocation(actionCastSpell.oTarget) :
-                                          actionCastSpell.lTarget,
-                                         actionCastSpell.iCasterLevel,
-                                         actionCastSpell.iMetaMagicFeat,
-                                         actionCastSpell.iSpellSaveDC,
-                                         actionCastSpell.iClass))
-    {
-        ClearAllActions();
-        JXClearActionQueue();
-        return;
-    }
-
-    // Call the post conjuration event
-    int iConjurationTime = StringToInt(Get2DAString("spells", "ConjTime", actionCastSpell.iSpellId));
-    DelayCommand(IntToFloat(iConjurationTime - 250) / 1000.0,
-     JXPrivateFireActionCastSpellConjured(oCaster, actionCastSpell));
-
-    // Remove the spell cast action at the end of the round
-    struct jx_action_castspell actionCastSpell2 = JXGetActionCastSpellFromQueue(2);
-    if (!(actionCastSpell2.iMetaMagicFeat & METAMAGIC_QUICKEN))
-        DelayCommand(5.5, JXRemoveFirstActionCastSpellFromQueue(TRUE, iActionId));
-}
-
-// Make a creature cast a spell at a location by performing an action
-// - lTarget Target location of the spell
-// - iSpellId SPELL_* constant
-// - iMetaMagicFeat METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iSpellSaveDC Difficulty check for the spell
-// - iClass Class used to cast the spell
-void JXActionCastSpellAtLocation(location lTarget,
-                                 int iSpellId,
-                                 int iMetaMagicFeat,
-                                 int iCasterLevel,
-                                 int iSpellSaveDC,
-                                 int iClass)
-{
-    int bPreRoundAction = FALSE;
-
-    struct jx_action_castspell actionCastSpell;
-    actionCastSpell.iActionId = JXFindNewActionCastSpellIdentifier();
-    actionCastSpell.iSpellId = iSpellId;
-    actionCastSpell.oTarget = OBJECT_INVALID;
-    actionCastSpell.lTarget = lTarget;
-    actionCastSpell.iCasterLevel = iCasterLevel;
-    actionCastSpell.iMetaMagicFeat = iMetaMagicFeat;
-    actionCastSpell.iSpellSaveDC = iSpellSaveDC;
-    actionCastSpell.iClass = iClass;
-
-    if (iMetaMagicFeat & METAMAGIC_QUICKEN)
-    {
-        int iCurrentAction = GetCurrentAction();
-        bPreRoundAction = (iCurrentAction == ACTION_INVALID) || (Get2DAString("actions", "TIMER", iCurrentAction) == "0");
-        actionCastSpell.bPreRoundAction = bPreRoundAction;
-        if (JXAddActionCastSpellToQueue(actionCastSpell))
-            ActionCastSpellAtLocation(iSpellId, lTarget, METAMAGIC_ANY, TRUE, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
-    }
-        else if (JXAddActionCastSpellToQueue(actionCastSpell))
-    {
-        int bIsMoving = (GetCurrentAction() == ACTION_MOVETOPOINT) ? TRUE : FALSE;
-        ActionCastSpellAtLocation(iSpellId, lTarget, METAMAGIC_ANY, TRUE);
-        JXPrivateStartActionCastSpell(actionCastSpell.iActionId, bIsMoving);
-    }
-}
-
-// Make a creature cast a spell at an object by performing an action
-// - oTarget Target creature/placeable of the spell
-// - iSpellId SPELL_* constant
-// - iMetaMagicFeat METAMAGIC_* constant
-// - iCasterLevel Spell caster level
-// - iSpellSaveDC Difficulty check for the spell
-// - iClass Class used to cast the spell
-void JXActionCastSpellAtObject(object oTarget,
-                               int iSpellId,
-                               int iMetaMagicFeat,
-                               int iCasterLevel,
-                               int iSpellSaveDC,
-                               int iClass)
-{
-    int bPreRoundAction = FALSE;
-
-    struct jx_action_castspell actionCastSpell;
-    actionCastSpell.iActionId = JXFindNewActionCastSpellIdentifier();
-    actionCastSpell.iSpellId = iSpellId;
-    actionCastSpell.oTarget = oTarget;
-    actionCastSpell.lTarget = GetLocation(oTarget);
-    actionCastSpell.iCasterLevel = iCasterLevel;
-    actionCastSpell.iMetaMagicFeat = iMetaMagicFeat;
-    actionCastSpell.iSpellSaveDC = iSpellSaveDC;
-    actionCastSpell.iClass = iClass;
-
-    if (iMetaMagicFeat & METAMAGIC_QUICKEN)
-    {
-        int iCurrentAction = GetCurrentAction();
-        bPreRoundAction = (iCurrentAction == ACTION_INVALID) || (Get2DAString("actions", "TIMER", iCurrentAction) == "0");
-        actionCastSpell.bPreRoundAction = bPreRoundAction;
-        if (JXAddActionCastSpellToQueue(actionCastSpell))
-            ActionCastSpellAtObject(iSpellId, oTarget, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
-    }
-    else if (JXAddActionCastSpellToQueue(actionCastSpell))
-    {
-        int bIsMoving = (GetCurrentAction() == ACTION_MOVETOPOINT) ? TRUE : FALSE;
-        ActionCastSpellAtObject(iSpellId, oTarget, METAMAGIC_ANY, TRUE);
-        JXPrivateStartActionCastSpell(actionCastSpell.iActionId, bIsMoving);
-    }
-}
-
-
-
-//========================================== Spell Alteration ==========================================//
-
+// Constants that dictate ResistSpell results
+const int SPELL_RESIST_FAIL = 0;
+const int SPELL_RESIST_PASS = 1;
+const int SPELL_RESIST_GLOBE = 2;
+const int SPELL_RESIST_MANTLE = 3;
 // Get the metamagic value (METAMAGIC_*) of the current spell cast by the specified caster.
 // It gets the metamagic value returned by the GetMetaMagicFeat(), or the value previously
 // set by JXSetMetaMagicFeat().
@@ -1371,101 +999,348 @@ object JXGetSpellTargetObject(object oCaster)
     return oTarget;
 }
 
-
-/*object IPGetTargetedOrEquippedMeleeWeapon()
+// Cast a spell from a location at another location
+// - lFrom Origin location of the spell
+// - lTo Target location of the spell
+// - iSpellId SPELL_* constant
+// - iMetamagic METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iDC Difficulty check for the spell
+// - bIgnoreDeadZone Ignore dead/wild magic effects
+// - oSpellCreator To specify a creature as the spell creator
+void JXCastSpellFromLocationAtLocation(location lFrom,
+                                       location lTo,
+                                       int iSpellId,
+                                       int iMetamagic = 0,
+                                       int iCasterLevel = 0,
+                                       int iDC = 0,
+                                       int bIgnoreDeadZone = FALSE,
+                                       object oSpellCreator = OBJECT_INVALID)
 {
-  object oTarget = JXGetSpellTargetObject();
-  if(GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_ITEM)
-  {
-    if (IPGetIsMeleeWeapon(oTarget))
+    // Create an invisible placeable and set its name
+    object oCaster = CreateObject(OBJECT_TYPE_PLACEABLE, "plc_ipoint ", lFrom, FALSE, "jx_ipoint_caster");
+    if (GetIsObjectValid(oSpellCreator))
     {
-        return oTarget;
+        SetFirstName(oCaster, GetName(oSpellCreator));
+        // Save the real creator on the placeable
+        SetLocalObject(oCaster, JX_REAL_CREATOR, oSpellCreator);
     }
     else
-    {
-        return OBJECT_INVALID;
-    }
+        SetFirstName(oCaster, GetStringByStrRef(50963));
 
-  }
 
-  object oWeapon1 = GetItemInSlot(INVENTORY_SLOT_RIGHTHAND, oTarget);
-  if (GetIsObjectValid(oWeapon1) && IPGetIsMeleeWeapon(oWeapon1))
-  {
-    return oWeapon1;
-  }
+    // Cast the spell
+    JXCastSpellFromObjectAtLocation(oCaster, lTo, iSpellId, iMetamagic, iCasterLevel, iDC, bIgnoreDeadZone);
 
-  oWeapon1 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oTarget);
-  if (GetIsObjectValid(oWeapon1) && IPGetIsMeleeWeapon(oWeapon1))
-  {
-    return oWeapon1;
-  }
-
-  oWeapon1 = GetItemInSlot(INVENTORY_SLOT_CWEAPON_R, oTarget);
-  if (GetIsObjectValid(oWeapon1))
-  {
-    return oWeapon1;
-  }
-
-  oWeapon1 = GetItemInSlot(INVENTORY_SLOT_CWEAPON_B, oTarget);
-  if (GetIsObjectValid(oWeapon1))
-  {
-    return oWeapon1;
-  }
-
-  return OBJECT_INVALID;
-
+    // Delete the object in 24 hours
+    DestroyObject(oCaster, HoursToSeconds(24));
 }
 
-
-
-object IPGetTargetedOrEquippedArmor(int bAllowShields = FALSE)
+// Cast a spell from a location at an object
+// - lFrom Origin location of the spell
+// - oTarget Target creature/placeable of the spell
+// - iSpellId SPELL_* constant
+// - iMetamagic METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iDC Difficulty check for the spell
+// - bIgnoreDeadZone Ignore dead/wild magic effects
+// - oSpellCreator To specify a creature as the spell creator
+void JXCastSpellFromLocationAtObject(location lFrom,
+                                     object oTarget,
+                                     int iSpellId,
+                                     int iMetamagic = 0,
+                                     int iCasterLevel = 0,
+                                     int iDC = 0,
+                                     int bIgnoreDeadZone = FALSE,
+                                     object oSpellCreator = OBJECT_INVALID)
 {
-  object oTarget = JXGetSpellTargetObject();
-  if(GetIsObjectValid(oTarget) && GetObjectType(oTarget) == OBJECT_TYPE_ITEM)
-  {
-    if (GetBaseItemType(oTarget) == BASE_ITEM_ARMOR)
+    // Create an invisible placeable and set its name
+    object oCaster = CreateObject(OBJECT_TYPE_PLACEABLE, "plc_ipoint ", lFrom, FALSE, "jx_ipoint_caster");
+    if (GetIsObjectValid(oSpellCreator))
     {
-        return oTarget;
+        SetFirstName(oCaster, GetName(oSpellCreator));
+        // Save the real creator on the placeable
+        SetLocalObject(oCaster, JX_REAL_CREATOR, oSpellCreator);
     }
     else
+        SetFirstName(oCaster, GetStringByStrRef(50963));
+
+    // Cast the spell
+    JXCastSpellFromObjectAtObject(oCaster, oTarget, iSpellId, iMetamagic, iCasterLevel, iDC, bIgnoreDeadZone);
+
+    // Delete the object in 24 hours
+    DestroyObject(oCaster, HoursToSeconds(24));
+}
+
+// Cast a spell from an object at another location
+// - oCaster Caster of the spell
+// - lTo Target location of the spell
+// - iSpellId SPELL_* constant
+// - iMetamagic METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iDC Difficulty check for the spell
+// - bIgnoreDeadZone Ignore dead/wild magic effects
+void JXCastSpellFromObjectAtLocation(object oCaster,
+                                     location lTo,
+                                     int iSpellId,
+                                     int iMetamagic = 0,
+                                     int iCasterLevel = 0,
+                                     int iDC = 0,
+                                     int bIgnoreDeadZone = FALSE)
+{
+    if (bIgnoreDeadZone)
+        JXSetIgnoreDeadZone(oCaster);
+
+    if (iCasterLevel > 0)
+        JXSetCasterLevel(iCasterLevel, oCaster);
+    if (iMetamagic > 0)
+        JXSetMetaMagicFeat(iMetamagic, oCaster);
+    if (iDC > 0)
+        JXSetSpellSaveDC(iDC, oCaster);
+
+    AssignCommand(oCaster,
+        ActionCastSpellAtLocation(iSpellId,
+                                  lTo,
+                                  iMetamagic,
+                                  TRUE,
+                                  PROJECTILE_PATH_TYPE_DEFAULT,
+                                  TRUE));
+}
+
+// Cast a spell from an object at another object
+// - oCaster Caster of the spell
+// - oTarget Target creature/placeable of the spell
+// - iSpellId SPELL_* constant
+// - iMetamagic METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iDC Difficulty check for the spell
+// - bIgnoreDeadZone Ignore dead/wild magic effects
+void JXCastSpellFromObjectAtObject(object oCaster,
+                                   object oTarget,
+                                   int iSpellId,
+                                   int iMetamagic = 0,
+                                   int iCasterLevel = 0,
+                                   int iDC = 0,
+                                   int bIgnoreDeadZone = FALSE)
+{
+    if (bIgnoreDeadZone)
+        JXSetIgnoreDeadZone(oCaster);
+
+    if (iCasterLevel > 0)
+        JXSetCasterLevel(iCasterLevel, oCaster);
+    if (iMetamagic > 0)
+        JXSetMetaMagicFeat(iMetamagic, oCaster);
+    if (iDC > 0)
+        JXSetSpellSaveDC(iDC, oCaster);
+
+    AssignCommand(oCaster,
+        ActionCastSpellAtObject(iSpellId,
+                                oTarget,
+                                iMetamagic,
+                                TRUE,
+                                0,
+                                PROJECTILE_PATH_TYPE_DEFAULT,
+                                TRUE));
+}
+
+// Private function - used by JXPrivateStartActionCastSpell() - Check Armor Spell Failure
+void JXPrivateFireActionCastSpellConjured(object oCaster, struct jx_action_castspell actionCastSpell)
+{
+    // Fire the conjuration animation started event
+    if (!JXEventActionCastSpellConjured(oCaster,
+                                        actionCastSpell.iSpellId,
+                                        actionCastSpell.oTarget,
+                                        GetIsObjectValid(actionCastSpell.oTarget) ?
+                                         GetLocation(actionCastSpell.oTarget) :
+                                         actionCastSpell.lTarget,
+                                        actionCastSpell.iCasterLevel,
+                                        actionCastSpell.iMetaMagicFeat,
+                                        actionCastSpell.iSpellSaveDC,
+                                        actionCastSpell.iClass))
     {
-        if ((bAllowShields) && (GetBaseItemType(oTarget) == BASE_ITEM_LARGESHIELD ||
-                               GetBaseItemType(oTarget) == BASE_ITEM_SMALLSHIELD ||
-                                GetBaseItemType(oTarget) == BASE_ITEM_TOWERSHIELD))
+        ClearAllActions();
+        JXClearActionQueue();
+    }
+}
+
+// Private function - used by JXActionCastSpellAtObject() and JXActionCastSpellAtLocation()
+void JXPrivateStartActionCastSpell(int iActionId, int bIsMoving = FALSE, int bActionStarted = FALSE)
+{
+    object oCaster = OBJECT_SELF;
+
+    // Get the current action
+    int iCurrentAction = GetCurrentAction();
+    // The current action may be invalid because all actions have just been cleared
+    if (iCurrentAction == ACTION_INVALID)
+    {
+        JXClearActionQueue();
+        return;
+    }
+    // The action queue may be cleared if a PC is performing a move action
+    if ((GetIsPC(oCaster)) && (iCurrentAction == ACTION_MOVETOPOINT))
+    {
+        // The creature was moving before the spell cast action was added to the queue
+        if (bIsMoving)
         {
-            return oTarget;
+            DelayCommand(0.1, JXPrivateStartActionCastSpell(iActionId, TRUE));
+            return;
         }
+        // The creature has moved since the spell cast action was added to the queue
         else
         {
-            return OBJECT_INVALID;
+            JXClearActionQueue();
+            return;
         }
     }
 
-  }
-
-  object oArmor1 = GetItemInSlot(INVENTORY_SLOT_CHEST, oTarget);
-  if (GetIsObjectValid(oArmor1) && GetBaseItemType(oArmor1) == BASE_ITEM_ARMOR)
-  {
-    return oArmor1;
-  }
-  if (bAllowShields != FALSE)
-  {
-      oArmor1 = GetItemInSlot(INVENTORY_SLOT_LEFTHAND, oTarget);
-      if (GetIsObjectValid(oArmor1) && (GetBaseItemType(oTarget) == BASE_ITEM_LARGESHIELD ||
-                               GetBaseItemType(oTarget) == BASE_ITEM_SMALLSHIELD ||
-                                GetBaseItemType(oTarget) == BASE_ITEM_TOWERSHIELD))
-      {
-        return oArmor1;
-      }
+    // Wait until the previous action is done
+    struct jx_action_castspell actionCastSpell = JXGetActionCastSpellFromQueue(1);
+    int iCurrentActionId = actionCastSpell.iActionId;
+    if ((iCurrentAction != ACTION_CASTSPELL) || (iCurrentActionId != iActionId))
+    {
+        DelayCommand(0.1, JXPrivateStartActionCastSpell(iActionId));
+        return;
     }
 
+    if (!bActionStarted)
+        // Fire the spellcasting action started event
+        if (!JXEventActionCastSpellStarted(oCaster,
+                                           actionCastSpell.iSpellId,
+                                           actionCastSpell.oTarget,
+                                           GetIsObjectValid(actionCastSpell.oTarget) ?
+                                            GetLocation(actionCastSpell.oTarget) :
+                                            actionCastSpell.lTarget,
+                                           actionCastSpell.iCasterLevel,
+                                           actionCastSpell.iMetaMagicFeat,
+                                           actionCastSpell.iSpellSaveDC,
+                                           actionCastSpell.iClass))
+        {
+            ClearAllActions();
+            JXClearActionQueue();
+            return;
+        }
 
+    // Wait if the caster near his target is moving to cast the spell
+    location lLastCasterLocation = GetLocalLocation(oCaster, "JX_CASTER_LAST_LOCATION");
+    location lCurrentCasterLocation = GetLocation(oCaster);
+    if (lCurrentCasterLocation != lLastCasterLocation)
+    {
+        SetLocalLocation(oCaster, "JX_CASTER_LAST_LOCATION", lCurrentCasterLocation);
+        DelayCommand(0.1, JXPrivateStartActionCastSpell(iActionId, FALSE, TRUE));
+        return;
+    }
+    DeleteLocalLocation(oCaster, "JX_CASTER_LAST_LOCATION");
 
-  return OBJECT_INVALID;
+    // Fire the conjuration animation started event
+    if (!JXEventActionCastSpellConjuring(oCaster,
+                                         actionCastSpell.iSpellId,
+                                         actionCastSpell.oTarget,
+                                         GetIsObjectValid(actionCastSpell.oTarget) ?
+                                          GetLocation(actionCastSpell.oTarget) :
+                                          actionCastSpell.lTarget,
+                                         actionCastSpell.iCasterLevel,
+                                         actionCastSpell.iMetaMagicFeat,
+                                         actionCastSpell.iSpellSaveDC,
+                                         actionCastSpell.iClass))
+    {
+        ClearAllActions();
+        JXClearActionQueue();
+        return;
+    }
 
-}*/
+    // Call the post conjuration event
+    int iConjurationTime = StringToInt(Get2DAString("spells", "ConjTime", actionCastSpell.iSpellId));
+    DelayCommand(IntToFloat(iConjurationTime - 250) / 1000.0, JXPrivateFireActionCastSpellConjured(oCaster, actionCastSpell));
 
+    // Remove the spell cast action at the end of the round
+    struct jx_action_castspell actionCastSpell2 = JXGetActionCastSpellFromQueue(2);
+    if (!(actionCastSpell2.iMetaMagicFeat & METAMAGIC_QUICKEN))
+        DelayCommand(5.5, JXRemoveFirstActionCastSpellFromQueue(TRUE, iActionId));
+}
 
+// Make a creature cast a spell at a location by performing an action
+// - lTarget Target location of the spell
+// - iSpellId SPELL_* constant
+// - iMetaMagicFeat METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iSpellSaveDC Difficulty check for the spell
+// - iClass Class used to cast the spell
+void JXActionCastSpellAtLocation(location lTarget,
+                                 int iSpellId,
+                                 int iMetaMagicFeat,
+                                 int iCasterLevel,
+                                 int iSpellSaveDC,
+                                 int iClass)
+{
+    int bPreRoundAction = FALSE;
+
+    struct jx_action_castspell actionCastSpell;
+    actionCastSpell.iActionId = JXFindNewActionCastSpellIdentifier();
+    actionCastSpell.iSpellId = iSpellId;
+    actionCastSpell.oTarget = OBJECT_INVALID;
+    actionCastSpell.lTarget = lTarget;
+    actionCastSpell.iCasterLevel = iCasterLevel;
+    actionCastSpell.iMetaMagicFeat = iMetaMagicFeat;
+    actionCastSpell.iSpellSaveDC = iSpellSaveDC;
+    actionCastSpell.iClass = iClass;
+
+    if (iMetaMagicFeat & METAMAGIC_QUICKEN)
+    {
+        int iCurrentAction = GetCurrentAction();
+        bPreRoundAction = (iCurrentAction == ACTION_INVALID) || (Get2DAString("actions", "TIMER", iCurrentAction) == "0");
+        actionCastSpell.bPreRoundAction = bPreRoundAction;
+        if (JXAddActionCastSpellToQueue(actionCastSpell))
+            ActionCastSpellAtLocation(iSpellId, lTarget, METAMAGIC_ANY, TRUE, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
+    }
+        else if (JXAddActionCastSpellToQueue(actionCastSpell))
+    {
+        int bIsMoving = (GetCurrentAction() == ACTION_MOVETOPOINT) ? TRUE : FALSE;
+        ActionCastSpellAtLocation(iSpellId, lTarget, METAMAGIC_ANY, TRUE);
+        JXPrivateStartActionCastSpell(actionCastSpell.iActionId, bIsMoving);
+    }
+}
+
+// Make a creature cast a spell at an object by performing an action
+// - oTarget Target creature/placeable of the spell
+// - iSpellId SPELL_* constant
+// - iMetaMagicFeat METAMAGIC_* constant
+// - iCasterLevel Spell caster level
+// - iSpellSaveDC Difficulty check for the spell
+// - iClass Class used to cast the spell
+void JXActionCastSpellAtObject(object oTarget,
+                               int iSpellId,
+                               int iMetaMagicFeat,
+                               int iCasterLevel,
+                               int iSpellSaveDC,
+                               int iClass)
+{
+    int bPreRoundAction = FALSE;
+
+    struct jx_action_castspell actionCastSpell;
+    actionCastSpell.iActionId = JXFindNewActionCastSpellIdentifier();
+    actionCastSpell.iSpellId = iSpellId;
+    actionCastSpell.oTarget = oTarget;
+    actionCastSpell.lTarget = GetLocation(oTarget);
+    actionCastSpell.iCasterLevel = iCasterLevel;
+    actionCastSpell.iMetaMagicFeat = iMetaMagicFeat;
+    actionCastSpell.iSpellSaveDC = iSpellSaveDC;
+    actionCastSpell.iClass = iClass;
+
+    if (iMetaMagicFeat & METAMAGIC_QUICKEN)
+    {
+        int iCurrentAction = GetCurrentAction();
+        bPreRoundAction = (iCurrentAction == ACTION_INVALID) || (Get2DAString("actions", "TIMER", iCurrentAction) == "0");
+        actionCastSpell.bPreRoundAction = bPreRoundAction;
+        if (JXAddActionCastSpellToQueue(actionCastSpell))
+            ActionCastSpellAtObject(iSpellId, oTarget, METAMAGIC_ANY, TRUE, 0, PROJECTILE_PATH_TYPE_DEFAULT, TRUE);
+    }
+    else if (JXAddActionCastSpellToQueue(actionCastSpell))
+    {
+        int bIsMoving = (GetCurrentAction() == ACTION_MOVETOPOINT) ? TRUE : FALSE;
+        ActionCastSpellAtObject(iSpellId, oTarget, METAMAGIC_ANY, TRUE);
+        JXPrivateStartActionCastSpell(actionCastSpell.iActionId, bIsMoving);
+    }
+}
 
 //========================================== Spell Effects ==========================================//
 
@@ -1553,23 +1428,12 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
 // - iEffectType JX_EFFECT_TYPE_* of the passed effect
-void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f)
+void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iRunOnApply=TRUE)
 {
-
-    object oCaster = OBJECT_SELF;
+    object oCaster = JXGetCaster();
     int iSpellId = JXGetSpellId();
+    int iEffectType = GetEffectType(eEffect);
 
-    // list out effect integers
-    // int iCount = 0;
-    // int iEffectInt;
-    // int iEffectType = GetEffectType(eEffect);
-    // Log("Applying Effect type: " + IntToString(iEffectType));
-    // while (iCount < 32) // to account for EffectDamage
-    // {
-    //     iEffectInt = GetEffectInteger(eEffect, iCount);
-    //     if (iEffectInt == 0) break;
-    //     Log(IntToString(iCount) + ": " + IntToString(iEffectInt));
-    // }
 
     // Information about instant effect spells aren't saved
     if (iDuration != DURATION_TYPE_INSTANT)
@@ -1590,14 +1454,36 @@ void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float 
         if (iSpellId != -1) JXPrivateSaveSpellInfosOnCreature(oCaster, oTarget, iSpellId);
     }
 
-    // on apply triggers
-    if (!JXOnApplySpellEffectCode(oCaster, oTarget))
-    {
-        return;
-    }
-
+    // tag the effect
     eEffect = SetEffectSpellId(eEffect, iSpellId);
-    ApplyEffectToObject(iDuration, eEffect, oTarget, fDuration);
+
+    int iContinue = TRUE;
+    if (iRunOnApply)
+    {
+        switch(iEffectType)
+        {
+            case EFFECT_TYPE_BEAM:
+            case EFFECT_TYPE_VISUALEFFECT:
+            case EFFECT_TYPE_CUTSCENE_PARALYZE:
+            case EFFECT_TYPE_CUTSCENEGHOST: // NOTE: sanity check
+            case EFFECT_TYPE_AREA_OF_EFFECT:
+            case EFFECT_TYPE_CUTSCENEIMMOBILIZE:
+            case EFFECT_TYPE_HITPOINT_CHANGE_WHEN_DYING:
+            case EFFECT_TYPE_EFFECT_ICON:
+            {
+                break;
+            }
+            default:
+            {
+                iContinue = JXOnApplySpellEffectCode(oCaster, oTarget, eEffect);
+                break;
+            }
+        }
+    }
+    if (iContinue)
+    {
+        ApplyEffectToObject(iDuration, eEffect, oTarget, fDuration);
+    }
 }
 
 // Private function - used by JXApplyAreaEffectAtLocation
@@ -2167,26 +2053,6 @@ string JXGetMagicalAuraStrengthName(int iAuraStrength)
 
 
 
-//========================================== Dead/Wild Magic ==========================================//
-
-// Make the next/current spell ignore dead/wild magic effects
-// - oCaster Caster that must ignore dead/wild magic effects
-void JXSetIgnoreDeadZone(object oCaster)
-{
-    SetLocalInt(oCaster, JX_IGNORE_DEADMAGICZONE, 1);
-}
-
-// Get if a cast spell must ignore dead/wild magic effects
-// - oCaster Caster that could ignore dead/wild magic effects
-int JXGetIgnoreDeadZone(object oCaster)
-{
-    if (GetLocalInt(oCaster, JX_IGNORE_DEADMAGICZONE) == 1)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-
 //========================================== Post-cast spell hook ==========================================//
 
 // Private function - used by JXPostSpellCastCode
@@ -2231,84 +2097,57 @@ void JXPostSpellCastCode()
     // Delete the values of the spell targets
     DeleteLocalObject(oCaster, JX_SPELL_TARGET_OBJECT);
     DeleteLocalLocation(oCaster, JX_SPELL_TARGET_LOCATION);
-
-    // clear effects
-    // from jx_inc_magic_effects_impl.nss
-    JXClearEffectModifiers();
 }
 
 
 //========================================== On Apply Spell Effect Hook ==========================================//
 // TODO: actually make this work
-int JXOnApplySpellEffectCode(object oCaster, object oTarget)
+int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect)
 {
-    int iContinue = JXRunUserDefinedOnApplySpellEffectScript(oCaster, oTarget);
-    // if user script reports false, do no apply any effects
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterObject(paramList, oCaster);
+    // paramList = JXScriptAddParameterObject(paramList, oTarget);
+    // paramList = JXScriptAddParameterInt(paramList, GetEffectType(eEffect));
     //
-    switch (iContinue)
-    {
-        case -2: // script not found
-        case -1: // script found, execution failed
-        case 0:  // script found, exec success, proceed as normal
-            return TRUE;
-        case 1:  // script found, execution success, dont apply other effects
-        default:
-            return FALSE;
-    }
-    return TRUE;
+    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_ON_APPLY_CODE, paramList);
+
+    AddScriptParameterObject(oCaster);
+    AddScriptParameterObject(oTarget);
+    AddScriptParameterInt(GetEffectType(eEffect));
+    ExecuteScriptEnhanced(JX_EFFECT_ON_APPLY_FORKSCRIPT, OBJECT_SELF);
+
+    return JXScriptGetResponseInt();
 }
 
-//#######################################################
-// JXRunUserDefinedOnApplySpellEffectScript
-// oCaster - object that cast the spell applying the effect
-// oTarget - object to which the effect is applied
-// eEffect - the effect being applied
-// TODO: actually fix this
-// int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget, struct jx_effect Effect)
+
+// int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget)
 // {
 //     string sScript =  GetLocalString(GetModule(), MODULE_VAR_JX_USER_ON_APPLY_SPELL_EFFECT);
 //     if (sScript != "")
 //     {
-//         AddScriptParameterString(Effect.types);
-//         AddScriptParameterInt(JXGetSpellId());
-//         AddScriptParameterObject(oCaster);
-//         AddScriptParameterObject(oTarget);
-//         int res = ExecuteScriptEnhanced(sScript, oTarget, TRUE);
-//         if (res == -1) // execution failed
+//         Info("On Apply Script is " + sScript);
+
+//         SetLocalInt(oTarget, JX_ON_APPLY_SPELL_ID, JXGetSpellId());
+//         SetLocalInt(oTarget, JX_ON_APPLY_EFFECT_TYPE, GetEffectType(eEffect));
+//         SetLocalObject(oTarget, JX_ON_APPLY_TARGET, oTarget);
+//         SetLocalObject(oTarget, JX_ON_APPLY_CASTER, oCaster);
+
+//         ExecuteScriptEnhanced(sScript, oTarget);
+
+//         int res = GetLocalInt(oTarget, VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT);
+
+//         if (res == FALSE) // execution failed
 //         {
-//             SendMessageToPC(oCaster, "Executing user on apply spell effect script failed");
-//             return 0;
+//             Error("Executing user on apply spell effect script failed");
+//         } else if (res = TRUE)
+//         {
+//             Success("On Apply success");
 //         }
 //         // the variable must be set by on apply spell effect script
-//         res = GetLocalInt(oTarget, VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT);
 //         return res;
 //     }
 //     return -2;
 // }
-
-int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget)
-{
-    string sScript =  GetLocalString(GetModule(), MODULE_VAR_JX_USER_ON_APPLY_SPELL_EFFECT);
-    if (sScript != "")
-    {
-        SetLogObject(oCaster);
-        Success("On Apply Script is " + sScript);
-        AddScriptParameterInt(JXGetSpellId());
-        AddScriptParameterObject(oCaster);
-        AddScriptParameterObject(oTarget);
-        int res = ExecuteScriptEnhanced(sScript, oTarget, TRUE);
-        if (res == -1) // execution failed
-        {
-            SetLogObject(oCaster);
-            Error("Executing user on apply spell effect script failed");
-            return 0;
-        }
-        // the variable must be set by on apply spell effect script
-        res = GetLocalInt(oTarget, VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT);
-        return res;
-    }
-    return -1;
-}
 
 // use this function to set the result of on_apply_spell_effect script
 void JXSetOnApplySpellEffectResult(int iValue, object oTarget=OBJECT_SELF)
@@ -2316,9 +2155,10 @@ void JXSetOnApplySpellEffectResult(int iValue, object oTarget=OBJECT_SELF)
     SetLocalInt(oTarget, VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT, iValue);
 }
 
-int JXSavingThrow(int iSavingThrow, object oTarget, int iDC, int iSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus=OBJECT_SELF, float fDelay=0.0f)
+int JXSavingThrow(int iResult, int iSavingThrow, object oTarget, int iDC, int iSaveType, object oSaveVersus, float fDelay)
 {
     struct script_param_list paramList;
+    paramList = JXScriptAddParameterInt(paramList, iResult);
     paramList = JXScriptAddParameterInt(paramList, iSavingThrow);
     paramList = JXScriptAddParameterObject(paramList, oTarget);
     paramList = JXScriptAddParameterInt(paramList, iDC);
@@ -2326,7 +2166,7 @@ int JXSavingThrow(int iSavingThrow, object oTarget, int iDC, int iSaveType=SAVIN
     paramList = JXScriptAddParameterObject(paramList, oSaveVersus);
     paramList = JXScriptAddParameterFloat(paramList, fDelay);
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SAVINGTHROW, paramList);
+    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SAVING_THROW, paramList);
 
     return JXScriptGetResponseInt();
 }

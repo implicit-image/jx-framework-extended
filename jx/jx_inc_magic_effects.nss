@@ -1,7 +1,4 @@
-#include "jx_inc_magic_effects_impl"
 #include "utils"
-// #include "jx_inc_magic_effects_impl"
-// #include "jx_inc_magic_effects_overrides"
 
 
 /*
@@ -11,34 +8,6 @@ Since effect type cannot be identified before the effect is applied, this code
 works by creating wrapper functions for effect creation.
 
 More about the precast script in x2_inc_spellhook.nss.
-
-You can:
-- override effect parameters
-- modify passed parameters
-- add bonus effect to be linked with og effect
-- nullify effect (changes the effect to an invalid one)
-
-
-Examples:
-
-
-- increase slow effects by 20
-JXSetEffectModiffierInt(JX_EFFECT_SLOW, JX_EFFECT_PARAM_1, JX_EFFECT_MOD_PARAM_INCREASE_BY, 20);
-
-- override the damage type of damage effects
-JXSetEffectModifierInt(JX_EFFECT_DAMAGE, JX_EFFECT_PARAM_2, JX_EFFECT_PARAM_OVERRIDE, DAMAGE_TYPE_MAGICAL);
-
-- add bonus damage effect to all slow effects (may cause unexpected behaviour with dispelling)
-JXOverrideEffectLinkEffectDamage(JX_EFFECT_SLOW, 20);
-
-- make damage effects count as magical effects
-JXSetEffectModifierInt(JX_EFFECT_DAMAGE, JX_EFFECT_SUBTYPE, JX_EFFECT_SUBTYPE_MAGICAL);
-
-- override the damage type if it is DAMAGE_TYPE_FIRE
-JXSetEffectModifierInt(JX_EFFECT_DAMAGE, JX_EFFECT_PARAM_1, JX_EFFECT_PARAM_OVERRIDE, DAMAGE_TYPE_MAGICAL, DAMAGE_TYPE_FIRE);
-
-- nullify the effect (it is declared but not initialized, and therefore invalid)
-JXSetEffectModifierInt(JX_EFFECT_DAMAGE, JX_EFFECT_NULLIFY);
 
 */
 
@@ -339,7 +308,13 @@ effect JXEffectLink9Effects(effect e1, effect e2, effect e3, effect e4, effect e
 
 effect JXEffectLink10Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8, effect e9, effect e10);
 
+int JXApplyEffectParamModifier_Int(int iJXEffectType, int iValue, int iParamPos=1);
 
+float JXApplyEffectParamModifier_Float(int iJXEffectType, float fValue, int iParamPos=1);
+
+string JXApplyEffectParamModifier_String(int iJXEffectType, string sValue, int iParamPos=1);
+
+object JXApplyEffectParamModifier_Object(int iJXEffectType, object oValue, int iParamPos=1);
 
 //================================================IMPLEMENTATION====================================
 
@@ -349,26 +324,9 @@ effect JXEffectLink10Effects(effect e1, effect e2, effect e3, effect e4, effect 
 //=====================================================
 effect JXEffectHeal(int iDmgToHeal)
 {
-    JXStartEffectMod(JX_EFFECT_HEAL);
-
     effect eMain;
-    // if effect is disabled return empty effect
-    if (JXIsEffectDisabled())
-    {
-        JXEndEffectMod();
-        return eMain;
-    }
-
-    // apply param1 modifiers
-
-    iDmgToHeal = JXApplyEffectParamModifiers_Int(iDmgToHeal, 1);
-
+    iDmgToHeal = JXApplyEffectParamModifier_Int(JX_EFFECT_HEAL, iDmgToHeal, 1);
     eMain = EffectHeal(iDmgToHeal);
-
-    // apply effect property modifiers
-    eMain = JXApplyEffectPropertyModifiers(eMain);
-
-    JXEndEffectMod();
     return eMain;
 }
 
@@ -382,25 +340,12 @@ effect JXEffectHeal(int iDmgToHeal)
 // Allows for overriding spell damage type in precast script
 effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDmgPower=DAMAGE_POWER_NORMAL, int bIgnoreRes=FALSE)
 {
-    JXStartEffectMod(JX_EFFECT_DAMAGE);
-
     effect eMain;
-
-    if (JXIsEffectDisabled())
-    {
-        JXEndEffectMod();
-        return eMain;
-    }
-    iDmg = JXApplyEffectParamModifiers_Int(iDmg, 1);
-    iDmgType = JXApplyEffectParamModifiers_Int(iDmgType, 2);
-    iDmgPower = JXApplyEffectParamModifiers_Int(iDmgPower, 3);
-    bIgnoreRes = JXApplyEffectParamModifiers_Int(bIgnoreRes, 4);
-
+    iDmg = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmg, 1);
+    iDmgType = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmgType, 2);
+    iDmgPower = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, iDmgPower, 3);
+    bIgnoreRes = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE, bIgnoreRes, 4);
     eMain = EffectDamage(iDmg, iDmgType, iDmgPower, bIgnoreRes);
-
-    eMain = JXApplyEffectPropertyModifiers(eMain);
-
-    JXEndEffectMod();
     return eMain;
 }
 
@@ -412,25 +357,12 @@ effect JXEffectDamage(int iDmg, int iDmgType=DAMAGE_TYPE_MAGICAL, int iDmgPower=
 
 effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYPE_MAGICAL, int bIgnoreResistances=FALSE)
 {
-    JXStartEffectMod(JX_EFFECT_DAMAGE_OVER_TIME);
-
     effect eMain;
-
-    if (JXIsEffectDisabled())
-    {
-        JXEndEffectMod();
-        return eMain;
-    }
-    iDmg = JXApplyEffectParamModifiers_Int(iDmg, 1);
-    fInterval = JXApplyEffectParamModifiers_Float(fInterval, 2);
-    iDmgType = JXApplyEffectParamModifiers_Int(iDmgType, 3);
-    bIgnoreResistances = JXApplyEffectParamModifiers_Int(bIgnoreResistances, 4);
-
+    iDmg = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_OVER_TIME, iDmg, 1);
+    fInterval = JXApplyEffectParamModifier_Float(JX_EFFECT_DAMAGE_OVER_TIME, fInterval, 2);
+    iDmgType = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_OVER_TIME, iDmgType, 3);
+    bIgnoreResistances = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_OVER_TIME, bIgnoreResistances, 4);
     eMain = EffectDamageOverTime(iDmg, fInterval, iDmgType, bIgnoreResistances);
-
-    eMain = JXApplyEffectPropertyModifiers(eMain);
-
-    JXEndEffectMod();
     return eMain;
 }
 
@@ -441,74 +373,39 @@ effect JXEffectDamageOverTime(int iDmg, float fInterval, int iDmgType=DAMAGE_TYP
 
 effect JXEffectAbilityIncrease(int iAbility, int iModifyBy)
 {
-    JXStartEffectMod(JX_EFFECT_ABILITY_INCREASE);
-
     effect eMain;
-
-    if (JXIsEffectDisabled())
-    {
-        JXEndEffectMod();
-        return eMain;
-    }
-
-    iAbility = JXApplyEffectParamModifiers_Int(iAbility, 1);
-    iModifyBy = JXApplyEffectParamModifiers_Int(iModifyBy, 2);
-
+    iAbility = JXApplyEffectParamModifier_Int(JX_EFFECT_ABILITY_INCREASE, iAbility, 1);
+    iModifyBy = JXApplyEffectParamModifier_Int(JX_EFFECT_ABILITY_INCREASE, iModifyBy, 2);
     eMain = EffectAbilityIncrease(iAbility, iModifyBy);
-
-    // eMain = JXApplyEffectPropertyModifiers(eMain);
-
-    JXEndEffectMod();
     return eMain;
 }
 
 effect JXEffectDamageResistance(int iDamageType, int iAmount, int iLimit=0)
 {
-    JXStartEffectMod(JX_EFFECT_DAMAGE_RESISTANCE);
-
     effect eMain;
-
-    if (JXIsEffectDisabled())
-    {
-        JXEndEffectMod();
-        return eMain;
-    }
-
-    iDamageType = JXApplyEffectParamModifiers_Int(iDamageType, 1);
-    iAmount = JXApplyEffectParamModifiers_Int(iAmount, 2);
-    iLimit = JXApplyEffectParamModifiers_Int(iLimit, 3);
-
+    iDamageType = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_RESISTANCE, iDamageType, 1);
+    iAmount = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_RESISTANCE, iAmount, 2);
+    iLimit = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_RESISTANCE, iLimit, 3);
     eMain = EffectDamageResistance(iDamageType, iAmount, iLimit);
-
-    // eMain = JXApplyEffectPropertyModifiers(eMain)
-
-    JXEndEffectMod();
     return eMain;
 }
 
 effect JXEffectResurrection()
 {
-    JXStartEffectMod(JX_EFFECT_RESURRECTION);
-
     effect eMain;
-
-    if (JXIsEffectDisabled())
-    {
-        JXEndEffectMod();
-        return eMain;
-    }
-
     eMain = EffectResurrection();
-
-    // eMain = JXApplyEffectPropertyModifiers(eMain)
-
-    JXEndEffectMod();
     return eMain;
 }
 
 effect JXEffectSummonCreature(string sCreatureResref, int iVisualEffectId=VFX_NONE, float fDelay=0.0f, int iUseAppearAnimation=0)
 {
-    return EffectSummonCreature(sCreatureResref, iVisualEffectId, fDelay, iUseAppearAnimation);
+    effect eMain;
+    sCreatureResref = JXApplyEffectParamModifier_String(JX_EFFECT_SUMMON_CREATURE, sCreatureResref, 1);
+    iVisualEffectId = JXApplyEffectParamModifier_Int(JX_EFFECT_SUMMON_CREATURE, iVisualEffectId, 2);
+    fDelay = JXApplyEffectParamModifier_Float(JX_EFFECT_SUMMON_CREATURE, fDelay, 3);
+    iUseAppearAnimation = JXApplyEffectParamModifier_Int(JX_EFFECT_SUMMON_CREATURE, iUseAppearAnimation, 4);
+    eMain = EffectSummonCreature(sCreatureResref, iVisualEffectId, fDelay, iUseAppearAnimation);
+    return eMain;
 }
 
 
@@ -532,27 +429,53 @@ effect JXExtraordinaryEffect(effect eEffect)
 
 effect JXEffectACIncrease(int iValue, int iModifyType=AC_DODGE_BONUS, int iDamageType=AC_VS_DAMAGE_TYPE_ALL, int iVsSpiritsOnly=FALSE)
 {
-    return EffectACIncrease(iValue, iModifyType, iDamageType, iVsSpiritsOnly);
+    effect eMain;
+    iValue = JXApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iValue, 1);
+    iModifyType = JXApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iModifyType, 2);
+    iDamageType = JXApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iDamageType, 3);
+    iVsSpiritsOnly = JXApplyEffectParamModifier_Int(JX_EFFECT_AC_INCREASE, iVsSpiritsOnly, 4);
+    eMain = EffectACIncrease(iValue, iModifyType, iDamageType, iVsSpiritsOnly);
+    return eMain;
 }
 
 effect JXEffectSavingThrowIncrease(int iSave, int iValue, int iSaveType=SAVING_THROW_TYPE_ALL, int iVsSpiritsOnly=FALSE)
 {
-    return EffectSavingThrowIncrease(iSave, iValue, iSaveType, iVsSpiritsOnly);
+    effect eMain;
+    iSave = JXApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_INCREASE, iSave, 1);
+    iValue = JXApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_INCREASE, iValue, 2);
+    iVsSpiritsOnly = JXApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_INCREASE, iVsSpiritsOnly, 3);
+    eMain = EffectSavingThrowIncrease(iSave, iValue, iSaveType, iVsSpiritsOnly);
+    return eMain;
 }
 
 effect JXEffectAttackIncrease(int iBonus, int iModifierType=ATTACK_BONUS_MISC)
 {
-    return EffectAttackIncrease(iBonus, iModifierType);
+    effect eMain;
+    iBonus = JXApplyEffectParamModifier_Int(JX_EFFECT_ATTACK_INCREASE, iBonus, 1);
+    iModifierType = JXApplyEffectParamModifier_Int(JX_EFFECT_ATTACK_INCREASE, iModifierType, 2);
+    eMain = EffectAttackIncrease (iBonus, iModifierType);
+    return eMain;
 }
 
-effect JXEffectDamageReduction(int iAmount, int iDRSubType=DAMAGE_POWER_NORMAL, int iLimit=0, int iDRType=DR_TYPE_MAGICBONUS)
+effect JXEffectDamageReduction(int iAmount, int iDmgPower=DAMAGE_POWER_NORMAL, int iLimit=0, int iDRType=DR_TYPE_MAGICBONUS)
 {
-    return EffectDamageReduction(iAmount, iDRSubType, iLimit, iDRType);
+    effect eMain;
+    iAmount = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iAmount, 1);
+    iDmgPower = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iDmgPower, 2);
+    iLimit = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iLimit, 3);
+    iDRType = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_REDUCTION, iDRType, 4);
+    eMain = EffectDamageReduction (iAmount, iDmgPower, iLimit, iDRType);
+    return eMain;
 }
 
 effect JXEffectDamageIncrease(int iBonus, int iDamageType=DAMAGE_TYPE_MAGICAL, int iVersusRace=-1)
 {
-    return EffectDamageIncrease(iBonus, iDamageType, iVersusRace);
+    effect eMain;
+    iBonus = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iBonus, 1);
+    iDamageType = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iDamageType, 2);
+    iVersusRace = JXApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_INCREASE, iVersusRace, 3);
+    eMain = EffectDamageIncrease (iBonus, iDamageType, iVersusRace)
+    return eMain;
 }
 
 effect JXEffectEntangle()
@@ -562,7 +485,12 @@ effect JXEffectEntangle()
 
 effect JXEffectDeath(int iSpectacularDeath=FALSE, int iDisplayFeedback=TRUE, int iIgnoreDeathImmunity=FALSE, int iPurgeEffects=TRUE)
 {
-    return EffectDeath(iSpectacularDeath, iDisplayFeedback, iIgnoreDeathImmunity, iPurgeEffects);
+    effect eMain;
+    iSpectacularDeath = JXApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iSpectacularDeath, 1);
+    iDisplayFeedback = JXApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iDisplayFeedback, 2);
+    iIgnoreDeathImmunity = JXApplyEffectParamModifier_Int(JX_EFFECT_DEATH, iIgnoreDeathImmunity, 3);
+    eMain = EffectDeath (iSpectacularDeath, iDisplayFeedback, iIgnoreDeathImmunity, iPurgeEffects)
+    return eMain;
 }
 
 effect JXEffectKnockdown()
@@ -1219,4 +1147,72 @@ effect JXEffectLink10Effects(effect e1, effect e2, effect e3, effect e4, effect 
     e1 = EffectLinkEffects(e1, e9);
     e1 = EffectLinkEffects(e1, e10);
     return e1;
+}
+
+int JXApplyEffectParamModifier_Int(int iJXEffectType, int iValue, int iParamPos=1)
+{
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
+    // paramList = JXScriptAddParameterInt(paramList, iValue);
+    // paramList = JXScriptAddParameterInt(paramList, iParamPos);
+    //
+    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_INT, paramList);
+
+    AddScriptParameterInt(iJXEffectType);
+    AddScriptParameterInt(iValue);
+    AddScriptParameterInt(iParamPos);
+    ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_INT_FORKSCRIPT, OBJECT_SELF);
+
+    return JXScriptGetResponseInt();
+}
+
+float JXApplyEffectParamModifier_Float(int iJXEffectType, float fValue, int iParamPos=1)
+{
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
+    // paramList = JXScriptAddParameterFloat(paramList, fValue);
+    // paramList = JXScriptAddParameterInt(paramList, iParamPos);
+    //
+    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_FLOAT, paramList);
+
+    AddScriptParameterInt(iJXEffectType);
+    AddScriptParameterFloat(fValue);
+    AddScriptParameterInt(iParamPos);
+    ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_FLOAT_FORKSCRIPT, OBJECT_SELF);
+
+    return JXScriptGetResponseFloat();
+}
+
+string JXApplyEffectParamModifier_String(int iJXEffectType, string sValue, int iParamPos=1)
+{
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
+    // paramList = JXScriptAddParameterString(paramList, sValue);
+    // paramList = JXScriptAddParameterInt(paramList, iParamPos);
+    //
+    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_STRING, paramList);
+
+    AddScriptParameterInt(iJXEffectType);
+    AddScriptParameterString(sValue);
+    AddScriptParameterInt(iParamPos);
+    ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_STRING_FORKSCRIPT, OBJECT_SELF);
+
+    return JXScriptGetResponseString();
+}
+
+object JXApplyEffectParamModifier_Object(int iJXEffectType, object oValue, int iParamPos=1)
+{
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
+    // paramList = JXScriptAddParameterObject(paramList, oValue);
+    // paramList = JXScriptAddParameterInt(paramList, iParamPos);
+    //
+    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_STRING, paramList);
+
+    AddScriptParameterInt(iJXEffectType);
+    AddScriptParameterObject(oValue);
+    AddScriptParameterInt(iParamPos);
+    ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_OBJECT_FORKSCRIPT, OBJECT_SELF);
+
+    return JXScriptGetResponseObject();
 }

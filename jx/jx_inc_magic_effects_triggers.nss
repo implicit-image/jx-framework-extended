@@ -15,7 +15,7 @@ int JXEffectActivateTrigger(int iTrigger)
     struct script_param_list paramList;
     paramList = JXScriptAddParameterInt(paramList, iTrigger);
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_EFFECT_TRIGGER, paramList);
+    JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_TRIGGER, paramList);
 
     return JXScriptGetResponseInt();
 }
