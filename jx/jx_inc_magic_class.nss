@@ -59,13 +59,6 @@ int JXGetImprovedDivineCLFromClasses(object oCreature, int iClass);
 
 int JXGetCLBonusFromPractisedSpellcaster(object oCaster, int iCastingClass, int iCastingLevels);
 
-// int JXImplGetCreatureCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID);
-//
-// int JXImplGetCreatureCasterLevelForSpell(int iSpellId, object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID);
-//
-// int JXImplGetCreatureArcaneCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID);
-//
-// int JXImplGetCreatureDivineCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID);
 
 //========================================== Caster Class Search ==========================================//
 
@@ -75,27 +68,12 @@ int JXGetCLBonusFromPractisedSpellcaster(object oCaster, int iCastingClass, int 
 // * Returns a CLASS_TYPE_* constant, or -1 if not found
 int JXGetMainCasterClass(object oCreature = OBJECT_SELF, int iSpellType = JX_SPELLTYPE_BOTH)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterObject(paramList, oCreature);
-    // paramList = JXScriptAddParameterInt(paramList, iSpellType);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_MAINCASTERCLASS, paramList);
-    //
-    // return JXScriptGetResponseInt();
-
     return JXImplGetMainCasterClass(oCreature, iSpellType);
 }
 
 
 int JXGetClassForSpell(int iSpellId, object oCreature = OBJECT_SELF)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterInt(paramList, iSpellId);
-    // paramList = JXScriptAddParameterObject(paramList, oCreature);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_CLASS_FOR_SPELL, paramList);
-    //
-    // return JXScriptGetResponseInt();
     return JXImplGetClassForSpell(iSpellId, oCreature);
 }
 
@@ -108,13 +86,6 @@ int JXGetClassForSpell(int iSpellId, object oCreature = OBJECT_SELF)
 // * Returns the creature's arcane caster level
 int JXGetCreatureArcaneCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterObject(paramList, oCreature);
-    // paramList = JXScriptAddParameterInt(paramList, iClass);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_CREATUREARCANECASTERLEVEL, paramList);
-
-    // return JXScriptGetResponseInt();
     return JXImplGetCreatureArcaneCasterLevel(oCreature, iClass);
 }
 
@@ -124,13 +95,6 @@ int JXGetCreatureArcaneCasterLevel(object oCreature = OBJECT_SELF, int iClass = 
 // * Returns the creature's divine caster level
 int JXGetCreatureDivineCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterObject(paramList, oCreature);
-    // paramList = JXScriptAddParameterInt(paramList, iClass);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_CREATUREDIVINECASTERLEVEL, paramList);
-    //
-    // return JXScriptGetResponseInt();
     return JXImplGetCreatureDivineCasterLevel(oCreature, iClass);
 }
 
@@ -140,14 +104,6 @@ int JXGetCreatureDivineCasterLevel(object oCreature = OBJECT_SELF, int iClass = 
 // * Returns the creature's caster level
 int JXGetCreatureCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterObject(paramList, oCreature);
-    // paramList = JXScriptAddParameterInt(paramList, iClass);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_CREATURECASTERLEVEL, paramList);
-    //
-    // return JXScriptGetResponseInt();
-
     return JXImplGetCreatureCasterLevel(oCreature, iClass);
 }
 
@@ -157,15 +113,6 @@ int JXGetCreatureCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_
 // * Returns the creature's caster level
 int JXGetCreatureCasterLevelForSpell(int iSpellId, object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterInt(paramList, iSpellId);
-    // paramList = JXScriptAddParameterObject(paramList, oCreature);
-    // paramList = JXScriptAddParameterInt(paramList, iClass);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_CREATURECASTERLEVELSPELL, paramList);
-    //
-    // return JXScriptGetResponseInt();
-
     return JXImplGetCreatureCasterLevelForSpell(iSpellId, oCreature, iClass);
 }
 
@@ -179,88 +126,36 @@ int JXGetCreatureCasterLevelForSpell(int iSpellId, object oCreature = OBJECT_SEL
 // * Returns the creature's spell save DC
 int JXGetCreatureSpellSaveDC(int iSpellId, object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterInt(paramList, iSpellId);
-    // paramList = JXScriptAddParameterObject(paramList, oCreature);
-    // paramList = JXScriptAddParameterInt(paramList, iClass);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_CREATURESPELLSAVEDC, paramList);
-    //
-    // return JXScriptGetResponseInt();
     return JXImplGetCreatureSpellSaveDC(iSpellId, oCreature, iClass);
 }
 
 
 int JXGetIsMainArcaneClass(int iClass)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterInt(paramList, iClass);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IS_MAIN_ARCANE_CLASS, paramList);
-    //
-    // return JXScriptGetResponseInt();
     return JXImplGetIsMainArcaneClass(iClass);
 }
 
 int JXGetIsMainDivineClass(int iClass)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterInt(paramList, iClass);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IS_MAIN_DIVINE_CLASS, paramList);
-    //
-    // return JXScriptGetResponseInt();
     return JXImplGetIsMainDivineClass(iClass);
 }
 
 int JXGetComputedCLFromClass(int iClass, int iClassLevel)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterInt(paramList, iClass);
-    // paramList = JXScriptAddParameterInt(paramList, iClassLevel);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_COMPUTED_CL_FROM_CLASS, paramList);
-    //
-    // return JXScriptGetResponseInt();
-
     return JXImplGetComputedCLFromClass(iClass, iClassLevel);
 }
 
 int JXGetImprovedArcaneCLFromClasses(object oCreature, int iClass)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterObject(paramList, oCreature);
-    // paramList = JXScriptAddParameterInt(paramList, iClass);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IMPROVED_ARCANE_CL_FROM_CLASSES, paramList);
-
-    // return JXScriptGetResponseInt();
-
     return JXImplGetImprovedArcaneCLFromClasses(oCreature, iClass);
 }
 
 int JXGetImprovedDivineCLFromClasses(object oCreature, int iClass)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterObject(paramList, oCreature);
-    // paramList = JXScriptAddParameterInt(paramList, iClass);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IMPROVED_DIVINE_CL_FROM_CLASSES, paramList);
-    //
-    // return JXScriptGetResponseInt();
-
     return JXImplGetImprovedDivineCLFromClasses(oCreature, iClass);
 }
 
 int JXGetCLBonusFromPractisedSpellcaster(object oCaster, int iCastingClass, int iCastingLevels)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterObject(paramList, oCaster);
-    // paramList = JXScriptAddParameterInt(paramList, iCastingClass);
-    // paramList = JXScriptAddParameterInt(paramList, iCastingLevels);
-    //
-    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_PRACTISED_SPELLCASTER_BONUS, paramList);
-    //
-    // return JXScriptGetResponseInt();
     return JXImplGetCLBonusFromPractisedSpellcaster(oCaster, iCastingClass, iCastingLevels);
 }

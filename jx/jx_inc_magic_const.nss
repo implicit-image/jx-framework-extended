@@ -395,27 +395,3 @@ const int JX_EFFECT_MAX_ID = 105;
 
 const string JX_EFFECT_STATUS_WET = "JX_ST_WET";
 const string JX_EFFECT_STATUS_FROZEN = "JX_ST_FROZEN";
-
-//================ from jx_inc_magic ============================
-
-// const string JX_IGNORE_DEADMAGICZONE    = "JX_IGNORE_DEADMAGICZONE";
-// const string JX_METAMAGIC_BYPASS_STD    = "JX_METAMAGIC_BYPASS_STD";
-// const string JX_METAMAGIC               = "JX_METAMAGIC";
-// const string JX_SPELL_DC_OVERRIDE       = "JX_SPELL_DC_OVERRIDE";
-// const string JX_CASTER_LEVEL_OVERRIDE   = "JX_CASTER_LEVEL_OVERRIDE";
-// const string JX_SPELL_ID                = "JX_SPELL_ID";
-// const string JX_SPELL_TARGET_LOCATION   = "JX_SPELL_TARGET_LOCATION";
-// const string JX_SPELL_TARGET_OBJECT         = "JX_SPELL_TARGET_OBJECT";
-//
-// // Area of effect constants
-// const string JX_AOE_CASTER_TMP_LOCATION = "jxwp_loc_temp";
-// const string JX_AOE_CASTER_TAG          = "c_attachspellnode";
-// const string JX_AOE_REAL_CREATOR        = "JX_AOE_REAL_CREATOR";
-//
-// // Spell constants
-// const string JX_REAL_CREATOR = "JX_REAL_CREATOR";
-// const string JX_CAST_SPELLS_INFO = "JX_CAST_SPELLS_INFO";
-//
-// // Spell Turning constants
-// const string JX_SPELLTURN_ACTIVE = "JX_SPELLTURN_ACTIVE";
-// const string JX_SP_SPELLTURN_LVLS = "JX_SP_SPELLTURN_LVLS";

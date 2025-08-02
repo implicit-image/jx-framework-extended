@@ -439,9 +439,6 @@ string JXGetMagicalAuraStrengthName(int iAuraStrength);
 
 int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect);
 
-// Run user defined on_apply_spell_effect script
-int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget);
-
 // Set the result of running user on_apply_spell_effect script on a target
 // For use in the user script
 void JXSetOnApplySpellEffectResult(int iValue, object oTarget=OBJECT_SELF);
@@ -2120,36 +2117,6 @@ int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect)
 
     return JXScriptGetResponseInt(oTarget);
 }
-
-
-// int JXRunUserDefinedOnApplySpellEffectScript(object oCaster, object oTarget)
-// {
-//     string sScript =  GetLocalString(GetModule(), MODULE_VAR_JX_USER_ON_APPLY_SPELL_EFFECT);
-//     if (sScript != "")
-//     {
-//         Info("On Apply Script is " + sScript);
-
-//         SetLocalInt(oTarget, JX_ON_APPLY_SPELL_ID, JXGetSpellId());
-//         SetLocalInt(oTarget, JX_ON_APPLY_EFFECT_TYPE, GetEffectType(eEffect));
-//         SetLocalObject(oTarget, JX_ON_APPLY_TARGET, oTarget);
-//         SetLocalObject(oTarget, JX_ON_APPLY_CASTER, oCaster);
-
-//         ExecuteScriptEnhanced(sScript, oTarget);
-
-//         int res = GetLocalInt(oTarget, VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT);
-
-//         if (res == FALSE) // execution failed
-//         {
-//             Error("Executing user on apply spell effect script failed");
-//         } else if (res = TRUE)
-//         {
-//             Success("On Apply success");
-//         }
-//         // the variable must be set by on apply spell effect script
-//         return res;
-//     }
-//     return -2;
-// }
 
 // use this function to set the result of on_apply_spell_effect script
 void JXSetOnApplySpellEffectResult(int iValue, object oTarget=OBJECT_SELF)

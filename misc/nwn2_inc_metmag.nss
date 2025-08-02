@@ -12,14 +12,13 @@
 // ChazM 7/24/07 - fix for no meta-magic feats - thanks to OVLD_NZ for pointing this out.
 
 #include "jx_inc_magic"
-
+#include "jx_metamagic_interface"
 
 int ApplyMetamagicVariableMods(int nVal, int nValMax);
 
 float ApplyMetamagicDurationMods(float fDuration);
 
 int ApplyMetamagicDurationTypeMods(int nDurType);
-
 
 int ApplyMetamagicVariableMods(int nVal, int nValMax)
 {
@@ -39,7 +38,7 @@ int ApplyMetamagicVariableMods(int nVal, int nValMax)
     {
         nVal += nOrigVal/2; // Add in 50%
     }
-    return nVal;
+    return JXImplApplyMetamagicVariableMods(nVal, nValMax);
 }
 
 
@@ -63,7 +62,7 @@ float ApplyMetamagicDurationMods(float fDuration)
     {
         fDuration *= 2;
     }
-    return fDuration;
+    return JXImplApplyMetamagicDurationMods(fDuration);
 }
 
 
@@ -83,5 +82,5 @@ int ApplyMetamagicDurationTypeMods(int nDurType)
 
     // Note: METAMAGIC_PERSISTENT & METAMAGIC_EXTEND don't affect this...
 
-    return nDurType;
+    return JXImplApplyMetamagicDurationTypeMods(nDurType);
 }
