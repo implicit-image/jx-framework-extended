@@ -1120,7 +1120,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 
 
     // potentially override the results of the throw
-    bValid = JXSavingThrow(bValid, nSavingThrow, oTarget, nDC, nSaveType, oSaveVersus, fDelay);
+    // bValid = JXSavingThrow(bValid, nSavingThrow, oTarget, nDC, nSaveType, oSaveVersus, fDelay);
 
     nSpellID = JXGetSpellId();
 
