@@ -1476,6 +1476,7 @@ void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float 
             default:
             {
                 iContinue = JXOnApplySpellEffectCode(oCaster, oTarget, eEffect);
+                Log("OnApply returned " + IntToString(iContinue));
                 break;
             }
         }
