@@ -285,7 +285,8 @@ effect JXEffectSickened(int iAttackPenalty=2,
 effect JXEffectFatigued(int iStrPenalty=2, int iDexPenalty=2, int iMovePenalty=10);
 
 
-effect JXEffectExhausted();
+effect JXEffectExhausted(int iStrPenalty=6, int iDexPenalty=6, int iMovePenalty=50);
+
 
 
 
@@ -1029,7 +1030,7 @@ effect JXEffectSummonCopy(object oSource, int iVisualEffectId=VFX_NONE, float fD
     fDelaySeconds = JXImplApplyEffectParamModifier_Float(JX_EFFECT_SUMMON_COPY, fDelaySeconds, 3);
     sNewTag = JXImplApplyEffectParamModifier_String(JX_EFFECT_SUMMON_COPY, sNewTag, 4);
     iNewHP = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SUMMON_COPY, iNewHP, 5);
-    sScript = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SUMMON_COPY, sScript, 6);
+    sScript = JXImplApplyEffectParamModifier_String(JX_EFFECT_SUMMON_COPY, sScript, 6);
     return EffectSummonCopy(oSource, iVisualEffectId, fDelaySeconds, sNewTag, iNewHP, sScript);
 }
 
@@ -1147,6 +1148,7 @@ effect JXEffectFatigued(int iStrPenalty=2, int iDexPenalty=2, int iMovePenalty=1
         eStrPenalty,
         eDexPenalty,
         eMovePenalty);
+
     return eRet;
 }
 
@@ -1164,6 +1166,7 @@ effect JXEffectExhausted(int iStrPenalty=6, int iDexPenalty=6, int iMovePenalty=
         eStrPenalty,
         eDexPenalty,
         eMovePenalty);
+
     return eRet;
 }
 
