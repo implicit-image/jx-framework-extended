@@ -11,4 +11,6 @@ void main(object oCaster, object oTarget, int iEffectType)
             oCaster,
             oTarget,
             iEffectType));
+
+    return;
 }
