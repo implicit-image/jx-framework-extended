@@ -7,19 +7,19 @@
 
 #include "jx_inc_script_call"
 #include "jx_inc_magic_item_impl"
-#include "jx_inc_magic_class_impl"
+// #include "jx_inc_magic_class_impl"
 #include "jx_inc_magicstaff"
 #include "jx_inc_magic_events_impl"
 
 
 // interface implementations
-#include "jx_class_info_interface"
+// #include "jx_class_info_interface"
 #include "jx_effect_interface"
 #include "jx_epic_spell_interface"
 #include "jx_invocations_interface"
 #include "jx_metamagic_interface"
 #include "jx_save_interface"
-#include "jx_spell_info_interface"
+// #include "jx_spell_info_interface"
 //:://////////////////////////////////////////////
 
 
