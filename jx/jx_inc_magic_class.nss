@@ -59,7 +59,13 @@ int JXGetImprovedDivineCLFromClasses(object oCreature, int iClass);
 
 int JXGetCLBonusFromPractisedSpellcaster(object oCaster, int iCastingClass, int iCastingLevels);
 
+int JXImplGetCreatureCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID);
 
+int JXImplGetCreatureCasterLevelForSpell(int iSpellId, object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID);
+
+int JXImplGetCreatureArcaneCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID);
+
+int JXImplGetCreatureDivineCasterLevel(object oCreature = OBJECT_SELF, int iClass = CLASS_TYPE_INVALID);
 
 //========================================== Caster Class Search ==========================================//
 
