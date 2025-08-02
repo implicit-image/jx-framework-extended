@@ -55,13 +55,13 @@ void main()
         //             JXScriptGetParameterObject(paramList, 2),
         //             JXScriptGetParameterInt(paramList, 3)));
         //     break;
-        // case JX_FORK_EFFECT_ON_APPLY_CODE:
-        //     JXScriptSetResponseInt(
-        //         JXImplOnApplySpellEffectCode(
-        //             JXScriptGetParameterObject(paramList, 1),
-        //             JXScriptGetParameterObject(paramList, 2),
-        //             JXScriptGetParameterInt(paramList, 3)));
-        //     break;
+        case JX_FORK_EFFECT_ON_APPLY_CODE:
+            JXScriptSetResponseInt(
+                JXImplOnApplySpellEffectCode(
+                    JXScriptGetParameterObject(paramList, 1),
+                    JXScriptGetParameterObject(paramList, 2),
+                    JXScriptGetParameterInt(paramList, 3)));
+            break;
         default:
             return;
     }
