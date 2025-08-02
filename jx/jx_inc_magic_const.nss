@@ -125,10 +125,6 @@ const int JX_SPELLTYPE_BOTH         = 3;
 const string JX_SPFMWK_FORKSCRIPT = "jx_spfmwk_fork";
 const string JX_EFFECT_FORKSCRIPT = "jx_effect_fork";
 const string JX_EFFECT_TRIGGER_FORKSCRIPT = "jx_ef_trg_fork";
-const string JX_EFFECT_PARAM_MOD_INT_FORKSCRIPT = "jx_ef_pmi_fork";
-const string JX_EFFECT_PARAM_MOD_FLOAT_FORKSCRIPT = "jx_ef_pmf_fork";
-const string JX_EFFECT_PARAM_MOD_STRING_FORKSCRIPT = "jx_ef_pms_fork";
-const string JX_EFFECT_PARAM_MOD_OBJECT_FORKSCRIPT = "jx_ef_pmo_fork";
 const string JX_EFFECT_ON_APPLY_FORKSCRIPT = "jx_ef_oa_fork";
 
 //        jx_inc_magic_info
@@ -385,11 +381,14 @@ const int JX_EFFECT_SUMMON_COPY = 97;
 const int JX_EFFECT_DISAPPEAR_APPEAR = 98;
 const int JX_EFFECT_DISAPPEAR = 99;
 const int JX_EFFECT_APPEAR = 100;
+const int JX_EFFECT_EFFECT_ICON = 101;
 // simulated effects
-const int JX_EFFECT_SHAKEN = 101;
+const int JX_EFFECT_SHAKEN = 102;
+const int JX_EFFECT_SICKENED = 103;
+const int JX_EFFECT_FATIGUED = 104;
+const int JX_EFFECT_EXHAUSTED = 105;
 
-
-const int JX_EFFECT_MAX_ID = 101;
+const int JX_EFFECT_MAX_ID = 105;
 
 
 //========================== Effect statuses ===========

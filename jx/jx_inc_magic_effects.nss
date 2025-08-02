@@ -1,6 +1,6 @@
 #include "utils"
 #include "jx_effect_param_interface"
-
+#include "jx_inc_magic"
 /*
 In order to use effect overrides you need to set them in the precast script.
 All effect overrides are local and are reset after the spell finishes casting.
@@ -18,7 +18,6 @@ More about the precast script in x2_inc_spellhook.nss.
 // Each effect uses only some of existing overrides. See jx_inc_effect_ovr.nss
 // for more more information.
 //======================================================
-
 
 
 //============================================Declarations===================================
@@ -276,11 +275,15 @@ effect JXEffectBeam(int iBeamVisualEffect, object oEffector, int iBodyPart, int 
 //======================================================
 
 //simulates shaken effect
-effect JXEffectShaken();
+effect JXEffectShaken(int iAttackPenalty=2, int iSavePenalty=2, int iSkillPenalty=2);
 
-effect JXEffectSickened();
+effect JXEffectSickened(int iAttackPenalty=2,
+                        int iDamagePenalty=2,
+                        int iSavePenalty=2,
+                        int iSkillPenalty=2);
 
-effect JXEffectFatigue();
+effect JXEffectFatigued(int iStrPenalty=2, int iDexPenalty=2, int iMovePenalty=10);
+
 
 effect JXEffectExhausted();
 
@@ -291,22 +294,6 @@ effect JXEffectExhausted();
 //=========================================================
 
 effect JXEffectLinkEffects(effect e1, effect e2);
-
-effect JXEffectLink3Effects(effect e1, effect e2, effect e3);
-
-effect JXEffectLink4Effects(effect e1, effect e2, effect e3, effect e4);
-
-effect JXEffectLink5Effects(effect e1, effect e2, effect e3, effect e4, effect e5);
-
-effect JXEffectLink6Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6);
-
-effect JXEffectLink7Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7);
-
-effect JXEffectLink8Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8);
-
-effect JXEffectLink9Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8, effect e9);
-
-effect JXEffectLink10Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8, effect e9, effect e10);
 
 int JXApplyEffectParamModifier_Int(int iJXEffectType, int iValue, int iParamPos=1);
 
@@ -500,16 +487,26 @@ effect JXEffectKnockdown()
 
 effect JXEffectCurse(int iStrMod=1, int iDexMod=1, int iConMod=1, int iIntMod=1, int iWisMod=1, int iChaMod=1)
 {
+    iStrMod = JXImplApplyEffectParamModifier_Int(JX_EFFECT_CURSE, iStrMod, 1);
+    iDexMod = JXImplApplyEffectParamModifier_Int(JX_EFFECT_CURSE, iDexMod, 2);
+    iConMod = JXImplApplyEffectParamModifier_Int(JX_EFFECT_CURSE, iConMod, 3);
+    iIntMod = JXImplApplyEffectParamModifier_Int(JX_EFFECT_CURSE, iIntMod, 4);
+    iWisMod = JXImplApplyEffectParamModifier_Int(JX_EFFECT_CURSE, iWisMod, 5);
+    iChaMod = JXImplApplyEffectParamModifier_Int(JX_EFFECT_CURSE, iChaMod, 6);
     return EffectCurse(iStrMod, iDexMod, iConMod, iIntMod, iWisMod, iChaMod);
 }
 
 effect JXEffectParalyze(int iSaveDC=-1, int iSave=SAVING_THROW_WILL, int iSaveEveryRound = TRUE)
 {
+    iSaveDC = JXImplApplyEffectParamModifier_Int(JX_EFFECT_PARALYZE, iSaveDC, 1);
+    iSave = JXImplApplyEffectParamModifier_Int(JX_EFFECT_PARALYZE, iSave, 2);
+    iSaveEveryRound = JXImplApplyEffectParamModifier_Int(JX_EFFECT_PARALYZE, iSaveEveryRound, 3);
     return EffectParalyze(iSaveDC, iSave, iSaveEveryRound);
 }
 
 effect JXEffectSpellImmunity(int iImmunityToSpell=SPELL_ALL_SPELLS)
 {
+    iImmunityToSpell = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SPELL_IMMUNITY, iImmunityToSpell, 1);
     return EffectSpellImmunity(iImmunityToSpell);
 }
 
@@ -555,26 +552,33 @@ effect JXEffectStunned()
 
 effect JXEffectRegenerate(int iAmount, float fIntervalSeconds)
 {
+    iAmount = JXImplApplyEffectParamModifier_Int(JX_EFFECT_REGENERATE, iAmount, 1);
+    fIntervalSeconds = JXImplApplyEffectParamModifier_Float(JX_EFFECT_REGENERATE, fIntervalSeconds, 2);
     return EffectRegenerate(iAmount, fIntervalSeconds);
 }
 
 effect JXEffectMovementSpeedIncrease(int iPercentChange)
 {
+    iPercentChange = JXImplApplyEffectParamModifier_Int(JX_EFFECT_MOVEMENT_SPEED_INCREASE, iPercentChange, 1);
     return EffectMovementSpeedIncrease(iPercentChange);
 }
 
 effect JXEffectSpellResistanceIncrease(int iValue, int iUses=-1)
 {
+    iValue = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SPELL_RESISTANCE_INCREASE, iValue, 1);
+    iUses = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SPELL_RESISTANCE_INCREASE, iUses, 2);
     return EffectSpellResistanceIncrease(iValue, iUses);
 }
 
 effect JXEffectPoison(int iPoisonType)
 {
+    iPoisonType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_POISON, iPoisonType, 1);
     return EffectPoison(iPoisonType);
 }
 
 effect JXEffectDisease(int iDiseaseType)
 {
+    iDiseaseType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DISEASE, iDiseaseType, 1);
     return EffectDisease(iDiseaseType);
 }
 
@@ -595,21 +599,27 @@ effect JXEffectSlow()
 
 effect JXEffectImmunity(int iImmunityType)
 {
+    iImmunityType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_IMMUNITY, iImmunityType, 1);
     return EffectImmunity(iImmunityType);
 }
 
 effect JXEffectDamageImmunityIncrease(int iDamageType, int iPercentImmunity)
 {
+    iDamageType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_IMMUNITY_INCREASE, iDamageType, 1);
+    iPercentImmunity = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_IMMUNITY_INCREASE, iPercentImmunity, 2);
     return EffectDamageImmunityIncrease(iDamageType, iPercentImmunity);
 }
 
 effect JXEffectTemporaryHitpoints(int iHitPoints)
 {
+    iHitPoints = JXImplApplyEffectParamModifier_Int(JX_EFFECT_TEMPORARY_HITPOINTS, iHitPoints, 1);
     return EffectTemporaryHitpoints(iHitPoints);
 }
 
 effect JXEffectSkillIncrease(int iSkill, int iValue)
 {
+    iSkill = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SKILL_INCREASE, iSkill, 1);
+    iValue = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SKILL_INCREASE, iSkill, 2);
     return EffectSkillIncrease(iSkill, iValue);
 }
 
@@ -639,61 +649,83 @@ effect JXEffectTurned()
 
 effect JXEffectHitPointChangeWhenDying(float fHitPointChangePerRound)
 {
+    fHitPointChangePerRound = JXImplApplyEffectParamModifier_Float(JX_EFFECT_HITPOINT_CHANGE_WHEN_DYING, fHitPointChangePerRound, 1);
     return EffectHitPointChangeWhenDying(fHitPointChangePerRound);
 }
 
 effect JXEffectAbilityDecrease(int iAbility, int iModifyBy)
 {
+    iAbility = JXImplApplyEffectParamModifier_Int(JX_EFFECT_ABILITY_DECREASE, iAbility, 1);
+    iModifyBy = JXImplApplyEffectParamModifier_Int(JX_EFFECT_ABILITY_DECREASE, iModifyBy, 2);
     return EffectAbilityDecrease(iAbility, iModifyBy);
 }
 
 effect JXEffectAttackDecrease(int iPenalty, int iModifierType=ATTACK_BONUS_MISC)
 {
+    iPenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_ATTACK_DECREASE, iPenalty, 1);
+    iModifierType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_ATTACK_DECREASE, iModifierType, 2);
     return EffectAttackDecrease(iPenalty, iModifierType);
 }
 
 effect JXEffectDamageDecrease(int iPenalty, int iDamageType=DAMAGE_TYPE_MAGICAL)
 {
+    iPenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_DECREASE, iPenalty, 1);
+    iDamageType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_DECREASE, iDamageType, 2);
     return EffectDamageDecrease(iPenalty, iDamageType);
 }
 
 effect JXEffectDamageImmunityDecrease(int iDamageType, int iPercentImmunity)
 {
+    iDamageType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_IMMUNITY_DECREASE, iDamageType, 1);
+    iPercentImmunity = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_IMMUNITY_DECREASE, iPercentImmunity, 2);
     return EffectDamageImmunityDecrease(iDamageType, iPercentImmunity);
 }
 
 effect JXEffectACDecrease(int iValue, int iModifyType=AC_DODGE_BONUS, int iDamageType=AC_VS_DAMAGE_TYPE_ALL)
 {
+    iValue = JXImplApplyEffectParamModifier_Int(JX_EFFECT_AC_DECREASE, iValue, 1);
+    iModifyType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_AC_DECREASE, iModifyType, 2);
+    iDamageType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_AC_DECREASE, iDamageType, 3);
     return EffectACDecrease(iValue, iModifyType, iDamageType);
 }
 
 effect JXEffectMovementSpeedDecrease(int iPercentChange)
 {
+    iPercentChange = JXImplApplyEffectParamModifier_Int(JX_EFFECT_MOVEMENT_SPEED_DECREASE, iPercentChange, 1);
     return EffectMovementSpeedDecrease(iPercentChange);
 }
 
 effect JXEffectSavingThrowDecrease(int iSave, int iValue, int iSaveType=SAVING_THROW_TYPE_ALL)
 {
+    iSave = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_DECREASE, iSave, 1);
+    iValue = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_DECREASE, iValue, 2);
+    iSaveType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SAVING_THROW_DECREASE, iSaveType, 3);
     return EffectSavingThrowDecrease(iSave, iValue, iSaveType);
 }
 
 effect JXEffectSkillDecrease(int iSkill, int iValue)
 {
+    iSkill = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SKILL_DECREASE, iSkill, 1);
+    iValue = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SKILL_DECREASE, iValue, 2);
     return EffectSkillDecrease(iSkill, iValue);
 }
 
 effect JXEffectSpellResistanceDecrease(int iValue)
 {
+    iValue = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SPELL_RESISTANCE_DECREASE, iValue, 1);
     return EffectSpellResistanceDecrease(iValue);
 }
 
 effect JXEffectInvisibility(int iInvisibilityType)
 {
+    iInvisibilityType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_INVISIBILITY, iInvisibilityType, 1);
     return EffectInvisibility(iInvisibilityType);
 }
 
 effect JXEffectConcealment(int iPercentage, int iMissType=MISS_CHANCE_TYPE_NORMAL)
 {
+    iPercentage = JXImplApplyEffectParamModifier_Int(JX_EFFECT_CONCEALMENT, iPercentage, 1);
+    iMissType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_CONCEALMENT, iMissType, 2);
     return EffectConcealment(iPercentage, iMissType);
 }
 
@@ -709,16 +741,22 @@ effect JXEffectUltravision()
 
 effect JXEffectNegativeLevel(int iNumLevels, int bHPBonus=FALSE)
 {
+    iNumLevels = JXImplApplyEffectParamModifier_Int(JX_EFFECT_NEGATIVE_LEVEL, iNumLevels, 1);
+    bHPBonus = JXImplApplyEffectParamModifier_Int(JX_EFFECT_NEGATIVE_LEVEL, bHPBonus, 2);
     return EffectNegativeLevel(iNumLevels, bHPBonus);
 }
 
 effect JXEffectPolymorph(int iPolymorphSelection, int bLocked=FALSE, int bWildshape=FALSE)
 {
+    iPolymorphSelection = JXImplApplyEffectParamModifier_Int(JX_EFFECT_POLYMORPH, iPolymorphSelection, 1);
+    bLocked = JXImplApplyEffectParamModifier_Int(JX_EFFECT_POLYMORPH, bLocked, 2);
+    bWildshape = JXImplApplyEffectParamModifier_Int(JX_EFFECT_POLYMORPH, bWildshape, 3);
     return EffectPolymorph(iPolymorphSelection, bLocked, bWildshape);
 }
 
 effect JXEffectSanctuary(int iDifficultyClass)
 {
+    iDifficultyClass = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SANCTUARY, iDifficultyClass, 1);
     return EffectSanctuary(iDifficultyClass);
 }
 
@@ -744,11 +782,16 @@ effect JXEffectBlindness()
 
 effect JXEffectSpellLevelAbsorption(int iMaxSpellLevelAbsorbed, int iTotalSpellLevelsAbsorbed=0, int iSpellSchool=SPELL_SCHOOL_GENERAL )
 {
+    iMaxSpellLevelAbsorbed = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SPELL_LEVEL_ABSORPTION, iMaxSpellLevelAbsorbed, 1);
+    iTotalSpellLevelsAbsorbed = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SPELL_LEVEL_ABSORPTION, iTotalSpellLevelsAbsorbed, 2);
+    iSpellSchool = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SPELL_LEVEL_ABSORPTION, iSpellSchool, 3);
     return EffectSpellLevelAbsorption(iMaxSpellLevelAbsorbed, iTotalSpellLevelsAbsorbed, iSpellSchool);
 }
 
 effect JXEffectMissChance(int iPercentage, int iMissChanceType=MISS_CHANCE_TYPE_NORMAL)
 {
+    iPercentage = JXImplApplyEffectParamModifier_Int(JX_EFFECT_MISS_CHANCE, iPercentage, 1);
+    iMissChanceType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_MISS_CHANCE, iMissChanceType, 2);
     return EffectMissChance(iPercentage, iMissChanceType);
 }
 
@@ -769,26 +812,38 @@ effect JXEffectAppear(int iAnimation=1)
 
 effect JXEffectModifyAttacks(int iAttacks)
 {
+    iAttacks = JXImplApplyEffectParamModifier_Int(JX_EFFECT_MODIFY_ATTACKS, iAttacks, 1);
     return EffectModifyAttacks(iAttacks);
 }
 
 effect JXEffectDamageShield(int iDamageAmount, int iRandomAmount, int iDamageType)
 {
+    iDamageAmount = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_SHIELD, iDamageAmount, 1);
+    iRandomAmount = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_SHIELD, iRandomAmount, 2);
+    iDamageType = JXImplApplyEffectParamModifier_Int(JX_EFFECT_DAMAGE_SHIELD, iDamageType, 3);
     return EffectDamageShield(iDamageAmount, iRandomAmount, iDamageType);
 }
 
 effect JXEffectSwarm(int bLooping, string sCreatureTemplate1, string sCreatureTemplate2="", string sCreatureTemplate3="", string sCreatureTemplate4="")
 {
+    bLooping = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SWARM, bLooping, 1);
+    sCreatureTemplate1 = JXImplApplyEffectParamModifier_String(JX_EFFECT_SWARM, sCreatureTemplate1, 2);
+    sCreatureTemplate2 = JXImplApplyEffectParamModifier_String(JX_EFFECT_SWARM, sCreatureTemplate2, 3);
+    sCreatureTemplate3 = JXImplApplyEffectParamModifier_String(JX_EFFECT_SWARM, sCreatureTemplate3, 4);
+    sCreatureTemplate4 = JXImplApplyEffectParamModifier_String(JX_EFFECT_SWARM, sCreatureTemplate4, 5);
+
     return EffectSwarm(bLooping, sCreatureTemplate1, sCreatureTemplate2, sCreatureTemplate3, sCreatureTemplate4);
 }
 
 effect JXEffectTurnResistanceDecrease(int iHitDice)
 {
+    iHitDice = JXImplApplyEffectParamModifier_Int(JX_EFFECT_TURN_RESISTANCE_DECREASE, iHitDice, 1);
     return EffectTurnResistanceDecrease(iHitDice);
 }
 
 effect JXEffectTurnResistanceIncrease(int iHitDice)
 {
+    iHitDice = JXImplApplyEffectParamModifier_Int(JX_EFFECT_TURN_RESISTANCE_INCREASE, iHitDice, 1);
     return EffectTurnResistanceIncrease(iHitDice);
 }
 
@@ -799,6 +854,8 @@ effect JXEffectPetrify()
 
 effect JXEffectSpellFailure(int iPercent=100, int iSpellSchool=SPELL_SCHOOL_GENERAL)
 {
+    iPercent = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SPELL_FAILURE, iPercent, 1);
+    iSpellSchool = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SPELL_FAILURE, iSpellSchool, 2);
     return EffectSpellFailure(iPercent, iSpellSchool);
 }
 
@@ -819,16 +876,23 @@ effect JXEffectLowLightVision()
 
 effect JXEffectSetScale(float fScaleX, float fScaleY=-1.0, float fScaleZ=-1.0)
 {
+    fScaleX = JXImplApplyEffectParamModifier_Float(JX_EFFECT_SET_SCALE, fScaleX, 1);
+    fScaleY = JXImplApplyEffectParamModifier_Float(JX_EFFECT_SET_SCALE, fScaleY, 2);
+    fScaleZ = JXImplApplyEffectParamModifier_Float(JX_EFFECT_SET_SCALE, fScaleZ, 3);
     return EffectSetScale(fScaleX, fScaleY, fScaleZ);
 }
 
 effect JXEffectShareDamage(object oHelper, int iAmountShared=50, int iAmountCasterShared=50)
 {
+    oHelper = JXImplApplyEffectParamModifier_Object(JX_EFFECT_SHARE_DAMAGE, oHelper, 1);
+    iAmountShared = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SHARE_DAMAGE, iAmountShared, 2);
+    iAmountCasterShared = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SHARE_DAMAGE, iAmountCasterShared, 3);
     return EffectShareDamage(oHelper, iAmountShared, iAmountCasterShared);
 }
 
 effect JXEffectAssayResistance(object oTarget)
 {
+    oTarget = JXImplApplyEffectParamModifier_Object(JX_EFFECT_ASSAY_RESISTANCE, oTarget, 1);
     return EffectAssayResistance(oTarget);
 }
 
@@ -839,16 +903,20 @@ effect JXEffectSeeTrueHPs()
 
 effect JXEffectAbsorbDamage(int iACTest)
 {
+    iACTest = JXImplApplyEffectParamModifier_Int(JX_EFFECT_ABSORB_DAMAGE, iACTest, 1);
     return EffectAbsorbDamage(iACTest);
 }
 
 effect JXEffectHideousBlow(int iMetamagic)
 {
+    iMetamagic = JXImplApplyEffectParamModifier_Int(JX_EFFECT_HIDEOUS_BLOW, iMetamagic, 1);
     return EffectHideousBlow(iMetamagic);
 }
 
 effect JXEffectMesmerize(int iBreakFlags, float fBreakDist = 0.0f)
 {
+    iBreakFlags = JXImplApplyEffectParamModifier_Int(JX_EFFECT_MESMERIZE, iBreakFlags, 1);
+    fBreakDist = JXImplApplyEffectParamModifier_Float(JX_EFFECT_MESMERIZE, fBreakDist, 2);
     return EffectMesmerize(iBreakFlags, fBreakDist);
 }
 
@@ -859,31 +927,40 @@ effect JXEffectDarkVision()
 
 effect JXEffectArmorCheckPenaltyIncrease(object oTarget, int iPenalty)
 {
+    oTarget = JXImplApplyEffectParamModifier_Object(JX_EFFECT_ARMOR_CHECK_PENALTY_INCREASE, oTarget, 1);
+    iPenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_ARMOR_CHECK_PENALTY_INCREASE, iPenalty, 2);
     return EffectArmorCheckPenaltyIncrease(oTarget, iPenalty);
 }
 
 effect JXEffectDisintegrate(object oTarget)
 {
+    oTarget = JXImplApplyEffectParamModifier_Object(JX_EFFECT_DESINTEGRATE, oTarget, 1);
     return EffectDisintegrate(oTarget);
 }
 
 effect JXEffectHealOnZeroHP(object oTarget, int iDmgToHeal)
 {
+    oTarget = JXImplApplyEffectParamModifier_Object(JX_EFFECT_HEAL_ON_ZERO_HP, oTarget, 1);
+    iDmgToHeal = JXImplApplyEffectParamModifier_Int(JX_EFFECT_HEAL_ON_ZERO_HP, iDmgToHeal, 2);
     return EffectHealOnZeroHP(oTarget, iDmgToHeal);
 }
 
 effect JXEffectBreakEnchantment(int iLevel)
 {
+    iLevel = JXImplApplyEffectParamModifier_Int(JX_EFFECT_BREAK_ENCHANTMENT, iLevel, 1);
     return EffectBreakEnchantment(iLevel);
 }
 
 effect JXEffectBonusHitpoints(int iHitpoints)
 {
+    iHitpoints = JXImplApplyEffectParamModifier_Int(JX_EFFECT_BONUS_HITPOINTS, iHitpoints, 1);
     return EffectBonusHitpoints(iHitpoints);
 }
 
 effect JXEffectBardSongSinging(int iSpellId)
 {
+    // NOTE: probably not necessary
+    iSpellId = JXImplApplyEffectParamModifier_Int(JX_EFFECT_BARD_SONG_SINGING, iSpellId, 1);
     return EffectBardSongSinging(iSpellId);
 }
 
@@ -894,6 +971,7 @@ effect JXEffectJarring()
 
 effect JXEffectBABMinimum(int iBABMin)
 {
+    iBABMin = JXImplApplyEffectParamModifier_Int(JX_EFFECT_BAB_MINIMUM, iBABMin, 1);
     return EffectBABMinimum(iBABMin);
 }
 
@@ -904,6 +982,7 @@ effect JXEffectMaxDamage()
 
 effect JXEffectArcaneSpellFailure(int iPercent)
 {
+    iPercent = JXImplApplyEffectParamModifier_Int(JX_EFFECT_ARCANE_SPELL_FAILURE, iPercent, 1);
     return EffectArcaneSpellFailure(iPercent);
 }
 
@@ -914,6 +993,7 @@ effect JXEffectWildshape()
 
 effect JXEffectEffectIcon(int iEffectIconId)
 {
+    iEffectIconId = JXImplApplyEffectParamModifier_Int(JX_EFFECT_EFFECT_ICON, iEffectIconId, 1);
     return EffectEffectIcon(iEffectIconId);
 }
 
@@ -944,6 +1024,12 @@ effect JXEffectInsane()
 
 effect JXEffectSummonCopy(object oSource, int iVisualEffectId=VFX_NONE, float fDelaySeconds=0.0f, string sNewTag="", int iNewHP=0, string sScript="")
 {
+    oSource = JXImplApplyEffectParamModifier_Object(JX_EFFECT_SUMMON_COPY, oSource, 1);
+    iVisualEffectId = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SUMMON_COPY, iVisualEffectId, 2);
+    fDelaySeconds = JXImplApplyEffectParamModifier_Float(JX_EFFECT_SUMMON_COPY, fDelaySeconds, 3);
+    sNewTag = JXImplApplyEffectParamModifier_String(JX_EFFECT_SUMMON_COPY, sNewTag, 4);
+    iNewHP = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SUMMON_COPY, iNewHP, 5);
+    sScript = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SUMMON_COPY, sScript, 6);
     return EffectSummonCopy(oSource, iVisualEffectId, fDelaySeconds, sNewTag, iNewHP, sScript);
 }
 
@@ -1009,54 +1095,76 @@ effect JXEffectBeam(int iBeamVisualEffect, object oEffector, int iBodyPart, int 
 //=====================================================
 
 //simulates shaken effect
-effect JXEffectShaken()
+effect JXEffectShaken(int iAttackPenalty=2, int iSavePenalty=2, int iSkillPenalty=2)
 {
-    effect eAttackPen = EffectAttackDecrease(2, ATTACK_BONUS_MISC);
-    effect eSavePen = EffectSavingThrowDecrease(SAVING_THROW_ALL, 2, SAVING_THROW_TYPE_ALL);
-    effect eSkillPen = EffectSkillDecrease(SKILL_ALL_SKILLS, 2);
-    effect eShakenLink = EffectLinkEffects(eAttackPen, eSavePen);
-    eShakenLink = EffectLinkEffects(eShakenLink, eSkillPen);
+    iAttackPenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SHAKEN, iAttackPenalty, 1);
+    iSavePenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SHAKEN, iSavePenalty, 2);
+    iSkillPenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SHAKEN, iSkillPenalty, 3);
+
+    effect eAttackPen = EffectAttackDecrease(iAttackPenalty, ATTACK_BONUS_MISC);
+    effect eSavePen = EffectSavingThrowDecrease(SAVING_THROW_TYPE_FEAR, iSavePenalty, SAVING_THROW_TYPE_ALL);
+    effect eSkillPen = EffectSkillDecrease(SKILL_ALL_SKILLS, iSkillPenalty);
+
+    effect eShakenLink = EffectLink3Effects(eAttackPen, eSavePen, eSkillPen);
     return eShakenLink;
 }
 
-effect JXEffectSickened()
+effect JXEffectSickened(int iAttackPenalty=2,
+                        int iDamagePenalty=2,
+                        int iSavePenalty=2,
+                        int iSkillPenalty=2)
 {
-    effect eAttackPenalty = EffectAttackDecrease(2);
-    effect eDamagePenalty = EffectDamageDecrease(2);
-    effect eSavePenalty = EffectSavingThrowDecrease(SAVING_THROW_ALL, 2);
-    effect eSkillPenalty = EffectSkillDecrease(SKILL_ALL_SKILLS, 2);
-    //effect eAbilityPenalty = EffectAbilityDecrease(, 2);
+    iAttackPenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SICKENED, iAttackPenalty, 1);
+    iDamagePenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SICKENED, iDamagePenalty, 2);
+    iSavePenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SICKENED, iSavePenalty, 3);
+    iSkillPenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_SICKENED, iSkillPenalty, 4);
 
-    effect eRet = EffectLinkEffects (eAttackPenalty, eDamagePenalty);
-    eRet = EffectLinkEffects(eRet, eSavePenalty);
-    eRet = EffectLinkEffects(eRet, eSkillPenalty);
-    eRet = ExtraordinaryEffect(eRet);
-    return (eRet);
+
+    effect eAttackPenalty = EffectAttackDecrease(iAttackPenalty);
+    effect eDamagePenalty = EffectDamageDecrease(iDamagePenalty);
+    effect eSavePenalty = EffectSavingThrowDecrease(SAVING_THROW_ALL, iSavePenalty);
+    effect eSkillPenalty = EffectSkillDecrease(SKILL_ALL_SKILLS, iSkillPenalty);
+
+    effect eRet = EffectLink4Effects(
+        eAttackPenalty,
+        eDamagePenalty,
+        eSavePenalty,
+        eSkillPenalty);
+    return eRet;
 }
 
-effect JXEffectFatigue()
+effect JXEffectFatigued(int iStrPenalty=2, int iDexPenalty=2, int iMovePenalty=10)
 {
-    // Create the fatigue penalty
-    effect eStrPenalty = EffectAbilityDecrease(ABILITY_STRENGTH, 2);
-    effect eDexPenalty = EffectAbilityDecrease(ABILITY_DEXTERITY, 2);
-    effect eMovePenalty = EffectMovementSpeedDecrease(10);  // 10% decrease
+    iStrPenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_FATIGUED, iStrPenalty, 1);
+    iDexPenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_FATIGUED, iDexPenalty, 2);
+    iMovePenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_FATIGUED, iMovePenalty, 3);
 
-    effect eRet = EffectLinkEffects (eStrPenalty, eDexPenalty);
-    eRet = EffectLinkEffects(eRet, eMovePenalty);
-    eRet = ExtraordinaryEffect(eRet);
-    return (eRet);
+    effect eStrPenalty = EffectAbilityDecrease(ABILITY_STRENGTH, iStrPenalty);
+    effect eDexPenalty = EffectAbilityDecrease(ABILITY_DEXTERITY, iDexPenalty);
+    effect eMovePenalty = EffectMovementSpeedDecrease(iMovePenalty);
+
+    effect eRet = EffectLink3Effects(
+        eStrPenalty,
+        eDexPenalty,
+        eMovePenalty);
+    return eRet;
 }
 
-effect JXEffectExhausted()
+effect JXEffectExhausted(int iStrPenalty=6, int iDexPenalty=6, int iMovePenalty=50)
 {
-    effect eStrPenalty = EffectAbilityDecrease(ABILITY_STRENGTH, 6);
-    effect eDexPenalty = EffectAbilityDecrease(ABILITY_DEXTERITY, 6);
-    effect eMovePenalty = EffectMovementSpeedDecrease(50);  // 50% decrease
+    iStrPenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_EXHAUSTED, iStrPenalty, 1);
+    iDexPenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_EXHAUSTED, iDexPenalty, 2);
+    iMovePenalty = JXImplApplyEffectParamModifier_Int(JX_EFFECT_EXHAUSTED, iMovePenalty, 3);
 
-    effect eRet = EffectLinkEffects (eStrPenalty, eDexPenalty);
-    eRet = EffectLinkEffects(eRet, eMovePenalty);
-    eRet = ExtraordinaryEffect(eRet);
-    return (eRet);
+    effect eStrPenalty = EffectAbilityDecrease(ABILITY_STRENGTH, iStrPenalty);
+    effect eDexPenalty = EffectAbilityDecrease(ABILITY_DEXTERITY, iDexPenalty);
+    effect eMovePenalty = EffectMovementSpeedDecrease(iMovePenalty);
+
+    effect eRet = EffectLink3Effects(
+        eStrPenalty,
+        eDexPenalty,
+        eMovePenalty);
+    return eRet;
 }
 
 // for compatibility atp.
@@ -1064,155 +1172,3 @@ effect JXEffectLinkEffects(effect e1, effect e2)
 {
     return EffectLinkEffects(e1, e2);
 }
-
-effect JXEffectLink3Effects(effect e1, effect e2, effect e3)
-{
-    e1 = EffectLinkEffects(e1, e2);
-    e1 = EffectLinkEffects(e1, e3);
-    return e1;
-}
-
-effect JXEffectLink4Effects(effect e1, effect e2, effect e3, effect e4)
-{
-    e1 = EffectLinkEffects(e1, e2);
-    e1 = EffectLinkEffects(e1, e3);
-    e1 = EffectLinkEffects(e1, e4);
-    return e1;
-}
-
-effect JXEffectLink5Effects(effect e1, effect e2, effect e3, effect e4, effect e5)
-{
-    e1 = EffectLinkEffects(e1, e2);
-    e1 = EffectLinkEffects(e1, e3);
-    e1 = EffectLinkEffects(e1, e4);
-    e1 = EffectLinkEffects(e1, e5);
-    return e1;
-}
-
-effect JXEffectLink6Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6)
-{
-    e1 = EffectLinkEffects(e1, e2);
-    e1 = EffectLinkEffects(e1, e3);
-    e1 = EffectLinkEffects(e1, e4);
-    e1 = EffectLinkEffects(e1, e5);
-    e1 = EffectLinkEffects(e1, e6);
-    return e1;
-}
-
-effect JXEffectLink7Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7)
-{
-    e1 = EffectLinkEffects(e1, e2);
-    e1 = EffectLinkEffects(e1, e3);
-    e1 = EffectLinkEffects(e1, e4);
-    e1 = EffectLinkEffects(e1, e5);
-    e1 = EffectLinkEffects(e1, e6);
-    e1 = EffectLinkEffects(e1, e7);
-    return e1;
-}
-
-effect JXEffectLink8Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8)
-{
-    e1 = EffectLinkEffects(e1, e2);
-    e1 = EffectLinkEffects(e1, e3);
-    e1 = EffectLinkEffects(e1, e4);
-    e1 = EffectLinkEffects(e1, e5);
-    e1 = EffectLinkEffects(e1, e6);
-    e1 = EffectLinkEffects(e1, e7);
-    e1 = EffectLinkEffects(e1, e8);
-    return e1;
-}
-
-effect JXEffectLink9Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8, effect e9)
-{
-    e1 = EffectLinkEffects(e1, e2);
-    e1 = EffectLinkEffects(e1, e3);
-    e1 = EffectLinkEffects(e1, e4);
-    e1 = EffectLinkEffects(e1, e5);
-    e1 = EffectLinkEffects(e1, e6);
-    e1 = EffectLinkEffects(e1, e7);
-    e1 = EffectLinkEffects(e1, e8);
-    e1 = EffectLinkEffects(e1, e9);
-    return e1;
-}
-
-effect JXEffectLink10Effects(effect e1, effect e2, effect e3, effect e4, effect e5, effect e6, effect e7, effect e8, effect e9, effect e10)
-{
-    e1 = EffectLinkEffects(e1, e2);
-    e1 = EffectLinkEffects(e1, e3);
-    e1 = EffectLinkEffects(e1, e4);
-    e1 = EffectLinkEffects(e1, e5);
-    e1 = EffectLinkEffects(e1, e6);
-    e1 = EffectLinkEffects(e1, e7);
-    e1 = EffectLinkEffects(e1, e8);
-    e1 = EffectLinkEffects(e1, e9);
-    e1 = EffectLinkEffects(e1, e10);
-    return e1;
-}
-
-// int JXImplApplyEffectParamModifier_Int(int iJXEffectType, int iValue, int iParamPos=1)
-// {
-//     // struct script_param_list paramList;
-//     // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
-//     // paramList = JXScriptAddParameterInt(paramList, iValue);
-//     // paramList = JXScriptAddParameterInt(paramList, iParamPos);
-//     //
-//     // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_INT, paramList);
-//
-//     AddScriptParameterInt(iJXEffectType);
-//     AddScriptParameterInt(iValue);
-//     AddScriptParameterInt(iParamPos);
-//     ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_INT_FORKSCRIPT, OBJECT_SELF);
-//
-//     return JXScriptGetResponseInt();
-// }
-//
-// float JXImplApplyEffectParamModifier_Float(int iJXEffectType, float fValue, int iParamPos=1)
-// {
-//     // struct script_param_list paramList;
-//     // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
-//     // paramList = JXScriptAddParameterFloat(paramList, fValue);
-//     // paramList = JXScriptAddParameterInt(paramList, iParamPos);
-//     //
-//     // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_FLOAT, paramList);
-//
-//     AddScriptParameterInt(iJXEffectType);
-//     AddScriptParameterFloat(fValue);
-//     AddScriptParameterInt(iParamPos);
-//     ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_FLOAT_FORKSCRIPT, OBJECT_SELF);
-//
-//     return JXScriptGetResponseFloat();
-// }
-//
-// string JXImplApplyEffectParamModifier_String(int iJXEffectType, string sValue, int iParamPos=1)
-// {
-//     // struct script_param_list paramList;
-//     // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
-//     // paramList = JXScriptAddParameterString(paramList, sValue);
-//     // paramList = JXScriptAddParameterInt(paramList, iParamPos);
-//     //
-//     // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_STRING, paramList);
-//
-//     AddScriptParameterInt(iJXEffectType);
-//     AddScriptParameterString(sValue);
-//     AddScriptParameterInt(iParamPos);
-//     ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_STRING_FORKSCRIPT, OBJECT_SELF);
-//
-//     return JXScriptGetResponseString();
-// }
-//
-// object JXImplApplyEffectParamModifier_Object(int iJXEffectType, object oValue, int iParamPos=1)
-// {
-//     // struct script_param_list paramList;
-//     // paramList = JXScriptAddParameterInt(paramList, iJXEffectType);
-//     // paramList = JXScriptAddParameterObject(paramList, oValue);
-//     // paramList = JXScriptAddParameterInt(paramList, iParamPos);
-//     //
-//     // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_PARAM_MOD_STRING, paramList);
-//
-//     AddScriptParameterInt(iJXEffectType);
-//     AddScriptParameterObject(oValue);
-//     AddScriptParameterInt(iParamPos);
-//     ExecuteScriptEnhanced(JX_EFFECT_PARAM_MOD_OBJECT_FORKSCRIPT, OBJECT_SELF);
-//
-//     return JXScriptGetResponseObject();
-// }

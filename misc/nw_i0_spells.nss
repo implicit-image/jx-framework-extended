@@ -78,7 +78,7 @@
 #include "x0_i0_assoc"
 // #include "bot9s_inc_constants"
 #include "x2_inc_spellhook"
-
+#include "jx_save_interface"
 // #include "2d2f_includes"
 
 // #include "jx_inc_magic_effects"
@@ -1120,7 +1120,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 
 
     // potentially override the results of the throw
-    // bValid = JXSavingThrow(bValid, nSavingThrow, oTarget, nDC, nSaveType, oSaveVersus, fDelay);
+    bValid = JXImplSavingThrow(bValid, nSavingThrow, oTarget, nDC, nSaveType, oSaveVersus, fDelay);
 
     nSpellID = JXGetSpellId();
 

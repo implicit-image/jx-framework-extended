@@ -80,7 +80,6 @@
 #include "jx_inc_magic_item"
 #include "jx_inc_magic_class"
 #include "jx_inc_action"
-// #include "jx_inc_magic_effects"
 #include "jx_inc_magic_wild"
 
 #include "utils"
@@ -316,7 +315,7 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - eEffect Effect to apply to the object
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
-void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iRunOnApply=TRUE);
+void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iEffectType=-1,  int iRunOnApply=TRUE);
 
 // Create an area of effect for the current spell and apply it at the specified location.
 // Areas of effect created by this way have the following properties :
@@ -1428,12 +1427,16 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
 // - iEffectType JX_EFFECT_TYPE_* of the passed effect
-void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iRunOnApply=TRUE)
+void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iEffectType=-1, int iRunOnApply=TRUE)
 {
     object oCaster = JXGetCaster();
     int iSpellId = JXGetSpellId();
-    int iEffectType = GetEffectType(eEffect);
 
+    // try to guess the effect type
+    if (iEffectType == -1)
+    {
+        iEffectType = GetEffectType(eEffect);
+    }
 
     // Information about instant effect spells aren't saved
     if (iDuration != DURATION_TYPE_INSTANT)
@@ -2104,17 +2107,17 @@ void JXPostSpellCastCode()
 // TODO: actually make this work
 int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterObject(paramList, oCaster);
-    paramList = JXScriptAddParameterObject(paramList, oTarget);
-    paramList = JXScriptAddParameterInt(paramList, GetEffectType(eEffect));
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterObject(paramList, oCaster);
+    // paramList = JXScriptAddParameterObject(paramList, oTarget);
+    // paramList = JXScriptAddParameterInt(paramList, GetEffectType(eEffect));
+    //
+    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_ON_APPLY_CODE, paramList);
 
-    JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_ON_APPLY_CODE, paramList);
-
-    // AddScriptParameterObject(oCaster);
-    // AddScriptParameterObject(oTarget);
-    // AddScriptParameterInt(GetEffectType(eEffect));
-    // ExecuteScriptEnhanced(JX_EFFECT_ON_APPLY_FORKSCRIPT, OBJECT_SELF);
+    AddScriptParameterObject(oCaster);
+    AddScriptParameterObject(oTarget);
+    AddScriptParameterInt(GetEffectType(eEffect));
+    ExecuteScriptEnhanced(JX_EFFECT_ON_APPLY_FORKSCRIPT, OBJECT_SELF);
 
     return JXScriptGetResponseInt();
 }

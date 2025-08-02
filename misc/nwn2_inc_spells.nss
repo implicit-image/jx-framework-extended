@@ -975,7 +975,7 @@ void ApplyFatigue(object oTarget, int nFatigueDuration, float fDelay = 0.0f)
                 //SpeakString("Actually applying fatigue effect in ApplyFatigue");
 
                 // Create the fatigue penalty
-                effect eFatigue = JXEffectFatigue();
+                effect eFatigue = JXEffectFatigued();
 
                 float fFatigueDuration = RoundsToSeconds(nFatigueDuration);
 
