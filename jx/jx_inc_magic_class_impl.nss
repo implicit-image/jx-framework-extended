@@ -1,5 +1,6 @@
 #include "jx_inc_magic_class"
 // include content-dependent implementation
+#include "jx_class_info_interface"
 
 int JXGetIsMainArcaneClass(int iClass);
 
@@ -171,65 +172,74 @@ int JXImplGetCreatureCasterLevelForSpell(int iSpellId, object oCreature = OBJECT
 
 int JXGetIsMainArcaneClass(int iClass)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iClass);
-
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IS_MAIN_ARCANE_CLASS, paramList);
-
-    return JXScriptGetResponseInt();
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iClass);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IS_MAIN_ARCANE_CLASS, paramList);
+    //
+    // return JXScriptGetResponseInt();
+    return JXImplGetIsMainArcaneClass(iClass);
 }
 
 int JXGetIsMainDivineClass(int iClass)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iClass);
-
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IS_MAIN_DIVINE_CLASS, paramList);
-
-    return JXScriptGetResponseInt();
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iClass);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IS_MAIN_DIVINE_CLASS, paramList);
+    //
+    // return JXScriptGetResponseInt();
+    return JXImplGetIsMainDivineClass(iClass);
 }
 
 int JXGetComputedCLFromClass(int iClass, int iClassLevel)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iClass);
-    paramList = JXScriptAddParameterInt(paramList, iClassLevel);
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iClass);
+    // paramList = JXScriptAddParameterInt(paramList, iClassLevel);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_COMPUTED_CL_FROM_CLASS, paramList);
+    //
+    // return JXScriptGetResponseInt();
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_COMPUTED_CL_FROM_CLASS, paramList);
-
-    return JXScriptGetResponseInt();
+    return JXImplGetComputedCLFromClass(iClass, iClassLevel);
 }
 
 int JXGetImprovedArcaneCLFromClasses(object oCreature, int iClass)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterObject(paramList, oCreature);
-    paramList = JXScriptAddParameterInt(paramList, iClass);
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterObject(paramList, oCreature);
+    // paramList = JXScriptAddParameterInt(paramList, iClass);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IMPROVED_ARCANE_CL_FROM_CLASSES, paramList);
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IMPROVED_ARCANE_CL_FROM_CLASSES, paramList);
+    // return JXScriptGetResponseInt();
 
-    return JXScriptGetResponseInt();
+    return JXImplGetImprovedArcaneCLFromClasses(oCreature, iClass);
 }
 
 int JXGetImprovedDivineCLFromClasses(object oCreature, int iClass)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterObject(paramList, oCreature);
-    paramList = JXScriptAddParameterInt(paramList, iClass);
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterObject(paramList, oCreature);
+    // paramList = JXScriptAddParameterInt(paramList, iClass);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IMPROVED_DIVINE_CL_FROM_CLASSES, paramList);
+    //
+    // return JXScriptGetResponseInt();
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_IMPROVED_DIVINE_CL_FROM_CLASSES, paramList);
-
-    return JXScriptGetResponseInt();
+    return JXImplGetImprovedDivineCLFromClasses(oCreature, iClass);
 }
 
 int JXGetCLBonusFromPractisedSpellcaster(object oCaster, int iCastingClass, int iCastingLevels)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterObject(paramList, oCaster);
-    paramList = JXScriptAddParameterInt(paramList, iCastingClass);
-    paramList = JXScriptAddParameterInt(paramList, iCastingLevels);
-
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_PRACTISED_SPELLCASTER_BONUS, paramList);
-
-    return JXScriptGetResponseInt();
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterObject(paramList, oCaster);
+    // paramList = JXScriptAddParameterInt(paramList, iCastingClass);
+    // paramList = JXScriptAddParameterInt(paramList, iCastingLevels);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_PRACTISED_SPELLCASTER_BONUS, paramList);
+    //
+    // return JXScriptGetResponseInt();
+    return JXImplGetCLBonusFromPractisedSpellcaster(oCaster, iCastingClass, iCastingLevels);
 }

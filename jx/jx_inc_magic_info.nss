@@ -29,7 +29,7 @@
 
 #include "jx_inc_magic_const"
 #include "jx_inc_script_call"
-
+#include "jx_spell_info_interface"
 
 //**************************************//
 //                                      //
@@ -312,12 +312,14 @@ int JXGetHasSpellTargetTypeArea(int iSpellId)
 // * Returns TRUE if the spell uses a ranged touch attack
 int JXGetIsSpellUsingRangedTouchAttack(int iSpellId)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLRANGEDTOUCHATTACK, paramList);
+    //
+    // return JXScriptGetResponseInt();
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLRANGEDTOUCHATTACK, paramList);
-
-    return JXScriptGetResponseInt();
+    return JXImplGetIsSpellUsingRangedTouchAttack(iSpellId);
 }
 
 // Indicate if a spell is a spell or a spell-like ability
@@ -325,12 +327,14 @@ int JXGetIsSpellUsingRangedTouchAttack(int iSpellId)
 // * Returns TRUE if the spell is a spell or a spell-like ability
 int JXGetIsSpellMagical(int iSpellId)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLMAGICAL, paramList);
+    //
+    // return JXScriptGetResponseInt();
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLMAGICAL, paramList);
-
-    return JXScriptGetResponseInt();
+    return JXImplGetIsSpellMagical(iSpellId);
 }
 
 // Indicate if a spell is a supernatural ability
@@ -338,12 +342,14 @@ int JXGetIsSpellMagical(int iSpellId)
 // * Returns TRUE if the spell is a supernatural ability
 int JXGetIsSpellSupernatural(int iSpellId)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLSUPERNATURAL, paramList);
+    //
+    // return JXScriptGetResponseInt();
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLSUPERNATURAL, paramList);
-
-    return JXScriptGetResponseInt();
+    return JXImplGetIsSpellSupernatural(iSpellId);
 }
 
 // Indicate if a spell is an extraordinary ability
@@ -351,12 +357,14 @@ int JXGetIsSpellSupernatural(int iSpellId)
 // * Returns TRUE if the spell is an extraordinary ability
 int JXGetIsSpellExtraordinary(int iSpellId)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLEXTRAORDINARY, paramList);
+    //
+    // return JXScriptGetResponseInt();
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLEXTRAORDINARY, paramList);
-
-    return JXScriptGetResponseInt();
+    return JXImplGetIsSpellExtraordinary(iSpellId);
 }
 
 // Indicate if a spell isn't a spell, spell-like, supernatural or extraordinary ability
@@ -364,12 +372,14 @@ int JXGetIsSpellExtraordinary(int iSpellId)
 // * Returns TRUE if the spell isn't a spell, spell-like, supernatural or extraordinary ability
 int JXGetIsSpellMiscellaneous(int iSpellId)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLMISCELLANEOUS, paramList);
+    //
+    // return JXScriptGetResponseInt();
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLMISCELLANEOUS, paramList);
-
-    return JXScriptGetResponseInt();
+    return JXImplGetIsSpellMiscellaneous(iSpellId);
 }
 
 // Indicate if a spell has the specified descriptor
@@ -378,13 +388,15 @@ int JXGetIsSpellMiscellaneous(int iSpellId)
 // * Returns TRUE if the spell has the specified spell descriptor
 int JXGetHasSpellDescriptor(int iSpellId, int iDescriptor = JX_SPELLDESCRIPTOR_ANY)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iSpellId);
-    paramList = JXScriptAddParameterInt(paramList, iDescriptor);
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    // paramList = JXScriptAddParameterInt(paramList, iDescriptor);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLDESCRIPTOR, paramList);
+    //
+    // return JXScriptGetResponseInt();
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLDESCRIPTOR, paramList);
-
-    return JXScriptGetResponseInt();
+    return JXImplGetHasSpellDescriptor(iSpellId, iDescriptor);
 }
 
 // Get the spell school of a spell
@@ -410,12 +422,14 @@ int JXGetSpellSchool(int iSpellId)
 // * Returns a JX_SPELLSUBSCHOOL_* constant
 int JXGetSpellSubSchool(int iSpellId)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLSUBSCHOOL, paramList);
+    //
+    // return JXScriptGetResponseInt();
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLSUBSCHOOL, paramList);
-
-    return JXScriptGetResponseInt();
+    return JXImplGetSpellSubSchool(iSpellId);
 }
 
 // Get the spell school name from a spell school identifier
@@ -591,13 +605,15 @@ int JXGetSpellType(int iSpellId)
 // * Returns the spell level, or -1 if the spell is not accessible to the class
 int JXGetBaseSpellLevel(int iSpellId, int iClass = CLASS_TYPE_INVALID)
 {
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iSpellId);
-    paramList = JXScriptAddParameterInt(paramList, iClass);
+    // struct script_param_list paramList;
+    // paramList = JXScriptAddParameterInt(paramList, iSpellId);
+    // paramList = JXScriptAddParameterInt(paramList, iClass);
+    //
+    // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLLEVEL, paramList);
+    //
+    // return JXScriptGetResponseInt();
 
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SPELLLEVEL, paramList);
-
-    return JXScriptGetResponseInt();
+    return JXImplGetBaseSpellLevel(iSpellId, iClass);
 }
 
 // Get the main ability for a spellcasting class
