@@ -166,7 +166,7 @@ int JXGetCreatureCasterLevelForSpell(int iSpellId, object oCreature = OBJECT_SEL
     //
     // return JXScriptGetResponseInt();
 
-    return JXImplGetCreatureCasterLevelForSpell(oCreature, iClass);
+    return JXImplGetCreatureCasterLevelForSpell(iSpellId, oCreature, iClass);
 }
 
 
@@ -187,7 +187,7 @@ int JXGetCreatureSpellSaveDC(int iSpellId, object oCreature = OBJECT_SELF, int i
     // JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_CREATURESPELLSAVEDC, paramList);
     //
     // return JXScriptGetResponseInt();
-    return JXImplGetCreatureSpellSaveDC(iSpellId, oCreature);
+    return JXImplGetCreatureSpellSaveDC(iSpellId, oCreature, iClass);
 }
 
 
