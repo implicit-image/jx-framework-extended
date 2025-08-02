@@ -451,14 +451,6 @@ void JXSetOnApplySpellEffectResult(int iValue, object oTarget=OBJECT_SELF);
 void JXPostSpellCastCode();
 
 
-
-
-
-//========================================= Saving Throw ===========================================
-
-int JXSavingThrow(int iResult, int iSavingThrow, object oTarget, int iDC, int iSaveType, object oSaveVersus, float fDelay);
-
-
 //**************************************//
 //                                      //
 //            Implementation            //
@@ -2105,42 +2097,17 @@ void JXPostSpellCastCode()
 // TODO: actually make this work
 int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterObject(paramList, oCaster);
-    // paramList = JXScriptAddParameterObject(paramList, oTarget);
-    // paramList = JXScriptAddParameterInt(paramList, GetEffectType(eEffect));
-    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_ON_APPLY_CODE, paramList);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCaster);
+    paramList = JXScriptAddParameterObject(paramList, oTarget);
+    paramList = JXScriptAddParameterInt(paramList, GetEffectType(eEffect));
+    JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_ON_APPLY_CODE, paramList);
 
-    AddScriptParameterObject(oCaster);
-    AddScriptParameterObject(oTarget);
-    AddScriptParameterInt(GetEffectType(eEffect));
-    int r = ExecuteScriptEnhanced(JX_EFFECT_ON_APPLY_FORKSCRIPT, OBJECT_SELF, FALSE);
-    ClearScriptParams();
-    if (r == -1)
-    {
-        Log("On apply script execution failed");
-    }
-    return JXScriptGetResponseInt();
+   return JXScriptGetResponseInt();
 }
 
 // use this function to set the result of on_apply_spell_effect script
 void JXSetOnApplySpellEffectResult(int iValue, object oTarget=OBJECT_SELF)
 {
     SetLocalInt(oTarget, VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT, iValue);
-}
-
-int JXSavingThrow(int iResult, int iSavingThrow, object oTarget, int iDC, int iSaveType, object oSaveVersus, float fDelay)
-{
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterInt(paramList, iResult);
-    paramList = JXScriptAddParameterInt(paramList, iSavingThrow);
-    paramList = JXScriptAddParameterObject(paramList, oTarget);
-    paramList = JXScriptAddParameterInt(paramList, iDC);
-    paramList = JXScriptAddParameterInt(paramList, iSaveType);
-    paramList = JXScriptAddParameterObject(paramList, oSaveVersus);
-    paramList = JXScriptAddParameterFloat(paramList, fDelay);
-
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_SAVING_THROW, paramList);
-
-    return JXScriptGetResponseInt();
 }
