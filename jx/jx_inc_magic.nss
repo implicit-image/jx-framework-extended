@@ -2107,17 +2107,17 @@ void JXPostSpellCastCode()
 // TODO: actually make this work
 int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect)
 {
-    // struct script_param_list paramList;
-    // paramList = JXScriptAddParameterObject(paramList, oCaster);
-    // paramList = JXScriptAddParameterObject(paramList, oTarget);
-    // paramList = JXScriptAddParameterInt(paramList, GetEffectType(eEffect));
-    //
-    // JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_ON_APPLY_CODE, paramList);
+    struct script_param_list paramList;
+    paramList = JXScriptAddParameterObject(paramList, oCaster);
+    paramList = JXScriptAddParameterObject(paramList, oTarget);
+    paramList = JXScriptAddParameterInt(paramList, GetEffectType(eEffect));
 
-    AddScriptParameterObject(oCaster);
-    AddScriptParameterObject(oTarget);
-    AddScriptParameterInt(GetEffectType(eEffect));
-    ExecuteScriptEnhanced(JX_EFFECT_ON_APPLY_FORKSCRIPT, OBJECT_SELF);
+    JXScriptCallFork(JX_EFFECT_FORKSCRIPT, JX_FORK_EFFECT_ON_APPLY_CODE, paramList);
+
+    // AddScriptParameterObject(oCaster);
+    // AddScriptParameterObject(oTarget);
+    // AddScriptParameterInt(GetEffectType(eEffect));
+    // ExecuteScriptEnhanced(JX_EFFECT_ON_APPLY_FORKSCRIPT, OBJECT_SELF);
 
     return JXScriptGetResponseInt();
 }
