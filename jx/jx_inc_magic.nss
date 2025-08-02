@@ -2114,8 +2114,12 @@ int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect)
     AddScriptParameterObject(oCaster);
     AddScriptParameterObject(oTarget);
     AddScriptParameterInt(GetEffectType(eEffect));
-    int r = ExecuteScriptEnhanced(JX_EFFECT_ON_APPLY_FORKSCRIPT, oCaster);
-
+    int r = ExecuteScriptEnhanced(JX_EFFECT_ON_APPLY_FORKSCRIPT, oCaster, FALSE);
+    ClearScriptParams();
+    if (r == -1)
+    {
+        Log("On apply script execution failed");
+    }
     return JXScriptGetResponseInt(oCaster);
 }
 
