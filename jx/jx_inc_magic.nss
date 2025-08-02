@@ -2117,7 +2117,7 @@ int JXOnApplySpellEffectCode(object oCaster, object oTarget, effect eEffect)
     AddScriptParameterObject(oCaster);
     AddScriptParameterObject(oTarget);
     AddScriptParameterInt(GetEffectType(eEffect));
-    ExecuteScriptEnhanced(JX_EFFECT_ON_APPLY_FORKSCRIPT, oTarget);
+    ExecuteScriptEnhanced(JX_EFFECT_ON_APPLY_FORKSCRIPT, oCaster);
 
     return JXScriptGetResponseInt(oTarget);
 }
