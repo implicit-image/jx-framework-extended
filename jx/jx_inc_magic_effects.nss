@@ -843,7 +843,7 @@ effect JXEffectTurnResistanceIncrease(int iHitDice)
 
 effect JXEffectPetrify()
 {
-    return JxImplEffectPetrify();
+    return JXImplEffectPetrify();
 }
 
 effect JXEffectSpellFailure(int iPercent=100, int iSpellSchool=SPELL_SCHOOL_GENERAL)
