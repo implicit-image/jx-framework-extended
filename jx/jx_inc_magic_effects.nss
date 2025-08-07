@@ -1,15 +1,6 @@
 #include "utils"
 #include "jx_effect_param_interface"
 #include "jx_inc_magic"
-/*
-In order to use effect overrides you need to set them in the precast script.
-All effect overrides are local and are reset after the spell finishes casting.
-Since effect type cannot be identified before the effect is applied, this code
-works by creating wrapper functions for effect creation.
-
-More about the precast script in x2_inc_spellhook.nss.
-
-*/
 
 
 //=====================================================
@@ -21,6 +12,10 @@ More about the precast script in x2_inc_spellhook.nss.
 
 
 //============================================Declarations===================================
+
+void JXSetInhibitEffectModifiers(int iValue);
+
+int JXGetInhibitEffectModifiers();
 
 effect JXEffectHeal(int iDmgToHeal);
 
@@ -1131,4 +1126,14 @@ effect JXEffectExhausted(int iStrPenalty=6, int iDexPenalty=6, int iMovePenalty=
 effect JXEffectLinkEffects(effect e1, effect e2)
 {
     return EffectLinkEffects(e1, e2);
+}
+
+void JXSetInhibitEffectModifiers(int iValue)
+{
+    SetLocalInt(OBJECT_SELF, JX_INHIBIT_EFFECT_MODIFIERS, iValue);
+}
+
+int JXGetInhibitEffectModifiers()
+{
+    return GetLocalInt(OBJECT_SELF, JX_INHIBIT_EFFECT_MODIFIERS);
 }

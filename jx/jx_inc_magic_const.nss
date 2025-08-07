@@ -190,8 +190,6 @@ const string MODULE_VAR_JX_USER_ON_SPELL_HIT = "JX_ON_SPELL_HIT";
 //Event handler backup arrays
 
 
-
-
 const string VAR_JX_ON_APPLY_SPELL_EFFECT_RESULT = "JX_ON_APPLY_SPELL_EFFECT_RESULT";
 
 const string JX_ON_APPLY_SPELL_ID = "JX_ON_APPLY_ID";
@@ -213,73 +211,6 @@ const string JX_MAP_SEP = ";";
 
 //=============================== EFFECT OVERRIDES ======================================
 
-// effect override types
-// param override types take as their parameters values of types corresponding to effect
-// constructor arguments
-// eg. for EffectDamage()
-//  int, int int int
-const int JX_EFFECT_MOD_TYPE_PARAM_1 = 1;
-const int JX_EFFECT_MOD_TYPE_PARAM_2 = 2;
-const int JX_EFFECT_MOD_TYPE_PARAM_3 = 3;
-const int JX_EFFECT_MOD_TYPE_PARAM_4 = 4;
-const int JX_EFFECT_MOD_TYPE_PARAM_5 = 5;
-const int JX_EFFECT_MOD_TYPE_PARAM_6 = 6;
-const int JX_EFFECT_MOD_TYPE_PARAM_7 = 7;
-const int JX_EFFECT_MOD_TYPE_PARAM_8 = 8;
-const int JX_EFFECT_MOD_TYPE_PARAM_9 = 9;
-
-
-const int JX_EFFECT_MOD_TYPE_EFFECT_PROP = 10;
-
-const int JX_EFFECT_MOD_TYPE_DISABLE_EFFECT = 11;
-const int JX_EFFECT_MOD_TYPE_SUBSTITUTE_EFFECT = 12;
-const int JX_EFFECT_MOD_TYPE_LINK_EFFECT = 13;
-
-const int JX_EFFECT_MOD_TYPE_MAX_ID = 14;
-// effect override modifier types
-const int JX_EFFECT_MOD_OP_PARAM_INCREASE_BY = 1;
-const int JX_EFFECT_MOD_OP_PARAM_DECREASE_BY = 2;
-const int JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY = 3;
-const int JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY = 4;
-const int JX_EFFECT_MOD_OP_PARAM_LOGIC_OR = 5;
-const int JX_EFFECT_MOD_OP_PARAM_LOGIC_AND = 6;
-const int JX_EFFECT_MOD_OP_PARAM_INCREASE_BY_RAND = 7;
-const int JX_EFFECT_MOD_OP_PARAM_DECREASE_BY_RAND = 8;
-const int JX_EFFECT_MOD_OP_PARAM_MULTIPLY_BY_RAND = 9;
-const int JX_EFFECT_MOD_OP_PARAM_DIVIDE_BY_RAND = 10;
-const int JX_EFFECT_MOD_OP_PARAM_MAX = 11;
-const int JX_EFFECT_MOD_OP_PARAM_MIN = 12;
-const int JX_EFFECT_MOD_OP_PARAM_OVERRIDE = 13;
-const int JX_EFFECT_MOD_OP_PARAM_MAP = 14;
-
-const int JX_EFFECT_MOD_OP_PROP_SUBTYPE = 15;
-const int JX_EFFECT_MOD_OP_PROP_VS_RACIAL = 16;
-const int JX_EFFECT_MOD_OP_PROP_VS_ALIGN = 17;
-const int JX_EFFECT_MOD_OP_MAX_ID = 18;
-
-//###########################################
-// params at effect creation
-//############################################
-const string JX_EFFECT_MOD_OP_PARAMS = "JX_EM_PARAM";
-const string JX_EFFECT_MOD_OP_PARAM_STATES = "JX_EF_MPS";
-const string JX_EFFECT_MOD_OP_PARAM_TYPES = "JX_EMP_T";
-const string JX_EFFECT_MOD_ENABLED = "JX_EM_E";
-//###################################
-// currently processed mod params
-//######################################
-const string JX_EFFECT_CURR_MOD_OP_PARAMS = "JX_EF_CMP";
-const string JX_EFFECT_CURR_MOD_OP_PARAM_STATES = "JX_EF_CMPS";
-const string JX_EFFECT_CURR_MOD_OP_PARAM_TYPES = "JX_CEMP_T";
-// stores the id of currently processed effect in JXEffect* wrappers
-const string JX_EFFECT_CURRENT = "JX_EF_CURR";
-
-// JX_P_MODS_1_1 = 33242452, JX_P_MODS_1_1_32;
-// JX_P_MODS_1_2 = 33242452, JX_P_MODS_1_2_32
-// JX_P_MODS_1_3 = 33242452, JX_P_MODS_1_3_32
-// JX_P_MODS_1_4 = 33242452, JX_P_MODS_1_4_32
-// JX_P_MODS_1_5 = 33242452, JX_P_MODS_1_5_32
-// JX_P_MODS_1_6 = 33242452, JX_P_MODS_1_6_32
-const int JX_EFFECT_MAX_MOD_PARAMS = 8;
 
 const int JX_EFFECT_HEAL = 1;
 const int JX_EFFECT_DAMAGE = 2;
@@ -390,6 +321,7 @@ const int JX_EFFECT_EXHAUSTED = 105;
 
 const int JX_EFFECT_MAX_ID = 105;
 
+const string JX_INHIBIT_EFFECT_MODIFIERS = "JX_EF_INH";
 
 //========================== Effect statuses ===========
 
