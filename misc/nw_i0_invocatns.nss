@@ -411,7 +411,7 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
             JXApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oTarget,1.0);
         }
         // Run on hit code
-        JXImplEldtrichOnHitCode(oCaster, oTarget, JXGetSpellId());
+        JXImplEldtritchOnHitCode(oCaster, oTarget, JXGetSpellId());
     }
     return FALSE;
 }
