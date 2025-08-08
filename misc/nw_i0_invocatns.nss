@@ -49,6 +49,7 @@
 #include "nwn2_inc_spells"
 #include "ginc_debug"
 #include "cmi_ginc_spells"
+#include "jx_invocations_interface"
 
 const int STRREF_HELLFIRE_BONUS             = 220796;  // Bonus Damage (Hellfire): ( in use )
 const int STRREF_HELLFIRE_SHIELD_NAME   = 220779;  // Hellfire Shield ( in use )
@@ -63,9 +64,6 @@ const int STRREF_HELLFIRE_SHIELD_NO_CON = 233608; //Constitution isn't high enou
 // JWR-OEI: 09/24/2008 - Global Variable to track CON damage output
 int nHellfireConDmg = 0;
 
-int JXGetEldtritchBlastLevelBonus(object oCaster);
-
-int JXEldtrichOnHitCode(object oCaster, object oTarget, int iSpellId);
 
 // JWR - OEI 06/18/2008 -- Hellfire Warlock Damage Bonus functions
 void HellfireShieldFeedbackMsg(int x, int strref, object oCaster);
@@ -226,7 +224,7 @@ int GetEldritchBlastLevel(object oCaster)
             nBlstLvl += 2;
     }
 
-    int nBonus = JXGetEldtritchBlastLevelBonus(oCaster);
+    int nBonus = JXImplGetEldtritchBlastLevelBonus(oCaster);
     nBlstLvl += nBonus;
 
 // NOTE: Need to Add in Prestige "+1 Spellcasting" Bonuses here...
@@ -413,7 +411,7 @@ int DoEldritchBlast(object oCaster, object oTarget, int bCalledFromShape, int bD
             JXApplyEffectToObject(DURATION_TYPE_TEMPORARY,eBeam,oTarget,1.0);
         }
         // Run on hit code
-        JXEldtrichOnHitCode(oCaster, oTarget, JXGetSpellId());
+        JXImplEldtrichOnHitCode(oCaster, oTarget, JXGetSpellId());
     }
     return FALSE;
 }
@@ -1303,25 +1301,3 @@ int DoShapeEldritchDoom()
 //void main() {}    // keep this line uncommented before saving/checking in; used only for compiling purposes
 
 // --------------------------------------------------------------------------------------------------------------------
-
-int JXGetEldtritchBlastLevelBonus(object oCaster)
-{
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterObject(paramList, oCaster);
-
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_ELDRITCH_BLAST_LEVEL_BONUS, paramList);
-
-    return JXScriptGetResponseInt();
-}
-
-int JXEldtrichOnHitCode(object oCaster, object oTarget, int iSpellId)
-{
-    struct script_param_list paramList;
-    paramList = JXScriptAddParameterObject(paramList, oCaster);
-    paramList = JXScriptAddParameterObject(paramList, oTarget);
-    paramList = JXScriptAddParameterInt(paramList, iSpellId);
-
-    JXScriptCallFork(JX_SPFMWK_FORKSCRIPT, JX_FORK_ELDRITCH_BLAST_ON_HIT_CODE, paramList);
-
-    return JXScriptGetResponseInt();
-}
