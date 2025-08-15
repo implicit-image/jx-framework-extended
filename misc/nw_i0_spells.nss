@@ -1247,8 +1247,7 @@ int Bot9sReflexAdjustedDamage(int nDamage, object oTarget, int nDC, int nSaveTyp
     if (nReturn != nDamage) sResult = "Success";
     string sMsg = "Reflex Save: " + sResult;
     sMsg = sMsg + " " + IntToString(iRoll) + " vs " + IntToString(nDC);
-    DelayCommand(fDelay,
-                 FloatingTextStringOnCreature(sMsg, oTarget, FALSE, 0.6f));
+    FloatingTextStringOnCreature(sMsg, oTarget, FALSE, 0.6f);
 
     return nReturn;
 }
