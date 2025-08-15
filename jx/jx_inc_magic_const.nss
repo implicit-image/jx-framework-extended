@@ -327,3 +327,14 @@ const string JX_INHIBIT_EFFECT_MODIFIERS = "JX_EF_INH";
 
 const string JX_EFFECT_STATUS_WET = "JX_ST_WET";
 const string JX_EFFECT_STATUS_FROZEN = "JX_ST_FROZEN";
+
+
+//========================== Spell Resist Variables ================
+const string JX_SPELL_RESIST_ROLL = "JX_SR_ROLL";
+const string JX_SPELL_RESIST_DC = "JX_SR_DC";
+
+
+//========================== Saving Throw Constants =================
+const int JX_SAVING_THROW_FAILURE = 0;
+const int JX_SAVING_THROW_SUCCESS = 1;
+const int JX_SAVING_THROW_IMMUNE = 2;

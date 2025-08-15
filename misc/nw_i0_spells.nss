@@ -930,22 +930,40 @@ int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
     //effect eMantle = EffectVisualEffect(VFX_IMP_SPELL_MANTLE_USE);    // no longer using NWN1 VFX
     effect eMantle = EffectVisualEffect( VFX_DUR_SPELL_SPELL_MANTLE );  // uses NWN2 VFX
 
-    if(nResist == 1) //Spell Resistance
+    string sMsg;
+
+    int iRoll = GetLocalInt(oTarget, JX_SPELL_RESIST_ROLL);
+    int iSR = GetLocalInt(oTarget, JX_SPELL_RESIST_DC);
+
+    if(nResist == SPELL_RESIST_PASS) //Spell Resistance
     {
+        sMsg = "Spell Resisted: " + IntToString(iRoll) + " vs " + IntToString(iSR);
         DelayCommand(fDelay, JXApplyEffectToObject(DURATION_TYPE_INSTANT, eSR, oTarget));
     }
-    else if(nResist == 2) //Globe
+    else if(nResist == SPELL_RESIST_GLOBE) //Globe
     {
+        sMsg = "Spell Resisted (Globe of Invulnerability)";
         DelayCommand(fDelay, JXApplyEffectToObject(DURATION_TYPE_INSTANT, eGlobe, oTarget));
     }
-    else if(nResist == 3) //Spell Mantle
+    else if(nResist == SPELL_RESIST_MANTLE) //Spell Mantle
     {
+        sMsg = "Spell Resisted (Spell Mantle)";
         if (fDelay > 0.5)
         {
             fDelay = fDelay - 0.1;
         }
         DelayCommand(fDelay, JXApplyEffectToObject(DURATION_TYPE_INSTANT, eMantle, oTarget));
     }
+
+
+
+    if (nResist > 0)
+    {
+        FloatingTextStringOnCreature(sMsg, oTarget, FALSE, 0.6f);
+    }
+    DeleteLocalInt(oTarget, JX_SPELL_RESIST_ROLL);
+    DeleteLocalInt(oTarget, JX_SPELL_RESIST_DC);
+
     return nResist;
 }
 
@@ -973,66 +991,63 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 
     effect eVis;
     int bValid = FALSE;
-    string sToB = GetFirstName(oTarget) + "tob";
-    object oToB = GetObjectByTag(sToB);
-    // FIXME: bot9s code
-    // if (GetLocalInt(oTarget, "AuraOfPerfectOrder") == 1) //Assumed that the Target has the Tome of Battle if this is set to 1.
-    // {
-    //     if ((GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER) || (GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER))
-    //     {// From here we're attempting to rebuild the Saving Throw functions.
     int nBaseSave;
+    string sSaveType;
 
     if (nSavingThrow == SAVING_THROW_FORT)
     {
+        sSaveType = "Fortitude";
         nBaseSave = GetFortitudeSavingThrow(oTarget);// Tested to confirm it does add effect bonuses.
     }
     else if (nSavingThrow == SAVING_THROW_REFLEX)
     {
+        sSaveType = "Reflex";
         nBaseSave = GetReflexSavingThrow(oTarget);
     }
     else if (nSavingThrow == SAVING_THROW_WILL)
     {
-        nSavingThrow = GetWillSavingThrow(oTarget);
+        sSaveType = "Will";
+        nBaseSave = GetWillSavingThrow(oTarget);
     }
 
     if ((11 + nBaseSave) < nDC)
     {
-        bValid = 0;
+        bValid = JX_SAVING_THROW_FAILURE;
     }
-    else bValid = 1;
+    else bValid = JX_SAVING_THROW_SUCCESS;
 
     if (nSaveType == SAVING_THROW_TYPE_CHAOS)
     {
-        bValid = 2; // It is an Aura of Perfect Order after all.
+        bValid = JX_SAVING_THROW_IMMUNE; // It is an Aura of Perfect Order after all.
     }
     else if ((nSaveType == SAVING_THROW_TYPE_DEATH) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH)))
     {
-        bValid = 2;
+        bValid = JX_SAVING_THROW_IMMUNE;
     }
     else if ((nSaveType == SAVING_THROW_TYPE_DISEASE) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE)))
     {
-        bValid = 2;
+        bValid = JX_SAVING_THROW_IMMUNE;
     }
     else if ((nSaveType == SAVING_THROW_TYPE_FEAR) && (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR)))
     {
-        bValid = 2;
+        bValid = JX_SAVING_THROW_IMMUNE;
     }
     else if ((nSaveType == SAVING_THROW_TYPE_MIND_SPELLS) && (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)))
     {
-        bValid = 2;
+        bValid = JX_SAVING_THROW_IMMUNE;
     }
     else if ((nSaveType == SAVING_THROW_TYPE_POISON) && (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON)))
     {
-        bValid = 2;
+        bValid = JX_SAVING_THROW_IMMUNE;
     }
     else if ((nSaveType == SAVING_THROW_TYPE_TRAP) && (GetIsImmune(oTarget, IMMUNITY_TYPE_TRAP)))
     {
-        bValid = 2;
+        bValid = JX_SAVING_THROW_IMMUNE;
     }
 
     int nMessage; // For the sheer sake of producing the saving throw message without a lot of clunky duplication.
 
-    if (bValid == 0)
+    if (bValid == JX_SAVING_THROW_FAILURE)
     {
         if (nSavingThrow == SAVING_THROW_FORT)
         {
@@ -1062,9 +1077,6 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
             nMessage = WillSave(oTarget, 1, nSaveType, oSaveVersus);
         }
     }
-    //     }
-    // }
-    // else
     if (nSavingThrow == SAVING_THROW_FORT)
     {
         bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
@@ -1077,59 +1089,12 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
     {
         bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
     }
-    //FIXME: bot9s code
-    // if (GetIsObjectValid(oToB) && (bValid == 0) && (GetLocalInt(oToB, "Counter") == COUNTER_IRON_HEART_FOCUS) && (GetLocalInt(oToB, "Swift") == 0))
-    // { //Priotity is given to Iron Heart Focus over Zealous Surge because Zealous Surge has a once per day use.
-    //     SetLocalInt(oToB, "IronHeartFocus", 1);
-    //
-    //     if (nSavingThrow == SAVING_THROW_FORT)
-    //     {
-    //         bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
-    //     }
-    //     else if (nSavingThrow == SAVING_THROW_REFLEX)
-    //     {
-    //         bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
-    //     }
-    //     else if (nSavingThrow == SAVING_THROW_WILL)
-    //     {
-    //         bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
-    //     }
-    // }
-
-    // if ((GetHasFeat(FEAT_ZEALOUS_SURGE, oTarget)) && (bValid == 0))
-    // {// Assuemed that oToB is valid if you have this feat.
-    //     if ((GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
-    //     {
-    //         FloatingTextStringOnCreature("<color=cyan>*Zealous Surge!*</color>", oTarget, TRUE, 5.0f, COLOR_CYAN, COLOR_BLUE_DARK);
-    //         SetLocalInt(oToB, "ZealousSurgeUse", 0);
-    //
-    //         if (nSavingThrow == SAVING_THROW_FORT)
-    //         {
-    //             bValid = FortitudeSave(oTarget, nDC, nSaveType, oSaveVersus);
-    //         }
-    //         else if (nSavingThrow == SAVING_THROW_REFLEX)
-    //         {
-    //             bValid = ReflexSave(oTarget, nDC, nSaveType, oSaveVersus);
-    //         }
-    //         else if (nSavingThrow == SAVING_THROW_WILL)
-    //         {
-    //             bValid = WillSave(oTarget, nDC, nSaveType, oSaveVersus);
-    //         }
-    //     }
-    // }
-
 
     // potentially override the results of the throw
     bValid = JXImplSavingThrow(bValid, nSavingThrow, oTarget, nDC, nSaveType, oSaveVersus, fDelay);
 
     nSpellID = JXGetSpellId();
-
-    /*
-        return 0 = FAILED SAVE
-        return 1 = SAVE SUCCESSFUL
-        return 2 = IMMUNE TO WHAT WAS BEING SAVED AGAINST
-    */
-    if (bValid == 0)
+    if (bValid == JX_SAVING_THROW_FAILURE)
     {
         if ((nSaveType == SAVING_THROW_TYPE_DEATH
         || nSpellID == SPELL_WEIRD
@@ -1140,27 +1105,29 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
             DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
         }
     }
+    string sMsg;
+    string sResult;
+    if (bValid == JX_SAVING_THROW_FAILURE) sResult = "Failed";
+    else if (bValid == JX_SAVING_THROW_SUCCESS) sResult = "Success";
+    else sResult = "Immune";
 
-    //redundant comparison on bValid, let's move the eVis line down below
-/*    if(bValid == 2)
+    if (bValid == JX_SAVING_THROW_SUCCESS
+    || bValid == JX_SAVING_THROW_IMMUNE)
     {
-        eVis = EffectVisualEffect(VFX_IMP_MAGIC_RESISTANCE_USE);
-    }*/
-    if (bValid == 1 || bValid == 2)
-    {
-        if (bValid == 2)
+        if (bValid == JX_SAVING_THROW_IMMUNE)
         {
-            //eVis = EffectVisualEffect(VFX_IMP_MAGIC_RESISTANCE_USE);  // no longer using NWN1 VFX
             eVis = EffectVisualEffect( VFX_DUR_SPELL_SPELL_RESISTANCE );    // makes use of NWN2 VFX
             /*
             If the spell is save immune then the link must be applied in order to get the true immunity
             to be resisted.  That is the reason for returing false and not true.  True blocks the
             application of effects.
             */
-            bValid = FALSE;
+            bValid = JX_SAVING_THROW_FAILURE;
         }
         DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
     }
+    sMsg = sSaveType + " Save: " + sResult + IntToString(nBaseSave) + " vs " + IntToString(nDC);
+    FloatingTextStringOnCreature(sMsg, oTarget, FALSE, 0.6f);
     return bValid;
 }
 
@@ -1170,28 +1137,15 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 int Bot9sReflexAdjustedDamage(int nDamage, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus=OBJECT_SELF)
 {
     int nReturn, nMod, bValid;
-    string sToB = GetFirstName(oTarget) + "tob";
-    object oToB = GetObjectByTag(sToB);
+    // string sToB = GetFirstName(oTarget) + "tob";
+    // object oToB = GetObjectByTag(sToB);
 
     if (GetIsObjectValid(oToB))
     {
-        SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
-        SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-        DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-        DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
-        // FIXME: bot9s code
-        // if ((GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER) || (GetLocalInt(oToB, "Stance") == STANCE_AURA_OF_PERFECT_ORDER))
-        // {
-        //     nMod = 1;
-        // }
-        // else if (GetLocalInt(oToB, "Counter") == COUNTER_IRON_HEART_FOCUS)
-        // {
-        //     nMod = 1;
-        // }
-        // else if ((GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
-        // {
-        //     nMod = 1;
-        // }
+        // SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
+        // SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+        // DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+        // DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
 
         if (nMod == 1)
         {

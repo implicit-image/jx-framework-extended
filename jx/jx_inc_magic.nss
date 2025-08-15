@@ -315,7 +315,7 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - eEffect Effect to apply to the object
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
-void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iEffectType=-1,  int iRunOnApply=TRUE);
+void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iEffectType=-1);
 
 // Create an area of effect for the current spell and apply it at the specified location.
 // Areas of effect created by this way have the following properties :
@@ -838,6 +838,8 @@ int JXResistSpell(object oCaster, object oTarget)
 
     // Test if the caster bypasses the target's spell resistance
     int iCLCheck = iCasterLevel + d20();
+    SetLocalInt(oTarget, JX_SPELL_RESIST_ROLL, iCLCheck);
+    SetLocalInt(oTarget, JX_SPELL_RESIST_DC, iSpellResistance);
     if (iCLCheck < iSpellResistance)
         return SPELL_RESIST_PASS;
     else
@@ -1416,7 +1418,7 @@ void JXApplyEffectAtLocation(int iDuration, effect eEffect, location lLocation, 
 // - oTarget Object to apply the effect to
 // - fDuration Duration of the spell if iDuration is DURATION_TYPE_TEMPORARY
 // - iEffectType JX_EFFECT_TYPE_* of the passed effect
-void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iEffectType=-1, int iRunOnApply=TRUE)
+void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float fDuration=0.0f, int iEffectType=-1)
 {
     object oCaster = JXGetCaster();
     int iSpellId = JXGetSpellId();
@@ -1450,29 +1452,6 @@ void JXApplyEffectToObject(int iDuration, effect eEffect, object oTarget, float 
     eEffect = SetEffectSpellId(eEffect, iSpellId);
 
     int iContinue = TRUE;
-    if (iRunOnApply)
-    {
-        switch(iEffectType)
-        {
-            case EFFECT_TYPE_BEAM:
-            case EFFECT_TYPE_VISUALEFFECT:
-            case EFFECT_TYPE_CUTSCENE_PARALYZE:
-            case EFFECT_TYPE_CUTSCENEGHOST: // NOTE: sanity check
-            case EFFECT_TYPE_AREA_OF_EFFECT:
-            case EFFECT_TYPE_CUTSCENEIMMOBILIZE:
-            case EFFECT_TYPE_HITPOINT_CHANGE_WHEN_DYING:
-            case EFFECT_TYPE_EFFECT_ICON:
-            {
-                break;
-            }
-            default:
-            {
-                iContinue = JXOnApplySpellEffectCode(oCaster, oTarget, eEffect);
-                Log("OnApply returned " + IntToString(iContinue));
-                break;
-            }
-        }
-    }
     if (iContinue)
     {
         ApplyEffectToObject(iDuration, eEffect, oTarget, fDuration);
