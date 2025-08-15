@@ -1111,6 +1111,14 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
     else if (bValid == JX_SAVING_THROW_SUCCESS) sResult = "Success";
     else sResult = "Immune";
 
+    sMsg = sSaveType + " Save: " + sResult;
+    if (bValid != JX_SAVING_THROW_IMMUNE)
+    {
+        sMsg = sMsg + " " + IntToString(nBaseSave) + " vs " + IntToString(nDC);
+    }
+    DelayCommand(fDelay,
+                 FloatingTextStringOnCreature(sMsg, oTarget, FALSE, 0.6f));
+
     if (bValid == JX_SAVING_THROW_SUCCESS
     || bValid == JX_SAVING_THROW_IMMUNE)
     {
@@ -1126,8 +1134,6 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
         }
         DelayCommand(fDelay, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
     }
-    sMsg = sSaveType + " Save: " + sResult + IntToString(nBaseSave) + " vs " + IntToString(nDC);
-    FloatingTextStringOnCreature(sMsg, oTarget, FALSE, 0.6f);
     return bValid;
 }
 
