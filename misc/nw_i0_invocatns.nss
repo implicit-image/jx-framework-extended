@@ -224,7 +224,7 @@ int GetEldritchBlastLevel(object oCaster)
             nBlstLvl += 2;
     }
 
-    int nBonus = JXImplGetEldtritchBlastLevelBonus(oCaster);
+    int nBonus = JXImplGetEldritchBlastLevelBonus(oCaster);
     nBlstLvl += nBonus;
 
 // NOTE: Need to Add in Prestige "+1 Spellcasting" Bonuses here...
