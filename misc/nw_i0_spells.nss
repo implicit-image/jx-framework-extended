@@ -1143,6 +1143,8 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
 int Bot9sReflexAdjustedDamage(int nDamage, object oTarget, int nDC, int nSaveType=SAVING_THROW_TYPE_NONE, object oSaveVersus=OBJECT_SELF)
 {
     int nReturn, nMod, bValid;
+    int iBaseSave = GetReflexSavingThrow(oTarget);
+    int iRoll = d20(1) + iBaseSave;
     // string sToB = GetFirstName(oTarget) + "tob";
     // object oToB = GetObjectByTag(sToB);
 
@@ -1228,6 +1230,7 @@ int Bot9sReflexAdjustedDamage(int nDamage, object oTarget, int nDC, int nSaveTyp
     //         }
     //     }
     // }
+    string sResult = "Failure";
 
     if (nMod == 1)
     {
@@ -1237,7 +1240,15 @@ int Bot9sReflexAdjustedDamage(int nDamage, object oTarget, int nDC, int nSaveTyp
         }
         else nReturn = GetReflexAdjustedDamage(nDamage, oTarget, 1, nSaveType, oSaveVersus);
     }
-    else nReturn = GetReflexAdjustedDamage(nDamage, oTarget, nDC, nSaveType, oSaveVersus);
+    else
+    {
+        nReturn = GetReflexAdjustedDamage(nDamage, oTarget, nDC, nSaveType, oSaveVersus);
+    }
+    if (nReturn != nDamage) sResult = "Success";
+    string sMsg = "Reflex Save: " + sResult;
+    sMsg = sMsg + " " + IntToString(iRoll) + " vs " + IntToString(nDC);
+    DelayCommand(fDelay,
+                 FloatingTextStringOnCreature(sMsg, oTarget, FALSE, 0.6f));
 
     return nReturn;
 }
