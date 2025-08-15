@@ -959,7 +959,7 @@ int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
 
     if (nResist > 0)
     {
-        FloatingTextStringOnCreature(sMsg, oTarget, FALSE, 0.6f);
+        FloatingTextStringOnCreature(sMsg, oTarget, TRUE, 0.6f);
     }
     DeleteLocalInt(oTarget, JX_SPELL_RESIST_ROLL);
     DeleteLocalInt(oTarget, JX_SPELL_RESIST_DC);
@@ -1117,7 +1117,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
         sMsg = sMsg + " " + IntToString(nBaseSave) + " vs " + IntToString(nDC);
     }
     DelayCommand(fDelay,
-                 FloatingTextStringOnCreature(sMsg, oTarget, FALSE, 0.6f));
+                 FloatingTextStringOnCreature(sMsg, oTarget, TRUE, 0.6f));
 
     if (bValid == JX_SAVING_THROW_SUCCESS
     || bValid == JX_SAVING_THROW_IMMUNE)
@@ -1247,7 +1247,7 @@ int Bot9sReflexAdjustedDamage(int nDamage, object oTarget, int nDC, int nSaveTyp
     if (nReturn != nDamage) sResult = "Success";
     string sMsg = "Reflex Save: " + sResult;
     sMsg = sMsg + " " + IntToString(iRoll) + " vs " + IntToString(nDC);
-    FloatingTextStringOnCreature(sMsg, oTarget, FALSE, 0.6f);
+    FloatingTextStringOnCreature(sMsg, oTarget, TRUE, 0.6f);
 
     return nReturn;
 }
