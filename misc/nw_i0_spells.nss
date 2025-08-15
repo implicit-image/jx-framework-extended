@@ -1140,88 +1140,88 @@ int Bot9sReflexAdjustedDamage(int nDamage, object oTarget, int nDC, int nSaveTyp
     // string sToB = GetFirstName(oTarget) + "tob";
     // object oToB = GetObjectByTag(sToB);
 
-    if (GetIsObjectValid(oToB))
-    {
-        // SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
-        // SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
-        // DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
-        // DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+    // if (GetIsObjectValid(oToB))
+    // {
+    //     // SetLocalInt(oToB, "SaveType", SAVING_THROW_REFLEX);
+    //     // SetLocalInt(oToB, "SaveTarget", ObjectToInt(oTarget));
+    //     // DelayCommand(1.0f, SetLocalInt(oToB, "SaveType", 0));
+    //     // DelayCommand(1.0f, SetLocalInt(oToB, "SaveTarget", 0));
+    //
+    //     if (nMod == 1)
+    //     {
+    //         int nBaseSave = GetReflexSavingThrow(oTarget);
+    //         int nSave;
+    //
+    //         // From here we're attempting to rebuild the Saving Throw functions.
+    //         if (GetLocalInt(oTarget, "AuraOfPerfectOrder") == 1) //Assumed that the Target has the Tome of Battle if this is set to 1.
+    //         {
+    //             nSave = 11 + nBaseSave;
+    //         }
+    //         else nSave = d20(1) + nBaseSave;
+    //
+    //         if (nSave < nDC)
+    //         {
+    //             bValid = 0;
+    //         }
+    //         else bValid = 1;
+    //
+    //         if (nSaveType == SAVING_THROW_TYPE_CHAOS)
+    //         {
+    //             bValid = 2; // It is an Aura of Perfect Order after all.
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_DEATH) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH)))
+    //         {
+    //             bValid = 2;
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_DISEASE) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE)))
+    //         {
+    //             bValid = 2;
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_FEAR) && (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR)))
+    //         {
+    //             bValid = 2;
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_MIND_SPELLS) && (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)))
+    //         {
+    //             bValid = 2;
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_POISON) && (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON)))
+    //         {
+    //             bValid = 2;
+    //         }
+    //         else if ((nSaveType == SAVING_THROW_TYPE_TRAP) && (GetIsImmune(oTarget, IMMUNITY_TYPE_TRAP)))
+    //         {
+    //             bValid = 2;
+    //         }
+    //         // FIXME: bot9s code
+    //         // if ((bValid == 0) && (GetLocalInt(oToB, "Counter") == COUNTER_IRON_HEART_FOCUS) && (GetLocalInt(oToB, "Swift") == 0))
+    //         // {
+    //         //     SetLocalInt(oToB, "IronHeartFocus", 1);
+    //
+    //         //     nSave = d20(1) + nBaseSave;
+    //
+    //         //     if (nSave < nDC)
+    //         //     {
+    //         //         bValid = 0;
+    //         //     }
+    //         //     else bValid = 1;
+    //         // }
+    //
+    //         if ((bValid == 0) && (GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
+    //         {
+    //             FloatingTextStringOnCreature("<color=cyan>*Zealous Surge!*</color>", oTarget, TRUE, 5.0f, COLOR_CYAN, COLOR_BLUE_DARK);
+    //             SetLocalInt(oToB, "ZealousSurgeUse", 0);
 
-        if (nMod == 1)
-        {
-            int nBaseSave = GetReflexSavingThrow(oTarget);
-            int nSave;
-
-            // From here we're attempting to rebuild the Saving Throw functions.
-            if (GetLocalInt(oTarget, "AuraOfPerfectOrder") == 1) //Assumed that the Target has the Tome of Battle if this is set to 1.
-            {
-                nSave = 11 + nBaseSave;
-            }
-            else nSave = d20(1) + nBaseSave;
-
-            if (nSave < nDC)
-            {
-                bValid = 0;
-            }
-            else bValid = 1;
-
-            if (nSaveType == SAVING_THROW_TYPE_CHAOS)
-            {
-                bValid = 2; // It is an Aura of Perfect Order after all.
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_DEATH) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DEATH)))
-            {
-                bValid = 2;
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_DISEASE) && (GetIsImmune(oTarget, IMMUNITY_TYPE_DISEASE)))
-            {
-                bValid = 2;
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_FEAR) && (GetIsImmune(oTarget, IMMUNITY_TYPE_FEAR)))
-            {
-                bValid = 2;
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_MIND_SPELLS) && (GetIsImmune(oTarget, IMMUNITY_TYPE_MIND_SPELLS)))
-            {
-                bValid = 2;
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_POISON) && (GetIsImmune(oTarget, IMMUNITY_TYPE_POISON)))
-            {
-                bValid = 2;
-            }
-            else if ((nSaveType == SAVING_THROW_TYPE_TRAP) && (GetIsImmune(oTarget, IMMUNITY_TYPE_TRAP)))
-            {
-                bValid = 2;
-            }
-            // FIXME: bot9s code
-            // if ((bValid == 0) && (GetLocalInt(oToB, "Counter") == COUNTER_IRON_HEART_FOCUS) && (GetLocalInt(oToB, "Swift") == 0))
-            // {
-            //     SetLocalInt(oToB, "IronHeartFocus", 1);
-
-            //     nSave = d20(1) + nBaseSave;
-
-            //     if (nSave < nDC)
-            //     {
-            //         bValid = 0;
-            //     }
-            //     else bValid = 1;
-            // }
-
-            if ((bValid == 0) && (GetLocalInt(oToB, "ZealousSurge") == 1) && (GetLocalInt(oToB, "ZealousSurgeUse") == 1))
-            {
-                FloatingTextStringOnCreature("<color=cyan>*Zealous Surge!*</color>", oTarget, TRUE, 5.0f, COLOR_CYAN, COLOR_BLUE_DARK);
-                SetLocalInt(oToB, "ZealousSurgeUse", 0);
-
-                nSave = d20(1) + nBaseSave;
-
-                if (nSave < nDC)
-                {
-                    bValid = 0;
-                }
-                else bValid = 1;
-            }
-        }
-    }
+   //              nSave = d20(1) + nBaseSave;
+    //
+    //             if (nSave < nDC)
+    //             {
+    //                 bValid = 0;
+    //             }
+    //             else bValid = 1;
+    //         }
+    //     }
+    // }
 
     if (nMod == 1)
     {
