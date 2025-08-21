@@ -126,6 +126,7 @@ const string JX_SPFMWK_FORKSCRIPT = "jx_spfmwk_fork";
 const string JX_EFFECT_FORKSCRIPT = "jx_effect_fork";
 const string JX_EFFECT_TRIGGER_FORKSCRIPT = "jx_ef_trg_fork";
 const string JX_EFFECT_ON_APPLY_FORKSCRIPT = "jx_ef_oa_fork";
+const string JX_MESSAGE_FORKSCRIPT = "jx_msg_script";
 
 //        jx_inc_magic_info
 const int JX_FORK_SPELLRANGEDTOUCHATTACK =      1;

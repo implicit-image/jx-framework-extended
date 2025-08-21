@@ -98,6 +98,8 @@ const string ITR_ENTRY_PREFIX = "ITR_TARGET_ENTRY";
 // GZ: Number of spells in GetSpellBreachProtections
 const int NW_I0_SPELLS_MAX_BREACH = 33;
 const string VAR_IMMUNE_TO_HEAL = "IMMUNE_TO_HEAL";
+
+const float SAVING_THROW_MESSAGE_DURATION = 2.5f;
 //=========================================================================
 // Prototypes
 //=========================================================================
@@ -223,6 +225,8 @@ void IgnoreTargetRulesActionCastSpellAtObjectArea(int nShapeType, float fShapeSi
 // Other parameters are the same as ActionCastSpellAtLocation() in nwscript.nss
 void IgnoreTargetRulesActionCastSpellAtLocationArea(int nShapeType, float fShapeSize, int nSpell, location lTargetLocation, int nMetaMagic=METAMAGIC_ANY, int bCheat=FALSE, int nProjectilePathType=PROJECTILE_PATH_TYPE_DEFAULT, int bInstantSpell=FALSE);
 
+
+void DisplayStatusMessage(string sMsg, object oPC=OBJECT_SELF);
 //=========================================================================
 // Functions
 //=========================================================================
@@ -959,7 +963,7 @@ int MyResistSpell(object oCaster, object oTarget, float fDelay = 0.0)
 
     if (nResist > 0)
     {
-        FloatingTextStringOnCreature(sMsg, oTarget, TRUE, 1.5f);
+        DisplayStatusMessage(sMsg, oTarget);
     }
     DeleteLocalInt(oTarget, JX_SPELL_RESIST_ROLL);
     DeleteLocalInt(oTarget, JX_SPELL_RESIST_DC);
@@ -1116,8 +1120,9 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
     {
         sMsg = sMsg + " " + IntToString(nBaseSave) + " vs " + IntToString(nDC);
     }
-    DelayCommand(fDelay,
-                 FloatingTextStringOnCreature(sMsg, oTarget, TRUE, 1.5f));
+
+    DelayCommand(fDelay, DisplayStatusMessage(sMsg, oTarget);
+
 
     if (bValid == JX_SAVING_THROW_SUCCESS
     || bValid == JX_SAVING_THROW_IMMUNE)
@@ -1247,7 +1252,8 @@ int Bot9sReflexAdjustedDamage(int nDamage, object oTarget, int nDC, int nSaveTyp
     if (nReturn != nDamage) sResult = "Success";
     string sMsg = "Reflex Save: " + sResult;
     sMsg = sMsg + " " + IntToString(iRoll) + " vs " + IntToString(nDC);
-    FloatingTextStringOnCreature(sMsg, oTarget, TRUE, 1.5f);
+
+    DisplayStatusMessage(sMsg, oTarget);
 
     return nReturn;
 }
@@ -1712,5 +1718,11 @@ void IgnoreTargetRulesActionCastSpellAtLocationArea(int nShapeType, float fShape
     ActionCastSpellAtLocation(nSpell,lTargetLocation,nMetaMagic,bCheat,nProjectilePathType, bInstantSpell);
 }
 
+void DisplayStatusMessage(string sMsg, object oPC=OBJECT_SELF)
+{
+    struct script_param_list ParamList;
+    ParamList = JXScriptAddParameterString(ParamList, sMsg);
+    JXScriptCall(JX_MESSAGE_FORKSCRIPT, ParamList, oPC);
+}
 
 //void main() {}
