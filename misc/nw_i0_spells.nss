@@ -1121,7 +1121,7 @@ int MySavingThrow(int nSavingThrow, object oTarget, int nDC, int nSaveType=SAVIN
         sMsg = sMsg + " " + IntToString(nBaseSave) + " vs " + IntToString(nDC);
     }
 
-    DelayCommand(fDelay, DisplayStatusMessage(sMsg, oTarget);
+    DelayCommand(fDelay, DisplayStatusMessage(sMsg, oTarget));
 
 
     if (bValid == JX_SAVING_THROW_SUCCESS
