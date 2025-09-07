@@ -147,30 +147,6 @@ int IsTargetValidForDelayedSpellEffect( int nSpellID, object oTarget, object oCa
 }
 
 // -------------------------------------------------------------------
-// General math helpers
-int ClampInt( int nValue, int nMin, int nMax )
-{
-    if ( nValue < nMin )
-        return nMin;
-
-    if ( nValue > nMax )
-        return nMax;
-
-    return nValue;
-}
-
-
-float ClampFloat( float flValue, float flMin, float flMax )
-{
-    if ( flValue < flMin )
-        return flMin;
-
-    if ( flValue > flMax )
-        return flMax;
-
-    return flValue;
-}
-// -------------------------------------------------------------------
 
 
 void RemovePermanencySpells(object oTarget)
